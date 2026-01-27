@@ -7,15 +7,21 @@ import DifficultySelection from "@/components/DifficultySelection";
 import ProgrammerWorld from "@/components/careers/ProgrammerWorld";
 import NurseWorld from "@/components/careers/NurseWorld";
 import EngineerWorld from "@/components/careers/EngineerWorld";
+import TeacherWorld from "@/components/careers/TeacherWorld";
+import ChefWorld from "@/components/careers/ChefWorld";
+import ArchitectWorld from "@/components/careers/ArchitectWorld";
 import OutcomeScreen from "@/components/OutcomeScreen";
 import { Career, Difficulty, Trophy } from "@/types/game";
 
 type GameState = "title" | "career-select" | "difficulty-select" | "playing" | "outcome";
 
-const careerNames = {
+const careerNames: Record<Career, string> = {
   programmer: "Software Programmer",
   nurse: "Registered Nurse",
   engineer: "Civil Engineer",
+  teacher: "Teacher",
+  chef: "Professional Chef",
+  architect: "Architect",
 };
 
 export default function Home() {
@@ -117,6 +123,27 @@ export default function Home() {
       case "engineer":
         return (
           <EngineerWorld
+            difficulty={selectedDifficulty}
+            onComplete={handleChallengeComplete}
+          />
+        );
+      case "teacher":
+        return (
+          <TeacherWorld
+            difficulty={selectedDifficulty}
+            onComplete={handleChallengeComplete}
+          />
+        );
+      case "chef":
+        return (
+          <ChefWorld
+            difficulty={selectedDifficulty}
+            onComplete={handleChallengeComplete}
+          />
+        );
+      case "architect":
+        return (
+          <ArchitectWorld
             difficulty={selectedDifficulty}
             onComplete={handleChallengeComplete}
           />

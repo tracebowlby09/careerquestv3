@@ -1,5 +1,5 @@
 export type Difficulty = "easy" | "medium" | "hard";
-export type Career = "programmer" | "nurse" | "engineer";
+export type Career = "programmer" | "nurse" | "engineer" | "teacher" | "chef" | "architect";
 
 export interface Trophy {
   career: Career;

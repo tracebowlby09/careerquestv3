@@ -56,6 +56,48 @@ const careerData = {
       "Safety-first mindset",
     ],
   },
+  teacher: {
+    icon: "👩‍🏫",
+    title: "Teacher",
+    successSkill: "Classroom Management & Professional Judgment",
+    successMessage: "Excellent teaching decisions! You demonstrated the professional judgment needed to manage classrooms and support student learning effectively.",
+    failureSkill: "Educational Decision-Making",
+    failureMessage: "Teaching requires balancing student needs, classroom management, and professional ethics. Review the scenarios and try again.",
+    keySkills: [
+      "Classroom management and leadership",
+      "Understanding diverse learning needs",
+      "Professional ethics and responsibility",
+      "Communication and patience",
+    ],
+  },
+  chef: {
+    icon: "👨‍🍳",
+    title: "Professional Chef",
+    successSkill: "Culinary Expertise & Kitchen Management",
+    successMessage: "Outstanding culinary decisions! You showed the expertise needed to manage a professional kitchen, from food safety to quality control.",
+    failureSkill: "Kitchen Operations",
+    failureMessage: "Professional cooking requires timing, quality control, and food safety knowledge. Review the challenges and try again.",
+    keySkills: [
+      "Time management and multitasking",
+      "Food safety and quality control",
+      "Creativity and adaptability",
+      "Leadership under pressure",
+    ],
+  },
+  architect: {
+    icon: "🏛️",
+    title: "Architect",
+    successSkill: "Design Integration & Professional Practice",
+    successMessage: "Excellent architectural thinking! You balanced aesthetics, function, safety, and codes—the hallmarks of great architecture.",
+    failureSkill: "Design Problem-Solving",
+    failureMessage: "Architecture requires balancing many factors: client needs, codes, sustainability, and aesthetics. Review the principles and try again.",
+    keySkills: [
+      "Spatial and creative thinking",
+      "Building codes and safety",
+      "Sustainable design principles",
+      "Client communication and ethics",
+    ],
+  },
 };
 
 const trophyColors = {

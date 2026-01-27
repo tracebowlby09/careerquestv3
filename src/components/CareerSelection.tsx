@@ -36,6 +36,27 @@ const careers: CareerOption[] = [
     description: "Design structures and balance technical constraints",
     skills: ["Analysis", "Design", "Constraint Management"],
   },
+  {
+    id: "teacher",
+    title: "Teacher",
+    icon: "👩‍🏫",
+    description: "Educate students and manage classroom dynamics",
+    skills: ["Communication", "Patience", "Leadership"],
+  },
+  {
+    id: "chef",
+    title: "Professional Chef",
+    icon: "👨‍🍳",
+    description: "Create culinary experiences and manage kitchen operations",
+    skills: ["Creativity", "Time Management", "Quality Control"],
+  },
+  {
+    id: "architect",
+    title: "Architect",
+    icon: "🏛️",
+    description: "Design buildings that balance form, function, and safety",
+    skills: ["Spatial Thinking", "Problem Solving", "Sustainability"],
+  },
 ];
 
 export default function CareerSelection({ onSelectCareer }: CareerSelectionProps) {
