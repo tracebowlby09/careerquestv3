@@ -1,0 +1,98 @@
+"use client";
+
+export type Career = "programmer" | "nurse" | "engineer";
+
+interface CareerOption {
+  id: Career;
+  title: string;
+  icon: string;
+  description: string;
+  skills: string[];
+}
+
+interface CareerSelectionProps {
+  onSelectCareer: (career: Career) => void;
+}
+
+const careers: CareerOption[] = [
+  {
+    id: "programmer",
+    title: "Software Programmer",
+    icon: "💻",
+    description: "Write code, solve problems, and build digital solutions",
+    skills: ["Logic", "Debugging", "Problem Solving"],
+  },
+  {
+    id: "nurse",
+    title: "Registered Nurse",
+    icon: "🏥",
+    description: "Care for patients and make critical healthcare decisions",
+    skills: ["Prioritization", "Critical Thinking", "Empathy"],
+  },
+  {
+    id: "engineer",
+    title: "Civil Engineer",
+    icon: "🏗️",
+    description: "Design structures and balance technical constraints",
+    skills: ["Analysis", "Design", "Constraint Management"],
+  },
+];
+
+export default function CareerSelection({ onSelectCareer }: CareerSelectionProps) {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-4 md:p-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Choose Your Career Path
+          </h2>
+          <p className="text-xl text-white/90">
+            Select a career to explore and complete a real-world challenge
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          {careers.map((career) => (
+            <button
+              key={career.id}
+              onClick={() => onSelectCareer(career.id)}
+              className="bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200 text-left"
+            >
+              <div className="text-6xl mb-4 text-center">{career.icon}</div>
+              
+              <h3 className="text-2xl font-bold text-gray-900 mb-3 text-center">
+                {career.title}
+              </h3>
+              
+              <p className="text-gray-600 mb-4 text-center">
+                {career.description}
+              </p>
+              
+              <div className="border-t pt-4">
+                <p className="text-sm font-semibold text-gray-700 mb-2">
+                  Skills You&apos;ll Learn:
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {career.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="bg-purple-100 text-purple-700 text-xs px-3 py-1 rounded-full"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="mt-4 text-center">
+                <span className="text-purple-600 font-semibold">
+                  Start Challenge →
+                </span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
