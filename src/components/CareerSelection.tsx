@@ -1,6 +1,6 @@
 "use client";
 
-export type Career = "programmer" | "nurse" | "engineer";
+import { Career } from "@/types/game";
 
 interface CareerOption {
   id: Career;

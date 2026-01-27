@@ -1,12 +1,16 @@
 "use client";
 
-import { Career } from "./CareerSelection";
+import { Career, Difficulty } from "@/types/game";
 
 interface OutcomeScreenProps {
   career: Career;
+  difficulty: Difficulty;
   success: boolean;
+  score: number;
+  total: number;
   onPlayAgain: () => void;
   onNewCareer: () => void;
+  onChangeDifficulty: () => void;
 }
 
 const careerData = {
@@ -14,9 +18,9 @@ const careerData = {
     icon: "💻",
     title: "Software Programmer",
     successSkill: "Debugging & Logical Thinking",
-    successMessage: "You correctly identified the off-by-one error! This is one of the most common bugs in programming. Programmers need strong logical thinking to trace through code execution and spot where things go wrong.",
+    successMessage: "You demonstrated strong debugging skills! Programmers need logical thinking to trace through code execution and spot where things go wrong.",
     failureSkill: "Root Cause Analysis",
-    failureMessage: "The issue was an off-by-one error in the loop condition. The loop used `i <= items.length` which tries to access one index beyond the array. Programmers must identify root causes, not just mask symptoms.",
+    failureMessage: "Keep practicing! Programmers must identify root causes, not just mask symptoms. Review the questions and try again.",
     keySkills: [
       "Problem-solving and logical reasoning",
       "Attention to detail",
@@ -28,9 +32,9 @@ const careerData = {
     icon: "🏥",
     title: "Registered Nurse",
     successSkill: "Clinical Prioritization & Triage",
-    successMessage: "Excellent triage! You correctly prioritized the chest pain patient (possible heart attack), then the child with respiratory distress, then the sprained ankle. Nurses must make life-or-death decisions under pressure.",
+    successMessage: "Excellent triage skills! You correctly prioritized patients based on severity. Nurses must make life-or-death decisions under pressure.",
     failureSkill: "Critical Assessment",
-    failureMessage: "The correct order was: John (chest pain - possible MI), Emma (pediatric respiratory distress), then Sarah (sprained ankle). Nurses must quickly assess severity and prioritize life-threatening conditions first.",
+    failureMessage: "Triage is challenging! Remember to prioritize life-threatening conditions first, then urgent cases, then stable patients.",
     keySkills: [
       "Rapid assessment of patient conditions",
       "Prioritization under pressure",
@@ -42,9 +46,9 @@ const careerData = {
     icon: "🏗️",
     title: "Civil Engineer",
     successSkill: "Constraint Optimization",
-    successMessage: "Perfect choice! The Reinforced Concrete design was the only option that met all constraints: under budget ($85k < $100k), sufficient strength (95 ≥ 85), and within timeline (12 ≤ 14 months). Engineers must balance multiple competing requirements.",
+    successMessage: "Perfect engineering decisions! You balanced cost, strength, and timeline effectively. Engineers must find solutions that meet ALL requirements.",
     failureSkill: "Requirements Analysis",
-    failureMessage: "Only the Reinforced Concrete design satisfied all constraints. The Budget option lacked strength, and the Premium option exceeded budget and timeline. Engineers must find solutions that meet ALL requirements, not just some.",
+    failureMessage: "Engineering requires balancing multiple constraints. Review which designs met all requirements and try again.",
     keySkills: [
       "Balancing multiple constraints",
       "Mathematical and analytical thinking",
@@ -54,13 +58,30 @@ const careerData = {
   },
 };
 
+const trophyColors = {
+  easy: "from-green-400 to-emerald-500",
+  medium: "from-yellow-400 to-orange-500",
+  hard: "from-red-500 to-pink-600",
+};
+
+const trophyIcons = {
+  easy: "🥉",
+  medium: "🥈",
+  hard: "🥇",
+};
+
 export default function OutcomeScreen({
   career,
+  difficulty,
   success,
+  score,
+  total,
   onPlayAgain,
   onNewCareer,
+  onChangeDifficulty,
 }: OutcomeScreenProps) {
   const data = careerData[career];
+  const percentage = Math.round((score / total) * 100);
 
   return (
     <div className={`min-h-screen p-4 md:p-8 flex items-center justify-center ${
@@ -71,14 +92,52 @@ export default function OutcomeScreen({
       <div className="max-w-3xl w-full bg-white rounded-2xl shadow-2xl p-8">
         <div className="text-center mb-6">
           <div className="text-6xl mb-4">{data.icon}</div>
+          
+          {success && (
+            <div className="mb-4">
+              <div className={`inline-block bg-gradient-to-r ${trophyColors[difficulty]} text-white px-6 py-3 rounded-full text-4xl font-bold shadow-lg`}>
+                {trophyIcons[difficulty]} Trophy Earned!
+              </div>
+            </div>
+          )}
+          
           <div className={`text-5xl font-bold mb-4 ${
             success ? "text-green-600" : "text-orange-600"
           }`}>
-            {success ? "Success! ✓" : "Not Quite"}
+            {success ? "Success! ✓" : "Keep Trying!"}
           </div>
-          <h3 className="text-2xl font-bold text-gray-900">
+          
+          <h3 className="text-2xl font-bold text-gray-900 mb-2">
             {data.title}
           </h3>
+          
+          <div className="text-lg text-gray-700">
+            Difficulty: <span className="font-bold capitalize">{difficulty}</span>
+          </div>
+        </div>
+
+        <div className="bg-gray-100 rounded-lg p-6 mb-6">
+          <div className="text-center mb-4">
+            <div className="text-5xl font-bold text-gray-900 mb-2">
+              {score} / {total}
+            </div>
+            <div className="text-xl text-gray-700">
+              {percentage}% Correct
+            </div>
+          </div>
+          
+          <div className="w-full bg-gray-300 rounded-full h-4 overflow-hidden">
+            <div
+              className={`h-full transition-all duration-500 ${
+                percentage >= 60 ? "bg-green-500" : "bg-red-500"
+              }`}
+              style={{ width: `${percentage}%` }}
+            />
+          </div>
+          
+          <div className="text-center mt-2 text-sm text-gray-600">
+            {percentage >= 60 ? "Passed! (60% required)" : "Need 60% to pass"}
+          </div>
         </div>
 
         <div className="mb-6">
@@ -111,12 +170,19 @@ export default function OutcomeScreen({
             onClick={onPlayAgain}
             className="w-full bg-blue-600 text-white font-bold py-4 rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Try This Career Again
+            Try Same Difficulty Again
+          </button>
+          
+          <button
+            onClick={onChangeDifficulty}
+            className="w-full bg-purple-600 text-white font-bold py-4 rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            Change Difficulty Level
           </button>
           
           <button
             onClick={onNewCareer}
-            className="w-full bg-purple-600 text-white font-bold py-4 rounded-lg hover:bg-purple-700 transition-colors"
+            className="w-full bg-gray-600 text-white font-bold py-4 rounded-lg hover:bg-gray-700 transition-colors"
           >
             Explore Another Career
           </button>
@@ -124,8 +190,8 @@ export default function OutcomeScreen({
 
         <div className="mt-6 text-center text-sm text-gray-600">
           {success
-            ? "Great job! You demonstrated the key skills needed for this career."
-            : "Learning from mistakes is part of every career. Try again!"}
+            ? `Great job! You earned the ${difficulty} trophy for ${data.title}!`
+            : "Learning from mistakes is part of every career. Keep practicing!"}
         </div>
       </div>
     </div>
