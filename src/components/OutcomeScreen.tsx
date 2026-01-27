@@ -128,8 +128,8 @@ export default function OutcomeScreen({
   return (
     <div className={`min-h-screen p-4 md:p-8 flex items-center justify-center ${
       success
-        ? "bg-gradient-to-br from-green-500 via-emerald-500 to-teal-500"
-        : "bg-gradient-to-br from-orange-500 via-red-500 to-pink-500"
+        ? "bg-gradient-to-br from-emerald-700 via-teal-800 to-cyan-900"
+        : "bg-gradient-to-br from-orange-700 via-red-800 to-rose-900"
     }`}>
       <div className="max-w-3xl w-full bg-white rounded-2xl shadow-2xl p-8">
         <div className="text-center mb-6">

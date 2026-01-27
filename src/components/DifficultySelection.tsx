@@ -49,8 +49,16 @@ export default function DifficultySelection({
   onSelectDifficulty,
   onBack,
 }: DifficultySelectionProps) {
+  const handleSelect = (difficulty: Difficulty) => {
+    if (typeof window !== 'undefined') {
+      const { audioSystem } = require('@/lib/audio');
+      audioSystem.playClickSound();
+    }
+    onSelectDifficulty(difficulty);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-600 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-700 via-blue-900 to-indigo-900 p-4 md:p-8">
       <div className="max-w-5xl mx-auto">
         <button
           onClick={onBack}
@@ -72,7 +80,7 @@ export default function DifficultySelection({
           {difficulties.map((diff) => (
             <button
               key={diff.id}
-              onClick={() => onSelectDifficulty(diff.id)}
+              onClick={() => handleSelect(diff.id)}
               className="bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200"
             >
               <div className="text-6xl mb-4 text-center">{diff.icon}</div>

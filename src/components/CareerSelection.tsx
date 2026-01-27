@@ -60,8 +60,16 @@ const careers: CareerOption[] = [
 ];
 
 export default function CareerSelection({ onSelectCareer }: CareerSelectionProps) {
+  const handleSelect = (career: Career) => {
+    if (typeof window !== 'undefined') {
+      const { audioSystem } = require('@/lib/audio');
+      audioSystem.playClickSound();
+    }
+    onSelectCareer(career);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-700 via-indigo-800 to-gray-900 p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
@@ -76,7 +84,7 @@ export default function CareerSelection({ onSelectCareer }: CareerSelectionProps
           {careers.map((career) => (
             <button
               key={career.id}
-              onClick={() => onSelectCareer(career.id)}
+              onClick={() => handleSelect(career.id)}
               className="bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200 text-left"
             >
               <div className="text-6xl mb-4 text-center">{career.icon}</div>

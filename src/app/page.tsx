@@ -11,7 +11,9 @@ import TeacherWorld from "@/components/careers/TeacherWorld";
 import ChefWorld from "@/components/careers/ChefWorld";
 import ArchitectWorld from "@/components/careers/ArchitectWorld";
 import OutcomeScreen from "@/components/OutcomeScreen";
+import Settings from "@/components/Settings";
 import { Career, Difficulty, Trophy } from "@/types/game";
+import { audioSystem } from "@/lib/audio";
 
 type GameState = "title" | "career-select" | "difficulty-select" | "playing" | "outcome";
 
@@ -32,8 +34,10 @@ export default function Home() {
   const [totalQuestions, setTotalQuestions] = useState(0);
   const [challengeSuccess, setChallengeSuccess] = useState(false);
   const [trophies, setTrophies] = useState<Trophy[]>([]);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const handleStart = () => {
+    audioSystem.playClickSound();
     setGameState("career-select");
   };
 
@@ -51,6 +55,13 @@ export default function Home() {
     setChallengeSuccess(success);
     setScore(finalScore);
     setTotalQuestions(total);
+    
+    // Play success or failure sound
+    if (success) {
+      audioSystem.playSuccessSound();
+    } else {
+      audioSystem.playFailureSound();
+    }
     
     // Award trophy if successful
     if (success && selectedCareer && selectedDifficulty) {
@@ -87,7 +98,12 @@ export default function Home() {
 
   // Render current game state
   if (gameState === "title") {
-    return <TitleScreen onStart={handleStart} />;
+    return (
+      <>
+        <TitleScreen onStart={handleStart} onOpenSettings={() => setSettingsOpen(true)} />
+        <Settings isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      </>
+    );
   }
 
   if (gameState === "career-select") {
