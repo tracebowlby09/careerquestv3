@@ -1,162 +1,185 @@
-// Audio system using Web Audio API for synthesized sounds
+// src/lib/audio.ts
+// File-based audio system using Web Audio API (works with /public/audio/*)
+
+type SoundKey = "click" | "success" | "failure" | "music";
 
 class AudioSystem {
-  private audioContext: AudioContext | null = null;
-  private musicGainNode: GainNode | null = null;
-  private sfxGainNode: GainNode | null = null;
-  private musicOscillator: OscillatorNode | null = null;
-  private musicVolume = 0.3;
-  private sfxVolume = 0.5;
+  private ctx: AudioContext | null = null;
+
+  private masterGain: GainNode | null = null;
+  private musicGain: GainNode | null = null;
+  private sfxGain: GainNode | null = null;
+
+  private buffers = new Map<SoundKey, AudioBuffer>();
+
+  private musicSource: AudioBufferSourceNode | null = null;
   private isMusicPlaying = false;
 
-  initialize() {
-    if (typeof window === 'undefined') return;
-    
-    if (!this.audioContext) {
-      this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      this.musicGainNode = this.audioContext.createGain();
-      this.sfxGainNode = this.audioContext.createGain();
-      
-      this.musicGainNode.connect(this.audioContext.destination);
-      this.sfxGainNode.connect(this.audioContext.destination);
-      
-      this.musicGainNode.gain.value = this.musicVolume;
-      this.sfxGainNode.gain.value = this.sfxVolume;
+  private musicVolume = 0.3;
+  private sfxVolume = 0.5;
+
+  // Default file locations (you can change these)
+  private urls: Record<SoundKey, string> = {
+    click: "/audio/click.mp3",
+    success: "/audio/success.mp3",
+    failure: "/audio/failure.mp3",
+    music: "/audio/music.mp3",
+  };
+
+  /** Call once somewhere like on first user interaction, or TitleScreen */
+  initialize(customUrls?: Partial<Record<SoundKey, string>>) {
+    if (typeof window === "undefined") return;
+
+    if (customUrls) this.urls = { ...this.urls, ...customUrls };
+
+    if (!this.ctx) {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      this.ctx = new AudioCtx();
+
+      this.masterGain = this.ctx.createGain();
+      this.musicGain = this.ctx.createGain();
+      this.sfxGain = this.ctx.createGain();
+
+      this.musicGain.connect(this.masterGain);
+      this.sfxGain.connect(this.masterGain);
+      this.masterGain.connect(this.ctx.destination);
+
+      this.musicGain.gain.value = this.musicVolume;
+      this.sfxGain.gain.value = this.sfxVolume;
+      this.masterGain.gain.value = 1;
     }
   }
 
-  // Background music - simple ambient loop
-  startBackgroundMusic() {
-    if (!this.audioContext || !this.musicGainNode || this.isMusicPlaying) return;
-    
+  /** Browsers often require a gesture before audio can start */
+  private async resumeIfNeeded() {
+    if (!this.ctx) return;
+    if (this.ctx.state === "running") return;
+    try {
+      await this.ctx.resume();
+    } catch {
+      // If resume fails (no user gesture), just do nothing.
+    }
+  }
+
+  /** Preload one sound into memory */
+  private async loadSound(key: SoundKey) {
+    if (!this.ctx) return;
+    if (this.buffers.has(key)) return;
+
+    const res = await fetch(this.urls[key]);
+    if (!res.ok) throw new Error(`Failed to load sound: ${key} (${this.urls[key]})`);
+
+    const arr = await res.arrayBuffer();
+    const buf = await this.ctx.decodeAudioData(arr);
+    this.buffers.set(key, buf);
+  }
+
+  /** Preload all sounds (recommended) */
+  async preloadAll() {
+    this.initialize();
+    if (!this.ctx) return;
+
+    await this.resumeIfNeeded();
+    await Promise.all([
+      this.loadSound("click"),
+      this.loadSound("success"),
+      this.loadSound("failure"),
+      this.loadSound("music"),
+    ]);
+  }
+
+  /** Plays a sound buffer through the given gain node */
+  private playBuffer(key: SoundKey, destination: GainNode, opts?: { loop?: boolean }) {
+    if (!this.ctx) return;
+    const buf = this.buffers.get(key);
+    if (!buf) return;
+
+    const src = this.ctx.createBufferSource();
+    src.buffer = buf;
+    src.loop = !!opts?.loop;
+    src.connect(destination);
+    src.start(0);
+
+    return src;
+  }
+
+  // -------------------------
+  // SFX
+  // -------------------------
+  playClickSound() {
+    void this.playSfx("click");
+  }
+
+  playSuccessSound() {
+    void this.playSfx("success");
+  }
+
+  playFailureSound() {
+    void this.playSfx("failure");
+  }
+
+  private async playSfx(key: Exclude<SoundKey, "music">) {
+    this.initialize();
+    if (!this.ctx || !this.sfxGain) return;
+
+    await this.resumeIfNeeded();
+    if (!this.buffers.has(key)) {
+      try {
+        await this.loadSound(key);
+      } catch {
+        return;
+      }
+    }
+
+    this.playBuffer(key, this.sfxGain);
+  }
+
+  // -------------------------
+  // Music
+  // -------------------------
+  async startBackgroundMusic() {
+    this.initialize();
+    if (!this.ctx || !this.musicGain) return;
+    if (this.isMusicPlaying) return;
+
+    await this.resumeIfNeeded();
+
+    if (!this.buffers.has("music")) {
+      try {
+        await this.loadSound("music");
+      } catch {
+        return;
+      }
+    }
+
+    this.stopBackgroundMusic(); // ensure clean restart
     this.isMusicPlaying = true;
-    this.playAmbientMusic();
-  }
 
-  private playAmbientMusic() {
-    if (!this.audioContext || !this.musicGainNode) return;
-
-    // Create a simple ambient chord progression
-    const notes = [
-      { freq: 261.63, duration: 2 }, // C4
-      { freq: 329.63, duration: 2 }, // E4
-      { freq: 392.00, duration: 2 }, // G4
-      { freq: 329.63, duration: 2 }, // E4
-    ];
-
-    let time = this.audioContext.currentTime;
-    
-    notes.forEach((note) => {
-      const osc = this.audioContext!.createOscillator();
-      const gainNode = this.audioContext!.createGain();
-      
-      osc.type = 'sine';
-      osc.frequency.value = note.freq;
-      
-      gainNode.gain.setValueAtTime(0, time);
-      gainNode.gain.linearRampToValueAtTime(0.1, time + 0.1);
-      gainNode.gain.linearRampToValueAtTime(0.05, time + note.duration - 0.1);
-      gainNode.gain.linearRampToValueAtTime(0, time + note.duration);
-      
-      osc.connect(gainNode);
-      gainNode.connect(this.musicGainNode!);
-      
-      osc.start(time);
-      osc.stop(time + note.duration);
-      
-      time += note.duration;
-    });
-
-    // Loop the music
-    if (this.isMusicPlaying) {
-      setTimeout(() => this.playAmbientMusic(), 8000);
-    }
+    this.musicSource = this.playBuffer("music", this.musicGain, { loop: true }) ?? null;
   }
 
   stopBackgroundMusic() {
     this.isMusicPlaying = false;
+    if (this.musicSource) {
+      try {
+        this.musicSource.stop();
+      } catch {}
+      this.musicSource.disconnect();
+      this.musicSource = null;
+    }
   }
 
-  // Click sound effect
-  playClickSound() {
-    if (!this.audioContext || !this.sfxGainNode) return;
-
-    const osc = this.audioContext.createOscillator();
-    const gainNode = this.audioContext.createGain();
-    
-    osc.type = 'sine';
-    osc.frequency.value = 800;
-    
-    gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.1);
-    
-    osc.connect(gainNode);
-    gainNode.connect(this.sfxGainNode);
-    
-    osc.start();
-    osc.stop(this.audioContext.currentTime + 0.1);
-  }
-
-  // Success sound effect
-  playSuccessSound() {
-    if (!this.audioContext || !this.sfxGainNode) return;
-
-    const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
-    let time = this.audioContext.currentTime;
-
-    notes.forEach((freq, i) => {
-      const osc = this.audioContext!.createOscillator();
-      const gainNode = this.audioContext!.createGain();
-      
-      osc.type = 'sine';
-      osc.frequency.value = freq;
-      
-      gainNode.gain.setValueAtTime(0.2, time);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, time + 0.2);
-      
-      osc.connect(gainNode);
-      gainNode.connect(this.sfxGainNode!);
-      
-      osc.start(time);
-      osc.stop(time + 0.2);
-      
-      time += 0.15;
-    });
-  }
-
-  // Failure sound effect
-  playFailureSound() {
-    if (!this.audioContext || !this.sfxGainNode) return;
-
-    const osc = this.audioContext.createOscillator();
-    const gainNode = this.audioContext.createGain();
-    
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(400, this.audioContext.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(200, this.audioContext.currentTime + 0.3);
-    
-    gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.3);
-    
-    osc.connect(gainNode);
-    gainNode.connect(this.sfxGainNode);
-    
-    osc.start();
-    osc.stop(this.audioContext.currentTime + 0.3);
-  }
-
+  // -------------------------
+  // Volume controls
+  // -------------------------
   setMusicVolume(volume: number) {
     this.musicVolume = Math.max(0, Math.min(1, volume));
-    if (this.musicGainNode) {
-      this.musicGainNode.gain.value = this.musicVolume;
-    }
+    if (this.musicGain) this.musicGain.gain.value = this.musicVolume;
   }
 
   setSfxVolume(volume: number) {
     this.sfxVolume = Math.max(0, Math.min(1, volume));
-    if (this.sfxGainNode) {
-      this.sfxGainNode.gain.value = this.sfxVolume;
-    }
+    if (this.sfxGain) this.sfxGain.gain.value = this.sfxVolume;
   }
 
   getMusicVolume() {
@@ -168,5 +191,4 @@ class AudioSystem {
   }
 }
 
-// Singleton instance
 export const audioSystem = new AudioSystem();
