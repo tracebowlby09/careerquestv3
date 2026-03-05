@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { audioSystem } from "@/lib/audio";
 
 interface SettingsProps {
@@ -9,8 +9,16 @@ interface SettingsProps {
 }
 
 export default function Settings({ isOpen, onClose }: SettingsProps) {
-  const [musicVolume, setMusicVolume] = useState(() => audioSystem.getMusicVolume() * 100);
-  const [sfxVolume, setSfxVolume] = useState(() => audioSystem.getSfxVolume() * 100);
+  const [musicVolume, setMusicVolume] = useState(30);
+  const [sfxVolume, setSfxVolume] = useState(50);
+
+  // Sync with audio system when settings opens
+  useEffect(() => {
+    if (isOpen) {
+      setMusicVolume(audioSystem.getMusicVolume() * 100);
+      setSfxVolume(audioSystem.getSfxVolume() * 100);
+    }
+  }, [isOpen]);
 
   const handleMusicVolumeChange = (value: number) => {
     setMusicVolume(value);

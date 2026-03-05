@@ -319,25 +319,19 @@ export default function EngineerWorld({ difficulty, onComplete }: EngineerWorldP
                   <div className="grid grid-cols-3 gap-4">
                     <div>
                       <span className="text-sm font-semibold text-gray-600">Cost:</span>
-                      <p className={`font-bold ${
-                        design.cost <= currentQuestion.constraints.maxCost ? "text-green-600" : "text-red-600"
-                      }`}>
+                      <p className="font-bold text-gray-900">
                         ${design.cost.toLocaleString()}
                       </p>
                     </div>
                     <div>
                       <span className="text-sm font-semibold text-gray-600">Strength:</span>
-                      <p className={`font-bold ${
-                        design.strength >= currentQuestion.constraints.minStrength ? "text-green-600" : "text-red-600"
-                      }`}>
+                      <p className="font-bold text-gray-900">
                         {design.strength}/100
                       </p>
                     </div>
                     <div>
                       <span className="text-sm font-semibold text-gray-600">Timeline:</span>
-                      <p className={`font-bold ${
-                        design.time <= currentQuestion.constraints.maxTime ? "text-green-600" : "text-red-600"
-                      }`}>
+                      <p className="font-bold text-gray-900">
                         {design.time} months
                       </p>
                     </div>
