@@ -20,6 +20,7 @@ Career Quest V3 is a career simulation game with multiple career paths (Programm
 - [x] Fixed pass/fail screen alignment (centered)
 - [x] Fixed career worlds to be full screen
 - [x] Added secret Konami code trophy easter egg
+- [x] Added unique Quick Recall career selection screen with gradient cards
 
 ## Current Structure
 

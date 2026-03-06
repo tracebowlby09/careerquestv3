@@ -330,7 +330,12 @@ export default function Home() {
   if (gameState === "career-select") {
     return (
       <>
-        <CareerSelection onSelectCareer={handleCareerSelect} onOpenSettings={() => setSettingsOpen(true)} onExit={handleExitToTitle} />
+        <CareerSelection 
+          onSelectCareer={handleCareerSelect} 
+          onOpenSettings={() => setSettingsOpen(true)} 
+          onExit={handleExitToTitle}
+          gameMode={gameMode}
+        />
         {settingsModal}
         <SecretTrophyPopup 
           show={showSecretTrophyPopup} 
