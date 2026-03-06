@@ -2,7 +2,6 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { Difficulty } from "@/types/game";
-import { getBackgroundStyle } from "@/lib/backgrounds";
 
 // Fisher-Yates shuffle algorithm
 function shuffleArray<T>(array: T[]): T[] {
@@ -559,9 +558,8 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall }: 
   };
 
   if (stage === "intro") {
-    const customStyle = getBackgroundStyle("teacher");
     return (
-      <div style={customStyle} className={`min-h-screen ${customStyle.backgroundImage ? '' : 'bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600'} p-4 md:p-8 flex items-center justify-center`}>
+      <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-4 md:p-8 flex items-center justify-center">
         <div className="max-w-3xl w-full bg-white rounded-2xl shadow-2xl p-8">
           <div className="text-center mb-6">
             <div className="text-6xl mb-4">👩‍🏫</div>
@@ -617,10 +615,8 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall }: 
     );
   }
 
-  const customStyle = getBackgroundStyle("teacher");
-
   return (
-    <div style={customStyle} className={`min-h-screen ${customStyle.backgroundImage ? '' : 'bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600'} p-4 md:p-8`}>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
         {/* Heart Lost Overlay */}
         {showHeartLost && (
