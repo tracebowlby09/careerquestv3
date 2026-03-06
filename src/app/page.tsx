@@ -288,6 +288,12 @@ export default function Home() {
     setGameState("career-select");
   };
 
+  const handleBackToSelection = () => {
+    // For Quick Recall mode, go back to career selection
+    setSelectedCareer(null);
+    setGameState("career-select");
+  };
+
   const handleBackToCareerSelect = () => {
     setSelectedCareer(null);
     setGameState("career-select");
@@ -444,6 +450,7 @@ export default function Home() {
           onOpenSettings={() => setSettingsOpen(true)}
           onExit={handleExitToTitle}
           isQuickRecall={gameMode === "quick-recall"}
+          onBackToSelection={handleBackToSelection}
         />
         {settingsModal}
         <SecretTrophyPopup 

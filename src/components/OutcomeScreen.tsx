@@ -15,6 +15,7 @@ interface OutcomeScreenProps {
   onOpenSettings?: () => void;
   onExit?: () => void;
   isQuickRecall?: boolean;
+  onBackToSelection?: () => void;
 }
 
 const careerData = {
@@ -127,50 +128,53 @@ export default function OutcomeScreen({
   onChangeDifficulty,
   onOpenSettings,
   onExit,
+  isQuickRecall,
+  onBackToSelection,
 }: OutcomeScreenProps) {
   const data = careerData[career];
   const percentage = Math.round((score / total) * 100);
+  const isQR = isQuickRecall;
 
   return (
     <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit} dark>
-      <div className={`max-w-3xl w-full bg-white rounded-2xl shadow-2xl p-8 mx-auto`}>
+      <div className={`max-w-3xl w-full rounded-2xl shadow-2xl p-8 mx-auto ${isQR ? "bg-gradient-to-br from-indigo-900 via-purple-900 to-violet-900" : "bg-white"}`}>
         <div className="text-center mb-6">
           <div className="text-6xl mb-4">{data.icon}</div>
           
           {success && (
             <div className="mb-4">
-              <div className={`inline-block bg-gradient-to-r ${trophyColors[difficulty]} text-white px-6 py-3 rounded-full text-4xl font-bold shadow-lg`}>
-                {trophyIcons[difficulty]} Trophy Earned!
+              <div className={`inline-block bg-gradient-to-r ${isQR ? "from-amber-400 via-orange-500 to-red-500" : trophyColors[difficulty]} text-white px-6 py-3 rounded-full text-4xl font-bold shadow-lg`}>
+                {isQR ? "🏆" : trophyIcons[difficulty]} {isQR ? "Mastery Achieved!" : "Trophy Earned!"}
               </div>
             </div>
           )}
           
           <div className={`text-5xl font-bold mb-4 ${
-            success ? "text-green-600" : "text-orange-600"
+            success ? (isQR ? "text-amber-300" : "text-green-600") : (isQR ? "text-purple-300" : "text-orange-600")
           }`}>
-            {success ? "Success! ✓" : "Keep Trying!"}
+            {success ? (isQR ? "Mastery Complete! ✓" : "Success! ✓") : (isQR ? "Keep Practicing!" : "Keep Trying!")}
           </div>
           
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">
+          <h3 className={`text-2xl font-bold mb-2 ${isQR ? "text-white" : "text-gray-900"}`}>
             {data.title}
           </h3>
           
-          <div className="text-lg text-gray-700">
-            Difficulty: <span className="font-bold capitalize">{difficulty}</span>
+          <div className={`text-lg ${isQR ? "text-purple-200" : "text-gray-700"}`}>
+            {isQR ? "Quick Recall Mode" : `Difficulty: ${difficulty}`}
           </div>
         </div>
 
-        <div className="bg-gray-100 rounded-lg p-6 mb-6">
+        <div className={`rounded-lg p-6 mb-6 ${isQR ? "bg-indigo-800/50" : "bg-gray-100"}`}>
           <div className="text-center mb-4">
-            <div className="text-5xl font-bold text-gray-900 mb-2">
+            <div className={`text-5xl font-bold mb-2 ${isQR ? "text-white" : "text-gray-900"}`}>
               {score} / {total}
             </div>
-            <div className="text-xl text-gray-700">
+            <div className={`text-xl ${isQR ? "text-purple-200" : "text-gray-700"}`}>
               {percentage}% Correct
             </div>
           </div>
           
-          <div className="w-full bg-gray-300 rounded-full h-4 overflow-hidden">
+          <div className="bg-gray-700 rounded-full h-4 overflow-hidden">
             <div
               className={`h-full transition-all duration-500 ${
                 percentage >= 60 ? "bg-green-500" : "bg-red-500"
@@ -179,30 +183,32 @@ export default function OutcomeScreen({
             />
           </div>
           
-          <div className="text-center mt-2 text-sm text-gray-600">
-            {percentage >= 60 ? "Passed! (60% required)" : "Need 60% to pass"}
+          <div className="text-center mt-2 text-sm text-gray-400">
+            {isQR 
+              ? (percentage >= 60 ? "Great job! You passed!" : "Keep practicing to improve!")
+              : (percentage >= 60 ? "Passed! (60% required)" : "Need 60% to pass")}
           </div>
         </div>
 
         <div className="mb-6">
-          <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
-            <p className="font-bold text-blue-900 mb-2">
+          <div className={`border-l-4 p-4 mb-4 ${isQR ? "bg-amber-900/50 border-amber-400" : "bg-blue-50 border-blue-500"}`}>
+            <p className={`font-bold mb-2 ${isQR ? "text-amber-200" : "text-blue-900"}`}>
               Key Skill: {success ? data.successSkill : data.failureSkill}
             </p>
-            <p className="text-blue-800">
+            <p className={isQR ? "text-amber-100" : "text-blue-800"}>
               {success ? data.successMessage : data.failureMessage}
             </p>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h4 className="font-bold text-gray-900 mb-3">
+          <div className={`rounded-lg p-6 ${isQR ? "bg-indigo-900/50" : "bg-gray-50"}`}>
+            <h4 className={`font-bold mb-3 ${isQR ? "text-white" : "text-gray-900"}`}>
               What {data.title}s Need:
             </h4>
             <ul className="space-y-2">
               {data.keySkills.map((skill, index) => (
                 <li key={index} className="flex items-start">
-                  <span className="text-green-600 mr-2">✓</span>
-                  <span className="text-gray-700">{skill}</span>
+                  <span className={isQR ? "text-amber-400 mr-2" : "text-green-600 mr-2"}>✓</span>
+                  <span className={isQR ? "text-purple-200" : "text-gray-700"}>{skill}</span>
                 </li>
               ))}
             </ul>
@@ -212,30 +218,47 @@ export default function OutcomeScreen({
         <div className="space-y-3">
           <button
             onClick={onPlayAgain}
-            className="w-full bg-blue-600 text-white font-bold py-4 rounded-lg hover:bg-blue-700 transition-colors"
+            className={`w-full font-bold py-4 rounded-lg transition-colors ${
+              isQR 
+                ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600"
+                : "bg-blue-600 text-white hover:bg-blue-700"
+            }`}
           >
-            Try Same Difficulty Again
+            {isQR ? "Try Again" : "Try Same Difficulty Again"}
           </button>
           
-          <button
-            onClick={onChangeDifficulty}
-            className="w-full bg-purple-600 text-white font-bold py-4 rounded-lg hover:bg-purple-700 transition-colors"
-          >
-            Change Difficulty Level
-          </button>
+          {isQR ? (
+            <button
+              onClick={onBackToSelection}
+              className="w-full bg-gradient-to-r from-purple-500 to-violet-500 text-white font-bold py-4 rounded-lg hover:from-purple-600 hover:to-violet-600 transition-colors"
+            >
+              ← Back to Selection
+            </button>
+          ) : (
+            <button
+              onClick={onChangeDifficulty}
+              className="w-full bg-purple-600 text-white font-bold py-4 rounded-lg hover:bg-purple-700 transition-colors"
+            >
+              Change Difficulty Level
+            </button>
+          )}
           
           <button
             onClick={onNewCareer}
-            className="w-full bg-gray-600 text-white font-bold py-4 rounded-lg hover:bg-gray-700 transition-colors"
+            className={`w-full font-bold py-4 rounded-lg transition-colors ${
+              isQR
+                ? "bg-gray-700/50 text-purple-200 border border-purple-500 hover:bg-gray-600/50"
+                : "bg-gray-600 text-white hover:bg-gray-700"
+            }`}
           >
             Explore Another Career
           </button>
         </div>
 
-        <div className="mt-6 text-center text-sm text-gray-600">
+        <div className={`mt-6 text-center text-sm ${isQR ? "text-purple-300" : "text-gray-600"}`}>
           {success
-            ? `Great job! You earned the ${difficulty} trophy for ${data.title}!`
-            : "Learning from mistakes is part of every career. Keep practicing!"}
+            ? (isQR ? `Great job! You showed mastery in ${data.title}!` : `Great job! You earned the ${difficulty} trophy for ${data.title}!`)
+            : (isQR ? "Practice makes perfect! Keep trying!" : "Learning from mistakes is part of every career. Keep practicing!")}
         </div>
         </div>
     </ScreenWrapper>
