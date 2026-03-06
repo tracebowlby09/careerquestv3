@@ -135,7 +135,10 @@ export default function ChefWorld({ difficulty, onComplete, isQuickRecall }: Che
   const [score, setScore] = useState(0);
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
 
-  const currentQuestions = isQuickRecall ? quickRecallQuestions : questions[difficulty];
+  // Use quick recall questions if available, otherwise fall back to easy questions
+  const currentQuestions = isQuickRecall 
+    ? (quickRecallQuestions.length > 0 ? quickRecallQuestions : questions.easy)
+    : questions[difficulty];
   const currentQuestion = currentQuestions[currentQuestionIndex];
   const totalQuestions = currentQuestions.length;
 
