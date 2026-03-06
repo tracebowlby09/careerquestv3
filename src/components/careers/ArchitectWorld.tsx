@@ -125,8 +125,309 @@ const questions: Record<Difficulty, Question[]> = {
   ],
 };
 
-// Quick Recall mode - add your own questions here
-const quickRecallQuestions: Question[] = [];
+// Quick Recall mode - 30 architectural design challenges
+const quickRecallQuestions: Question[] = [
+  {
+    id: "qr1",
+    scenario: "You're designing a home in an earthquake-prone area.",
+    question: "What structural feature is most important?",
+    options: [
+      { id: "a", text: "Seismic-resistant foundations and shear walls", correct: true, explanation: "These features absorb and distribute earthquake forces." },
+      { id: "b", text: "Heavy concrete walls throughout", correct: false, explanation: "Heavy walls can amplify seismic forces." },
+      { id: "c", text: "Large open spaces without walls", correct: false, explanation: "Open spaces need proper structural design to resist forces." },
+    ],
+  },
+  {
+    id: "qr2",
+    scenario: "A client wants to maximize natural light in their office.",
+    question: "What's the best approach?",
+    options: [
+      { id: "a", text: "Floor-to-ceiling windows with light-colored interiors", correct: true, explanation: "Maximizes daylight penetration and reflection." },
+      { id: "b", text: "Small windows to reduce glare", correct: false, explanation: "This reduces natural light, not enhances it." },
+      { id: "c", text: "Interior offices with artificial lighting", correct: false, explanation: "This doesn't utilize natural light at all." },
+    ],
+  },
+  {
+    id: "qr3",
+    scenario: "You're designing a building in a hot, desert climate.",
+    question: "What should be your primary focus?",
+    options: [
+      { id: "a", text: "Thermal mass and shading elements", correct: true, explanation: "These reduce heat gain and regulate temperature." },
+      { id: "b", text: "Maximize glass for views", correct: false, explanation: "Glass increases heat gain in hot climates." },
+      { id: "c", text: "Minimize windows to reduce heat", correct: false, explanation: "Windows are needed - proper shading is the solution." },
+    ],
+  },
+  {
+    id: "qr4",
+    scenario: "A client needs a building that's fully accessible for elderly visitors.",
+    question: "What's the most critical feature?",
+    options: [
+      { id: "a", text: "No-step entrances and handrails on all stairs", correct: true, explanation: "These are essential for elderly mobility and safety." },
+      { id: "b", text: "Wide hallways", correct: false, explanation: "Important but not the most critical feature." },
+      { id: "c", text: "Elevator to all floors", correct: false, explanation: "Important but ground-floor access is more critical." },
+    ],
+  },
+  {
+    id: "qr5",
+    scenario: "You're designing a sustainable office building.",
+    question: "Which feature has the biggest impact?",
+    options: [
+      { id: "a", text: "Building orientation and window placement", correct: true, explanation: "Passive design has the greatest energy impact." },
+      { id: "b", text: "Recycled carpeting", correct: false, explanation: "Important but minimal energy impact." },
+      { id: "c", text: "Solar panels on the roof", correct: false, explanation: "Helpful but passive design matters more." },
+    ],
+  },
+  {
+    id: "qr6",
+    scenario: "A client wants to create a quiet home office.",
+    question: "What's most important for sound isolation?",
+    options: [
+      { id: "a", text: "Double-layer drywall and acoustic insulation", correct: true, explanation: "These materials block sound transmission." },
+      { id: "b", text: "Thick curtains", correct: false, explanation: "Softens sound but doesn't block it." },
+      { id: "c", text: "White noise machine", correct: false, explanation: "Masks sound but doesn't provide isolation." },
+    ],
+  },
+  {
+    id: "qr7",
+    scenario: "You're designing a building on a steep hillside.",
+    question: "What foundation type is best?",
+    options: [
+      { id: "a", text: "Cantilevered foundation or piles", correct: true, explanation: "These handle uneven terrain and slopes." },
+      { id: "b", text: "Simple slab on grade", correct: false, explanation: "Not suitable for steep slopes." },
+      { id: "c", text: "Basement foundation", correct: false, explanation: "Could work but requires special engineering." },
+    ],
+  },
+  {
+    id: "qr8",
+    scenario: "A client wants to minimize their building's carbon footprint.",
+    question: "What should you prioritize first?",
+    options: [
+      { id: "a", text: "Energy efficiency in envelope and systems", correct: true, explanation: "Reduces ongoing emissions most significantly." },
+      { id: "b", text: "Solar panels", correct: false, explanation: "Helpful but efficiency comes first." },
+      { id: "c", text: "Green roof", correct: false, explanation: "Aesthetic and insulation but secondary." },
+    ],
+  },
+  {
+    id: "qr9",
+    scenario: "You're designing a restaurant kitchen that must stay cool.",
+    question: "What's the most important consideration?",
+    options: [
+      { id: "a", text: "Proper ventilation and exhaust systems", correct: true, explanation: "Heat removal is critical in kitchens." },
+      { id: "b", text: "Large air conditioning units", correct: false, explanation: "Ventilation is more important than cooling." },
+      { id: "c", text: "Reflective ceiling materials", correct: false, explanation: "Minimal impact compared to ventilation." },
+    ],
+  },
+  {
+    id: "qr10",
+    scenario: "A building in a flood zone needs to be designed.",
+    question: "What elevation strategy is best?",
+    options: [
+      { id: "a", text: "Elevate living spaces above flood level", correct: true, explanation: "Elevated design is the primary flood mitigation." },
+      { id: "b", text: "Build a basement for storage", correct: false, explanation: "Basements can flood in flood zones." },
+      { id: "c", text: "Install flood gates at entrances", correct: false, explanation: "Secondary measure, elevation is primary." },
+    ],
+  },
+  {
+    id: "qr11",
+    scenario: "You're designing a library that needs to preserve books.",
+    question: "What's most important for preservation?",
+    options: [
+      { id: "a", text: "Climate control - consistent temperature and humidity", correct: true, explanation: "Stable climate prevents book degradation." },
+      { id: "b", text: "Natural light through skylights", correct: false, explanation: "Light damages books over time." },
+      { id: "c", text: "Open floor plan for easy access", correct: false, explanation: "Not related to preservation." },
+    ],
+  },
+  {
+    id: "qr12",
+    scenario: "A client wants their home to be net-zero energy.",
+    question: "What should come first?",
+    options: [
+      { id: "a", text: "Drastic energy reduction through efficiency", correct: true, explanation: "Reduce demand before adding generation." },
+      { id: "b", text: "Install largest possible solar system", correct: false, explanation: "Generation without efficiency wastes resources." },
+      { id: "c", text: "Buy renewable energy credits", correct: false, explanation: "This is offsetting, not net-zero on site." },
+    ],
+  },
+  {
+    id: "qr13",
+    scenario: "You're designing a museum gallery for priceless artworks.",
+    question: "What environment is most critical?",
+    options: [
+      { id: "a", text: "Stable temperature and humidity with UV control", correct: true, explanation: "Climate stability protects art from damage." },
+      { id: "b", text: "dramatic accent lighting", correct: false, explanation: "Lighting should be controlled, not dramatic." },
+      { id: "c", text: "High ceilings for grandeur", correct: false, explanation: "Not critical for art preservation." },
+    ],
+  },
+  {
+    id: "qr14",
+    scenario: "A building needs to be fire-resistant for insurance purposes.",
+    question: "What's the best material choice?",
+    options: [
+      { id: "a", text: "Concrete and masonry construction", correct: true, explanation: "Non-combustible materials provide fire resistance." },
+      { id: "b", text: "Steel frame with wood cladding", correct: false, explanation: "Steel weakens in fire, wood burns." },
+      { id: "c", text: "Timber frame building", correct: false, explanation: "Wood is combustible unless engineered." },
+    ],
+  },
+  {
+    id: "qr15",
+    scenario: "You're designing a building in a high-wind coastal area.",
+    question: "What's most important?",
+    options: [
+      { id: "a", text: "Impact-resistant windows and reinforced connections", correct: true, explanation: "These prevent wind damage and uplift." },
+      { id: "b", text: "Heavy concrete roof", correct: false, explanation: "Heavy roofs can fail in high winds." },
+      { id: "c", text: "Open floor plan for wind flow", correct: false, explanation: "This doesn't address wind resistance." },
+    ],
+  },
+  {
+    id: "qr16",
+    scenario: "A client wants to age in place in their home.",
+    question: "What should be prioritized?",
+    options: [
+      { id: "a", text: "Single-floor living with wide doorways", correct: true, explanation: "Accessibility is key for aging in place." },
+      { id: "b", text: "Luxurious second floor master suite", correct: false, explanation: "Requires stairs - opposite of aging in place." },
+      { id: "c", text: "High-security features", correct: false, explanation: "Not related to aging in place." },
+    ],
+  },
+  {
+    id: "qr17",
+    scenario: "You're designing a hotel lobby that impresses guests.",
+    question: "What creates the biggest impact?",
+    options: [
+      { id: "a", text: "Double-height ceiling with natural light", correct: true, explanation: "Creates drama and welcoming atmosphere." },
+      { id: "b", text: "Small intimate corners", correct: false, explanation: "Doesn't create the lobby impression." },
+      { id: "c", text: "Basement recreation area", correct: false, explanation: "Not visible to arriving guests." },
+    ],
+  },
+  {
+    id: "qr18",
+    scenario: "A commercial building needs to reduce urban heat island effect.",
+    question: "What's most effective?",
+    options: [
+      { id: "a", text: "Cool roof with high albedo materials", correct: true, explanation: "Reflects sunlight and reduces heat absorption." },
+      { id: "b", text: "Green roof", correct: false, explanation: "Helps but cool roof is more effective." },
+      { id: "c", text: "Dark brick facade", correct: false, explanation: "Absorbs heat, worsens heat island." },
+    ],
+  },
+  {
+    id: "qr19",
+    scenario: "You're designing a childcare center.",
+    question: "What's the most important safety feature?",
+    options: [
+      { id: "a", text: "Child-height fixtures and rounded corners everywhere", correct: true, explanation: "Prevents injuries in active children." },
+      { id: "b", text: "Large educational wall displays", correct: false, explanation: "Educational but not primary safety." },
+      { id: "c", text: "Hardwood floors for easy cleaning", correct: false, explanation: "Hard floors can cause injury from falls." },
+    ],
+  },
+  {
+    id: "qr20",
+    scenario: "A client wants to maximize views while maintaining privacy.",
+    question: "What window treatment works best?",
+    options: [
+      { id: "a", text: "Frosted glass or angled louvers", correct: true, explanation: "Allows light and views while blocking visibility." },
+      { id: "b", text: "Clear glass with no treatment", correct: false, explanation: "No privacy from outside views." },
+      { id: "c", text: "Heavy blackout curtains", correct: false, explanation: "Blocks views entirely." },
+    ],
+  },
+  {
+    id: "qr21",
+    scenario: "You're designing a building in a cold, snowy climate.",
+    question: "What's most important for snow load?",
+    options: [
+      { id: "a", text: "Steep roof pitch and structural snow load capacity", correct: true, explanation: "Prevents snow accumulation and collapse." },
+      { id: "b", text: "Flat roof for snow to pile evenly", correct: false, explanation: "Flat roofs collect snow and can collapse." },
+      { id: "c", text: "Large overhangs for snow slide", correct: false, explanation: "Can create hazards below." },
+    ],
+  },
+  {
+    id: "qr22",
+    scenario: "A client wants a low-maintenance exterior.",
+    question: "What's the best material choice?",
+    options: [
+      { id: "a", text: "Fiber cement or vinyl siding", correct: true, explanation: "Durable and requires minimal upkeep." },
+      { id: "b", text: "Wood siding requiring regular staining", correct: false, explanation: "High maintenance requirement." },
+      { id: "c", text: "Natural stone requiring sealing", correct: false, explanation: "Requires periodic maintenance." },
+    ],
+  },
+  {
+    id: "qr23",
+    scenario: "You're designing a recording studio.",
+    question: "What's most important for acoustics?",
+    options: [
+      { id: "a", text: "Sound isolation and acoustic panels", correct: true, explanation: "Controls sound for recording quality." },
+      { id: "b", text: "Hard reflective surfaces for volume", correct: false, explanation: "Creates echo, not suitable for recording." },
+      { id: "c", text: "Open concept for spacious feel", correct: false, explanation: "Open spaces have poor acoustics for recording." },
+    ],
+  },
+  {
+    id: "qr24",
+    scenario: "A building needs to be easily modified for future needs.",
+    question: "What design approach is best?",
+    options: [
+      { id: "a", text: "Modular design with movable partitions", correct: true, explanation: "Allows reconfiguration without major work." },
+      { id: "b", text: "Load-bearing walls for maximum strength", correct: false, explanation: "Limits flexibility for future changes." },
+      { id: "c", text: "Minimal fixed elements", correct: false, explanation: "Still needs some structure." },
+    ],
+  },
+  {
+    id: "qr25",
+    scenario: "You're designing a healthcare facility.",
+    question: "What hygiene feature is most critical?",
+    options: [
+      { id: "a", text: "Easy-to-clean surfaces and hand-washing stations", correct: true, explanation: "Infection control is paramount in healthcare." },
+      { id: "b", text: "Comfortable patient waiting areas", correct: false, explanation: "Important but secondary to hygiene." },
+      { id: "c", text: "Natural healing garden", correct: false, explanation: "Beneficial but not primary for hygiene." },
+    ],
+  },
+  {
+    id: "qr26",
+    scenario: "A client wants to reduce their water consumption.",
+    question: "What's the biggest impact feature?",
+    options: [
+      { id: "a", text: "Low-flow fixtures and drought-tolerant landscaping", correct: true, explanation: "These reduce indoor and outdoor water use most." },
+      { id: "b", text: "Rainwater harvesting for irrigation", correct: false, explanation: "Helpful but fixtures have bigger impact." },
+      { id: "c", text: "Decorative water features", correct: false, explanation: "Increases water use, not reduces." },
+    ],
+  },
+  {
+    id: "qr27",
+    scenario: "You're designing a building in a noisy urban area.",
+    question: "What's most important for the design?",
+    options: [
+      { id: "a", text: "Soundproof windows and ventilation with silencing", correct: true, explanation: "Blocks urban noise from entering." },
+      { id: "b", text: "Open windows for fresh air", correct: false, explanation: "Lets in noise from traffic." },
+      { id: "c", text: "Street-level retail activation", correct: false, explanation: "Not related to noise control." },
+    ],
+  },
+  {
+    id: "qr28",
+    scenario: "A client wants their home to have universal design appeal.",
+    question: "What's the key principle?",
+    options: [
+      { id: "a", text: "Clean lines, neutral colors, and barrier-free access", correct: true, explanation: "Timeless and accessible design." },
+      { id: "b", text: "Bold colors and unique architectural features", correct: false, explanation: "May not appeal to everyone." },
+      { id: "c", text: "Minimalist tiny home aesthetic", correct: false, explanation: "Not what universal design means." },
+    ],
+  },
+  {
+    id: "qr29",
+    scenario: "You're designing a building that must meet tight budget constraints.",
+    question: "What's the best value strategy?",
+    options: [
+      { id: "a", text: "Simple box shape with efficient structural system", correct: true, explanation: "Simple forms are most cost-effective." },
+      { id: "b", text: "Complex curves and custom details", correct: false, explanation: "Expensive to construct." },
+      { id: "c", text: "Premium materials in key visible areas", correct: false, explanation: "Better to use consistent value materials." },
+    ],
+  },
+  {
+    id: "qr30",
+    scenario: "A client wants a building that feels connected to nature.",
+    question: "What design element is most effective?",
+    options: [
+      { id: "a", text: "Biophilic design with plants and natural materials", correct: true, explanation: "Direct connection to nature improves wellbeing." },
+      { id: "b", text: "Large television screens with nature scenes", correct: false, explanation: "Not the same as real nature connection." },
+      { id: "c", text: "Animal prints in decor", correct: false, explanation: "Not true biophilic design." },
+    ],
+  },
+];
 
 export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall }: ArchitectWorldProps) {
   const [stage, setStage] = useState<"intro" | "challenge">("intro");
