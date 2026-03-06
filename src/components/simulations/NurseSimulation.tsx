@@ -3,10 +3,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { Difficulty } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
+import ScreenWrapper from "@/components/ScreenWrapper";
 
 interface NurseSimulationProps {
   difficulty: Difficulty;
   onComplete: (success: boolean, score: number, total: number) => void;
+  onOpenSettings?: () => void;
+  onExit?: () => void;
 }
 
 interface Patient {
@@ -46,6 +49,18 @@ const triageTasks: Record<Difficulty, TriageTask[]> = {
       timeLimit: 45,
       points: 100,
     },
+    {
+      id: "nurse-e2",
+      title: "Clinic Patients",
+      description: "Triage patients arriving at the walk-in clinic.",
+      patients: [
+        { id: "p1", name: "Baby Lily", avatar: "👶", symptoms: "High fever 103°F", vitalSigns: { heartRate: "140", bloodPressure: "90/60", temperature: "103.0", oxygenSat: "96" }, correctTriage: "urgent" },
+        { id: "p2", name: "Mike", avatar: "👨", symptoms: "Needs prescription refill", vitalSigns: { heartRate: "72", bloodPressure: "118/75", temperature: "98.6", oxygenSat: "99" }, correctTriage: "stable" },
+        { id: "p3", name: "Grandma Rose", avatar: "👵", symptoms: "Stubbed toe", vitalSigns: { heartRate: "68", bloodPressure: "120/80", temperature: "98.2", oxygenSat: "97" }, correctTriage: "stable" },
+      ],
+      timeLimit: 40,
+      points: 100,
+    },
   ],
   medium: [
     {
@@ -60,6 +75,20 @@ const triageTasks: Record<Difficulty, TriageTask[]> = {
         { id: "p5", name: "Tom", avatar: "👨", symptoms: "Nausea", vitalSigns: { heartRate: "70", bloodPressure: "115/75", temperature: "98.8", oxygenSat: "98" }, correctTriage: "stable" },
       ],
       timeLimit: 60,
+      points: 150,
+    },
+    {
+      id: "nurse-m2",
+      title: "Emergency Room Rush",
+      description: "5 patients just arrived. Triage them quickly!",
+      patients: [
+        { id: "p1", name: "Paul", avatar: "👨", symptoms: "Chest pressure, left arm numbness", vitalSigns: { heartRate: "105", bloodPressure: "150/95", temperature: "98.8", oxygenSat: "95" }, correctTriage: "critical" },
+        { id: "p2", name: "Amy", avatar: "👩", symptoms: "Asthma attack", vitalSigns: { heartRate: "115", bloodPressure: "100/65", temperature: "99.0", oxygenSat: "86" }, correctTriage: "critical" },
+        { id: "p3", name: "John", avatar: "👦", symptoms: "Ear pain", vitalSigns: { heartRate: "80", bloodPressure: "110/70", temperature: "100.2", oxygenSat: "98" }, correctTriage: "stable" },
+        { id: "p4", name: "Susan", avatar: "👩", symptoms: "Cut finger, bleeding controlled", vitalSigns: { heartRate: "75", bloodPressure: "115/75", temperature: "98.4", oxygenSat: "98" }, correctTriage: "stable" },
+        { id: "p5", name: "Bob", avatar: "👴", symptoms: "Confused, history of diabetes", vitalSigns: { heartRate: "90", bloodPressure: "140/80", temperature: "101.0", oxygenSat: "94" }, correctTriage: "urgent" },
+      ],
+      timeLimit: 55,
       points: 150,
     },
   ],
@@ -80,10 +109,26 @@ const triageTasks: Record<Difficulty, TriageTask[]> = {
       timeLimit: 90,
       points: 200,
     },
+    {
+      id: "nurse-h2",
+      title: "ICU Overflow",
+      description: "ICU is full! Triage 7 patients and decide who gets the last bed.",
+      patients: [
+        { id: "p1", name: "Robert", avatar: "👨", symptoms: "Post-surgery, vital signs unstable", vitalSigns: { heartRate: "140", bloodPressure: "80/50", temperature: "97.0", oxygenSat: "88" }, correctTriage: "critical" },
+        { id: "p2", name: "Jennifer", avatar: "👩", symptoms: "Recovering well from surgery", vitalSigns: { heartRate: "72", bloodPressure: "118/75", temperature: "98.6", oxygenSat: "98" }, correctTriage: "stable" },
+        { id: "p3", name: "William", avatar: "👴", symptoms: "Heart attack survivor", vitalSigns: { heartRate: "85", bloodPressure: "110/70", temperature: "98.2", oxygenSat: "95" }, correctTriage: "urgent" },
+        { id: "p4", name: "Elizabeth", avatar: "👵", symptoms: "Stable after stroke", vitalSigns: { heartRate: "68", bloodPressure: "125/80", temperature: "98.4", oxygenSat: "97" }, correctTriage: "stable" },
+        { id: "p5", name: "Michael", avatar: "👨", symptoms: "Sepsis, high fever", vitalSigns: { heartRate: "120", bloodPressure: "90/55", temperature: "104.0", oxygenSat: "91" }, correctTriage: "critical" },
+        { id: "p6", name: "Sarah", avatar: "👩", symptoms: "Monitoring overnight", vitalSigns: { heartRate: "70", bloodPressure: "115/75", temperature: "98.0", oxygenSat: "99" }, correctTriage: "stable" },
+        { id: "p7", name: "James", avatar: "👦", symptoms: "Post-op, blood pressure dropping", vitalSigns: { heartRate: "110", bloodPressure: "85/60", temperature: "98.8", oxygenSat: "93" }, correctTriage: "urgent" },
+      ],
+      timeLimit: 80,
+      points: 200,
+    },
   ],
 };
 
-export default function NurseSimulation({ difficulty, onComplete }: NurseSimulationProps) {
+export default function NurseSimulation({ difficulty, onComplete, onOpenSettings, onExit }: NurseSimulationProps) {
   const tasks = triageTasks[difficulty];
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [patientAssignments, setPatientAssignments] = useState<Record<string, "critical" | "urgent" | "stable" | null>>({});

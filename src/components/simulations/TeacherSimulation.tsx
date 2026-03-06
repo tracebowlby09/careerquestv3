@@ -73,6 +73,38 @@ const teacherTasks: Record<Difficulty, TeacherTask[]> = {
       timeLimit: 60,
       points: 100,
     },
+    {
+      id: "tea-e2",
+      title: "First Day Jitters",
+      description: "Handle common first-day-of-school situations.",
+      type: "scenario",
+      scenarios: [
+        {
+          id: "s1",
+          situation: "A student is crying because they're scared and miss their parents",
+          student: "Emma",
+          avatar: "👧",
+          options: [
+            { id: "a", text: "Tell them to stop crying and be brave", correct: false, consequence: "Invalidates their feelings" },
+            { id: "b", text: "Comfort them and reassure them parents will be back", correct: true, consequence: "Student feels validated and calms down" },
+            { id: "c", text: "Ignore them - they'll get over it", correct: false, consequence: "Student becomes more distressed" },
+          ],
+        },
+        {
+          id: "s2",
+          situation: "Students don't know where to sit",
+          student: "Class",
+          avatar: "👨‍👩‍👧",
+          options: [
+            { id: "a", text: "Let them figure it out themselves", correct: false, consequence: "Chaos and arguments" },
+            { id: "b", text: "Assign seats quickly and clearly", correct: true, consequence: "Class begins smoothly" },
+            { id: "c", text: "Let them stand until they behave", correct: false, consequence: "Unnecessary confrontation" },
+          ],
+        },
+      ],
+      timeLimit: 50,
+      points: 100,
+    },
   ],
   medium: [
     {
@@ -116,6 +148,38 @@ const teacherTasks: Record<Difficulty, TeacherTask[]> = {
         },
       ],
       timeLimit: 90,
+      points: 150,
+    },
+    {
+      id: "tea-m2",
+      title: "Academic Integrity",
+      description: "Handle situations involving cheating and academic honesty.",
+      type: "scenario",
+      scenarios: [
+        {
+          id: "s1",
+          situation: "You catch a student copying from another student's test",
+          student: "Kyle",
+          avatar: "👦",
+          options: [
+            { id: "a", text: "Yell at both students in front of class", correct: false, consequence: "Embarrasses students, escalates situation" },
+            { id: "b", text: "Collect tests and address privately after class", correct: true, consequence: "Maintains dignity, addresses issue properly" },
+            { id: "c", text: "Give them both an F immediately", correct: false, consequence: "Too harsh without investigation" },
+          ],
+        },
+        {
+          id: "s2",
+          situation: "A student submits a paper that's clearly not their writing level",
+          student: "Lisa",
+          avatar: "👩",
+          options: [
+            { id: "a", text: "Accuse them of plagiarism right away", correct: false, consequence: "Could be wrong - need evidence" },
+            { id: "b", text: "Ask student to explain their work in person", correct: true, consequence: "Fair investigation" },
+            { id: "c", text: "Ignore it - not your problem", correct: false, consequence: "Academic dishonesty continues" },
+          ],
+        },
+      ],
+      timeLimit: 75,
       points: 150,
     },
   ],
