@@ -185,8 +185,339 @@ for (let i = 0; i <= 5; i++) {
   ],
 };
 
-// Quick Recall mode - add your own questions here
-const quickRecallQuestions: Question[] = [];
+// Quick Recall mode - 30 programming questions for practice
+const quickRecallQuestions: Question[] = [
+  {
+    id: "qr1",
+    code: `const x = [1, 2, 3];\nconsole.log(x[5]);`,
+    error: "undefined",
+    question: "What will this code output?",
+    options: [
+      { id: "a", text: "undefined", correct: true, explanation: "Array index 5 doesn't exist, so it returns undefined." },
+      { id: "b", text: "null", correct: false, explanation: "It's undefined, not null." },
+      { id: "c", text: "Error", correct: false, explanation: "No error, just returns undefined." },
+    ],
+  },
+  {
+    id: "qr2",
+    code: `console.log(typeof null);`,
+    error: "N/A",
+    question: "What does this output?",
+    options: [
+      { id: "a", text: "object", correct: true, explanation: "This is a famous JavaScript quirk - typeof null returns 'object'." },
+      { id: "b", text: "null", correct: false, explanation: "This is a known JavaScript bug/w quirk." },
+      { id: "c", text: "undefined", correct: false, explanation: "It's actually 'object'." },
+    ],
+  },
+  {
+    id: "qr3",
+    code: `let x = 5;\nlet y = '5';\nconsole.log(x == y);`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "true", correct: true, explanation: "== does type coercion, so 5 == '5' is true." },
+      { id: "b", text: "false", correct: false, explanation: "Use === for strict comparison." },
+      { id: "c", text: "Error", correct: false, explanation: "No error, returns boolean." },
+    ],
+  },
+  {
+    id: "qr4",
+    code: `console.log(1 + '2' + 3);`,
+    error: "N/A",
+    question: "What does this output?",
+    options: [
+      { id: "a", text: "123", correct: true, explanation: "String concatenation: 1 + '2' = '12', then '12' + 3 = '123'." },
+      { id: "b", text: "6", correct: false, explanation: "That's if all were numbers, but string wins." },
+      { id: "c", text: "15", correct: false, explanation: "No, string concatenation applies." },
+    ],
+  },
+  {
+    id: "qr5",
+    code: `for (var i = 0; i < 3; i++) {}\nconsole.log(i);`,
+    error: "N/A",
+    question: "What does this output?",
+    options: [
+      { id: "a", text: "3", correct: true, explanation: "var is function-scoped, loop ends at i=3." },
+      { id: "b", text: "2", correct: false, explanation: "After i++ from 2, i becomes 3, then loop exits." },
+      { id: "c", text: "undefined", correct: false, explanation: "var is accessible outside the loop." },
+    ],
+  },
+  {
+    id: "qr6",
+    code: `[1, 2, 3].forEach(x => console.log(x));`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "1 2 3 (each on new line)", correct: true, explanation: "forEach iterates and logs each element." },
+      { id: "b", text: "123", correct: false, explanation: "Each value is logged separately." },
+      { id: "c", text: "undefined", correct: false, explanation: "forEach returns undefined." },
+    ],
+  },
+  {
+    id: "qr7",
+    code: `console.log([...[1,2,3]]);`,
+    error: "N/A",
+    question: "What does this output?",
+    options: [
+      { id: "a", text: "[1, 2, 3]", correct: true, explanation: "Spread operator unpacks and repacks the array." },
+      { id: "b", text: "1,2,3", correct: false, explanation: "It creates a new array." },
+      { id: "c", text: "Error", correct: false, explanation: "This is valid syntax." },
+    ],
+  },
+  {
+    id: "qr8",
+    code: `const obj = { a: 1 };\nobj.b = 2;\nconsole.log(obj);`,
+    error: "N/A",
+    question: "What happens?",
+    options: [
+      { id: "a", text: "Outputs {a: 1, b: 2}", correct: true, explanation: "const prevents reassignment but not property modification." },
+      { id: "b", text: "Error", correct: false, explanation: "const objects can have properties modified." },
+      { id: "c", text: "Outputs {a: 1}", correct: false, explanation: "Properties can be added." },
+    ],
+  },
+  {
+    id: "qr9",
+    code: `console.log('hello'.replace('l', 'x'));`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "hexxo", correct: true, explanation: "replace() only replaces the first occurrence." },
+      { id: "b", text: "hexxxo", correct: false, explanation: "Only first 'l' is replaced." },
+      { id: "c", text: "hello", correct: false, explanation: "It does replace." },
+    ],
+  },
+  {
+    id: "qr10",
+    code: `console.log(0.1 + 0.2 === 0.3);`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "false", correct: true, explanation: "Floating point precision issue: 0.1 + 0.2 = 0.30000000000000004." },
+      { id: "b", text: "true", correct: false, explanation: "JavaScript has floating point precision issues." },
+      { id: "c", text: "Error", correct: false, explanation: "This is valid JavaScript." },
+    ],
+  },
+  {
+    id: "qr11",
+    code: `function test() { return; 1; }\nconsole.log(test());`,
+    error: "N/A",
+    question: "What does this return?",
+    options: [
+      { id: "a", text: "undefined", correct: true, explanation: "return; with no value returns undefined." },
+      { id: "b", text: "1", correct: false, explanation: "Code after return is unreachable." },
+      { id: "c", text: "Error", correct: false, explanation: "This is valid syntax." },
+    ],
+  },
+  {
+    id: "qr12",
+    code: `console.log([1,2,3].map(x => x * 2));`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "[2, 4, 6]", correct: true, explanation: "map creates a new array with transformed values." },
+      { id: "b", text: "[1, 2, 3]", correct: false, explanation: "map transforms each element." },
+      { id: "c", text: "6", correct: false, explanation: "map returns an array." },
+    ],
+  },
+  {
+    id: "qr13",
+    code: `console.log('5' - 3);`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "2", correct: true, explanation: "Minus operator coerces to number: '5' - 3 = 2." },
+      { id: "b", text: "'53'", correct: false, explanation: "Only plus does string concatenation." },
+      { id: "c", text: "Error", correct: false, explanation: "This is valid." },
+    ],
+  },
+  {
+    id: "qr14",
+    code: `const arr = [1, 2, 3];\narr.push(4);\nconsole.log(arr.length);`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "4", correct: true, explanation: "push adds an element, length becomes 4." },
+      { id: "b", text: "3", correct: false, explanation: "arr was modified." },
+      { id: "c", text: "Error", correct: false, explanation: "This is valid." },
+    ],
+  },
+  {
+    id: "qr15",
+    code: `console.log(Boolean(''));`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "false", correct: true, explanation: "Empty string is falsy." },
+      { id: "b", text: "true", correct: false, explanation: "Empty strings are falsy." },
+      { id: "c", text: "undefined", correct: false, explanation: "Boolean() returns boolean." },
+    ],
+  },
+  {
+    id: "qr16",
+    code: `let x = [1, 2, 3];\nlet y = x;\ny.push(4);\nconsole.log(x);`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "[1, 2, 3, 4]", correct: true, explanation: "Arrays are passed by reference in JS." },
+      { id: "b", text: "[1, 2, 3]", correct: false, explanation: "x and y reference the same array." },
+      { id: "c", text: "Error", correct: false, explanation: "This is valid." },
+    ],
+  },
+  {
+    id: "qr17",
+    code: `console.log([1,2,3].filter(x => x > 1));`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "[2, 3]", correct: true, explanation: "filter returns elements that pass the test." },
+      { id: "b", text: "[1, 2, 3]", correct: false, explanation: "filter removes elements that don't pass." },
+      { id: "c", text: "true", correct: false, explanation: "filter returns an array." },
+    ],
+  },
+  {
+    id: "qr18",
+    code: `console.log(Math.max());`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "-Infinity", correct: true, explanation: "With no arguments, max returns -Infinity." },
+      { id: "b", text: "0", correct: false, explanation: "It returns -Infinity." },
+      { id: "c", text: "undefined", correct: false, explanation: "It's -Infinity." },
+    ],
+  },
+  {
+    id: "qr19",
+    code: `console.log('abc'.charAt(10));`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "empty string", correct: true, explanation: "charAt returns empty string for out of bounds." },
+      { id: "b", text: "undefined", correct: false, explanation: "It returns empty string, not undefined." },
+      { id: "c", text: "Error", correct: false, explanation: "This is valid." },
+    ],
+  },
+  {
+    id: "qr20",
+    code: `console.log(2 ** 3);`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "8", correct: true, explanation: "** is the exponentiation operator (2^3 = 8)." },
+      { id: "b", text: "6", correct: false, explanation: "That's 2 * 3." },
+      { id: "c", text: "Error", correct: false, explanation: "This is valid ES2016+ syntax." },
+    ],
+  },
+  {
+    id: "qr21",
+    code: `console.log([1, 2, 3].reduce((a, b) => a + b));`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "6", correct: true, explanation: "reduce sums all elements: 1+2+3 = 6." },
+      { id: "b", text: "[1, 2, 3]", correct: false, explanation: "reduce returns a single value." },
+      { id: "c", text: "Error", correct: false, explanation: "This is valid." },
+    ],
+  },
+  {
+    id: "qr22",
+    code: `console.log(NaN === NaN);`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "false", correct: true, explanation: "NaN is not equal to itself - use isNaN() or Number.isNaN()." },
+      { id: "b", text: "true", correct: false, explanation: "NaN === NaN is false." },
+      { id: "c", text: "Error", correct: false, explanation: "This is valid but returns false." },
+    ],
+  },
+  {
+    id: "qr23",
+    code: `let x = { foo: 1 };\nlet y = { foo: 1 };\nconsole.log(x === y);`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "false", correct: true, explanation: "Objects are compared by reference, not value." },
+      { id: "b", text: "true", correct: false, explanation: "Different object references." },
+      { id: "c", text: "Error", correct: false, explanation: "This is valid." },
+    ],
+  },
+  {
+    id: "qr24",
+    code: `console.log('hello'.toUpperCase());`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "HELLO", correct: true, explanation: "toUpperCase converts string to uppercase." },
+      { id: "b", text: "Hello", correct: false, explanation: "That's not proper case conversion." },
+      { id: "c", text: "Error", correct: false, explanation: "This is valid." },
+    ],
+  },
+  {
+    id: "qr25",
+    code: `console.log(!!'hello');`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "true", correct: true, explanation: "!! converts to boolean (truthy becomes true)." },
+      { id: "b", text: "false", correct: false, explanation: "Non-empty string is truthy." },
+      { id: "c", text: "Error", correct: false, explanation: "This is valid." },
+    ],
+  },
+  {
+    id: "qr26",
+    code: `const greeting = 'Hello';\ngreeting = 'Hi';`,
+    error: "TypeError",
+    question: "What error occurs?",
+    options: [
+      { id: "a", text: "TypeError: Assignment to constant", correct: true, explanation: "Cannot reassign a const variable." },
+      { id: "b", text: "SyntaxError", correct: false, explanation: "This is a TypeError." },
+      { id: "c", text: "ReferenceError", correct: false, explanation: "Not a reference error." },
+    ],
+  },
+  {
+    id: "qr27",
+    code: `console.log([1,2,3].includes(2));`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "true", correct: true, explanation: "includes checks if element exists in array." },
+      { id: "b", text: "false", correct: false, explanation: "2 is in the array." },
+      { id: "c", text: "Error", correct: false, explanation: "This is valid ES2016 syntax." },
+    ],
+  },
+  {
+    id: "qr28",
+    code: `let x = 5;\nlet y = x++;\nconsole.log(y);`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "5", correct: true, explanation: "x++ returns value THEN increments, so y gets 5." },
+      { id: "b", text: "6", correct: false, explanation: "++ returns old value first." },
+      { id: "c", text: "Error", correct: false, explanation: "This is valid." },
+    ],
+  },
+  {
+    id: "qr29",
+    code: `console.log('a' < 'b');`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "true", correct: true, explanation: "String comparison uses Unicode values." },
+      { id: "b", text: "false", correct: false, explanation: "'a' comes before 'b'." },
+      { id: "c", text: "Error", correct: false, explanation: "This is valid." },
+    ],
+  },
+  {
+    id: "qr30",
+    code: `console.log(Array(3).fill(0));`,
+    error: "N/A",
+    question: "What is the output?",
+    options: [
+      { id: "a", text: "[0, 0, 0]", correct: true, explanation: "fill populates all elements with the value." },
+      { id: "b", text: "[undefined, undefined, undefined]", correct: false, explanation: "fill changes this." },
+      { id: "c", text: "Error", correct: false, explanation: "This is valid." },
+    ],
+  },
+];
 
 export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall }: ProgrammerWorldProps) {
   const [stage, setStage] = useState<"intro" | "challenge">("intro");

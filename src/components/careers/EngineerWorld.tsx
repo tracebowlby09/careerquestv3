@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Difficulty } from "@/types/game";
 
 // Fisher-Yates shuffle algorithm
@@ -164,7 +164,7 @@ const questions: Record<Difficulty, Question[]> = {
   ],
 };
 
-// Quick Recall mode - add your own questions here
+// Quick Recall mode - uses design-based format
 const quickRecallQuestions: Question[] = [];
 
 export default function EngineerWorld({ difficulty, onComplete, isQuickRecall }: EngineerWorldProps) {
@@ -173,6 +173,43 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall }:
   const [selectedDesign, setSelectedDesign] = useState<string | null>(null);
   const [score, setScore] = useState(0);
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
+  
+  // Quick Recall hearts system
+  const [hearts, setHearts] = useState(3);
+  const [timeLeft, setTimeLeft] = useState(20);
+  const [showHeartLost, setShowHeartLost] = useState(false);
+
+  // Quick Recall timer countdown
+  useEffect(() => {
+    if (!isQuickRecall || stage !== "challenge" || hearts <= 0) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          setHearts((h) => h - 1);
+          setShowHeartLost(true);
+          setTimeout(() => setShowHeartLost(false), 1000);
+          return 20;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isQuickRecall, stage, hearts]);
+
+  // Reset timer on new question
+  useEffect(() => {
+    if (isQuickRecall && stage === "challenge") {
+      setTimeLeft(20);
+    }
+  }, [currentQuestionIndex, isQuickRecall, stage]);
+
+  const handleLoseHeart = () => {
+    setHearts((h) => h - 1);
+    setShowHeartLost(true);
+    setTimeout(() => setShowHeartLost(false), 1000);
+  };
 
   // Use quick recall questions if available, otherwise fall back to easy questions
   const currentQuestions = isQuickRecall 
@@ -196,16 +233,45 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall }:
 
   const handleSubmit = () => {
     const isCorrect = selectedDesign === currentQuestion.correctDesign;
-    const newScore = isCorrect ? score + 1 : score;
-    setScore(newScore);
-    setAnsweredQuestions([...answeredQuestions, isCorrect]);
+    
+    if (isCorrect) {
+      const newScore = score + 1;
+      setScore(newScore);
+      setAnsweredQuestions([...answeredQuestions, true]);
 
-    if (currentQuestionIndex < totalQuestions - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedDesign(null);
+      if (currentQuestionIndex < totalQuestions - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+        setSelectedDesign(null);
+      } else {
+        onComplete(true, newScore, totalQuestions);
+      }
     } else {
-      const passThreshold = Math.ceil(totalQuestions * 0.6);
-      onComplete(newScore >= passThreshold, newScore, totalQuestions);
+      // Wrong answer in Quick Recall - lose a heart
+      if (isQuickRecall) {
+        handleLoseHeart();
+        
+        if (hearts <= 1) {
+          // Game over - no hearts left
+          onComplete(false, score, totalQuestions);
+        } else if (currentQuestionIndex < totalQuestions - 1) {
+          setCurrentQuestionIndex(currentQuestionIndex + 1);
+          setSelectedDesign(null);
+        } else {
+          onComplete(score >= Math.ceil(totalQuestions * 0.6), score, totalQuestions);
+        }
+      } else {
+        // Regular challenge mode
+        const newScore = score;
+        setAnsweredQuestions([...answeredQuestions, false]);
+
+        if (currentQuestionIndex < totalQuestions - 1) {
+          setCurrentQuestionIndex(currentQuestionIndex + 1);
+          setSelectedDesign(null);
+        } else {
+          const passThreshold = Math.ceil(totalQuestions * 0.6);
+          onComplete(newScore >= passThreshold, newScore, totalQuestions);
+        }
+      }
     }
   };
 
@@ -262,11 +328,35 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall }:
             <h3 className="text-2xl font-bold text-gray-900">
               🌉 Project {currentQuestionIndex + 1} of {totalQuestions}
             </h3>
-            <div className="text-right">
-              <div className="text-sm text-gray-600">Score</div>
-              <div className="text-2xl font-bold text-orange-600">{score}/{currentQuestionIndex}</div>
+            <div className="flex items-center gap-4">
+              {isQuickRecall && (
+                <div className="flex items-center gap-2">
+                  <div className="text-lg font-semibold text-gray-700">Timer:</div>
+                  <div className={`text-2xl font-bold ${timeLeft <= 5 ? "text-red-600" : "text-orange-600"}`}>
+                    {timeLeft}s
+                  </div>
+                </div>
+              )}
+              {isQuickRecall && (
+                <div className="flex items-center gap-1">
+                  {[...Array(3)].map((_, i) => (
+                    <span key={i} className={`text-2xl ${i < hearts ? "💖" : "🖤"}`} />
+                  ))}
+                </div>
+              )}
+              <div className="text-right">
+                <div className="text-sm text-gray-600">Score</div>
+                <div className="text-2xl font-bold text-orange-600">{score}/{currentQuestionIndex}</div>
+              </div>
             </div>
           </div>
+
+          {/* Heart lost animation */}
+          {showHeartLost && (
+            <div className="fixed inset-0 bg-red-500/30 flex items-center justify-center z-50 pointer-events-none">
+              <div className="text-8xl animate-pulse">💔</div>
+            </div>
+          )}
 
           <div className="mb-6">
             <div className="flex gap-2">

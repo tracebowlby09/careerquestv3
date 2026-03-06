@@ -177,6 +177,256 @@ const quickRecallQuestions: Question[] = [
       { id: "c", text: "Agree but then complain about it to other teachers", correct: false, explanation: "This creates negative workplace culture." },
     ],
   },
+  {
+    id: "qr6",
+    scenario: "A student complains that a lesson is boring and asks when they'll use this in real life.",
+    question: "How should you respond?",
+    options: [
+      { id: "a", text: "Explain real-world applications and connect to their interests", correct: true, explanation: "Making content relevant increases engagement and retention." },
+      { id: "b", text: "Tell them to just memorize it for the test", correct: false, explanation: "This kills motivation and doesn't address their concern." },
+      { id: "c", text: "Ignore the comment and continue with the lesson", correct: false, explanation: "Addressing student concerns is important for engagement." },
+    ],
+  },
+  {
+    id: "qr7",
+    scenario: "You discover two students are dating and one is in your class.",
+    question: "What's the appropriate action?",
+    options: [
+      { id: "a", text: "Monitor for appropriate behavior in class but otherwise ignore", correct: true, explanation: "As long as it's not affecting learning, it's a personal matter." },
+      { id: "b", text: "Publicly announce that dating is not allowed at school", correct: false, explanation: "This violates privacy and could be embarrassing." },
+      { id: "c", text: "Separate them in your class immediately", correct: false, explanation: "This should only be done if it's causing disruption." },
+    ],
+  },
+  {
+    id: "qr8",
+    scenario: "A student arrives late to class for the third time this week.",
+    question: "What's the best approach?",
+    options: [
+      { id: "a", text: "Speak with the student privately about patterns of tardiness", correct: true, explanation: "Understanding underlying issues is more effective than punishment." },
+      { id: "b", text: "Give them detention on the spot", correct: false, explanation: "Repeated issues may have root causes that need addressing." },
+      { id: "c", text: "Make the whole class wait until they arrive", correct: false, explanation: "Punishing the group for one student's behavior is unfair." },
+    ],
+  },
+  {
+    id: "qr9",
+    scenario: "A parent asks you to give their child extra credit work to improve their grade.",
+    question: "What should you say?",
+    options: [
+      { id: "a", text: "Explain that grades reflect mastery and offer office hours for extra help", correct: true, explanation: "This maintains grading integrity while offering support." },
+      { id: "b", text: "Agree and create easier assignments", correct: false, explanation: "This undermines grading standards and fairness." },
+      { id: "c", text: "Refuse categorically without explanation", correct: false, explanation: "Professional communication is important." },
+    ],
+  },
+  {
+    id: "qr10",
+    scenario: "You notice a student cheating during an exam.",
+    question: "What do you do?",
+    options: [
+      { id: "a", text: "Collect the evidence quietly and address it after class", correct: true, explanation: "This maintains exam integrity while handling it professionally." },
+      { id: "b", text: "Loudly announce that someone is cheating", correct: false, explanation: "This disrupts the exam and could embarrass the student unfairly." },
+      { id: "c", text: "Ignore it this one time", correct: false, explanation: "Cheating must be addressed to maintain academic integrity." },
+    ],
+  },
+  {
+    id: "qr11",
+    scenario: "A student with IEP (Individualized Education Program) is falling behind in your class.",
+    question: "What's your first action?",
+    options: [
+      { id: "a", text: "Review the IEP accommodations and implement them consistently", correct: true, explanation: "IEPs are legal documents that must be followed." },
+      { id: "b", text: "Expect the same work as other students", correct: false, explanation: "IEPs exist to provide necessary supports." },
+      { id: "c", text: "Lower your expectations significantly", correct: false, explanation: "The goal is appropriate challenge with support." },
+    ],
+  },
+  {
+    id: "qr12",
+    scenario: "Your classroom has a student with severe peanut allergy.",
+    question: "What should you do?",
+    options: [
+      { id: "a", text: "Create an allergy-aware classroom policy and communicate with parents", correct: true, explanation: "Safety is paramount and communication is key." },
+      { id: "b", text: "Ban all food from your classroom", correct: false, explanation: "This may be excessive; balance is needed." },
+      { id: "c", text: "Let students eat what they want, it's not your responsibility", correct: false, explanation: "You have a duty of care for all students." },
+    ],
+  },
+  {
+    id: "qr13",
+    scenario: "A gifted student complains that the work is too easy.",
+    question: "How do you respond?",
+    options: [
+      { id: "a", text: "Provide enrichment activities and challenging extensions", correct: true, explanation: "Differentiation helps all learners grow." },
+      { id: "b", text: "Tell them to help other students instead", correct: false, explanation: "This is not fair to the gifted student." },
+      { id: "c", text: "Say that's just how it is", correct: false, explanation: "All students deserve appropriate challenge." },
+    ],
+  },
+  {
+    id: "qr14",
+    scenario: "You receive an email from a student at 11pm asking about homework due tomorrow.",
+    question: "What's the best response?",
+    options: [
+      { id: "a", text: "Reply during work hours that you'll discuss in class", correct: true, explanation: "Boundaries are important for teacher wellness." },
+      { id: "b", text: "Reply immediately to show you care", correct: false, explanation: "Setting boundaries models healthy work-life balance." },
+      { id: "c", text: "Ignore the email completely", correct: false, explanation: "Some response is usually appropriate." },
+    ],
+  },
+  {
+    id: "qr15",
+    scenario: "A group project has one student doing all the work while others contribute nothing.",
+    question: "What do you do?",
+    options: [
+      { id: "a", text: "Observe and then address individual contributions in grading", correct: true, explanation: "Fair assessment should reflect actual work done." },
+      { id: "b", text: "Give them all the same grade", correct: false, explanation: "This penalizes hard workers and rewards slackers." },
+      { id: "c", text: "Reassign groups so the lazy students are together", correct: false, explanation: "This doesn't address the learning outcome." },
+    ],
+  },
+  {
+    id: "qr16",
+    scenario: "A parent wants to observe your classroom unannounced.",
+    question: "What's appropriate?",
+    options: [
+      { id: "a", text: "Check school policy and arrange a mutually convenient time", correct: true, explanation: "Following procedures while accommodating is professional." },
+      { id: "b", text: "Always allow parents to come whenever they want", correct: false, explanation: "Classroom needs to run smoothly during instruction." },
+      { id: "c", text: "Refuse all parent observations", correct: false, explanation: "Parents often have rights to observe." },
+    ],
+  },
+  {
+    id: "qr17",
+    scenario: "You make a grading error and a student's grade is wrong.",
+    question: "What should you do?",
+    options: [
+      { id: "a", text: "Correct the error promptly and apologize", correct: true, explanation: "Integrity means owning mistakes and fixing them." },
+      { id: "b", text: "Keep the error to avoid extra work", correct: false, explanation: "This is unethical and harms the student." },
+      { id: "c", text: "Blame the error on the school system", correct: false, explanation: "Taking responsibility is important." },
+    ],
+  },
+  {
+    id: "qr18",
+    scenario: "A student uses their phone in class despite repeated warnings.",
+    question: "What's the best consequence?",
+    options: [
+      { id: "a", text: "Apply consistent consequences per your classroom policy", correct: true, explanation: "Consistency builds trust and expectations." },
+      { id: "b", text: "Confiscate it for the entire semester", correct: false, explanation: "Proportionate consequences are more effective." },
+      { id: "c", text: "Ignore it since it's not worth the confrontation", correct: false, explanation: "Consistency in enforcement matters." },
+    ],
+  },
+  {
+    id: "qr19",
+    scenario: "You're asked to teach a subject outside your certification area.",
+    question: "What's the best response?",
+    options: [
+      { id: "a", text: "Express concerns and request support or training", correct: true, explanation: "Professional development helps ensure quality instruction." },
+      { id: "b", text: "Just agree to do it without concerns", correct: false, explanation: "Students deserve qualified teachers." },
+      { id: "c", text: "Refuse outright without discussion", correct: false, explanation: "Collaboration can find solutions." },
+    ],
+  },
+  {
+    id: "qr20",
+    scenario: "A student refuses to participate in a group activity for religious reasons.",
+    question: "What do you do?",
+    options: [
+      { id: "a", text: "Respect their beliefs and offer an alternative assignment", correct: true, explanation: "Religious accommodations are legally required." },
+      { id: "b", text: "Make them participate anyway", correct: false, explanation: "This violates religious freedom." },
+      { id: "c", text: "Grade them zero for not participating", correct: false, explanation: "Accommodations should be made when possible." },
+    ],
+  },
+  {
+    id: "qr21",
+    scenario: "Your teaching partner is consistently late to class, leaving you alone.",
+    question: "What's the best approach?",
+    options: [
+      { id: "a", text: "Discuss the issue privately first, then involve administration if needed", correct: true, explanation: "Professional resolution starts with direct communication." },
+      { id: "b", text: "Complain to other teachers about them", correct: false, explanation: "This is unprofessional and doesn't solve the problem." },
+      { id: "c", text: "Be late too to get back at them", correct: false, explanation: "This harms students, not the colleague." },
+    ],
+  },
+  {
+    id: "qr22",
+    scenario: "A student turns in a creative project that doesn't meet requirements but shows effort.",
+    question: "How should you grade it?",
+    options: [
+      { id: "a", text: "Grade based on requirements met and provide feedback for improvement", correct: true, explanation: "Fair assessment balances encouragement with standards." },
+      { id: "b", text: "Give full credit for effort alone", correct: false, explanation: "This sets unrealistic expectations." },
+      { id: "c", text: "Fail them for not following directions", correct: false, explanation: "Learning opportunity matters." },
+    ],
+  },
+  {
+    id: "qr23",
+    scenario: "You suspect a student is being bullied online.",
+    question: "What should you do?",
+    options: [
+      { id: "a", text: "Report to administration and counseling immediately", correct: true, explanation: "Bullying requires professional intervention." },
+      { id: "b", text: "Ignore it since it's outside school hours", correct: false, explanation: "Cyberbullying that affects school performance is relevant." },
+      { id: "c", text: "Tell the student to just ignore it", correct: false, explanation: "Victims need support, not dismissal." },
+    ],
+  },
+  {
+    id: "qr24",
+    scenario: "Your students are struggling with a concept despite your best teaching.",
+    question: "What do you do?",
+    options: [
+      { id: "a", text: "Try different teaching strategies and seek colleague input", correct: true, explanation: "Collaboration and adaptation improve instruction." },
+      { id: "b", text: "Move on since you've taught it", correct: false, explanation: "Student understanding is the goal." },
+      { id: "c", text: "Blame the students for not paying attention", correct: false, explanation: "Responsibility for learning lies with the teacher too." },
+    ],
+  },
+  {
+    id: "qr25",
+    scenario: "A student asks you to write a college recommendation letter but you don't know them well.",
+    question: "What's appropriate?",
+    options: [
+      { id: "a", text: "Politely explain you need more time to get to know them, or decline", correct: true, explanation: "Honest limits are better than weak recommendations." },
+      { id: "b", text: "Write a generic positive letter", correct: false, explanation: "A weak recommendation can hurt more than help." },
+      { id: "c", text: "Refuse because it's extra work", correct: false, explanation: "Professional courtesy matters." },
+    ],
+  },
+  {
+    id: "qr26",
+    scenario: "You notice a student hiding something in their backpack during class.",
+    question: "What do you do?",
+    options: [
+      { id: "a", text: "Continue teaching but keep an eye and address if needed", correct: true, explanation: "Observation without confrontation is often best." },
+      { id: "b", text: "Immediately search their backpack", correct: false, explanation: "This requires appropriate authority and cause." },
+      { id: "c", text: "Pretend you didn't see anything", correct: false, explanation: "Safety concerns should be addressed." },
+    ],
+  },
+  {
+    id: "qr27",
+    scenario: "A parent threatens to go to the media about a classroom issue.",
+    question: "What's your best response?",
+    options: [
+      { id: "a", text: "Stay calm, listen to concerns, and involve administration", correct: true, explanation: "De-escalation and following protocol is essential." },
+      { id: "b", text: "Argue back and defend yourself", correct: false, explanation: "This often escalates conflict." },
+      { id: "c", text: "Immediately apologize for everything", correct: false, explanation: "Professional boundaries matter." },
+    ],
+  },
+  {
+    id: "qr28",
+    scenario: "Your classroom has limited resources but you need to run a hands-on activity.",
+    question: "What do you do?",
+    options: [
+      { id: "a", text: "Get creative with available materials and apply for grants", correct: true, explanation: "Resourcefulness is a valuable teaching skill." },
+      { id: "b", text: "Skip the activity entirely", correct: false, explanation: "Students miss out on learning." },
+      { id: "c", text: "Ask students to bring materials from home", correct: false, explanation: "This may create equity issues." },
+    ],
+  },
+  {
+    id: "qr29",
+    scenario: "A student claims they turned in an assignment but you can't find it.",
+    question: "How do you handle this?",
+    options: [
+      { id: "a", text: "Give them benefit of the doubt and allow resubmission with proof", correct: true, explanation: "Technology can fail; being fair matters." },
+      { id: "b", text: "Grade them as if they never turned it in", correct: false, explanation: "This builds resentment and distrust." },
+      { id: "c", text: "Accuse them of lying", correct: false, explanation: "This damages the student-teacher relationship." },
+    ],
+  },
+  {
+    id: "qr30",
+    scenario: "You're offered a promotion to administration but you love teaching.",
+    question: "What's the best consideration?",
+    options: [
+      { id: "a", text: "Reflect on your career goals and what fulfills you", correct: true, explanation: "Job satisfaction matters for long-term success." },
+      { id: "b", text: "Always take the promotion for more money", correct: false, explanation: "Money doesn't equal fulfillment." },
+      { id: "c", text: "Never consider leaving the classroom", correct: false, explanation: "Growth opportunities can be valuable." },
+    ],
+  },
 ];
 
 export default function TeacherWorld({ difficulty, onComplete, isQuickRecall }: TeacherWorldProps) {

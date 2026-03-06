@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Difficulty } from "@/types/game";
 
 // Fisher-Yates shuffle algorithm
@@ -144,8 +144,252 @@ const questions: Record<Difficulty, Question[]> = {
   ],
 };
 
-// Quick Recall mode - add your own questions here
-const quickRecallQuestions: Question[] = [];
+// Quick Recall mode - 30 nursing triage questions for practice
+const quickRecallQuestions: Question[] = [
+  {
+    id: "qr1",
+    scenario: "ER Triage: 45-year-old with chest pain, diaphoretic, grabbing chest",
+    patients: [
+      { id: "p1", name: "Patient A", symptoms: "Chest pain, diaphoretic", vitals: "BP: 160/100, HR: 110, O2: 96%", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr2",
+    scenario: "Floor: Patient complaining of shortness of breath, lips turning blue",
+    patients: [
+      { id: "p1", name: "Patient B", symptoms: "SOB, cyanotic lips", vitals: "BP: 90/60, HR: 120, O2: 85%", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr3",
+    scenario: "Clinic waiting room: Child with fever of 104°F and seizure",
+    patients: [
+      { id: "p1", name: "Toddler", symptoms: "High fever, seizure", vitals: "HR: 160, O2: 94%", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr4",
+    scenario: "ER: Patient with deep laceration bleeding profusely, BP dropping",
+    patients: [
+      { id: "p1", name: "Adult M", symptoms: "Active bleeding, altered mental status", vitals: "BP: 80/50, HR: 130", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr5",
+    scenario: "ICU: Patient on ventilator suddenly having alarms, dropping sats",
+    patients: [
+      { id: "p1", name: "ICU Patient", symptoms: "Vent alarm, sats dropping", vitals: "O2: 78%, HR: 140", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr6",
+    scenario: "Outpatient: Elderly patient fell, complaining of hip pain, unable to bear weight",
+    patients: [
+      { id: "p1", name: "Elderly F", symptoms: "Hip pain, can't bear weight", vitals: "BP: 140/80, HR: 90", priority: 2 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr7",
+    scenario: "ER: Two patients - one with chest pain, one with ankle sprain",
+    patients: [
+      { id: "p1", name: "Chest Pain", symptoms: "Substernal pain", vitals: "BP: 150/95, HR: 100", priority: 1 },
+      { id: "p2", name: "Ankle Sprain", symptoms: "Swollen ankle", vitals: "BP: 120/80, HR: 80", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2"],
+  },
+  {
+    id: "qr8",
+    scenario: "Pediatric ER: Child with difficulty breathing and wasp sting reaction",
+    patients: [
+      { id: "p1", name: "Child", symptoms: "Wheezing, hive reaction", vitals: "HR: 120, O2: 90%", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr9",
+    scenario: "Surgical floor: Post-op patient with sudden onset tachycardia and fever",
+    patients: [
+      { id: "p1", name: "Post-op", symptoms: "Tachycardia, fever 102°F", vitals: "HR: 120, BP: 100/60", priority: 2 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr10",
+    scenario: "Waiting room: Patient with sudden severe headache and stiff neck",
+    patients: [
+      { id: "p1", name: "Adult", symptoms: "Thunderclap headache, nuchal rigidity", vitals: "BP: 180/110, HR: 70", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr11",
+    scenario: "Clinic: Patient with diabetic emergency - confused, fruity breath",
+    patients: [
+      { id: "p1", name: "Diabetic Patient", symptoms: "Confusion, Kussmaul breathing", vitals: "BP: 100/60, HR: 100", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr12",
+    scenario: "ER: Three patients - cardiac arrest, broken arm, minor cuts",
+    patients: [
+      { id: "p1", name: "Code Blue", symptoms: "Unconscious, no pulse", vitals: "No pulse", priority: 1 },
+      { id: "p2", name: "Arm Fracture", symptoms: "Deformed arm", vitals: "BP: 130/80", priority: 2 },
+      { id: "p3", name: "Abrasions", symptoms: "Superficial cuts", vitals: "Stable", priority: 4 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr13",
+    scenario: "Labor & Delivery: Patient with severe headache and visual changes at 38 weeks",
+    patients: [
+      { id: "p1", name: "Pregnant Patient", symptoms: "Headache, visual changes, swelling", vitals: "BP: 160/100", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr14",
+    scenario: "Psych unit: Patient becoming aggressive and physical with staff",
+    patients: [
+      { id: "p1", name: "Agitated Patient", symptoms: "Violent behavior", vitals: "BP: 150/90, HR: 110", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr15",
+    scenario: "Nursing home: Elderly patient with sudden weakness on one side of face",
+    patients: [
+      { id: "p1", name: "Elderly", symptoms: "Facial droop, slurred speech", vitals: "BP: 170/100", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr16",
+    scenario: "Walk-in clinic: Patient with eye injury, foreign body sensation, vision changes",
+    patients: [
+      { id: "p1", name: "Eye Injury", symptoms: "Chemical exposure to eye", vitals: "Normal", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr17",
+    scenario: "ER: Patient with alcohol intoxication and hypoglycemic symptoms",
+    patients: [
+      { id: "p1", name: "Intoxicated", symptoms: "Confusion, diaphoresis", vitals: "HR: 110, glucose: 60", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr18",
+    scenario: "Pediatric floor: Infant with dehydration - sunken fontanelle, no tears",
+    patients: [
+      { id: "p1", name: "Infant", symptoms: "Sunken fontanelle, dry mucous membranes", vitals: "HR: 160, fontanelle sunken", priority: 2 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr19",
+    scenario: "ER: Patient with anaphylactic reaction - throat closing, hives",
+    patients: [
+      { id: "p1", name: "Adult", symptoms: "Airway compromise, widespread hives", vitals: "BP: 70/40, HR: 120", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr20",
+    scenario: "Urgent care: Patient with suspected stroke - last known well 2 hours ago",
+    patients: [
+      { id: "p1", name: "Stroke Alert", symptoms: "Weakness, slurred speech, last well 2hrs", vitals: "BP: 160/90", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr21",
+    scenario: "Med-Surg floor: Patient with blood glucose of 600 and altered consciousness",
+    patients: [
+      { id: "p1", name: "DKA Alert", symptoms: "Hyperglycemia, confusion", vitals: "HR: 110, BP: 90/60", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr22",
+    scenario: "Clinic: Patient with acute asthma attack - can't speak in full sentences",
+    patients: [
+      { id: "p1", name: "Asthma Attack", symptoms: "Wheezing, tripoding, limited speech", vitals: "O2: 88%, HR: 120", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr23",
+    scenario: "Trauma: Motor vehicle accident - patient with GCS 8, unequal pupils",
+    patients: [
+      { id: "p1", name: "Trauma", symptoms: "GCS 8, unequal pupils", vitals: "BP: 180/110, HR: 60", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr24",
+    scenario: "Dialysis unit: Patient during treatment having chest pain and hypotension",
+    patients: [
+      { id: "p1", name: "Dialysis Patient", symptoms: "Chest pain, hypotensive", vitals: "BP: 80/50", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr25",
+    scenario: "Post-op: Patient with surgical site bleeding - soaking through dressings",
+    patients: [
+      { id: "p1", name: "Post-op Bleeding", symptoms: "Active surgical site bleeding", vitals: "BP: 100/70, HR: 100", priority: 2 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr26",
+    scenario: "ER: Patient with electrical burn and entry/exit wounds",
+    patients: [
+      { id: "p1", name: "Electrical Burn", symptoms: "Entry wound hand, exit foot", vitals: "HR: 100", priority: 2 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr27",
+    scenario: "Maternity: Patient at 32 weeks with painless bleeding, no trauma",
+    patients: [
+      { id: "p1", name: "OB Emergency", symptoms: "Painless bleeding, 32 weeks", vitals: "BP: 110/70, HR: 90", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr28",
+    scenario: "School nurse: Child with forehead laceration - bone visible",
+    patients: [
+      { id: "p1", name: "Child", symptoms: "Forehead laceration, bone visible", vitals: "Stable", priority: 2 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr29",
+    scenario: "Oncology floor: Patient with chemotherapy port and fever 101.5°F",
+    patients: [
+      { id: "p1", name: "Neutropenic Fever", symptoms: "Fever, immunocompromised", vitals: "HR: 110, temp 101.5", priority: 1 },
+    ],
+    correctOrder: ["p1"],
+  },
+  {
+    id: "qr30",
+    scenario: "ER: Patient with snake bite to hand - swelling spreading up arm",
+    patients: [
+      { id: "p1", name: "Snake Bite", symptoms: "Progressive swelling, pain", vitals: "BP: 100/60", priority: 2 },
+    ],
+    correctOrder: ["p1"],
+  },
+];
 
 export default function NurseWorld({ difficulty, onComplete, isQuickRecall }: NurseWorldProps) {
   const [stage, setStage] = useState<"intro" | "challenge">("intro");
@@ -153,6 +397,44 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall }: Nu
   const [selectedOrder, setSelectedOrder] = useState<string[]>([]);
   const [score, setScore] = useState(0);
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
+  
+  // Quick Recall hearts system
+  const [hearts, setHearts] = useState(3);
+  const [timeLeft, setTimeLeft] = useState(20);
+  const [showHeartLost, setShowHeartLost] = useState(false);
+
+  // Quick Recall timer countdown
+  useEffect(() => {
+    if (!isQuickRecall || stage !== "challenge" || hearts <= 0) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          // Time's up - lose a heart
+          setHearts((h) => h - 1);
+          setShowHeartLost(true);
+          setTimeout(() => setShowHeartLost(false), 1000);
+          return 20;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isQuickRecall, stage, hearts]);
+
+  // Reset timer on new question
+  useEffect(() => {
+    if (isQuickRecall && stage === "challenge") {
+      setTimeLeft(20);
+    }
+  }, [currentQuestionIndex, isQuickRecall, stage]);
+
+  const handleLoseHeart = () => {
+    setHearts((h) => h - 1);
+    setShowHeartLost(true);
+    setTimeout(() => setShowHeartLost(false), 1000);
+  };
 
   // Use quick recall questions if available, otherwise fall back to easy questions
   const currentQuestions = isQuickRecall 
@@ -176,16 +458,45 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall }: Nu
 
   const handleSubmit = () => {
     const isCorrect = JSON.stringify(selectedOrder) === JSON.stringify(currentQuestion.correctOrder);
-    const newScore = isCorrect ? score + 1 : score;
-    setScore(newScore);
-    setAnsweredQuestions([...answeredQuestions, isCorrect]);
+    
+    if (isCorrect) {
+      const newScore = score + 1;
+      setScore(newScore);
+      setAnsweredQuestions([...answeredQuestions, true]);
 
-    if (currentQuestionIndex < totalQuestions - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedOrder([]);
+      if (currentQuestionIndex < totalQuestions - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+        setSelectedOrder([]);
+      } else {
+        onComplete(true, newScore, totalQuestions);
+      }
     } else {
-      const passThreshold = Math.ceil(totalQuestions * 0.6);
-      onComplete(newScore >= passThreshold, newScore, totalQuestions);
+      // Wrong answer in Quick Recall - lose a heart
+      if (isQuickRecall) {
+        handleLoseHeart();
+        
+        if (hearts <= 1) {
+          // Game over - no hearts left
+          onComplete(false, score, totalQuestions);
+        } else if (currentQuestionIndex < totalQuestions - 1) {
+          setCurrentQuestionIndex(currentQuestionIndex + 1);
+          setSelectedOrder([]);
+        } else {
+          onComplete(score >= Math.ceil(totalQuestions * 0.6), score, totalQuestions);
+        }
+      } else {
+        // Regular challenge mode
+        const newScore = score;
+        setAnsweredQuestions([...answeredQuestions, false]);
+
+        if (currentQuestionIndex < totalQuestions - 1) {
+          setCurrentQuestionIndex(currentQuestionIndex + 1);
+          setSelectedOrder([]);
+        } else {
+          const passThreshold = Math.ceil(totalQuestions * 0.6);
+          onComplete(newScore >= passThreshold, newScore, totalQuestions);
+        }
+      }
     }
   };
 
@@ -242,11 +553,35 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall }: Nu
             <h3 className="text-2xl font-bold text-gray-900">
               🚨 Scenario {currentQuestionIndex + 1} of {totalQuestions}
             </h3>
-            <div className="text-right">
-              <div className="text-sm text-gray-600">Score</div>
-              <div className="text-2xl font-bold text-teal-600">{score}/{currentQuestionIndex}</div>
+            <div className="flex items-center gap-4">
+              {isQuickRecall && (
+                <div className="flex items-center gap-2">
+                  <div className="text-lg font-semibold text-gray-700">Timer:</div>
+                  <div className={`text-2xl font-bold ${timeLeft <= 5 ? "text-red-600" : "text-teal-600"}`}>
+                    {timeLeft}s
+                  </div>
+                </div>
+              )}
+              {isQuickRecall && (
+                <div className="flex items-center gap-1">
+                  {[...Array(3)].map((_, i) => (
+                    <span key={i} className={`text-2xl ${i < hearts ? "💖" : "🖤"}`} />
+                  ))}
+                </div>
+              )}
+              <div className="text-right">
+                <div className="text-sm text-gray-600">Score</div>
+                <div className="text-2xl font-bold text-teal-600">{score}/{currentQuestionIndex}</div>
+              </div>
             </div>
           </div>
+
+          {/* Heart lost animation */}
+          {showHeartLost && (
+            <div className="fixed inset-0 bg-red-500/30 flex items-center justify-center z-50 pointer-events-none">
+              <div className="text-8xl animate-pulse">💔</div>
+            </div>
+          )}
 
           <div className="mb-6">
             <div className="flex gap-2">
