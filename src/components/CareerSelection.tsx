@@ -1,6 +1,7 @@
 "use client";
 
 import { Career } from "@/types/game";
+import ScreenWrapper from "./ScreenWrapper";
 
 interface CareerOption {
   id: Career;
@@ -12,6 +13,8 @@ interface CareerOption {
 
 interface CareerSelectionProps {
   onSelectCareer: (career: Career) => void;
+  onOpenSettings?: () => void;
+  onExit?: () => void;
 }
 
 const careers: CareerOption[] = [
@@ -59,7 +62,7 @@ const careers: CareerOption[] = [
   },
 ];
 
-export default function CareerSelection({ onSelectCareer }: CareerSelectionProps) {
+export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit }: CareerSelectionProps) {
   const handleSelect = (career: Career) => {
     if (typeof window !== 'undefined') {
       const { audioSystem } = require('@/lib/audio');
@@ -69,18 +72,17 @@ export default function CareerSelection({ onSelectCareer }: CareerSelectionProps
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-700 via-indigo-800 to-gray-900 p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Choose Your Career Path
-          </h2>
-          <p className="text-xl text-white/90">
-            Select a career to explore and complete a real-world challenge
-          </p>
-        </div>
+    <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit}>
+      <div className="text-center mb-12">
+        <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          Choose Your Career Path
+        </h2>
+        <p className="text-xl text-white/90">
+          Select a career to explore and complete a real-world challenge
+        </p>
+      </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-3 gap-6">
           {careers.map((career) => (
             <button
               key={career.id}
@@ -121,7 +123,6 @@ export default function CareerSelection({ onSelectCareer }: CareerSelectionProps
             </button>
           ))}
         </div>
-      </div>
-    </div>
+    </ScreenWrapper>
   );
 }

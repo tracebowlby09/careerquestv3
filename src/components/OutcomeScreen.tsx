@@ -1,6 +1,7 @@
 "use client";
 
 import { Career, Difficulty } from "@/types/game";
+import ScreenWrapper from "./ScreenWrapper";
 
 interface OutcomeScreenProps {
   career: Career;
@@ -11,6 +12,8 @@ interface OutcomeScreenProps {
   onPlayAgain: () => void;
   onNewCareer: () => void;
   onChangeDifficulty: () => void;
+  onOpenSettings?: () => void;
+  onExit?: () => void;
 }
 
 const careerData = {
@@ -121,17 +124,15 @@ export default function OutcomeScreen({
   onPlayAgain,
   onNewCareer,
   onChangeDifficulty,
+  onOpenSettings,
+  onExit,
 }: OutcomeScreenProps) {
   const data = careerData[career];
   const percentage = Math.round((score / total) * 100);
 
   return (
-    <div className={`min-h-screen p-4 md:p-8 flex items-center justify-center ${
-      success
-        ? "bg-gradient-to-br from-emerald-700 via-teal-800 to-cyan-900"
-        : "bg-gradient-to-br from-orange-700 via-red-800 to-rose-900"
-    }`}>
-      <div className="max-w-3xl w-full bg-white rounded-2xl shadow-2xl p-8">
+    <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit} dark>
+      <div className={`max-w-3xl w-full bg-white rounded-2xl shadow-2xl p-8`}>
         <div className="text-center mb-6">
           <div className="text-6xl mb-4">{data.icon}</div>
           
@@ -235,7 +236,7 @@ export default function OutcomeScreen({
             ? `Great job! You earned the ${difficulty} trophy for ${data.title}!`
             : "Learning from mistakes is part of every career. Keep practicing!"}
         </div>
-      </div>
-    </div>
+        </div>
+    </ScreenWrapper>
   );
 }

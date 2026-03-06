@@ -2,6 +2,8 @@
 
 export type Difficulty = "easy" | "medium" | "hard";
 
+import ScreenWrapper from "./ScreenWrapper";
+
 interface DifficultyOption {
   id: Difficulty;
   title: string;
@@ -15,6 +17,8 @@ interface DifficultySelectionProps {
   career: string;
   onSelectDifficulty: (difficulty: Difficulty) => void;
   onBack: () => void;
+  onOpenSettings?: () => void;
+  onExit?: () => void;
 }
 
 const difficulties: DifficultyOption[] = [
@@ -48,6 +52,8 @@ export default function DifficultySelection({
   career,
   onSelectDifficulty,
   onBack,
+  onOpenSettings,
+  onExit,
 }: DifficultySelectionProps) {
   const handleSelect = (difficulty: Difficulty) => {
     if (typeof window !== 'undefined') {
@@ -58,23 +64,22 @@ export default function DifficultySelection({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-700 via-blue-900 to-indigo-900 p-4 md:p-8">
-      <div className="max-w-5xl mx-auto">
-        <button
-          onClick={onBack}
-          className="mb-6 text-white hover:text-white/80 transition-colors flex items-center gap-2"
-        >
-          ← Back to Career Selection
-        </button>
+    <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit}>
+      <button
+        onClick={onBack}
+        className="mb-6 text-white hover:text-white/80 transition-colors flex items-center gap-2"
+      >
+        ← Back to Career Selection
+      </button>
 
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Choose Your Difficulty
-          </h2>
-          <p className="text-xl text-white/90">
-            {career} - Select how challenging you want the experience
-          </p>
-        </div>
+      <div className="text-center mb-12">
+        <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          Choose Your Difficulty
+        </h2>
+        <p className="text-xl text-white/90">
+          {career} - Select how challenging you want the experience
+        </p>
+      </div>
 
         <div className="grid md:grid-cols-3 gap-6">
           {difficulties.map((diff) => (
@@ -109,7 +114,6 @@ export default function DifficultySelection({
         <div className="mt-8 text-center text-white/80 text-sm">
           Complete all questions to earn a trophy! 🏆
         </div>
-      </div>
-    </div>
+    </ScreenWrapper>
   );
 }

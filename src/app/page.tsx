@@ -96,91 +96,109 @@ export default function Home() {
     setGameState("career-select");
   };
 
+  const handleExitToTitle = () => {
+    audioSystem.stopBackgroundMusic();
+    setGameState("title");
+  };
+
+  // Render Settings modal (always available)
+  const settingsModal = <Settings isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />;
+
   // Render current game state
   if (gameState === "title") {
     return (
       <>
         <TitleScreen onStart={handleStart} onOpenSettings={() => setSettingsOpen(true)} />
-        <Settings isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+        {settingsModal}
       </>
     );
   }
 
   if (gameState === "career-select") {
-    return <CareerSelection onSelectCareer={handleCareerSelect} />;
+    return (
+      <>
+        <CareerSelection onSelectCareer={handleCareerSelect} onOpenSettings={() => setSettingsOpen(true)} onExit={handleExitToTitle} />
+        {settingsModal}
+      </>
+    );
   }
 
   if (gameState === "difficulty-select" && selectedCareer) {
     return (
-      <DifficultySelection
-        career={careerNames[selectedCareer]}
-        onSelectDifficulty={handleDifficultySelect}
-        onBack={handleBackToCareerSelect}
-      />
+      <>
+        <DifficultySelection
+          career={careerNames[selectedCareer]}
+          onSelectDifficulty={handleDifficultySelect}
+          onBack={handleBackToCareerSelect}
+          onOpenSettings={() => setSettingsOpen(true)}
+          onExit={handleExitToTitle}
+        />
+        {settingsModal}
+      </>
     );
   }
 
   if (gameState === "playing" && selectedCareer && selectedDifficulty) {
-    switch (selectedCareer) {
-      case "programmer":
-        return (
+    return (
+      <>
+        {selectedCareer === "programmer" && (
           <ProgrammerWorld
             difficulty={selectedDifficulty}
             onComplete={handleChallengeComplete}
           />
-        );
-      case "nurse":
-        return (
+        )}
+        {selectedCareer === "nurse" && (
           <NurseWorld
             difficulty={selectedDifficulty}
             onComplete={handleChallengeComplete}
           />
-        );
-      case "engineer":
-        return (
+        )}
+        {selectedCareer === "engineer" && (
           <EngineerWorld
             difficulty={selectedDifficulty}
             onComplete={handleChallengeComplete}
           />
-        );
-      case "teacher":
-        return (
+        )}
+        {selectedCareer === "teacher" && (
           <TeacherWorld
             difficulty={selectedDifficulty}
             onComplete={handleChallengeComplete}
           />
-        );
-      case "chef":
-        return (
+        )}
+        {selectedCareer === "chef" && (
           <ChefWorld
             difficulty={selectedDifficulty}
             onComplete={handleChallengeComplete}
           />
-        );
-      case "architect":
-        return (
+        )}
+        {selectedCareer === "architect" && (
           <ArchitectWorld
             difficulty={selectedDifficulty}
             onComplete={handleChallengeComplete}
           />
-        );
-      default:
-        return null;
-    }
+        )}
+        {settingsModal}
+      </>
+    );
   }
 
   if (gameState === "outcome" && selectedCareer && selectedDifficulty) {
     return (
-      <OutcomeScreen
-        career={selectedCareer}
-        difficulty={selectedDifficulty}
-        success={challengeSuccess}
-        score={score}
-        total={totalQuestions}
-        onPlayAgain={handlePlayAgain}
-        onNewCareer={handleNewCareer}
-        onChangeDifficulty={handleChangeDifficulty}
-      />
+      <>
+        <OutcomeScreen
+          career={selectedCareer}
+          difficulty={selectedDifficulty}
+          success={challengeSuccess}
+          score={score}
+          total={totalQuestions}
+          onPlayAgain={handlePlayAgain}
+          onNewCareer={handleNewCareer}
+          onChangeDifficulty={handleChangeDifficulty}
+          onOpenSettings={() => setSettingsOpen(true)}
+          onExit={handleExitToTitle}
+        />
+        {settingsModal}
+      </>
     );
   }
 
