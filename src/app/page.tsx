@@ -50,7 +50,9 @@ export default function Home() {
   const handleDifficultySelect = (difficulty: Difficulty) => {
     setSelectedDifficulty(difficulty);
     
-    // Play career-specific background music
+    // Stop current music and play career-specific background music
+    audioSystem.stopBackgroundMusic();
+    
     if (selectedCareer) {
       const musicUrls: Record<Career, string> = {
         programmer: "/audio/Programmer.mp3",
