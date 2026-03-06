@@ -14,6 +14,9 @@ class AudioSystem {
 
   private musicSource: AudioBufferSourceNode | null = null;
   private isMusicPlaying = false;
+  private isMusicPaused = false;
+  private musicStartTime = 0;
+  private musicPauseTime = 0;
 
   private musicVolume = 0.3;
   private sfxVolume = 0.5;
@@ -200,6 +203,7 @@ class AudioSystem {
       const buf = await this.ctx.decodeAudioData(arr);
       
       this.isMusicPlaying = true;
+      this.isMusicPaused = false;
       this.musicSource = this.ctx.createBufferSource();
       this.musicSource.buffer = buf;
       this.musicSource.loop = true;
@@ -211,6 +215,24 @@ class AudioSystem {
       if (trackUrl !== this.urls.music) {
         await this.playMusic(this.urls.music);
       }
+    }
+  }
+
+  /** Pause current music (can be resumed) */
+  pauseMusic() {
+    if (this.musicSource && this.isMusicPlaying && !this.isMusicPaused) {
+      try {
+        this.musicSource.stop();
+        this.isMusicPaused = true;
+        this.isMusicPlaying = false;
+      } catch {}
+    }
+  }
+
+  /** Resume paused music */
+  async resumeMusic() {
+    if (this.isMusicPaused && this.currentMusicUrl) {
+      await this.playMusic(this.currentMusicUrl);
     }
   }
 
