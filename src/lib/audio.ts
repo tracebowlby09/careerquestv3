@@ -16,6 +16,7 @@ class AudioSystem {
   private isMusicPlaying = false;
   private musicWasPlayingBeforePause = false;
   private savedMusicVolume = 0.3;
+  private isMusicTransitioning = false; // Lock to prevent concurrent music changes
 
   private musicVolume = 0.3;
   private sfxVolume = 0.5;
@@ -145,9 +146,17 @@ class AudioSystem {
   async startBackgroundMusic() {
     this.initialize();
     if (!this.ctx || !this.musicGain) return;
-    if (this.isMusicPlaying) return;
 
     await this.resumeIfNeeded();
+
+    // Always stop any existing music source first to prevent overlap
+    if (this.musicSource) {
+      try {
+        this.musicSource.stop();
+      } catch {}
+      this.musicSource.disconnect();
+      this.musicSource = null;
+    }
 
     if (!this.buffers.has("music")) {
       try {
@@ -175,13 +184,27 @@ class AudioSystem {
 
   /** Play a specific music track (for career-specific music) */
   async playMusic(trackUrl: string) {
+    // Prevent concurrent music changes
+    if (this.isMusicTransitioning) return;
+    this.isMusicTransitioning = true;
+
     this.initialize();
-    if (!this.ctx || !this.musicGain) return;
+    if (!this.ctx || !this.musicGain) {
+      this.isMusicTransitioning = false;
+      return;
+    }
 
     await this.resumeIfNeeded();
 
-    // Stop current music first
-    this.stopBackgroundMusic();
+    // ALWAYS stop current music first - don't rely on isMusicPlaying flag
+    // as it may have been reset by a previous stop call
+    if (this.musicSource) {
+      try {
+        this.musicSource.stop();
+      } catch {}
+      this.musicSource.disconnect();
+      this.musicSource = null;
+    }
 
     // Load the new track
     this.currentMusicUrl = trackUrl;
@@ -192,6 +215,7 @@ class AudioSystem {
         console.warn(`Failed to load music: ${trackUrl}`);
         // Fall back to default music
         if (trackUrl !== this.urls.music) {
+          this.isMusicTransitioning = false;
           await this.playMusic(this.urls.music);
         }
         return;
@@ -200,8 +224,6 @@ class AudioSystem {
       const arr = await res.arrayBuffer();
       const buf = await this.ctx.decodeAudioData(arr);
       
-      // Only set isMusicPlaying true - don't reset the pause flag
-      // The flag tracks whether title music was paused so we can resume it
       this.isMusicPlaying = true;
       this.musicSource = this.ctx.createBufferSource();
       this.musicSource.buffer = buf;
@@ -214,6 +236,8 @@ class AudioSystem {
       if (trackUrl !== this.urls.music) {
         await this.playMusic(this.urls.music);
       }
+    } finally {
+      this.isMusicTransitioning = false;
     }
   }
 
@@ -241,6 +265,15 @@ class AudioSystem {
 
   /** Play default title screen music */
   async playTitleMusic() {
+    // Always stop existing music first to prevent overlap
+    if (this.musicSource) {
+      try {
+        this.musicSource.stop();
+      } catch {}
+      this.musicSource.disconnect();
+      this.musicSource = null;
+    }
+    
     await this.playMusic(this.urls.music);
   }
 

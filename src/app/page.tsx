@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import TitleScreen from "@/components/TitleScreen";
 import CareerSelection from "@/components/CareerSelection";
 import DifficultySelection from "@/components/DifficultySelection";
@@ -14,8 +14,10 @@ import ProgrammerSimulation from "@/components/simulations/ProgrammerSimulation"
 import OutcomeScreen from "@/components/OutcomeScreen";
 import Settings from "@/components/Settings";
 import TrophyScreen from "@/components/TrophyScreen";
-import { Career, Difficulty, GameMode, Trophy } from "@/types/game";
+import SecretTrophyPopup from "@/components/SecretTrophyPopup";
+import { Career, Difficulty, GameMode, Trophy, AchievementType } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
+import ScreenWrapper from "@/components/ScreenWrapper";
 
 type GameState = "title" | "career-select" | "difficulty-select" | "playing" | "outcome" | "trophy";
 
@@ -53,6 +55,94 @@ const saveTrophies = (trophies: Trophy[]) => {
   localStorage.setItem("careerQuestTrophies", JSON.stringify(trophies));
 };
 
+// Check for achievements
+const checkAchievements = (
+  allTrophies: Trophy[],
+  isQuickRecallMode: boolean,
+  score: number,
+  total: number
+): AchievementType[] => {
+  const achievements: AchievementType[] = [];
+  const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect"];
+  const allDifficulties: Difficulty[] = ["easy", "medium", "hard"];
+  
+  // Check for Career Master - all 3 difficulties for any career
+  for (const career of allCareers) {
+    const careerTrophies = allTrophies.filter(
+      (t) => t.career === career && !t.achievementType
+    );
+    const earnedDifficulties = new Set(careerTrophies.map((t) => t.difficulty));
+    const hasAllDifficulties = allDifficulties.every((d) => earnedDifficulties.has(d));
+    
+    if (hasAllDifficulties) {
+      // Check if we already have this achievement
+      const alreadyHasCareerMaster = allTrophies.some(
+        (t) => t.achievementType === "career-master" && t.career === career
+      );
+      if (!alreadyHasCareerMaster) {
+        achievements.push("career-master");
+      }
+    }
+  }
+  
+  // Check for Quick Recall Champion - complete any quick recall
+  if (isQuickRecallMode) {
+    const alreadyHasChampion = allTrophies.some(
+      (t) => t.achievementType === "quick-recall-champion"
+    );
+    if (!alreadyHasChampion) {
+      achievements.push("quick-recall-champion");
+    }
+    
+    // Check for Perfect Recall - all questions right, no misses
+    if (score === total && total > 0) {
+      const alreadyHasPerfect = allTrophies.some(
+        (t) => t.achievementType === "perfect-recall"
+      );
+      if (!alreadyHasPerfect) {
+        achievements.push("perfect-recall");
+      }
+    }
+  }
+  
+  // Check for All Careers Master - complete all 3 difficulties for ALL careers
+  let hasAllCareersMaster = true;
+  for (const career of allCareers) {
+    const careerTrophies = allTrophies.filter(
+      (t) => t.career === career && !t.achievementType
+    );
+    const earnedDifficulties = new Set(careerTrophies.map((t) => t.difficulty));
+    if (!allDifficulties.every((d) => earnedDifficulties.has(d))) {
+      hasAllCareersMaster = false;
+      break;
+    }
+  }
+  if (hasAllCareersMaster) {
+    const alreadyHasAllCareersMaster = allTrophies.some(
+      (t) => t.achievementType === "all-careers-master"
+    );
+    if (!alreadyHasAllCareersMaster) {
+      achievements.push("all-careers-master");
+    }
+  }
+  
+  // Check for All Quick Recalls Master - complete quick recall for ALL careers
+  const quickRecallTrophies = allTrophies.filter(
+    (t) => t.achievementType === "quick-recall-champion"
+  );
+  const quickRecallCareers = new Set(quickRecallTrophies.map((t) => t.career));
+  if (quickRecallCareers.size === allCareers.length) {
+    const alreadyHasAllQuickRecallsMaster = allTrophies.some(
+      (t) => t.achievementType === "all-quick-recalls-master"
+    );
+    if (!alreadyHasAllQuickRecallsMaster) {
+      achievements.push("all-quick-recalls-master");
+    }
+  }
+  
+  return achievements;
+};
+
 export default function Home() {
   const [gameState, setGameState] = useState<GameState>("title");
   const [gameMode, setGameMode] = useState<GameMode>("challenge");
@@ -63,6 +153,57 @@ export default function Home() {
   const [challengeSuccess, setChallengeSuccess] = useState(false);
   const [trophies, setTrophies] = useState<Trophy[]>(() => loadTrophies());
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [showSecretTrophyPopup, setShowSecretTrophyPopup] = useState(false);
+
+  // Konami code detection
+  const konamiCode = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
+  const [konamiIndex, setKonamiIndex] = useState(0);
+
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    // Ignore if user is typing in an input
+    if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+      return;
+    }
+
+    const key = event.key;
+    
+    if (key === konamiCode[konamiIndex]) {
+      const newIndex = konamiIndex + 1;
+      if (newIndex === konamiCode.length) {
+        // Konami code entered! Award secret trophy
+        const secretTrophy: Trophy = {
+          career: "programmer", // Placeholder career
+          difficulty: "hard", // Placeholder difficulty
+          earnedAt: new Date(),
+          isSecret: true,
+          achievementType: "konami-master",
+        };
+        
+        // Check if already unlocked
+        const alreadyUnlocked = trophies.some((t) => t.isSecret);
+        if (!alreadyUnlocked) {
+          setTrophies([...trophies, secretTrophy]);
+          saveTrophies([...trophies, secretTrophy]);
+          setShowSecretTrophyPopup(true);
+        }
+        
+        // Reset index
+        setKonamiIndex(0);
+      } else {
+        setKonamiIndex(newIndex);
+      }
+    } else {
+      // Reset if wrong key
+      setKonamiIndex(0);
+    }
+  }, [konamiIndex, konamiCode, trophies]);
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleKeyDown]);
 
   const handleStart = (mode: GameMode) => {
     audioSystem.playClickSound();
@@ -151,8 +292,30 @@ export default function Home() {
           difficulty: difficulty,
           earnedAt: new Date(),
         };
-        setTrophies([...trophies, newTrophy]);
-        saveTrophies([...trophies, newTrophy]);
+        
+        // Check for achievements after awarding the new trophy
+        const allTrophies = [...trophies, newTrophy];
+        const newAchievements = checkAchievements(allTrophies, isQuickRecallMode, finalScore, total);
+        
+        if (newAchievements.length > 0) {
+          // Add achievement trophies
+          const achievementTrophies = newAchievements.map((achievement) => ({
+            career: selectedCareer,
+            difficulty: "hard" as Difficulty,
+            earnedAt: new Date(),
+            isSecret: true,
+            achievementType: achievement,
+          }));
+          
+          setTrophies([...allTrophies, ...achievementTrophies]);
+          saveTrophies([...allTrophies, ...achievementTrophies]);
+          
+          // Show popup for achievements
+          setShowSecretTrophyPopup(true);
+        } else {
+          setTrophies(allTrophies);
+          saveTrophies(allTrophies);
+        }
       }
     }
     
@@ -171,6 +334,12 @@ export default function Home() {
   const handleNewCareer = () => {
     setSelectedCareer(null);
     setSelectedDifficulty(null);
+    setGameState("career-select");
+  };
+
+  const handleBackToSelection = () => {
+    // For Quick Recall mode, go back to career selection
+    setSelectedCareer(null);
     setGameState("career-select");
   };
 
@@ -199,6 +368,10 @@ export default function Home() {
           onViewTrophies={() => setGameState("trophy")}
         />
         {settingsModal}
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
+          onClose={() => setShowSecretTrophyPopup(false)} 
+        />
       </>
     );
   }
@@ -206,8 +379,17 @@ export default function Home() {
   if (gameState === "career-select") {
     return (
       <>
-        <CareerSelection onSelectCareer={handleCareerSelect} onOpenSettings={() => setSettingsOpen(true)} onExit={handleExitToTitle} />
+        <CareerSelection 
+          onSelectCareer={handleCareerSelect} 
+          onOpenSettings={() => setSettingsOpen(true)} 
+          onExit={handleExitToTitle}
+          gameMode={gameMode}
+        />
         {settingsModal}
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
+          onClose={() => setShowSecretTrophyPopup(false)} 
+        />
       </>
     );
   }
@@ -223,6 +405,10 @@ export default function Home() {
           onExit={handleExitToTitle}
         />
         {settingsModal}
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
+          onClose={() => setShowSecretTrophyPopup(false)} 
+        />
       </>
     );
   }
@@ -245,7 +431,12 @@ export default function Home() {
     }
     
     return (
-      <>
+      <ScreenWrapper
+        onOpenSettings={() => setSettingsOpen(true)}
+        onExit={handleExitToTitle}
+        showExitWarning={true}
+        dark={true}
+      >
         {selectedCareer === "programmer" && (
           <ProgrammerWorld
             difficulty={selectedDifficulty ?? "easy"}
@@ -289,16 +480,26 @@ export default function Home() {
           />
         )}
         {settingsModal}
-      </>
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
+          onClose={() => setShowSecretTrophyPopup(false)} 
+        />
+      </ScreenWrapper>
     );
   }
 
   if (gameState === "trophy") {
     return (
-      <TrophyScreen 
-        trophies={trophies} 
-        onBack={() => setGameState("title")} 
-      />
+      <>
+        <TrophyScreen 
+          trophies={trophies} 
+          onBack={() => setGameState("title")} 
+        />
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
+          onClose={() => setShowSecretTrophyPopup(false)} 
+        />
+      </>
     );
   }
 
@@ -317,8 +518,13 @@ export default function Home() {
           onOpenSettings={() => setSettingsOpen(true)}
           onExit={handleExitToTitle}
           isQuickRecall={gameMode === "quick-recall"}
+          onBackToSelection={handleBackToSelection}
         />
         {settingsModal}
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
+          onClose={() => setShowSecretTrophyPopup(false)} 
+        />
       </>
     );
   }

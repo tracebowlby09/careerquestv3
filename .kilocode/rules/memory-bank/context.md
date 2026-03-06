@@ -1,18 +1,30 @@
-# Active Context: Career Quest Game
+# Active Context: Career Quest V3
 
 ## Current State
 
-**Game Status**: 🎮 Career Quest - Career trivia game with 6 professions
+**Game Status**: ✅ Fully playable career simulation game
 
-A career exploration game where players answer profession-related questions. Now includes interactive Career Simulation Mode for hands-on experience.
+Career Quest V3 is a career simulation game with multiple career paths (Programmer, Nurse, Engineer, Teacher, Chef, Architect) featuring challenge modes and quick recall gameplay. Now includes interactive Career Simulation Mode for hands-on job experience!
 
 ## Recently Completed
 
-- [x] Base game structure (6 careers, 3 difficulties, 2 game modes)
-- [x] Audio system with background music and sound effects
-- [x] Trophy/achievement system with localStorage persistence
-- [x] Title screen, career selection, difficulty selection
-- [x] Challenge Mode and Quick Recall game modes
+- [x] Base Next.js 16 setup with App Router
+- [x] TypeScript configuration with strict mode
+- [x] Tailwind CSS 4 integration
+- [x] ESLint configuration
+- [x] Memory bank documentation
+- [x] Recipe system for common features
+- [x] Career worlds with ScreenWrapper and exit warning popup
+- [x] Added progress loss warning when exiting career worlds during tests
+- [x] Added multiple patients to nurse quick recall questions
+- [x] Fixed pass/fail screen alignment (centered)
+- [x] Fixed career worlds to be full screen
+- [x] Added secret Konami code trophy easter egg
+- [x] Added unique Quick Recall career selection screen with gradient cards
+- [x] Added Ultimate Career Master trophy (complete all difficulties for ALL careers)
+- [x] Added Quick Recall Legend trophy (complete Quick Recall for ALL careers)
+- [x] Fixed background music overlapping issue when switching between different music packs
+- [x] Added music transition lock to prevent concurrent music changes
 - [x] **NEW**: Career Simulation Mode - interactive job experience
 - [x] **NEW**: ProgrammerSimulation - code-fixing challenges
 
@@ -20,13 +32,14 @@ A career exploration game where players answer profession-related questions. Now
 
 | File/Directory | Purpose | Status |
 |----------------|---------|--------|
-| `src/app/page.tsx` | Main game controller | ✅ Ready |
-| `src/components/TitleScreen.tsx` | Start menu | ✅ Ready |
-| `src/components/CareerSelection.tsx` | Career picker | ✅ Ready |
-| `src/components/careers/*.tsx` | 6 career question worlds | ✅ Ready |
+| `src/app/page.tsx` | Main game logic & routing | ✅ Ready |
+| `src/app/layout.tsx` | Root layout | ✅ Ready |
+| `src/app/globals.css` | Global styles | ✅ Ready |
+| `src/components/ScreenWrapper.tsx` | Screen wrapper with exit warning | ✅ Ready |
+| `src/components/careers/*.tsx` | Career world components | ✅ Ready |
 | `src/components/simulations/` | Interactive simulations | 🔄 Expanding |
 | `src/lib/audio.ts` | Audio system | ✅ Ready |
-| `src/types/game.ts` | TypeScript types | ✅ Ready |
+| `.kilocode/` | AI context & recipes | ✅ Ready |
 
 ## Current Focus
 
@@ -54,6 +67,28 @@ A career exploration game where players answer profession-related questions. Now
 | Chef | TBD |
 | Architect | TBD |
 
+### To add a new career:
+
+Create a new component in `src/components/careers/` and add it to `page.tsx`.
+
+### To modify career worlds:
+
+Edit the component files in `src/components/careers/`.
+
+### Exit Warning System:
+
+The ScreenWrapper component now includes an optional exit warning when `showExitWarning={true}` is passed.
+
+### Secret Konami Code Trophy:
+
+Enter the Konami code (↑↑↓↓←→←→BA) anywhere in the game to unlock a secret trophy. A popup will appear at the top of the screen when unlocked. The trophy only appears in the Trophy Case after unlocking.
+
+## Available Recipes
+
+| Recipe | File | Use Case |
+|--------|------|----------|
+| Add Database | `.kilocode/recipes/add-database.md` | Data persistence with Drizzle + SQLite |
+
 ## Pending Improvements
 
 - [ ] Add NurseSimulation - patient triage scenarios
@@ -69,4 +104,11 @@ A career exploration game where players answer profession-related questions. Now
 | Date | Changes |
 |------|---------|
 | Initial | Template created with base setup |
+| 2026-03-06 | Added career worlds with ScreenWrapper and exit warning popup |
+| 2026-03-06 | Added multiple patients to nurse quick recall questions |
+| 2026-03-06 | Fixed pass/fail screen alignment and career worlds full screen |
+| 2026-03-06 | Added secret Konami code trophy with popup notification |
+| 2026-03-06 | Added Ultimate Career Master and Quick Recall Legend trophies |
+| 2026-03-06 | Fixed background music overlapping issue when switching between different music packs |
+| 2026-03-06 | Added music transition lock to prevent concurrent music changes |
 | 2026-03-06 | Implemented Career Simulation Mode feature |

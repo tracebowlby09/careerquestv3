@@ -1,6 +1,6 @@
 "use client";
 
-import { Trophy, Career, Difficulty } from "@/types/game";
+import { Trophy, Career, Difficulty, AchievementType } from "@/types/game";
 
 interface TrophyScreenProps {
   trophies: Trophy[];
@@ -23,6 +23,63 @@ const careerIcons: Record<Career, string> = {
   teacher: "📚",
   chef: "👨‍🍳",
   architect: "🏛️",
+};
+
+const SECRET_TROPHY_ID = "konami-master";
+
+interface SecretTrophyDisplay {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+}
+
+const secretTrophies: SecretTrophyDisplay[] = [
+  {
+    id: SECRET_TROPHY_ID,
+    name: "Konami Code Master",
+    description: "Entered the legendary Konami code",
+    icon: "👾",
+  },
+  {
+    id: "career-master",
+    name: "Career Master",
+    description: "Earned all trophies for a career",
+    icon: "👑",
+  },
+  {
+    id: "quick-recall-champion",
+    name: "Quick Recall Champion",
+    description: "Completed Quick Recall mode",
+    icon: "⚡",
+  },
+  {
+    id: "perfect-recall",
+    name: "Perfect Recall",
+    description: "Got all Quick Recall questions right",
+    icon: "🎯",
+  },
+  {
+    id: "all-careers-master",
+    name: "Ultimate Career Master",
+    description: "Completed all difficulties for ALL careers",
+    icon: "🌟",
+  },
+  {
+    id: "all-quick-recalls-master",
+    name: "Quick Recall Legend",
+    description: "Completed Quick Recall for ALL careers",
+    icon: "🏅",
+  },
+];
+
+const getAchievementInfo = (achievementType?: AchievementType): SecretTrophyDisplay | undefined => {
+  if (!achievementType) return undefined;
+  return secretTrophies.find((s) => s.id === achievementType);
+};
+
+const isSecretTrophyUnlocked = (trophy: Trophy): boolean => {
+  return trophy.isSecret === true;
 };
 
 const difficultyColors: Record<Difficulty, string> = {
@@ -53,8 +110,12 @@ export default function TrophyScreen({ trophies, onBack }: TrophyScreenProps) {
     return acc;
   }, {} as Record<Career, Trophy[]>);
 
+  // Separate secret trophies from regular trophies
+  const regularTrophies = trophies.filter((t) => !t.isSecret);
+  const secretTrophiesList = trophies.filter((t) => t.isSecret);
+
   const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect"];
-  const earnedCareers = new Set(trophies.map((t) => t.career));
+  const earnedCareers = new Set(regularTrophies.map((t) => t.career));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-600 via-yellow-500 to-orange-600 p-4 md:p-8">
@@ -66,7 +127,7 @@ export default function TrophyScreen({ trophies, onBack }: TrophyScreenProps) {
               Trophy Case
             </h2>
             <p className="text-gray-600">
-              You have earned {trophies.length} trophy{trophies.length !== 1 ? "ies" : ""}!
+              You have earned {trophies.length} trophy{trophies.length !== 1 ? "s" : ""}!
             </p>
           </div>
 
@@ -126,6 +187,42 @@ export default function TrophyScreen({ trophies, onBack }: TrophyScreenProps) {
                   </div>
                 );
               })}
+            </div>
+          )}
+
+          {/* Secret Trophies Section */}
+          {secretTrophiesList.length > 0 && (
+            <div className="mt-8 pt-8 border-t-2 border-purple-300">
+              <div className="text-center mb-6">
+                <div className="text-4xl mb-2">🔮</div>
+                <h3 className="text-2xl font-bold text-purple-700">
+                  Secret Trophies
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 gap-4">
+                {secretTrophiesList.map((trophy, idx) => {
+                  const secretInfo = getAchievementInfo(trophy.achievementType);
+                  return (
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white px-6 py-4 rounded-xl border-2 border-yellow-400 shadow-lg"
+                    >
+                      <div className="flex items-center gap-4">
+                        <span className="text-4xl">{secretInfo?.icon || "🏆"}</span>
+                        <div>
+                          <p className="font-bold text-lg text-yellow-300">
+                            {secretInfo?.name || "Secret Trophy"}
+                          </p>
+                          <p className="text-white text-sm">
+                            {secretInfo?.description || "A hidden achievement"}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-3xl">⭐</span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
 
