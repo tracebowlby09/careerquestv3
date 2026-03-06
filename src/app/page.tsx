@@ -11,6 +11,11 @@ import TeacherWorld from "@/components/careers/TeacherWorld";
 import ChefWorld from "@/components/careers/ChefWorld";
 import ArchitectWorld from "@/components/careers/ArchitectWorld";
 import ProgrammerSimulation from "@/components/simulations/ProgrammerSimulation";
+import NurseSimulation from "@/components/simulations/NurseSimulation";
+import EngineerSimulation from "@/components/simulations/EngineerSimulation";
+import TeacherSimulation from "@/components/simulations/TeacherSimulation";
+import ChefSimulation from "@/components/simulations/ChefSimulation";
+import ArchitectSimulation from "@/components/simulations/ArchitectSimulation";
 import OutcomeScreen from "@/components/OutcomeScreen";
 import Settings from "@/components/Settings";
 import TrophyScreen from "@/components/TrophyScreen";
@@ -417,14 +422,46 @@ export default function Home() {
     const isQuickRecall = gameMode === "quick-recall";
     const isSimulation = gameMode === "simulation";
     
-    // Simulation mode - show simulation component
-    if (isSimulation && selectedCareer === "programmer") {
+    // Simulation mode - show simulation components
+    if (isSimulation) {
       return (
         <>
-          <ProgrammerSimulation
-            difficulty={selectedDifficulty ?? "easy"}
-            onComplete={handleChallengeComplete}
-          />
+          {selectedCareer === "programmer" && (
+            <ProgrammerSimulation
+              difficulty={selectedDifficulty ?? "easy"}
+              onComplete={handleChallengeComplete}
+            />
+          )}
+          {selectedCareer === "nurse" && (
+            <NurseSimulation
+              difficulty={selectedDifficulty ?? "easy"}
+              onComplete={handleChallengeComplete}
+            />
+          )}
+          {selectedCareer === "engineer" && (
+            <EngineerSimulation
+              difficulty={selectedDifficulty ?? "easy"}
+              onComplete={handleChallengeComplete}
+            />
+          )}
+          {selectedCareer === "teacher" && (
+            <TeacherSimulation
+              difficulty={selectedDifficulty ?? "easy"}
+              onComplete={handleChallengeComplete}
+            />
+          )}
+          {selectedCareer === "chef" && (
+            <ChefSimulation
+              difficulty={selectedDifficulty ?? "easy"}
+              onComplete={handleChallengeComplete}
+            />
+          )}
+          {selectedCareer === "architect" && (
+            <ArchitectSimulation
+              difficulty={selectedDifficulty ?? "easy"}
+              onComplete={handleChallengeComplete}
+            />
+          )}
           {settingsModal}
         </>
       );
