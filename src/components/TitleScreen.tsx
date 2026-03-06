@@ -6,9 +6,10 @@ import { GameMode } from "@/types/game";
 interface TitleScreenProps {
   onStart: (mode: GameMode) => void;
   onOpenSettings: () => void;
+  onViewTrophies: () => void;
 }
 
-export default function TitleScreen({ onStart, onOpenSettings }: TitleScreenProps) {
+export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies }: TitleScreenProps) {
   const handleStart = (mode: GameMode) => {
     audioSystem.initialize();
     audioSystem.startBackgroundMusic();
@@ -63,6 +64,16 @@ export default function TitleScreen({ onStart, onOpenSettings }: TitleScreenProp
         <div className="mt-8 text-sm text-gray-500">
           Choose your path. Learn real skills. Shape your future.
         </div>
+
+        <button
+          onClick={() => {
+            audioSystem.playClickSound();
+            onViewTrophies();
+          }}
+          className="mt-6 bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 font-bold py-3 px-8 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200"
+        >
+          🏆 View Trophies
+        </button>
       </div>
     </div>
   );

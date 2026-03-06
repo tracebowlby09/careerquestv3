@@ -12,10 +12,11 @@ import ChefWorld from "@/components/careers/ChefWorld";
 import ArchitectWorld from "@/components/careers/ArchitectWorld";
 import OutcomeScreen from "@/components/OutcomeScreen";
 import Settings from "@/components/Settings";
+import TrophyScreen from "@/components/TrophyScreen";
 import { Career, Difficulty, GameMode, Trophy } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 
-type GameState = "title" | "career-select" | "difficulty-select" | "playing" | "outcome";
+type GameState = "title" | "career-select" | "difficulty-select" | "playing" | "outcome" | "trophy";
 
 const careerNames: Record<Career, string> = {
   programmer: "Software Programmer",
@@ -90,18 +91,26 @@ export default function Home() {
     setTotalQuestions(total);
     
     // Play success or failure sound (only for challenge mode)
-    if (gameMode === "challenge") {
+    const isQuickRecallMode = gameMode === "quick-recall";
+    
+    if (!isQuickRecallMode) {
       if (success) {
         audioSystem.playSuccessSound();
       } else {
         audioSystem.playFailureSound();
       }
+    }
+    
+    // Award trophy if successful
+    if (success && selectedCareer) {
+      // For challenge mode, use selected difficulty
+      // For quick recall, use "hard" as the difficulty (mastery level)
+      const difficulty = isQuickRecallMode ? "hard" : selectedDifficulty;
       
-      // Award trophy if successful (only in challenge mode)
-      if (success && selectedCareer && selectedDifficulty) {
+      if (difficulty) {
         const newTrophy: Trophy = {
           career: selectedCareer,
-          difficulty: selectedDifficulty,
+          difficulty: difficulty,
           earnedAt: new Date(),
         };
         setTrophies([...trophies, newTrophy]);
@@ -145,7 +154,11 @@ export default function Home() {
   if (gameState === "title") {
     return (
       <>
-        <TitleScreen onStart={handleStart} onOpenSettings={() => setSettingsOpen(true)} />
+        <TitleScreen 
+          onStart={handleStart} 
+          onOpenSettings={() => setSettingsOpen(true)} 
+          onViewTrophies={() => setGameState("trophy")}
+        />
         {settingsModal}
       </>
     );
@@ -224,6 +237,15 @@ export default function Home() {
         )}
         {settingsModal}
       </>
+    );
+  }
+
+  if (gameState === "trophy") {
+    return (
+      <TrophyScreen 
+        trophies={trophies} 
+        onBack={() => setGameState("title")} 
+      />
     );
   }
 
