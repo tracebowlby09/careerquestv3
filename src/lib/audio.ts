@@ -16,6 +16,7 @@ class AudioSystem {
   private isMusicPlaying = false;
   private musicWasPlayingBeforePause = false;
   private savedMusicVolume = 0.3;
+  private isMusicTransitioning = false; // Lock to prevent concurrent music changes
 
   private musicVolume = 0.3;
   private sfxVolume = 0.5;
@@ -183,8 +184,15 @@ class AudioSystem {
 
   /** Play a specific music track (for career-specific music) */
   async playMusic(trackUrl: string) {
+    // Prevent concurrent music changes
+    if (this.isMusicTransitioning) return;
+    this.isMusicTransitioning = true;
+
     this.initialize();
-    if (!this.ctx || !this.musicGain) return;
+    if (!this.ctx || !this.musicGain) {
+      this.isMusicTransitioning = false;
+      return;
+    }
 
     await this.resumeIfNeeded();
 
@@ -207,6 +215,7 @@ class AudioSystem {
         console.warn(`Failed to load music: ${trackUrl}`);
         // Fall back to default music
         if (trackUrl !== this.urls.music) {
+          this.isMusicTransitioning = false;
           await this.playMusic(this.urls.music);
         }
         return;
@@ -227,6 +236,8 @@ class AudioSystem {
       if (trackUrl !== this.urls.music) {
         await this.playMusic(this.urls.music);
       }
+    } finally {
+      this.isMusicTransitioning = false;
     }
   }
 
@@ -254,6 +265,15 @@ class AudioSystem {
 
   /** Play default title screen music */
   async playTitleMusic() {
+    // Always stop existing music first to prevent overlap
+    if (this.musicSource) {
+      try {
+        this.musicSource.stop();
+      } catch {}
+      this.musicSource.disconnect();
+      this.musicSource = null;
+    }
+    
     await this.playMusic(this.urls.music);
   }
 
