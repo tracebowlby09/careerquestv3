@@ -10,6 +10,7 @@ import EngineerWorld from "@/components/careers/EngineerWorld";
 import TeacherWorld from "@/components/careers/TeacherWorld";
 import ChefWorld from "@/components/careers/ChefWorld";
 import ArchitectWorld from "@/components/careers/ArchitectWorld";
+import ProgrammerSimulation from "@/components/simulations/ProgrammerSimulation";
 import OutcomeScreen from "@/components/OutcomeScreen";
 import Settings from "@/components/Settings";
 import TrophyScreen from "@/components/TrophyScreen";
@@ -73,8 +74,20 @@ export default function Home() {
   const handleCareerSelect = (career: Career) => {
     setSelectedCareer(career);
     
-    // Quick Recall mode skips difficulty selection
-    if (gameMode === "quick-recall") {
+    // Simulation mode goes directly to playing (uses its own internal difficulty)
+    if (gameMode === "simulation") {
+      const musicUrls: Record<Career, string> = {
+        programmer: "/audio/Programmer.mp3",
+        nurse: "/audio/Nurse.mp3",
+        engineer: "/audio/Engineer.mp3",
+        teacher: "/audio/Teacher.mp3",
+        chef: "/audio/Chef.mp3",
+        architect: "/audio/Architect.mp3",
+      };
+      audioSystem.playMusic(musicUrls[career]);
+      setSelectedDifficulty("easy"); // Default for simulation
+      setGameState("playing");
+    } else if (gameMode === "quick-recall") {
       // Play career-specific background music
       const musicUrls: Record<Career, string> = {
         programmer: "/audio/Programmer.mp3",
@@ -216,6 +229,20 @@ export default function Home() {
 
   if (gameState === "playing" && selectedCareer) {
     const isQuickRecall = gameMode === "quick-recall";
+    const isSimulation = gameMode === "simulation";
+    
+    // Simulation mode - show simulation component
+    if (isSimulation && selectedCareer === "programmer") {
+      return (
+        <>
+          <ProgrammerSimulation
+            difficulty={selectedDifficulty ?? "easy"}
+            onComplete={handleChallengeComplete}
+          />
+          {settingsModal}
+        </>
+      );
+    }
     
     return (
       <>
