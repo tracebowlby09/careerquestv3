@@ -21,6 +21,8 @@ Career Quest V3 is a career simulation game with multiple career paths (Programm
 - [x] Fixed career worlds to be full screen
 - [x] Added secret Konami code trophy easter egg
 - [x] Added unique Quick Recall career selection screen with gradient cards
+- [x] Added Ultimate Career Master trophy (complete all difficulties for ALL careers)
+- [x] Added Quick Recall Legend trophy (complete Quick Recall for ALL careers)
 
 ## Current Structure
 
@@ -77,3 +79,4 @@ Enter the Konami code (↑↑↓↓←→←→BA) anywhere in the game to unloc
 | 2026-03-06 | Added multiple patients to nurse quick recall questions |
 | 2026-03-06 | Fixed pass/fail screen alignment and career worlds full screen |
 | 2026-03-06 | Added secret Konami code trophy with popup notification |
+| 2026-03-06 | Added Ultimate Career Master and Quick Recall Legend trophies |

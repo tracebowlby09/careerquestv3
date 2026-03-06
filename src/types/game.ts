@@ -1,7 +1,7 @@
 export type Difficulty = "easy" | "medium" | "hard";
 export type Career = "programmer" | "nurse" | "engineer" | "teacher" | "chef" | "architect";
 export type GameMode = "challenge" | "quick-recall";
-export type AchievementType = "career-master" | "quick-recall-champion" | "perfect-recall" | "konami-master";
+export type AchievementType = "career-master" | "quick-recall-champion" | "perfect-recall" | "konami-master" | "all-careers-master" | "all-quick-recalls-master";
 
 export interface Trophy {
   career: Career;

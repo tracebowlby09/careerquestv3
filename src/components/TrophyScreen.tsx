@@ -59,6 +59,18 @@ const secretTrophies: SecretTrophyDisplay[] = [
     description: "Got all Quick Recall questions right",
     icon: "🎯",
   },
+  {
+    id: "all-careers-master",
+    name: "Ultimate Career Master",
+    description: "Completed all difficulties for ALL careers",
+    icon: "🌟",
+  },
+  {
+    id: "all-quick-recalls-master",
+    name: "Quick Recall Legend",
+    description: "Completed Quick Recall for ALL careers",
+    icon: "🏅",
+  },
 ];
 
 const getAchievementInfo = (achievementType?: AchievementType): SecretTrophyDisplay | undefined => {

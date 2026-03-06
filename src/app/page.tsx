@@ -104,6 +104,41 @@ const checkAchievements = (
     }
   }
   
+  // Check for All Careers Master - complete all 3 difficulties for ALL careers
+  let hasAllCareersMaster = true;
+  for (const career of allCareers) {
+    const careerTrophies = allTrophies.filter(
+      (t) => t.career === career && !t.achievementType
+    );
+    const earnedDifficulties = new Set(careerTrophies.map((t) => t.difficulty));
+    if (!allDifficulties.every((d) => earnedDifficulties.has(d))) {
+      hasAllCareersMaster = false;
+      break;
+    }
+  }
+  if (hasAllCareersMaster) {
+    const alreadyHasAllCareersMaster = allTrophies.some(
+      (t) => t.achievementType === "all-careers-master"
+    );
+    if (!alreadyHasAllCareersMaster) {
+      achievements.push("all-careers-master");
+    }
+  }
+  
+  // Check for All Quick Recalls Master - complete quick recall for ALL careers
+  const quickRecallTrophies = allTrophies.filter(
+    (t) => t.achievementType === "quick-recall-champion"
+  );
+  const quickRecallCareers = new Set(quickRecallTrophies.map((t) => t.career));
+  if (quickRecallCareers.size === allCareers.length) {
+    const alreadyHasAllQuickRecallsMaster = allTrophies.some(
+      (t) => t.achievementType === "all-quick-recalls-master"
+    );
+    if (!alreadyHasAllQuickRecallsMaster) {
+      achievements.push("all-quick-recalls-master");
+    }
+  }
+  
   return achievements;
 };
 
