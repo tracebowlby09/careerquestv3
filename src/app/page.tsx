@@ -430,6 +430,8 @@ export default function Home() {
             <ProgrammerSimulation
               difficulty={selectedDifficulty ?? "easy"}
               onComplete={handleChallengeComplete}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
             />
           )}
           {selectedCareer === "nurse" && (
@@ -444,24 +446,32 @@ export default function Home() {
             <EngineerSimulation
               difficulty={selectedDifficulty ?? "easy"}
               onComplete={handleChallengeComplete}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
             />
           )}
           {selectedCareer === "teacher" && (
             <TeacherSimulation
               difficulty={selectedDifficulty ?? "easy"}
               onComplete={handleChallengeComplete}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
             />
           )}
           {selectedCareer === "chef" && (
             <ChefSimulation
               difficulty={selectedDifficulty ?? "easy"}
               onComplete={handleChallengeComplete}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
             />
           )}
           {selectedCareer === "architect" && (
             <ArchitectSimulation
               difficulty={selectedDifficulty ?? "easy"}
               onComplete={handleChallengeComplete}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
             />
           )}
           {settingsModal}

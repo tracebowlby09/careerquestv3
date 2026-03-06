@@ -7,6 +7,8 @@ import { audioSystem } from "@/lib/audio";
 interface TeacherSimulationProps {
   difficulty: Difficulty;
   onComplete: (success: boolean, score: number, total: number) => void;
+  onOpenSettings?: () => void;
+  onExit?: () => void;
 }
 
 interface Scenario {
@@ -241,12 +243,11 @@ const teacherTasks: Record<Difficulty, TeacherTask[]> = {
   ],
 };
 
-export default function TeacherSimulation({ difficulty, onComplete }: TeacherSimulationProps) {
+export default function TeacherSimulation({ difficulty, onComplete, onOpenSettings, onExit }: TeacherSimulationProps) {
   const tasks = teacherTasks[difficulty];
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
   const [showConsequence, setShowConsequence] = useState<Record<string, string>>({});
-  const [timeLeft, setTimeLeft] = useState(60);
   const [feedback, setFeedback] = useState<"correct" | "incorrect" | null>(null);
   const [totalScore, setTotalScore] = useState(0);
   const [completedTasks, setCompletedTasks] = useState(0);
@@ -259,27 +260,9 @@ export default function TeacherSimulation({ difficulty, onComplete }: TeacherSim
     if (currentTask) {
       setSelectedAnswers({});
       setShowConsequence({});
-      setTimeLeft(currentTask.timeLimit);
       setFeedback(null);
     }
   }, [currentTask]);
-
-  // Timer
-  useEffect(() => {
-    if (timeLeft <= 0 || feedback === "correct") return;
-    
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          handleSubmit();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [timeLeft, feedback]);
 
   const handleOptionSelect = (scenarioId: string, optionId: string) => {
     if (showConsequence[scenarioId]) return; // Already answered
@@ -310,8 +293,6 @@ export default function TeacherSimulation({ difficulty, onComplete }: TeacherSim
     if (percentage === 1) {
       audioSystem.playSuccessSound();
       pointsEarned = currentTask.points;
-      const timeBonus = Math.floor((timeLeft / currentTask.timeLimit) * 20);
-      pointsEarned += timeBonus;
     } else if (percentage >= 0.6) {
       audioSystem.playSuccessSound();
       pointsEarned = Math.floor(currentTask.points * 0.5);
@@ -336,11 +317,10 @@ export default function TeacherSimulation({ difficulty, onComplete }: TeacherSim
       setTimeout(() => {
         setSelectedAnswers({});
         setShowConsequence({});
-        setTimeLeft((prev) => Math.max(0, prev - 15));
         setFeedback(null);
       }, 2000);
     }
-  }, [currentTask, selectedAnswers, timeLeft, currentTaskIndex, tasks.length]);
+  }, [currentTask, selectedAnswers, currentTaskIndex, tasks.length]);
 
   const handleFinish = () => {
     const success = totalScore > 0;
@@ -380,11 +360,14 @@ export default function TeacherSimulation({ difficulty, onComplete }: TeacherSim
             <h1 className="text-2xl font-bold text-white">👩‍🏫 Teacher Simulation</h1>
             <p className="text-indigo-200">Task {currentTaskIndex + 1} of {tasks.length}</p>
           </div>
-          <div className="text-right">
+          <div className="flex items-center gap-4">
             <div className="text-2xl font-bold text-white">{totalScore} pts</div>
-            <div className={`text-lg ${timeLeft <= 20 ? "text-red-300 animate-pulse" : "text-green-300"}`}>
-              ⏱️ {timeLeft}s
-            </div>
+            <button
+              onClick={onExit}
+              className="px-4 py-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg transition-colors border border-red-500/30"
+            >
+              🚪 Exit
+            </button>
           </div>
         </div>
 

@@ -7,6 +7,8 @@ import { audioSystem } from "@/lib/audio";
 interface EngineerSimulationProps {
   difficulty: Difficulty;
   onComplete: (success: boolean, score: number, total: number) => void;
+  onOpenSettings?: () => void;
+  onExit?: () => void;
 }
 
 interface Material {
@@ -117,11 +119,10 @@ const engineerTasks: Record<Difficulty, StructureTask[]> = {
   ],
 };
 
-export default function EngineerSimulation({ difficulty, onComplete }: EngineerSimulationProps) {
+export default function EngineerSimulation({ difficulty, onComplete, onOpenSettings, onExit }: EngineerSimulationProps) {
   const tasks = engineerTasks[difficulty];
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]);
-  const [timeLeft, setTimeLeft] = useState(45);
   const [feedback, setFeedback] = useState<"correct" | "incorrect" | null>(null);
   const [totalScore, setTotalScore] = useState(0);
   const [completedTasks, setCompletedTasks] = useState(0);
@@ -133,27 +134,9 @@ export default function EngineerSimulation({ difficulty, onComplete }: EngineerS
   useEffect(() => {
     if (currentTask) {
       setSelectedMaterials([]);
-      setTimeLeft(currentTask.timeLimit);
       setFeedback(null);
     }
   }, [currentTask]);
-
-  // Timer
-  useEffect(() => {
-    if (timeLeft <= 0 || feedback === "correct") return;
-    
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          handleSubmit();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [timeLeft, feedback]);
 
   const addMaterial = (materialId: string) => {
     const material = currentTask.availableMaterials.find(m => m.id === materialId);
@@ -206,10 +189,6 @@ export default function EngineerSimulation({ difficulty, onComplete }: EngineerS
       const budgetBonus = Math.floor(budgetSavings / 10);
       pointsEarned += budgetBonus;
       
-      // Time bonus
-      const timeBonus = Math.floor((timeLeft / currentTask.timeLimit) * 20);
-      pointsEarned += timeBonus;
-      
       setTotalScore((prev) => prev + pointsEarned);
       setFeedback("correct");
       
@@ -224,11 +203,8 @@ export default function EngineerSimulation({ difficulty, onComplete }: EngineerS
     } else {
       audioSystem.playFailureSound();
       setFeedback("incorrect");
-      setTimeout(() => {
-        setTimeLeft((prev) => Math.max(0, prev - 10));
-      }, 1500);
     }
-  }, [currentTask, selectedMaterials, timeLeft, currentTaskIndex, tasks.length]);
+  }, [currentTask, selectedMaterials, currentTaskIndex, tasks.length]);
 
   const handleFinish = () => {
     const success = totalScore > 0;
@@ -271,11 +247,14 @@ export default function EngineerSimulation({ difficulty, onComplete }: EngineerS
             <h1 className="text-2xl font-bold text-white">🏗️ Engineer Simulation</h1>
             <p className="text-amber-200">Task {currentTaskIndex + 1} of {tasks.length}</p>
           </div>
-          <div className="text-right">
+          <div className="flex items-center gap-4">
             <div className="text-2xl font-bold text-white">{totalScore} pts</div>
-            <div className={`text-lg ${timeLeft <= 15 ? "text-red-300 animate-pulse" : "text-green-300"}`}>
-              ⏱️ {timeLeft}s
-            </div>
+            <button
+              onClick={onExit}
+              className="px-4 py-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg transition-colors border border-red-500/30"
+            >
+              🚪 Exit
+            </button>
           </div>
         </div>
 

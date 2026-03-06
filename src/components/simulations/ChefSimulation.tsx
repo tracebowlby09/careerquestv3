@@ -7,6 +7,8 @@ import { audioSystem } from "@/lib/audio";
 interface ChefSimulationProps {
   difficulty: Difficulty;
   onComplete: (success: boolean, score: number, total: number) => void;
+  onOpenSettings?: () => void;
+  onExit?: () => void;
 }
 
 interface Order {
@@ -83,12 +85,11 @@ const chefTasks: Record<Difficulty, ChefTask[]> = {
   ],
 };
 
-export default function ChefSimulation({ difficulty, onComplete }: ChefSimulationProps) {
+export default function ChefSimulation({ difficulty, onComplete, onOpenSettings, onExit }: ChefSimulationProps) {
   const tasks = chefTasks[difficulty];
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [completedOrders, setCompletedOrders] = useState<string[]>([]);
   const [failedOrders, setFailedOrders] = useState<string[]>([]);
-  const [timeLeft, setTimeLeft] = useState(60);
   const [totalScore, setTotalScore] = useState(0);
   const [completedTasks, setCompletedTasks] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -109,23 +110,6 @@ export default function ChefSimulation({ difficulty, onComplete }: ChefSimulatio
       setActiveOrders(currentTask.orders);
     }
   }, [currentTask, gameStarted]);
-
-  // Game timer
-  useEffect(() => {
-    if (!gameStarted || timeLeft <= 0 || showSuccess) return;
-    
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          handleGameEnd();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [gameStarted, timeLeft, showSuccess]);
 
   // Cooking progress timer
   useEffect(() => {
@@ -162,7 +146,6 @@ export default function ChefSimulation({ difficulty, onComplete }: ChefSimulatio
 
   const startGame = () => {
     setGameStarted(true);
-    setTimeLeft(currentTask.timeLimit);
     audioSystem.playClickSound();
   };
 
@@ -285,11 +268,14 @@ export default function ChefSimulation({ difficulty, onComplete }: ChefSimulatio
             <h1 className="text-2xl font-bold text-white">👨‍🍳 Chef Simulation</h1>
             <p className="text-orange-200">Orders: {completedOrders.length}/{currentTask.orders.length}</p>
           </div>
-          <div className="text-right">
+          <div className="flex items-center gap-4">
             <div className="text-2xl font-bold text-white">{totalScore} pts</div>
-            <div className={`text-lg ${timeLeft <= 20 ? "text-red-300 animate-pulse" : "text-green-300"}`}>
-              ⏱️ {timeLeft}s
-            </div>
+            <button
+              onClick={onExit}
+              className="px-4 py-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg transition-colors border border-red-500/30"
+            >
+              🚪 Exit
+            </button>
           </div>
         </div>
 

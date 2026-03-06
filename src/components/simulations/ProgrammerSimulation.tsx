@@ -7,6 +7,8 @@ import { audioSystem } from "@/lib/audio";
 interface ProgrammerSimulationProps {
   difficulty: Difficulty;
   onComplete: (success: boolean, score: number, total: number) => void;
+  onOpenSettings?: () => void;
+  onExit?: () => void;
 }
 
 interface SimulationTask {
@@ -125,11 +127,10 @@ const simulationTasks: Record<Difficulty, SimulationTask[]> = {
   ],
 };
 
-export default function ProgrammerSimulation({ difficulty, onComplete }: ProgrammerSimulationProps) {
+export default function ProgrammerSimulation({ difficulty, onComplete, onOpenSettings, onExit }: ProgrammerSimulationProps) {
   const tasks = simulationTasks[difficulty];
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [userCode, setUserCode] = useState("");
-  const [timeLeft, setTimeLeft] = useState(30);
   const [hintUsed, setHintUsed] = useState(false);
   const [feedback, setFeedback] = useState<"correct" | "incorrect" | null>(null);
   const [totalScore, setTotalScore] = useState(0);
@@ -142,28 +143,10 @@ export default function ProgrammerSimulation({ difficulty, onComplete }: Program
   useEffect(() => {
     if (currentTask) {
       setUserCode(currentTask.buggyCode);
-      setTimeLeft(currentTask.timeLimit);
       setHintUsed(false);
       setFeedback(null);
     }
   }, [currentTask]);
-
-  // Timer
-  useEffect(() => {
-    if (timeLeft <= 0 || feedback === "correct") return;
-    
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          handleSubmit(false);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [timeLeft, feedback]);
 
   const handleCodeChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setUserCode(e.target.value);
@@ -180,9 +163,6 @@ export default function ProgrammerSimulation({ difficulty, onComplete }: Program
       if (hintUsed) {
         pointsEarned = Math.floor(pointsEarned * 0.5); // 50% penalty for using hint
       }
-      // Time bonus
-      const timeBonus = Math.floor((timeLeft / currentTask.timeLimit) * 20);
-      pointsEarned += timeBonus;
       
       setTotalScore((prev) => prev + pointsEarned);
       setFeedback("correct");
@@ -198,17 +178,15 @@ export default function ProgrammerSimulation({ difficulty, onComplete }: Program
     } else {
       audioSystem.playFailureSound();
       setFeedback("incorrect");
-      // Allow retry with time penalty
+      // Allow retry
       setTimeout(() => {
         setFeedback(null);
-        setTimeLeft((prev) => Math.max(0, prev - 5)); // 5 second penalty
       }, 1000);
     }
-  }, [userCode, currentTask, currentTaskIndex, tasks.length, hintUsed, timeLeft]);
+  }, [userCode, currentTask, currentTaskIndex, tasks.length, hintUsed]);
 
   const handleUseHint = () => {
     setHintUsed(true);
-    setTimeLeft((prev) => Math.max(0, prev - 5)); // 5 second penalty
   };
 
   const handleFinish = () => {
@@ -260,11 +238,14 @@ export default function ProgrammerSimulation({ difficulty, onComplete }: Program
             <h1 className="text-2xl font-bold text-white">💻 Programmer Simulation</h1>
             <p className="text-purple-300">Task {currentTaskIndex + 1} of {tasks.length}</p>
           </div>
-          <div className="text-right">
+          <div className="flex items-center gap-4">
             <div className="text-2xl font-bold text-white">{totalScore} pts</div>
-            <div className={`text-lg ${timeLeft <= 10 ? "text-red-400 animate-pulse" : "text-green-400"}`}>
-              ⏱️ {timeLeft}s
-            </div>
+            <button
+              onClick={onExit}
+              className="px-4 py-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg transition-colors border border-red-500/30"
+            >
+              🚪 Exit
+            </button>
           </div>
         </div>
 

@@ -7,6 +7,8 @@ import { audioSystem } from "@/lib/audio";
 interface ArchitectSimulationProps {
   difficulty: Difficulty;
   onComplete: (success: boolean, score: number, total: number) => void;
+  onOpenSettings?: () => void;
+  onExit?: () => void;
 }
 
 interface Room {
@@ -151,12 +153,11 @@ interface PlacedRoom {
   y: number;
 }
 
-export default function ArchitectSimulation({ difficulty, onComplete }: ArchitectSimulationProps) {
+export default function ArchitectSimulation({ difficulty, onComplete, onOpenSettings, onExit }: ArchitectSimulationProps) {
   const tasks = architectTasks[difficulty];
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [placedRooms, setPlacedRooms] = useState<PlacedRoom[]>([]);
   const [draggedRoom, setDraggedRoom] = useState<string | null>(null);
-  const [timeLeft, setTimeLeft] = useState(60);
   const [feedback, setFeedback] = useState<"correct" | "incorrect" | null>(null);
   const [totalScore, setTotalScore] = useState(0);
   const [completedTasks, setCompletedTasks] = useState(0);
@@ -168,27 +169,9 @@ export default function ArchitectSimulation({ difficulty, onComplete }: Architec
   useEffect(() => {
     if (currentTask) {
       setPlacedRooms([]);
-      setTimeLeft(currentTask.timeLimit);
       setFeedback(null);
     }
   }, [currentTask]);
-
-  // Timer
-  useEffect(() => {
-    if (timeLeft <= 0 || feedback === "correct") return;
-    
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          handleSubmit();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [timeLeft, feedback]);
 
   const handleDragStart = (roomId: string) => {
     setDraggedRoom(roomId);
@@ -240,8 +223,6 @@ export default function ArchitectSimulation({ difficulty, onComplete }: Architec
     if (requirementsMet && allRoomsPlaced) {
       audioSystem.playSuccessSound();
       let pointsEarned = currentTask.points;
-      const timeBonus = Math.floor((timeLeft / currentTask.timeLimit) * 30);
-      pointsEarned += timeBonus;
       
       setTotalScore((prev) => prev + pointsEarned);
       setFeedback("correct");
@@ -258,11 +239,10 @@ export default function ArchitectSimulation({ difficulty, onComplete }: Architec
       audioSystem.playFailureSound();
       setFeedback("incorrect");
       setTimeout(() => {
-        setTimeLeft((prev) => Math.max(0, prev - 10));
         setFeedback(null);
       }, 1500);
     }
-  }, [currentTask, placedRooms, timeLeft, currentTaskIndex, tasks.length]);
+  }, [currentTask, placedRooms, currentTaskIndex, tasks.length]);
 
   const handleFinish = () => {
     const success = totalScore > 0;
@@ -310,11 +290,14 @@ export default function ArchitectSimulation({ difficulty, onComplete }: Architec
             <h1 className="text-2xl font-bold text-white">🏛️ Architect Simulation</h1>
             <p className="text-cyan-200">Task {currentTaskIndex + 1} of {tasks.length}</p>
           </div>
-          <div className="text-right">
+          <div className="flex items-center gap-4">
             <div className="text-2xl font-bold text-white">{totalScore} pts</div>
-            <div className={`text-lg ${timeLeft <= 15 ? "text-red-300 animate-pulse" : "text-green-300"}`}>
-              ⏱️ {timeLeft}s
-            </div>
+            <button
+              onClick={onExit}
+              className="px-4 py-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg transition-colors border border-red-500/30"
+            >
+              🚪 Exit
+            </button>
           </div>
         </div>
 
