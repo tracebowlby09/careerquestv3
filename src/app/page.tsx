@@ -38,6 +38,7 @@ export default function Home() {
 
   const handleStart = () => {
     audioSystem.playClickSound();
+    audioSystem.playTitleMusic();
     setGameState("career-select");
   };
 
@@ -48,6 +49,20 @@ export default function Home() {
 
   const handleDifficultySelect = (difficulty: Difficulty) => {
     setSelectedDifficulty(difficulty);
+    
+    // Play career-specific background music
+    if (selectedCareer) {
+      const musicUrls: Record<Career, string> = {
+        programmer: "/audio/Programmer.mp3",
+        nurse: "/audio/Nurse.mp3",
+        engineer: "/audio/Engineer.mp3",
+        teacher: "/audio/Teacher.mp3",
+        chef: "/audio/Chef.mp3",
+        architect: "/audio/Architect.mp3",
+      };
+      audioSystem.playMusic(musicUrls[selectedCareer]);
+    }
+    
     setGameState("playing");
   };
 
@@ -98,6 +113,7 @@ export default function Home() {
 
   const handleExitToTitle = () => {
     audioSystem.stopBackgroundMusic();
+    audioSystem.playTitleMusic();
     setGameState("title");
   };
 

@@ -26,6 +26,9 @@ class AudioSystem {
     music: "/audio/music.mp3",
   };
 
+  // Track current music URL for switching
+  private currentMusicUrl: string = "/audio/music.mp3";
+
   /** Call once somewhere like on first user interaction, or TitleScreen */
   initialize(customUrls?: Partial<Record<SoundKey, string>>) {
     if (typeof window === "undefined") return;
@@ -167,6 +170,53 @@ class AudioSystem {
       this.musicSource.disconnect();
       this.musicSource = null;
     }
+  }
+
+  /** Play a specific music track (for career-specific music) */
+  async playMusic(trackUrl: string) {
+    this.initialize();
+    if (!this.ctx || !this.musicGain) return;
+
+    await this.resumeIfNeeded();
+
+    // Stop current music
+    this.stopBackgroundMusic();
+
+    // Load the new track
+    this.currentMusicUrl = trackUrl;
+    
+    try {
+      const res = await fetch(trackUrl);
+      if (!res.ok) {
+        console.warn(`Failed to load music: ${trackUrl}`);
+        // Fall back to default music
+        if (trackUrl !== this.urls.music) {
+          await this.playMusic(this.urls.music);
+        }
+        return;
+      }
+
+      const arr = await res.arrayBuffer();
+      const buf = await this.ctx.decodeAudioData(arr);
+      
+      this.isMusicPlaying = true;
+      this.musicSource = this.ctx.createBufferSource();
+      this.musicSource.buffer = buf;
+      this.musicSource.loop = true;
+      this.musicSource.connect(this.musicGain);
+      this.musicSource.start(0);
+    } catch (error) {
+      console.warn(`Error playing music ${trackUrl}:`, error);
+      // Fall back to default music
+      if (trackUrl !== this.urls.music) {
+        await this.playMusic(this.urls.music);
+      }
+    }
+  }
+
+  /** Play default title screen music */
+  async playTitleMusic() {
+    await this.playMusic(this.urls.music);
   }
 
   // -------------------------
