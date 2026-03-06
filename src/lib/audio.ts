@@ -145,9 +145,17 @@ class AudioSystem {
   async startBackgroundMusic() {
     this.initialize();
     if (!this.ctx || !this.musicGain) return;
-    if (this.isMusicPlaying) return;
 
     await this.resumeIfNeeded();
+
+    // Always stop any existing music source first to prevent overlap
+    if (this.musicSource) {
+      try {
+        this.musicSource.stop();
+      } catch {}
+      this.musicSource.disconnect();
+      this.musicSource = null;
+    }
 
     if (!this.buffers.has("music")) {
       try {
@@ -180,8 +188,15 @@ class AudioSystem {
 
     await this.resumeIfNeeded();
 
-    // Stop current music first
-    this.stopBackgroundMusic();
+    // ALWAYS stop current music first - don't rely on isMusicPlaying flag
+    // as it may have been reset by a previous stop call
+    if (this.musicSource) {
+      try {
+        this.musicSource.stop();
+      } catch {}
+      this.musicSource.disconnect();
+      this.musicSource = null;
+    }
 
     // Load the new track
     this.currentMusicUrl = trackUrl;
@@ -200,8 +215,6 @@ class AudioSystem {
       const arr = await res.arrayBuffer();
       const buf = await this.ctx.decodeAudioData(arr);
       
-      // Only set isMusicPlaying true - don't reset the pause flag
-      // The flag tracks whether title music was paused so we can resume it
       this.isMusicPlaying = true;
       this.musicSource = this.ctx.createBufferSource();
       this.musicSource.buffer = buf;
