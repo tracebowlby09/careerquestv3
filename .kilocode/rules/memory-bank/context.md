@@ -19,6 +19,7 @@ Career Quest V3 is a career simulation game with multiple career paths (Programm
 - [x] Added multiple patients to nurse quick recall questions
 - [x] Fixed pass/fail screen alignment (centered)
 - [x] Fixed career worlds to be full screen
+- [x] Added secret Konami code trophy easter egg
 
 ## Current Structure
 
@@ -49,6 +50,10 @@ Edit the component files in `src/components/careers/`.
 
 The ScreenWrapper component now includes an optional exit warning when `showExitWarning={true}` is passed.
 
+### Secret Konami Code Trophy:
+
+Enter the Konami code (↑↑↓↓←→←→BA) anywhere in the game to unlock a secret trophy. A popup will appear at the top of the screen when unlocked. The trophy only appears in the Trophy Case after unlocking.
+
 ## Available Recipes
 
 | Recipe | File | Use Case |
@@ -70,3 +75,4 @@ The ScreenWrapper component now includes an optional exit warning when `showExit
 | 2026-03-06 | Added career worlds with ScreenWrapper and exit warning popup |
 | 2026-03-06 | Added multiple patients to nurse quick recall questions |
 | 2026-03-06 | Fixed pass/fail screen alignment and career worlds full screen |
+| 2026-03-06 | Added secret Konami code trophy with popup notification |

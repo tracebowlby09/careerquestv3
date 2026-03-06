@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import TitleScreen from "@/components/TitleScreen";
 import CareerSelection from "@/components/CareerSelection";
 import DifficultySelection from "@/components/DifficultySelection";
@@ -13,6 +13,7 @@ import ArchitectWorld from "@/components/careers/ArchitectWorld";
 import OutcomeScreen from "@/components/OutcomeScreen";
 import Settings from "@/components/Settings";
 import TrophyScreen from "@/components/TrophyScreen";
+import SecretTrophyPopup from "@/components/SecretTrophyPopup";
 import { Career, Difficulty, GameMode, Trophy } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import ScreenWrapper from "@/components/ScreenWrapper";
@@ -63,6 +64,56 @@ export default function Home() {
   const [challengeSuccess, setChallengeSuccess] = useState(false);
   const [trophies, setTrophies] = useState<Trophy[]>(() => loadTrophies());
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [showSecretTrophyPopup, setShowSecretTrophyPopup] = useState(false);
+
+  // Konami code detection
+  const konamiCode = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
+  const [konamiIndex, setKonamiIndex] = useState(0);
+
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    // Ignore if user is typing in an input
+    if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+      return;
+    }
+
+    const key = event.key;
+    
+    if (key === konamiCode[konamiIndex]) {
+      const newIndex = konamiIndex + 1;
+      if (newIndex === konamiCode.length) {
+        // Konami code entered! Award secret trophy
+        const secretTrophy: Trophy = {
+          career: "programmer", // Placeholder career
+          difficulty: "hard", // Placeholder difficulty
+          earnedAt: new Date(),
+          isSecret: true,
+        };
+        
+        // Check if already unlocked
+        const alreadyUnlocked = trophies.some((t) => t.isSecret);
+        if (!alreadyUnlocked) {
+          setTrophies([...trophies, secretTrophy]);
+          saveTrophies([...trophies, secretTrophy]);
+          setShowSecretTrophyPopup(true);
+        }
+        
+        // Reset index
+        setKonamiIndex(0);
+      } else {
+        setKonamiIndex(newIndex);
+      }
+    } else {
+      // Reset if wrong key
+      setKonamiIndex(0);
+    }
+  }, [konamiIndex, konamiCode, trophies]);
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleKeyDown]);
 
   const handleStart = (mode: GameMode) => {
     audioSystem.playClickSound();
@@ -187,6 +238,10 @@ export default function Home() {
           onViewTrophies={() => setGameState("trophy")}
         />
         {settingsModal}
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
+          onClose={() => setShowSecretTrophyPopup(false)} 
+        />
       </>
     );
   }
@@ -196,6 +251,10 @@ export default function Home() {
       <>
         <CareerSelection onSelectCareer={handleCareerSelect} onOpenSettings={() => setSettingsOpen(true)} onExit={handleExitToTitle} />
         {settingsModal}
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
+          onClose={() => setShowSecretTrophyPopup(false)} 
+        />
       </>
     );
   }
@@ -211,6 +270,10 @@ export default function Home() {
           onExit={handleExitToTitle}
         />
         {settingsModal}
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
+          onClose={() => setShowSecretTrophyPopup(false)} 
+        />
       </>
     );
   }
@@ -268,16 +331,26 @@ export default function Home() {
           />
         )}
         {settingsModal}
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
+          onClose={() => setShowSecretTrophyPopup(false)} 
+        />
       </ScreenWrapper>
     );
   }
 
   if (gameState === "trophy") {
     return (
-      <TrophyScreen 
-        trophies={trophies} 
-        onBack={() => setGameState("title")} 
-      />
+      <>
+        <TrophyScreen 
+          trophies={trophies} 
+          onBack={() => setGameState("title")} 
+        />
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
+          onClose={() => setShowSecretTrophyPopup(false)} 
+        />
+      </>
     );
   }
 
@@ -298,6 +371,10 @@ export default function Home() {
           isQuickRecall={gameMode === "quick-recall"}
         />
         {settingsModal}
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
+          onClose={() => setShowSecretTrophyPopup(false)} 
+        />
       </>
     );
   }

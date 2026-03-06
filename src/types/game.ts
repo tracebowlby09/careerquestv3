@@ -6,6 +6,7 @@ export interface Trophy {
   career: Career;
   difficulty: Difficulty;
   earnedAt: Date;
+  isSecret?: boolean;
 }
 
 export interface GameProgress {
