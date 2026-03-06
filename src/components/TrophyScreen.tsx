@@ -127,7 +127,7 @@ export default function TrophyScreen({ trophies, onBack }: TrophyScreenProps) {
               Trophy Case
             </h2>
             <p className="text-gray-600">
-              You have earned {trophies.length} trophy{trophies.length !== 1 ? "ies" : ""}!
+              You have earned {trophies.length} trophy{trophies.length !== 1 ? "s" : ""}!
             </p>
           </div>
 
