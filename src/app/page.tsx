@@ -175,6 +175,7 @@ export default function Home() {
           difficulty: "hard", // Placeholder difficulty
           earnedAt: new Date(),
           isSecret: true,
+          achievementType: "konami-master",
         };
         
         // Check if already unlocked
