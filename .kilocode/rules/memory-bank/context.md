@@ -30,6 +30,7 @@ Career Quest V3 is a career simulation game with multiple career paths (Programm
 - [x] **NEW**: All 6 career simulations (Programmer, Nurse, Engineer, Teacher, Chef, Architect)
 - [x] Removed timers from all simulations for stress-free gameplay
 - [x] Added exit buttons to all simulations
+- [x] Redesigned ArchitectSimulation to be easier and more fun (click-to-place, hints, visual feedback)
 
 ## Current Structure
 
@@ -115,5 +116,6 @@ Enter the Konami code (↑↑↓↓←→←→BA) anywhere in the game to unloc
 | 2026-03-06 | Fixed background music overlapping issue when switching between different music packs |
 | 2026-03-06 | Implemented Career Simulation Mode feature |
 | 2026-03-06 | Removed timers from all simulations, added exit buttons to all simulations |
+| 2026-03-06 | Redesigned ArchitectSimulation to be easier and more fun |
 | 2026-03-06 | Added music transition lock to prevent concurrent music changes |
 | 2026-03-06 | Implemented Career Simulation Mode feature |
