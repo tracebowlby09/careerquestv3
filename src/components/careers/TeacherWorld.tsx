@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Difficulty } from "@/types/game";
 
 // Fisher-Yates shuffle algorithm
@@ -125,8 +125,59 @@ const questions: Record<Difficulty, Question[]> = {
   ],
 };
 
-// Quick Recall mode - add your own questions here
-const quickRecallQuestions: Question[] = [];
+// Quick Recall mode - example questions for practice
+const quickRecallQuestions: Question[] = [
+  {
+    id: "qr1",
+    scenario: "A student hands in homework that is clearly not their own work.",
+    question: "What should you do?",
+    options: [
+      { id: "a", text: "Confront the student privately and discuss academic integrity", correct: true, explanation: "Private conversation allows student to admit mistake and learn from it." },
+      { id: "b", text: "Publicly shame the student in front of class", correct: false, explanation: "This damages trust and doesn't teach appropriate lessons." },
+      { id: "c", text: "Ignore it since it's not your problem", correct: false, explanation: "As a teacher, you must address academic dishonesty." },
+    ],
+  },
+  {
+    id: "qr2",
+    scenario: "A parent complains about their child's grade, insisting you change it.",
+    question: "What's the best response?",
+    options: [
+      { id: "a", text: "Explain the grading criteria and show their child's work", correct: true, explanation: "Transparency and evidence-based discussion builds trust." },
+      { id: "b", text: "Change the grade to avoid conflict", correct: false, explanation: "This undermines academic integrity and sets bad precedent." },
+      { id: "c", text: "Tell them to take it up with the principal", correct: false, explanation: "Avoiding the conversation damages the teacher-parent relationship." },
+    ],
+  },
+  {
+    id: "qr3",
+    scenario: "A highly disruptive student is affecting the entire class's learning.",
+    question: "What's your first step?",
+    options: [
+      { id: "a", text: "Speak with the student one-on-one to understand underlying issues", correct: true, explanation: "Understanding root causes is more effective than just punishment." },
+      { id: "b", text: "Send the student out of the classroom immediately", correct: false, explanation: "This may escalate the situation and doesn't address the cause." },
+      { id: "c", text: "Give the whole class extra homework as punishment", correct: false, explanation: "Punishing the group for one student's behavior is unfair." },
+    ],
+  },
+  {
+    id: "qr4",
+    scenario: "You notice a student who is usually outgoing becoming withdrawn and sad.",
+    question: "What should you do?",
+    options: [
+      { id: "a", text: "Check in privately with the student and refer to counseling if needed", correct: true, explanation: "Early intervention for mental health concerns is crucial." },
+      { id: "b", text: "Wait and see if they come to you", correct: false, explanation: "Students in distress may not seek help on their own." },
+      { id: "c", text: "Ask the student what's wrong in front of their friends", correct: false, explanation: "This violates privacy and may embarrass the student." },
+    ],
+  },
+  {
+    id: "qr5",
+    scenario: "A colleague asks you to cover their class, but you have prep work to do.",
+    question: "What's the professional response?",
+    options: [
+      { id: "a", text: "Agree to help while expressing your workload concerns", correct: true, explanation: "Professionalism means supporting colleagues while communicating boundaries." },
+      { id: "b", text: "Refuse because it's not your responsibility", correct: false, explanation: "Team collaboration is essential in schools." },
+      { id: "c", text: "Agree but then complain about it to other teachers", correct: false, explanation: "This creates negative workplace culture." },
+    ],
+  },
+];
 
 export default function TeacherWorld({ difficulty, onComplete, isQuickRecall }: TeacherWorldProps) {
   const [stage, setStage] = useState<"intro" | "challenge">("intro");
@@ -134,6 +185,53 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall }: 
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [score, setScore] = useState(0);
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
+  
+  // Quick Recall hearts system
+  const [hearts, setHearts] = useState(3);
+  const [timeLeft, setTimeLeft] = useState(20);
+  const [showHeartLost, setShowHeartLost] = useState(false);
+  const [heartLostMessage, setHeartLostMessage] = useState("");
+
+  // Timer for Quick Recall mode
+  useEffect(() => {
+    if (!isQuickRecall || stage !== "challenge" || hearts <= 0) return;
+    
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          // Time's up - lose a heart
+          handleLoseHeart("Time's up!");
+          return 20;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    
+    return () => clearInterval(timer);
+  }, [isQuickRecall, stage, currentQuestionIndex, hearts]);
+
+  const handleLoseHeart = (message: string) => {
+    const newHearts = hearts - 1;
+    setHearts(newHearts);
+    setShowHeartLost(true);
+    setHeartLostMessage(message);
+    
+    setTimeout(() => {
+      setShowHeartLost(false);
+      if (newHearts <= 0) {
+        // Game over - lost all hearts
+        onComplete(false, score, totalQuestions);
+      } else if (currentQuestionIndex < totalQuestions - 1) {
+        // Move to next question
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+        setSelectedAnswer(null);
+        setTimeLeft(20);
+      } else {
+        // Last question done
+        onComplete(true, score + 1, totalQuestions);
+      }
+    }, 1500);
+  };
 
   // Use quick recall questions if available, otherwise fall back to easy questions
   const currentQuestions = isQuickRecall 
@@ -152,6 +250,31 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall }: 
     if (!selected) return;
 
     const isCorrect = selected.correct;
+    
+    // Quick Recall mode: hearts system
+    if (isQuickRecall) {
+      if (isCorrect) {
+        // Correct answer - add score and move on
+        const newScore = score + 1;
+        setScore(newScore);
+        setAnsweredQuestions([...answeredQuestions, true]);
+        
+        if (currentQuestionIndex < totalQuestions - 1) {
+          setCurrentQuestionIndex(currentQuestionIndex + 1);
+          setSelectedAnswer(null);
+          setTimeLeft(20);
+        } else {
+          // All questions done - WIN!
+          onComplete(true, newScore, totalQuestions);
+        }
+      } else {
+        // Wrong answer - lose a heart
+        handleLoseHeart("Wrong answer!");
+      }
+      return;
+    }
+
+    // Regular challenge mode
     const newScore = isCorrect ? score + 1 : score;
     setScore(newScore);
     setAnsweredQuestions([...answeredQuestions, isCorrect]);
@@ -197,6 +320,19 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall }: 
                 {difficulty === "hard" && " Critical professional decisions"}
               </p>
             </div>
+
+            {/* Quick Recall Mode Info */}
+            {isQuickRecall && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mt-4">
+                <p className="font-semibold text-red-900 mb-2">⚡ Quick Recall Mode:</p>
+                <ul className="text-sm text-red-800 space-y-1">
+                  <li>❤️ You have 3 hearts</li>
+                  <li>❌ Lose 1 heart for each wrong answer</li>
+                  <li>⏱️ Lose 1 heart if time runs out (20 seconds per question)</li>
+                  <li>🏆 Complete all questions to win!</li>
+                </ul>
+              </div>
+            )}
           </div>
 
           <button
@@ -213,14 +349,45 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall }: 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
+        {/* Heart Lost Overlay */}
+        {showHeartLost && (
+          <div className="fixed inset-0 bg-red-500/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-2xl p-8 text-center animate-pulse">
+              <div className="text-6xl mb-4">💔</div>
+              <p className="text-2xl font-bold text-red-600">{heartLostMessage}</p>
+              <p className="text-lg text-gray-600 mt-2">Hearts remaining: {hearts}</p>
+            </div>
+          </div>
+        )}
+        
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-2xl font-bold text-gray-900">
               📚 Scenario {currentQuestionIndex + 1} of {totalQuestions}
             </h3>
-            <div className="text-right">
-              <div className="text-sm text-gray-600">Score</div>
-              <div className="text-2xl font-bold text-indigo-600">{score}/{currentQuestionIndex}</div>
+            <div className="flex items-center gap-4">
+              {/* Quick Recall: Hearts Display */}
+              {isQuickRecall && (
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">❤️</span>
+                  <span className={`text-2xl font-bold ${hearts === 1 ? 'text-red-600' : hearts === 2 ? 'text-yellow-600' : 'text-green-600'}`}>
+                    {hearts}
+                  </span>
+                </div>
+              )}
+              {/* Quick Recall: Timer Display */}
+              {isQuickRecall && (
+                <div className={`flex items-center gap-2 px-3 py-1 rounded-full ${timeLeft <= 5 ? 'bg-red-100 animate-pulse' : 'bg-indigo-100'}`}>
+                  <span className="text-lg">⏱️</span>
+                  <span className={`text-xl font-bold ${timeLeft <= 5 ? 'text-red-600' : 'text-indigo-600'}`}>
+                    {timeLeft}s
+                  </span>
+                </div>
+              )}
+              <div className="text-right">
+                <div className="text-sm text-gray-600">Score</div>
+                <div className="text-2xl font-bold text-indigo-600">{score}/{currentQuestionIndex}</div>
+              </div>
             </div>
           </div>
 
