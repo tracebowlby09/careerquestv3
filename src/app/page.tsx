@@ -15,6 +15,7 @@ import Settings from "@/components/Settings";
 import TrophyScreen from "@/components/TrophyScreen";
 import { Career, Difficulty, GameMode, Trophy } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
+import ScreenWrapper from "@/components/ScreenWrapper";
 
 type GameState = "title" | "career-select" | "difficulty-select" | "playing" | "outcome" | "trophy";
 
@@ -218,7 +219,12 @@ export default function Home() {
     const isQuickRecall = gameMode === "quick-recall";
     
     return (
-      <>
+      <ScreenWrapper
+        onOpenSettings={() => setSettingsOpen(true)}
+        onExit={handleExitToTitle}
+        showExitWarning={true}
+        dark={true}
+      >
         {selectedCareer === "programmer" && (
           <ProgrammerWorld
             difficulty={selectedDifficulty ?? "easy"}
@@ -262,7 +268,7 @@ export default function Home() {
           />
         )}
         {settingsModal}
-      </>
+      </ScreenWrapper>
     );
   }
 

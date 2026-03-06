@@ -1,10 +1,10 @@
-# Active Context: Next.js Starter Template
+# Active Context: Career Quest V3
 
 ## Current State
 
-**Template Status**: ✅ Ready for development
+**Game Status**: ✅ Fully playable career simulation game
 
-The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. It's ready for AI-assisted expansion to build any type of application.
+Career Quest V3 is a career simulation game with multiple career paths (Programmer, Nurse, Engineer, Teacher, Chef, Architect) featuring challenge modes and quick recall gameplay.
 
 ## Recently Completed
 
@@ -14,59 +14,37 @@ The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. I
 - [x] ESLint configuration
 - [x] Memory bank documentation
 - [x] Recipe system for common features
+- [x] Career worlds with ScreenWrapper and exit warning popup
+- [x] Added progress loss warning when exiting career worlds during tests
 
 ## Current Structure
 
 | File/Directory | Purpose | Status |
 |----------------|---------|--------|
-| `src/app/page.tsx` | Home page | ✅ Ready |
+| `src/app/page.tsx` | Main game logic & routing | ✅ Ready |
 | `src/app/layout.tsx` | Root layout | ✅ Ready |
 | `src/app/globals.css` | Global styles | ✅ Ready |
+| `src/components/ScreenWrapper.tsx` | Screen wrapper with exit warning | ✅ Ready |
+| `src/components/careers/*.tsx` | Career world components | ✅ Ready |
 | `.kilocode/` | AI context & recipes | ✅ Ready |
 
 ## Current Focus
 
-The template is ready. Next steps depend on user requirements:
-
-1. What type of application to build
-2. What features are needed
-3. Design/branding preferences
+Game is fully functional with multiple career paths. Exit warning system now in place for career worlds.
 
 ## Quick Start Guide
 
-### To add a new page:
+### To add a new career:
 
-Create a file at `src/app/[route]/page.tsx`:
-```tsx
-export default function NewPage() {
-  return <div>New page content</div>;
-}
-```
+Create a new component in `src/components/careers/` and add it to `page.tsx`.
 
-### To add components:
+### To modify career worlds:
 
-Create `src/components/` directory and add components:
-```tsx
-// src/components/ui/Button.tsx
-export function Button({ children }: { children: React.ReactNode }) {
-  return <button className="px-4 py-2 bg-blue-600 text-white rounded">{children}</button>;
-}
-```
+Edit the component files in `src/components/careers/`.
 
-### To add a database:
+### Exit Warning System:
 
-Follow `.kilocode/recipes/add-database.md`
-
-### To add API routes:
-
-Create `src/app/api/[route]/route.ts`:
-```tsx
-import { NextResponse } from "next/server";
-
-export async function GET() {
-  return NextResponse.json({ message: "Hello" });
-}
-```
+The ScreenWrapper component now includes an optional exit warning when `showExitWarning={true}` is passed.
 
 ## Available Recipes
 
@@ -76,8 +54,9 @@ export async function GET() {
 
 ## Pending Improvements
 
+- [ ] Add more career paths
+- [ ] Add more questions to existing careers
 - [ ] Add more recipes (auth, email, etc.)
-- [ ] Add example components
 - [ ] Add testing setup recipe
 
 ## Session History
@@ -85,3 +64,4 @@ export async function GET() {
 | Date | Changes |
 |------|---------|
 | Initial | Template created with base setup |
+| 2026-03-06 | Added career worlds with ScreenWrapper and exit warning popup |
