@@ -1,7 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Difficulty } from "@/types/game";
+
+// Fisher-Yates shuffle algorithm
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
 
 interface NurseWorldProps {
   difficulty: Difficulty;
@@ -144,6 +154,11 @@ export default function NurseWorld({ difficulty, onComplete }: NurseWorldProps) 
   const currentQuestion = currentQuestions[currentQuestionIndex];
   const totalQuestions = currentQuestions.length;
 
+  // Shuffle patients for current question
+  const shuffledPatients = useMemo(() => {
+    return shuffleArray(currentQuestion.patients);
+  }, [currentQuestionIndex]);
+
   const handlePatientClick = (patientId: string) => {
     if (selectedOrder.includes(patientId)) {
       setSelectedOrder(selectedOrder.filter((id) => id !== patientId));
@@ -256,7 +271,7 @@ export default function NurseWorld({ difficulty, onComplete }: NurseWorldProps) 
           <div className={`grid gap-4 mb-6 ${
             currentQuestion.patients.length <= 3 ? "md:grid-cols-3" : "md:grid-cols-2 lg:grid-cols-3"
           }`}>
-            {currentQuestion.patients.map((patient) => {
+            {shuffledPatients.map((patient) => {
               const orderIndex = selectedOrder.indexOf(patient.id);
               const isSelected = orderIndex !== -1;
               

@@ -1,7 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Difficulty } from "@/types/game";
+
+// Fisher-Yates shuffle algorithm
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
 
 interface EngineerWorldProps {
   difficulty: Difficulty;
@@ -164,6 +174,11 @@ export default function EngineerWorld({ difficulty, onComplete }: EngineerWorldP
   const currentQuestion = currentQuestions[currentQuestionIndex];
   const totalQuestions = currentQuestions.length;
 
+  // Shuffle designs for current question
+  const shuffledDesigns = useMemo(() => {
+    return shuffleArray(currentQuestion.designs);
+  }, [currentQuestionIndex]);
+
   const meetsConstraints = (design: DesignOption) => {
     return (
       design.cost <= currentQuestion.constraints.maxCost &&
@@ -289,7 +304,7 @@ export default function EngineerWorld({ difficulty, onComplete }: EngineerWorldP
           </div>
 
           <div className="space-y-4 mb-6">
-            {currentQuestion.designs.map((design) => {
+            {shuffledDesigns.map((design) => {
               const isSelected = selectedDesign === design.id;
               const meetsAll = meetsConstraints(design);
               

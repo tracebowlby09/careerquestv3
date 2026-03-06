@@ -1,7 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Difficulty } from "@/types/game";
+
+// Fisher-Yates shuffle algorithm
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
 
 interface ChefWorldProps {
   difficulty: Difficulty;
@@ -125,6 +135,11 @@ export default function ChefWorld({ difficulty, onComplete }: ChefWorldProps) {
   const currentQuestion = currentQuestions[currentQuestionIndex];
   const totalQuestions = currentQuestions.length;
 
+  // Shuffle options for current question
+  const shuffledOptions = useMemo(() => {
+    return shuffleArray(currentQuestion.options);
+  }, [currentQuestionIndex]);
+
   const handleSubmit = () => {
     const selected = currentQuestion.options.find((opt) => opt.id === selectedAnswer);
     if (!selected) return;
@@ -231,7 +246,7 @@ export default function ChefWorld({ difficulty, onComplete }: ChefWorldProps) {
           </p>
 
           <div className="space-y-3 mb-6">
-            {currentQuestion.options.map((option) => (
+            {shuffledOptions.map((option) => (
               <label
                 key={option.id}
                 className={`block p-4 border-2 rounded-lg cursor-pointer transition-all ${
