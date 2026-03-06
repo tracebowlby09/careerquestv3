@@ -14,9 +14,8 @@ class AudioSystem {
 
   private musicSource: AudioBufferSourceNode | null = null;
   private isMusicPlaying = false;
-  private isMusicPaused = false;
-  private musicStartTime = 0;
-  private musicPauseTime = 0;
+  private musicWasPlayingBeforePause = false;
+  private savedMusicVolume = 0.3;
 
   private musicVolume = 0.3;
   private sfxVolume = 0.5;
@@ -203,7 +202,7 @@ class AudioSystem {
       const buf = await this.ctx.decodeAudioData(arr);
       
       this.isMusicPlaying = true;
-      this.isMusicPaused = false;
+      this.musicWasPlayingBeforePause = false;
       this.musicSource = this.ctx.createBufferSource();
       this.musicSource.buffer = buf;
       this.musicSource.loop = true;
@@ -218,22 +217,26 @@ class AudioSystem {
     }
   }
 
-  /** Pause current music (can be resumed) */
+  /** Pause current music by muting (can be resumed) */
   pauseMusic() {
-    if (this.musicSource && this.isMusicPlaying && !this.isMusicPaused) {
-      try {
-        this.musicSource.stop();
-        this.isMusicPaused = true;
-        this.isMusicPlaying = false;
-      } catch {}
+    if (this.musicGain && this.isMusicPlaying) {
+      this.musicWasPlayingBeforePause = true;
+      this.savedMusicVolume = this.musicVolume;
+      this.musicGain.gain.value = 0;
     }
   }
 
-  /** Resume paused music */
-  async resumeMusic() {
-    if (this.isMusicPaused && this.currentMusicUrl) {
-      await this.playMusic(this.currentMusicUrl);
+  /** Resume paused music by unmuting */
+  resumeMusic() {
+    if (this.musicGain && this.musicWasPlayingBeforePause) {
+      this.musicGain.gain.value = this.savedMusicVolume;
+      this.musicWasPlayingBeforePause = false;
     }
+  }
+
+  /** Check if music is paused */
+  isMusicPaused() {
+    return this.musicWasPlayingBeforePause;
   }
 
   /** Play default title screen music */
