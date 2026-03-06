@@ -133,7 +133,7 @@ export default function OutcomeScreen({
 
   return (
     <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit} dark>
-      <div className={`max-w-3xl w-full bg-white rounded-2xl shadow-2xl p-8`}>
+      <div className={`max-w-3xl w-full bg-white rounded-2xl shadow-2xl p-8 mx-auto`}>
         <div className="text-center mb-6">
           <div className="text-6xl mb-4">{data.icon}</div>
           

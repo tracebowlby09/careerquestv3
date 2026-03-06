@@ -17,6 +17,8 @@ Career Quest V3 is a career simulation game with multiple career paths (Programm
 - [x] Career worlds with ScreenWrapper and exit warning popup
 - [x] Added progress loss warning when exiting career worlds during tests
 - [x] Added multiple patients to nurse quick recall questions
+- [x] Fixed pass/fail screen alignment (centered)
+- [x] Fixed career worlds to be full screen
 
 ## Current Structure
 
@@ -67,3 +69,4 @@ The ScreenWrapper component now includes an optional exit warning when `showExit
 | Initial | Template created with base setup |
 | 2026-03-06 | Added career worlds with ScreenWrapper and exit warning popup |
 | 2026-03-06 | Added multiple patients to nurse quick recall questions |
+| 2026-03-06 | Fixed pass/fail screen alignment and career worlds full screen |
