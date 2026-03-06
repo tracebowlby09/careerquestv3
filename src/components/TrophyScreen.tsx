@@ -1,6 +1,6 @@
 "use client";
 
-import { Trophy, Career, Difficulty } from "@/types/game";
+import { Trophy, Career, Difficulty, AchievementType } from "@/types/game";
 
 interface TrophyScreenProps {
   trophies: Trophy[];
@@ -41,7 +41,30 @@ const secretTrophies: SecretTrophyDisplay[] = [
     description: "Entered the legendary Konami code",
     icon: "👾",
   },
+  {
+    id: "career-master",
+    name: "Career Master",
+    description: "Earned all trophies for a career",
+    icon: "👑",
+  },
+  {
+    id: "quick-recall-champion",
+    name: "Quick Recall Champion",
+    description: "Completed Quick Recall mode",
+    icon: "⚡",
+  },
+  {
+    id: "perfect-recall",
+    name: "Perfect Recall",
+    description: "Got all Quick Recall questions right",
+    icon: "🎯",
+  },
 ];
+
+const getAchievementInfo = (achievementType?: AchievementType): SecretTrophyDisplay | undefined => {
+  if (!achievementType) return undefined;
+  return secretTrophies.find((s) => s.id === achievementType);
+};
 
 const isSecretTrophyUnlocked = (trophy: Trophy): boolean => {
   return trophy.isSecret === true;
@@ -166,7 +189,7 @@ export default function TrophyScreen({ trophies, onBack }: TrophyScreenProps) {
               </div>
               <div className="grid grid-cols-1 gap-4">
                 {secretTrophiesList.map((trophy, idx) => {
-                  const secretInfo = secretTrophies.find((s) => s.id === SECRET_TROPHY_ID);
+                  const secretInfo = getAchievementInfo(trophy.achievementType);
                   return (
                     <div
                       key={idx}

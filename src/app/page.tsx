@@ -14,7 +14,7 @@ import OutcomeScreen from "@/components/OutcomeScreen";
 import Settings from "@/components/Settings";
 import TrophyScreen from "@/components/TrophyScreen";
 import SecretTrophyPopup from "@/components/SecretTrophyPopup";
-import { Career, Difficulty, GameMode, Trophy } from "@/types/game";
+import { Career, Difficulty, GameMode, Trophy, AchievementType } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import ScreenWrapper from "@/components/ScreenWrapper";
 
@@ -52,6 +52,59 @@ const loadTrophies = (): Trophy[] => {
 const saveTrophies = (trophies: Trophy[]) => {
   if (typeof window === "undefined") return;
   localStorage.setItem("careerQuestTrophies", JSON.stringify(trophies));
+};
+
+// Check for achievements
+const checkAchievements = (
+  allTrophies: Trophy[],
+  isQuickRecallMode: boolean,
+  score: number,
+  total: number
+): AchievementType[] => {
+  const achievements: AchievementType[] = [];
+  const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect"];
+  const allDifficulties: Difficulty[] = ["easy", "medium", "hard"];
+  
+  // Check for Career Master - all 3 difficulties for any career
+  for (const career of allCareers) {
+    const careerTrophies = allTrophies.filter(
+      (t) => t.career === career && !t.achievementType
+    );
+    const earnedDifficulties = new Set(careerTrophies.map((t) => t.difficulty));
+    const hasAllDifficulties = allDifficulties.every((d) => earnedDifficulties.has(d));
+    
+    if (hasAllDifficulties) {
+      // Check if we already have this achievement
+      const alreadyHasCareerMaster = allTrophies.some(
+        (t) => t.achievementType === "career-master" && t.career === career
+      );
+      if (!alreadyHasCareerMaster) {
+        achievements.push("career-master");
+      }
+    }
+  }
+  
+  // Check for Quick Recall Champion - complete any quick recall
+  if (isQuickRecallMode) {
+    const alreadyHasChampion = allTrophies.some(
+      (t) => t.achievementType === "quick-recall-champion"
+    );
+    if (!alreadyHasChampion) {
+      achievements.push("quick-recall-champion");
+    }
+    
+    // Check for Perfect Recall - all questions right, no misses
+    if (score === total && total > 0) {
+      const alreadyHasPerfect = allTrophies.some(
+        (t) => t.achievementType === "perfect-recall"
+      );
+      if (!alreadyHasPerfect) {
+        achievements.push("perfect-recall");
+      }
+    }
+  }
+  
+  return achievements;
 };
 
 export default function Home() {
@@ -190,8 +243,30 @@ export default function Home() {
           difficulty: difficulty,
           earnedAt: new Date(),
         };
-        setTrophies([...trophies, newTrophy]);
-        saveTrophies([...trophies, newTrophy]);
+        
+        // Check for achievements after awarding the new trophy
+        const allTrophies = [...trophies, newTrophy];
+        const newAchievements = checkAchievements(allTrophies, isQuickRecallMode, finalScore, total);
+        
+        if (newAchievements.length > 0) {
+          // Add achievement trophies
+          const achievementTrophies = newAchievements.map((achievement) => ({
+            career: selectedCareer,
+            difficulty: "hard" as Difficulty,
+            earnedAt: new Date(),
+            isSecret: true,
+            achievementType: achievement,
+          }));
+          
+          setTrophies([...allTrophies, ...achievementTrophies]);
+          saveTrophies([...allTrophies, ...achievementTrophies]);
+          
+          // Show popup for achievements
+          setShowSecretTrophyPopup(true);
+        } else {
+          setTrophies(allTrophies);
+          saveTrophies(allTrophies);
+        }
       }
     }
     
