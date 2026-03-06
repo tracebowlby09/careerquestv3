@@ -23,8 +23,33 @@ const careerNames: Record<Career, string> = {
   nurse: "Registered Nurse",
   engineer: "Civil Engineer",
   teacher: "Teacher",
-  chef: "Professional Chef",
+  chef: "Head Chef",
   architect: "Architect",
+};
+
+// Load trophies from localStorage
+const loadTrophies = (): Trophy[] => {
+  if (typeof window === "undefined") return [];
+  const saved = localStorage.getItem("careerQuestTrophies");
+  if (saved) {
+    try {
+      const trophies = JSON.parse(saved);
+      // Convert date strings back to Date objects
+      return trophies.map((t: any) => ({
+        ...t,
+        earnedAt: new Date(t.earnedAt),
+      }));
+    } catch {
+      return [];
+    }
+  }
+  return [];
+};
+
+// Save trophies to localStorage
+const saveTrophies = (trophies: Trophy[]) => {
+  if (typeof window === "undefined") return;
+  localStorage.setItem("careerQuestTrophies", JSON.stringify(trophies));
 };
 
 export default function Home() {
@@ -35,7 +60,7 @@ export default function Home() {
   const [score, setScore] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
   const [challengeSuccess, setChallengeSuccess] = useState(false);
-  const [trophies, setTrophies] = useState<Trophy[]>([]);
+  const [trophies, setTrophies] = useState<Trophy[]>(() => loadTrophies());
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   const handleStart = (mode: GameMode) => {
@@ -114,6 +139,7 @@ export default function Home() {
           earnedAt: new Date(),
         };
         setTrophies([...trophies, newTrophy]);
+        saveTrophies([...trophies, newTrophy]);
       }
     }
     

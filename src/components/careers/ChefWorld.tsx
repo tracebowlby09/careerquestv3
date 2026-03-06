@@ -435,6 +435,8 @@ export default function ChefWorld({ difficulty, onComplete, isQuickRecall }: Che
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [score, setScore] = useState(0);
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
+  const [streak, setStreak] = useState(0);
+  const [bestStreak, setBestStreak] = useState(0);
   
   // Quick Recall hearts system
   const [hearts, setHearts] = useState(3);
@@ -495,6 +497,12 @@ export default function ChefWorld({ difficulty, onComplete, isQuickRecall }: Che
       const newScore = score + 1;
       setScore(newScore);
       setAnsweredQuestions([...answeredQuestions, true]);
+      // Update streak
+      const newStreak = streak + 1;
+      setStreak(newStreak);
+      if (newStreak > bestStreak) {
+        setBestStreak(newStreak);
+      }
 
       if (currentQuestionIndex < totalQuestions - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -506,6 +514,7 @@ export default function ChefWorld({ difficulty, onComplete, isQuickRecall }: Che
       // Wrong answer in Quick Recall - lose a heart
       if (isQuickRecall) {
         handleLoseHeart();
+        setStreak(0); // Reset streak on wrong answer
         
         if (hearts <= 1) {
           // Game over - no hearts left
@@ -604,6 +613,16 @@ export default function ChefWorld({ difficulty, onComplete, isQuickRecall }: Che
               <div className="text-right">
                 <div className="text-sm text-gray-600">Score</div>
                 <div className="text-2xl font-bold text-amber-600">{score}/{currentQuestionIndex}</div>
+              </div>
+              {/* Streak Display */}
+              <div className="text-right">
+                <div className="text-sm text-gray-600">🔥 Streak</div>
+                <div className={`text-2xl font-bold ${streak >= 3 ? 'text-orange-500' : streak >= 2 ? 'text-yellow-500' : 'text-gray-600'}`}>
+                  {streak}
+                </div>
+                {bestStreak > 0 && (
+                  <div className="text-xs text-gray-500">Best: {bestStreak}</div>
+                )}
               </div>
             </div>
           </div>

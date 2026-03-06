@@ -48,7 +48,7 @@ const careers: CareerOption[] = [
   },
   {
     id: "chef",
-    title: "Professional Chef",
+    title: "Head Chef",
     icon: "👨‍🍳",
     description: "Create culinary experiences and manage kitchen operations",
     skills: ["Creativity", "Time Management", "Quality Control"],
