@@ -157,7 +157,6 @@ class AudioSystem {
       }
     }
 
-    this.stopBackgroundMusic(); // ensure clean restart
     this.isMusicPlaying = true;
 
     this.musicSource = this.playBuffer("music", this.musicGain, { loop: true }) ?? null;
