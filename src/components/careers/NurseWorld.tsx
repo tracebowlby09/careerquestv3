@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { Difficulty } from "@/types/game";
+import { getBackgroundStyle } from "@/lib/backgrounds";
 
 // Fisher-Yates shuffle algorithm
 function shuffleArray<T>(array: T[]): T[] {
@@ -566,8 +567,9 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall }: Nu
   };
 
   if (stage === "intro") {
+    const customStyle = getBackgroundStyle("nurse");
     return (
-      <div className="min-h-screen bg-gradient-to-br from-teal-600 via-cyan-600 to-blue-600 p-4 md:p-8 flex items-center justify-center">
+      <div style={customStyle} className={`min-h-screen ${customStyle.backgroundImage ? '' : 'bg-gradient-to-br from-teal-600 via-cyan-600 to-blue-600'} p-4 md:p-8 flex items-center justify-center`}>
         <div className="max-w-3xl w-full bg-white rounded-2xl shadow-2xl p-8">
           <div className="text-center mb-6">
             <div className="text-6xl mb-4">🏥</div>
@@ -610,8 +612,10 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall }: Nu
     );
   }
 
+  const customStyle = getBackgroundStyle("nurse");
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-600 via-cyan-600 to-blue-600 p-4 md:p-8">
+    <div style={customStyle} className={`min-h-screen ${customStyle.backgroundImage ? '' : 'bg-gradient-to-br from-teal-600 via-cyan-600 to-blue-600'} p-4 md:p-8`}>
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           <div className="flex justify-between items-center mb-6">

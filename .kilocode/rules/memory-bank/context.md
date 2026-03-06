@@ -23,6 +23,7 @@ Career Quest V3 is a career simulation game with multiple career paths (Programm
 - [x] Added unique Quick Recall career selection screen with gradient cards
 - [x] Added Ultimate Career Master trophy (complete all difficulties for ALL careers)
 - [x] Added Quick Recall Legend trophy (complete Quick Recall for ALL careers)
+- [x] Added custom background image upload feature in Settings
 
 ## Current Structure
 
@@ -57,6 +58,10 @@ The ScreenWrapper component now includes an optional exit warning when `showExit
 
 Enter the Konami code (↑↑↓↓←→←→BA) anywhere in the game to unlock a secret trophy. A popup will appear at the top of the screen when unlocked. The trophy only appears in the Trophy Case after unlocking.
 
+### Custom Backgrounds:
+
+In Settings, go to the "Backgrounds" tab to upload custom images for each career. The images are stored locally in your browser and will replace the default gradient backgrounds when set. Use the "Remove" button to revert to the default background.
+
 ## Available Recipes
 
 | Recipe | File | Use Case |
@@ -80,3 +85,4 @@ Enter the Konami code (↑↑↓↓←→←→BA) anywhere in the game to unloc
 | 2026-03-06 | Fixed pass/fail screen alignment and career worlds full screen |
 | 2026-03-06 | Added secret Konami code trophy with popup notification |
 | 2026-03-06 | Added Ultimate Career Master and Quick Recall Legend trophies |
+| 2026-03-06 | Added custom background image upload feature in Settings |
