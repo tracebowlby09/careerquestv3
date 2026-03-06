@@ -50,9 +50,7 @@ export default function Home() {
   const handleDifficultySelect = (difficulty: Difficulty) => {
     setSelectedDifficulty(difficulty);
     
-    // Pause title music and play career-specific background music
-    audioSystem.pauseMusic();
-    
+    // Play career-specific background music
     if (selectedCareer) {
       const musicUrls: Record<Career, string> = {
         programmer: "/audio/Programmer.mp3",
@@ -114,8 +112,9 @@ export default function Home() {
   };
 
   const handleExitToTitle = () => {
+    // Stop career music and restart title music
     audioSystem.stopBackgroundMusic();
-    audioSystem.resumeMusic();
+    audioSystem.playTitleMusic();
     setGameState("title");
   };
 

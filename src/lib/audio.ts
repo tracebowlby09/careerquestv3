@@ -180,7 +180,7 @@ class AudioSystem {
 
     await this.resumeIfNeeded();
 
-    // Stop current music
+    // Stop current music first
     this.stopBackgroundMusic();
 
     // Load the new track
@@ -200,8 +200,9 @@ class AudioSystem {
       const arr = await res.arrayBuffer();
       const buf = await this.ctx.decodeAudioData(arr);
       
+      // Only set isMusicPlaying true - don't reset the pause flag
+      // The flag tracks whether title music was paused so we can resume it
       this.isMusicPlaying = true;
-      this.musicWasPlayingBeforePause = false;
       this.musicSource = this.ctx.createBufferSource();
       this.musicSource.buffer = buf;
       this.musicSource.loop = true;
