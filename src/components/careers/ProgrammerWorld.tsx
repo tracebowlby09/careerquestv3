@@ -16,6 +16,7 @@ function shuffleArray<T>(array: T[]): T[] {
 interface ProgrammerWorldProps {
   difficulty: Difficulty;
   onComplete: (success: boolean, score: number, total: number) => void;
+  isQuickRecall?: boolean;
 }
 
 interface Question {
@@ -184,14 +185,17 @@ for (let i = 0; i <= 5; i++) {
   ],
 };
 
-export default function ProgrammerWorld({ difficulty, onComplete }: ProgrammerWorldProps) {
+// Quick Recall mode - add your own questions here
+const quickRecallQuestions: Question[] = [];
+
+export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall }: ProgrammerWorldProps) {
   const [stage, setStage] = useState<"intro" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [score, setScore] = useState(0);
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
 
-  const currentQuestions = questions[difficulty];
+  const currentQuestions = isQuickRecall ? quickRecallQuestions : questions[difficulty];
   const currentQuestion = currentQuestions[currentQuestionIndex];
   const totalQuestions = currentQuestions.length;
 

@@ -1,18 +1,19 @@
 "use client";
 
 import { audioSystem } from "@/lib/audio";
+import { GameMode } from "@/types/game";
 
 interface TitleScreenProps {
-  onStart: () => void;
+  onStart: (mode: GameMode) => void;
   onOpenSettings: () => void;
 }
 
 export default function TitleScreen({ onStart, onOpenSettings }: TitleScreenProps) {
-  const handleStart = () => {
+  const handleStart = (mode: GameMode) => {
     audioSystem.initialize();
     audioSystem.startBackgroundMusic();
     audioSystem.playClickSound();
-    onStart();
+    onStart(mode);
   };
 
   return (
@@ -43,12 +44,21 @@ export default function TitleScreen({ onStart, onOpenSettings }: TitleScreenProp
           </p>
         </div>
 
-        <button
-          onClick={handleStart}
-          className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-xl font-bold py-4 px-12 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200"
-        >
-          Start Game
-        </button>
+        <div className="space-y-4">
+          <button
+            onClick={() => handleStart("challenge")}
+            className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-xl font-bold py-4 px-12 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200 w-full"
+          >
+            🎮 Challenge Mode
+          </button>
+          
+          <button
+            onClick={() => handleStart("quick-recall")}
+            className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xl font-bold py-4 px-12 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200 w-full"
+          >
+            ⚡ Quick Recall
+          </button>
+        </div>
 
         <div className="mt-8 text-sm text-gray-500">
           Choose your path. Learn real skills. Shape your future.

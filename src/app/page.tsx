@@ -12,7 +12,7 @@ import ChefWorld from "@/components/careers/ChefWorld";
 import ArchitectWorld from "@/components/careers/ArchitectWorld";
 import OutcomeScreen from "@/components/OutcomeScreen";
 import Settings from "@/components/Settings";
-import { Career, Difficulty, Trophy } from "@/types/game";
+import { Career, Difficulty, GameMode, Trophy } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 
 type GameState = "title" | "career-select" | "difficulty-select" | "playing" | "outcome";
@@ -28,6 +28,7 @@ const careerNames: Record<Career, string> = {
 
 export default function Home() {
   const [gameState, setGameState] = useState<GameState>("title");
+  const [gameMode, setGameMode] = useState<GameMode>("challenge");
   const [selectedCareer, setSelectedCareer] = useState<Career | null>(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | null>(null);
   const [score, setScore] = useState(0);
@@ -36,15 +37,32 @@ export default function Home() {
   const [trophies, setTrophies] = useState<Trophy[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
 
-  const handleStart = () => {
+  const handleStart = (mode: GameMode) => {
     audioSystem.playClickSound();
     audioSystem.playTitleMusic();
+    setGameMode(mode);
     setGameState("career-select");
   };
 
   const handleCareerSelect = (career: Career) => {
     setSelectedCareer(career);
-    setGameState("difficulty-select");
+    
+    // Quick Recall mode skips difficulty selection
+    if (gameMode === "quick-recall") {
+      // Play career-specific background music
+      const musicUrls: Record<Career, string> = {
+        programmer: "/audio/Programmer.mp3",
+        nurse: "/audio/Nurse.mp3",
+        engineer: "/audio/Engineer.mp3",
+        teacher: "/audio/Teacher.mp3",
+        chef: "/audio/Chef.mp3",
+        architect: "/audio/Architect.mp3",
+      };
+      audioSystem.playMusic(musicUrls[career]);
+      setGameState("playing");
+    } else {
+      setGameState("difficulty-select");
+    }
   };
 
   const handleDifficultySelect = (difficulty: Difficulty) => {
@@ -71,21 +89,23 @@ export default function Home() {
     setScore(finalScore);
     setTotalQuestions(total);
     
-    // Play success or failure sound
-    if (success) {
-      audioSystem.playSuccessSound();
-    } else {
-      audioSystem.playFailureSound();
-    }
-    
-    // Award trophy if successful
-    if (success && selectedCareer && selectedDifficulty) {
-      const newTrophy: Trophy = {
-        career: selectedCareer,
-        difficulty: selectedDifficulty,
-        earnedAt: new Date(),
-      };
-      setTrophies([...trophies, newTrophy]);
+    // Play success or failure sound (only for challenge mode)
+    if (gameMode === "challenge") {
+      if (success) {
+        audioSystem.playSuccessSound();
+      } else {
+        audioSystem.playFailureSound();
+      }
+      
+      // Award trophy if successful (only in challenge mode)
+      if (success && selectedCareer && selectedDifficulty) {
+        const newTrophy: Trophy = {
+          career: selectedCareer,
+          difficulty: selectedDifficulty,
+          earnedAt: new Date(),
+        };
+        setTrophies([...trophies, newTrophy]);
+      }
     }
     
     setGameState("outcome");
@@ -155,43 +175,51 @@ export default function Home() {
     );
   }
 
-  if (gameState === "playing" && selectedCareer && selectedDifficulty) {
+  if (gameState === "playing" && selectedCareer) {
+    const isQuickRecall = gameMode === "quick-recall";
+    
     return (
       <>
         {selectedCareer === "programmer" && (
           <ProgrammerWorld
-            difficulty={selectedDifficulty}
+            difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
+            isQuickRecall={isQuickRecall}
           />
         )}
         {selectedCareer === "nurse" && (
           <NurseWorld
-            difficulty={selectedDifficulty}
+            difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
+            isQuickRecall={isQuickRecall}
           />
         )}
         {selectedCareer === "engineer" && (
           <EngineerWorld
-            difficulty={selectedDifficulty}
+            difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
+            isQuickRecall={isQuickRecall}
           />
         )}
         {selectedCareer === "teacher" && (
           <TeacherWorld
-            difficulty={selectedDifficulty}
+            difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
+            isQuickRecall={isQuickRecall}
           />
         )}
         {selectedCareer === "chef" && (
           <ChefWorld
-            difficulty={selectedDifficulty}
+            difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
+            isQuickRecall={isQuickRecall}
           />
         )}
         {selectedCareer === "architect" && (
           <ArchitectWorld
-            difficulty={selectedDifficulty}
+            difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
+            isQuickRecall={isQuickRecall}
           />
         )}
         {settingsModal}
@@ -199,12 +227,12 @@ export default function Home() {
     );
   }
 
-  if (gameState === "outcome" && selectedCareer && selectedDifficulty) {
+  if (gameState === "outcome" && selectedCareer) {
     return (
       <>
         <OutcomeScreen
           career={selectedCareer}
-          difficulty={selectedDifficulty}
+          difficulty={selectedDifficulty ?? "easy"}
           success={challengeSuccess}
           score={score}
           total={totalQuestions}
@@ -213,6 +241,7 @@ export default function Home() {
           onChangeDifficulty={handleChangeDifficulty}
           onOpenSettings={() => setSettingsOpen(true)}
           onExit={handleExitToTitle}
+          isQuickRecall={gameMode === "quick-recall"}
         />
         {settingsModal}
       </>

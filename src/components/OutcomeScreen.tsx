@@ -14,6 +14,7 @@ interface OutcomeScreenProps {
   onChangeDifficulty: () => void;
   onOpenSettings?: () => void;
   onExit?: () => void;
+  isQuickRecall?: boolean;
 }
 
 const careerData = {

@@ -16,6 +16,7 @@ function shuffleArray<T>(array: T[]): T[] {
 interface EngineerWorldProps {
   difficulty: Difficulty;
   onComplete: (success: boolean, score: number, total: number) => void;
+  isQuickRecall?: boolean;
 }
 
 interface DesignOption {
@@ -163,14 +164,17 @@ const questions: Record<Difficulty, Question[]> = {
   ],
 };
 
-export default function EngineerWorld({ difficulty, onComplete }: EngineerWorldProps) {
+// Quick Recall mode - add your own questions here
+const quickRecallQuestions: Question[] = [];
+
+export default function EngineerWorld({ difficulty, onComplete, isQuickRecall }: EngineerWorldProps) {
   const [stage, setStage] = useState<"intro" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedDesign, setSelectedDesign] = useState<string | null>(null);
   const [score, setScore] = useState(0);
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
 
-  const currentQuestions = questions[difficulty];
+  const currentQuestions = isQuickRecall ? quickRecallQuestions : questions[difficulty];
   const currentQuestion = currentQuestions[currentQuestionIndex];
   const totalQuestions = currentQuestions.length;
 

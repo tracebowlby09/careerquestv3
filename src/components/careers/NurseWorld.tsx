@@ -16,6 +16,7 @@ function shuffleArray<T>(array: T[]): T[] {
 interface NurseWorldProps {
   difficulty: Difficulty;
   onComplete: (success: boolean, score: number, total: number) => void;
+  isQuickRecall?: boolean;
 }
 
 interface Patient {
@@ -143,14 +144,17 @@ const questions: Record<Difficulty, Question[]> = {
   ],
 };
 
-export default function NurseWorld({ difficulty, onComplete }: NurseWorldProps) {
+// Quick Recall mode - add your own questions here
+const quickRecallQuestions: Question[] = [];
+
+export default function NurseWorld({ difficulty, onComplete, isQuickRecall }: NurseWorldProps) {
   const [stage, setStage] = useState<"intro" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOrder, setSelectedOrder] = useState<string[]>([]);
   const [score, setScore] = useState(0);
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
 
-  const currentQuestions = questions[difficulty];
+  const currentQuestions = isQuickRecall ? quickRecallQuestions : questions[difficulty];
   const currentQuestion = currentQuestions[currentQuestionIndex];
   const totalQuestions = currentQuestions.length;
 
