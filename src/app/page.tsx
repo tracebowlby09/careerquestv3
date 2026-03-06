@@ -436,6 +436,8 @@ export default function Home() {
             <NurseSimulation
               difficulty={selectedDifficulty ?? "easy"}
               onComplete={handleChallengeComplete}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
             />
           )}
           {selectedCareer === "engineer" && (

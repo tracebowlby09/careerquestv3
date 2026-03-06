@@ -132,7 +132,6 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
   const tasks = triageTasks[difficulty];
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [patientAssignments, setPatientAssignments] = useState<Record<string, "critical" | "urgent" | "stable" | null>>({});
-  const [timeLeft, setTimeLeft] = useState(45);
   const [feedback, setFeedback] = useState<"correct" | "incorrect" | null>(null);
   const [totalScore, setTotalScore] = useState(0);
   const [completedTasks, setCompletedTasks] = useState(0);
@@ -149,27 +148,9 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
         initialAssignments[p.id] = null;
       });
       setPatientAssignments(initialAssignments);
-      setTimeLeft(currentTask.timeLimit);
       setFeedback(null);
     }
   }, [currentTask]);
-
-  // Timer
-  useEffect(() => {
-    if (timeLeft <= 0 || feedback === "correct") return;
-    
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          handleSubmit();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [timeLeft, feedback]);
 
   const handleDragStart = (patientId: string) => {
     setDraggedPatient(patientId);
@@ -209,9 +190,6 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
     if (percentage === 1) {
       audioSystem.playSuccessSound();
       pointsEarned = currentTask.points;
-      // Time bonus
-      const timeBonus = Math.floor((timeLeft / currentTask.timeLimit) * 30);
-      pointsEarned += timeBonus;
     } else if (percentage >= 0.6) {
       audioSystem.playSuccessSound();
       pointsEarned = Math.floor(currentTask.points * 0.5);
@@ -240,11 +218,10 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
           initialAssignments[p.id] = null;
         });
         setPatientAssignments(initialAssignments);
-        setTimeLeft((prev) => Math.max(0, prev - 10)); // Time penalty
         setFeedback(null);
       }, 1500);
     }
-  }, [currentTask, patientAssignments, timeLeft, currentTaskIndex, tasks.length]);
+  }, [currentTask, patientAssignments, currentTaskIndex, tasks.length]);
 
   const handleFinish = () => {
     const success = totalScore > 0;
@@ -284,11 +261,16 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
             <h1 className="text-2xl font-bold text-white">🏥 Nurse Triage Simulation</h1>
             <p className="text-red-200">Task {currentTaskIndex + 1} of {tasks.length}</p>
           </div>
-          <div className="text-right">
+          <div className="flex items-center gap-4">
             <div className="text-2xl font-bold text-white">{totalScore} pts</div>
-            <div className={`text-lg ${timeLeft <= 15 ? "text-red-300 animate-pulse" : "text-green-300"}`}>
-              ⏱️ {timeLeft}s
-            </div>
+            {onExit && (
+              <button
+                onClick={onExit}
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl font-bold transition-colors"
+              >
+                🏠 Exit
+              </button>
+            )}
           </div>
         </div>
 
