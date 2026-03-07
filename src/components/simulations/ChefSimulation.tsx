@@ -88,10 +88,14 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
   const [gameStarted, setGameStarted] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [targetOrders, setTargetOrders] = useState(5);
+  const [fadeIn, setFadeIn] = useState(false);
 
   const currentMenu = menu[difficulty];
 
-  // Generate new orders
+  useEffect(() => {
+    setFadeIn(true);
+  }, []);
+
   useEffect(() => {
     if (!gameStarted) return;
 
@@ -119,18 +123,15 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
     return () => clearInterval(interval);
   }, [gameStarted, currentMenu, orders.length]);
 
-  // Game tick - cooking progress and patience decay
   useEffect(() => {
     if (!gameStarted) return;
 
     const tick = setInterval(() => {
-      // Decrease patience for pending orders
       setOrders((prev) => prev.map((order) => ({
         ...order,
         patience: Math.max(0, order.patience - 2),
       })));
 
-      // Progress cooking orders
       setStations((prev) => prev.map((station) => {
         if (!station.occupiedBy) return station;
 
@@ -138,7 +139,6 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
         const cookTime = station.occupiedBy.dish.cookTime * 10;
 
         if (newProgress >= cookTime) {
-          // Order cooked
           setOrders((prev) => prev.map((o) => 
             o.id === station.occupiedBy!.id 
               ? { ...o, status: "ready", progress: cookTime }
@@ -147,7 +147,6 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
           return { ...station, occupiedBy: null, progress: 0 };
         }
 
-        // Check for burnt (overcooked)
         if (newProgress >= cookTime + 20) {
           setOrders((prev) => prev.map((o) => 
             o.id === station.occupiedBy!.id 
@@ -156,11 +155,10 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
           ));
           audioSystem.playFailureSound();
           setBurntOrders((prev) => prev + 1);
-          setFeedback("Order burnt! Customer will complain!");
+          setFeedback("🔥 Order burnt! Customer is angry!");
           return { ...station, occupiedBy: null, progress: 0 };
         }
 
-        // Update order progress
         setOrders((prev) => prev.map((o) => 
           o.id === station.occupiedBy!.id 
             ? { ...o, progress: newProgress }
@@ -170,12 +168,11 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
         return { ...station, progress: newProgress };
       }));
 
-      // Remove orders that ran out of patience
       setOrders((prev) => {
         const removed = prev.filter((o) => o.patience <= 0 && o.status === "pending");
         if (removed.length > 0) {
           audioSystem.playFailureSound();
-          setFeedback("Customer left! Too slow!");
+          setFeedback("😠 Customer left! Too slow!");
         }
         return prev.filter((o) => o.patience > 0 || o.status !== "pending");
       });
@@ -204,7 +201,6 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
     const station = stations.find((s) => s.id === stationId);
     if (station?.occupiedBy) return;
 
-    // Find an order that matches the prep queue
     const matchingOrder = orders.find((order) => {
       if (order.status !== "pending") return false;
       const hasAllIngredients = order.dish.ingredients.every((i) => prepQueue.includes(i));
@@ -212,11 +208,10 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
     });
 
     if (!matchingOrder) {
-      setFeedback("Wrong ingredients! Check the order requirements.");
+      setFeedback("❌ Wrong ingredients! Check the order requirements.");
       return;
     }
 
-    // Start cooking
     setOrders((prev) => prev.map((o) => 
       o.id === matchingOrder.id 
         ? { ...o, status: "cooking", progress: 0 }
@@ -231,19 +226,18 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
 
     setPrepQueue([]);
     setFeedback("");
+    audioSystem.playClickSound();
   };
 
   const serveOrder = (orderId: string) => {
     const order = orders.find((o) => o.id === orderId);
     if (!order || order.status !== "ready") return;
 
-    // Check special request
     let bonus = 0;
     if (order.specialRequest) {
-      bonus = 20; // Bonus for handling special request
+      bonus = 20;
     }
 
-    // Points based on remaining patience and difficulty
     const basePoints = order.dish.difficulty * 30;
     const patienceBonus = Math.floor(order.patience / 10);
     const points = basePoints + patienceBonus + bonus;
@@ -251,12 +245,10 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
     setScore((prev) => prev + points);
     setCompletedOrders((prev) => prev + 1);
     audioSystem.playSuccessSound();
-    setFeedback(`Served ${order.dish.name}! +${points} points`);
+    setFeedback(`✅ Served ${order.dish.name}! +${points} points`);
 
-    // Remove order
     setOrders((prev) => prev.filter((o) => o.id !== orderId));
 
-    // Check win condition
     if (completedOrders + 1 >= targetOrders) {
       setTimeout(() => setShowSuccess(true), 1000);
     }
@@ -264,7 +256,7 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
 
   const trashOrder = (orderId: string) => {
     setOrders((prev) => prev.filter((o) => o.id !== orderId));
-    setFeedback("Order trashed");
+    setFeedback("🗑️ Order trashed");
   };
 
   const handleFinish = () => {
@@ -277,7 +269,7 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
   if (showSuccess) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-600 via-red-500 to-yellow-500 p-4 md:p-8 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center transform scale-100 animate-bounce">
           <div className="text-6xl mb-4">👨‍🍳</div>
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Kitchen Closed!</h2>
           <p className="text-gray-600 mb-4">
@@ -292,7 +284,7 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
           </div>
           <button
             onClick={handleFinish}
-            className="w-full py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white font-bold rounded-xl hover:from-orange-700 hover:to-red-700 transition-all"
+            className="w-full py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white font-bold rounded-xl hover:from-orange-700 hover:to-red-700 transition-all transform hover:scale-105"
           >
             Continue
           </button>
@@ -305,7 +297,7 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-600 via-red-500 to-yellow-500 p-4 md:p-8 flex items-center justify-center">
         <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
-          <div className="text-6xl mb-4">👨‍🍳</div>
+          <div className="text-6xl mb-4 animate-bounce">👨‍🍳</div>
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Dinner Rush</h2>
           <p className="text-gray-600 mb-6">
             Serve {targetOrders} orders before customers leave!
@@ -337,7 +329,7 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
 
           <button
             onClick={startGame}
-            className="w-full py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white font-bold rounded-xl hover:from-orange-700 hover:to-red-700 transition-all"
+            className="w-full py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white font-bold rounded-xl hover:from-orange-700 hover:to-red-700 transition-all transform hover:scale-105"
           >
             🔥 Start Service!
           </button>
@@ -347,9 +339,8 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-600 via-red-500 to-yellow-500 p-4 md:p-8">
+    <div className={`min-h-screen bg-gradient-to-br from-orange-600 via-red-500 to-yellow-500 p-4 md:p-8 transition-all duration-500 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <div>
             <h1 className="text-2xl font-bold text-white">👨‍🍳 Dinner Rush</h1>
@@ -366,62 +357,57 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
           </div>
         </div>
 
-        {/* Feedback */}
         {feedback && (
-          <div className="bg-white/20 backdrop-blur rounded-lg p-2 mb-4 text-center text-white font-bold">
+          <div className="bg-white/20 backdrop-blur rounded-lg p-2 mb-4 text-center text-white font-bold animate-pulse">
             {feedback}
           </div>
         )}
 
-        {/* Orders */}
         <div className="mb-4">
           <h3 className="text-white font-bold mb-2">📋 Orders ({orders.length})</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
             {orders.map((order) => {
               const statusColor = 
-                order.status === "burnt" ? "bg-red-600" :
-                order.status === "ready" ? "bg-green-500" :
+                order.status === "burnt" ? "bg-red-600 animate-pulse" :
+                order.status === "ready" ? "bg-green-500 animate-bounce" :
                 order.status === "cooking" ? "bg-yellow-500" :
                 order.patience < 30 ? "bg-red-400" : "bg-white";
               
               return (
                 <div
                   key={order.id}
-                  className={`${statusColor} rounded-lg p-2 text-center relative`}
+                  className={`${statusColor} rounded-lg p-2 text-center relative shadow-lg transform transition-all hover:scale-105`}
                 >
-                  <div className="text-2xl">{order.dish.emoji}</div>
+                  <div className="text-3xl">{order.dish.emoji}</div>
                   <div className="font-bold text-sm text-gray-800">{order.dish.name}</div>
                   {order.specialRequest && (
-                    <div className="text-xs bg-purple-500 text-white px-1 rounded mt-1">
-                      {order.specialRequest}
+                    <div className="text-xs bg-purple-500 text-white px-1 rounded mt-1 font-medium">
+                      💫 {order.specialRequest}
                     </div>
                   )}
                   
-                  {/* Patience bar */}
                   {order.status === "pending" && (
-                    <div className="w-full bg-gray-300 rounded-full h-1 mt-1">
+                    <div className="w-full bg-gray-300 rounded-full h-1 mt-2">
                       <div 
-                        className={`h-1 rounded-full ${order.patience < 30 ? "bg-red-500" : "bg-green-500"}`}
+                        className={`h-1 rounded-full ${order.patience < 30 ? "bg-red-500 animate-pulse" : "bg-green-500"}`}
                         style={{ width: `${order.patience}%` }}
                       />
                     </div>
                   )}
                   
-                  {/* Cooking progress */}
                   {order.status === "cooking" && (
-                    <div className="w-full bg-gray-300 rounded-full h-1 mt-1">
+                    <div className="w-full bg-gray-300 rounded-full h-1 mt-2">
                       <div 
-                        className="bg-yellow-700 h-1 rounded-full"
+                        className="bg-yellow-700 h-1 rounded-full transition-all duration-200"
                         style={{ width: `${(order.progress / (order.dish.cookTime * 10)) * 100}%` }}
                       />
                     </div>
                   )}
                   
-                  {/* Action buttons */}
                   {order.status === "ready" && (
                     <button
                       onClick={() => serveOrder(order.id)}
-                      className="mt-1 w-full py-1 bg-green-600 hover:bg-green-700 text-white text-xs rounded font-bold"
+                      className="mt-2 w-full py-1 bg-green-600 hover:bg-green-700 text-white text-xs rounded font-bold transition-all transform hover:scale-105"
                     >
                       ✓ Serve!
                     </button>
@@ -429,7 +415,7 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
                   {(order.status === "burnt" || order.patience <= 0) && (
                     <button
                       onClick={() => trashOrder(order.id)}
-                      className="mt-1 w-full py-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded font-bold"
+                      className="mt-2 w-full py-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded font-bold"
                     >
                       🗑️ Trash
                     </button>
@@ -446,7 +432,6 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* Ingredients */}
           <div>
             <h3 className="text-white font-bold mb-2">🥗 Ingredients</h3>
             <p className="text-orange-200 text-xs mb-2">Click to add to prep (must match an order)</p>
@@ -455,9 +440,9 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
                 <button
                   key={ingredient}
                   onClick={() => addToPrep(ingredient)}
-                  className={`px-3 py-2 rounded-lg font-medium transition-all ${
+                  className={`px-3 py-2 rounded-lg font-medium transition-all transform hover:scale-105 ${
                     prepQueue.includes(ingredient)
-                      ? "bg-orange-500 text-white"
+                      ? "bg-orange-500 text-white shadow-lg"
                       : "bg-white hover:bg-orange-100 text-gray-800"
                   }`}
                 >
@@ -466,18 +451,17 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
               ))}
             </div>
 
-            {/* Prep Queue */}
             <div className="mt-4 bg-white/90 rounded-lg p-4">
               <div className="flex justify-between items-center mb-2">
                 <span className="font-bold text-gray-800">Prep Queue:</span>
-                <button onClick={clearPrep} className="text-sm text-red-500">Clear</button>
+                <button onClick={clearPrep} className="text-sm text-red-500 hover:text-red-700">Clear</button>
               </div>
               <div className="flex flex-wrap gap-2">
                 {prepQueue.length === 0 ? (
                   <span className="text-gray-500 text-sm">Click ingredients above</span>
                 ) : (
                   prepQueue.map((item) => (
-                    <span key={item} className="bg-orange-200 px-2 py-1 rounded text-sm">
+                    <span key={item} className="bg-orange-200 px-2 py-1 rounded text-sm font-medium">
                       {item}
                     </span>
                   ))
@@ -486,12 +470,11 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
             </div>
           </div>
 
-          {/* Cooking Stations */}
           <div>
             <h3 className="text-white font-bold mb-2">🔥 Cooking Stations</h3>
             <div className="space-y-2">
               {stations.map((station) => (
-                <div key={station.id} className="bg-gray-900 rounded-lg p-3">
+                <div key={station.id} className="bg-gray-900 rounded-lg p-3 shadow-lg">
                   <div className="flex justify-between items-center">
                     <span className="text-white font-bold">{station.icon} {station.name}</span>
                     {station.occupiedBy ? (
@@ -499,8 +482,8 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
                         <span className="text-white text-sm">{station.occupiedBy.dish.emoji} {station.occupiedBy.dish.name}</span>
                         <div className="w-20 bg-gray-700 rounded-full h-2">
                           <div 
-                            className={`h-2 rounded-full ${
-                              station.progress > station.occupiedBy.dish.cookTime * 10 ? "bg-red-500" : "bg-green-500"
+                            className={`h-2 rounded-full transition-all duration-200 ${
+                              station.progress > station.occupiedBy.dish.cookTime * 10 ? "bg-red-500 animate-pulse" : "bg-green-500"
                             }`}
                             style={{ width: `${Math.min(100, (station.progress / (station.occupiedBy.dish.cookTime * 10)) * 100)}%` }}
                           />
@@ -510,7 +493,7 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
                       <button
                         onClick={() => startCooking(station.id)}
                         disabled={prepQueue.length === 0}
-                        className="px-3 py-1 bg-green-600 text-white rounded text-sm disabled:opacity-50"
+                        className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-sm disabled:opacity-50 transition-all transform hover:scale-105"
                       >
                         Cook
                       </button>

@@ -149,10 +149,14 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
   const [showSuccess, setShowSuccess] = useState(false);
   const [clientSatisfaction, setClientSatisfaction] = useState(0);
   const [feedback, setFeedback] = useState("");
+  const [fadeIn, setFadeIn] = useState(false);
 
   const currentDesign = designs[currentDesignIndex];
 
-  // Calculate budget
+  useEffect(() => {
+    setFadeIn(true);
+  }, []);
+
   const calculateTotalCost = () => {
     return placedRooms.reduce((sum, placement) => {
       const room = currentDesign.availableRooms.find(r => r.id === placement.roomId);
@@ -160,13 +164,11 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
     }, 0);
   };
 
-  // Check requirements
   const checkRequirements = () => {
     const newRequirements = currentDesign.requirements.map((req) => {
       let met = false;
       
       if (req.type === "room") {
-        // Count specific room types
         const bedroomCount = placedRooms.filter(p => {
           const room = currentDesign.availableRooms.find(r => r.id === p.roomId);
           return room?.name.includes("Bedroom");
@@ -178,7 +180,6 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
       }
       
       if (req.type === "feature") {
-        // Check for specific features
         met = placedRooms.some(p => {
           const room = currentDesign.availableRooms.find(r => r.id === p.roomId);
           if (req.description === "Kitchen") return room?.name.includes("Kitchen");
@@ -215,12 +216,10 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
     const room = currentDesign.availableRooms.find(r => r.id === roomId);
     if (!room) return false;
     
-    // Check bounds
     if (x + room.width > currentDesign.gridSize || y + room.height > currentDesign.gridSize) {
       return false;
     }
     
-    // Check overlap
     for (const placed of placedRooms) {
       const existing = currentDesign.availableRooms.find(r => r.id === placed.roomId);
       if (!existing) continue;
@@ -243,32 +242,20 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
   };
 
   const handleGridClick = (x: number, y: number) => {
-    if (!selectedRoom) {
-      // Remove room if clicking on it
-      const roomIndex = placedRooms.findIndex(p => 
-        p.x === x && placedRooms.filter(p2 => p2.roomId === placedRooms.find(p3 => p3.x === x && p3.y === y)?.roomId).some(p2 => {
-          const room = currentDesign.availableRooms.find(r => r.id === p2.roomId);
-          return room && x >= p2.x && x < p2.x + room.width && y >= p2.y && y < p2.y + room.height;
-        })
-      );
-      if (roomIndex >= 0) {
-        setPlacedRooms(placedRooms.filter((_, i) => i !== roomIndex));
-      }
-      return;
-    }
+    if (!selectedRoom) return;
 
     if (isValidPlacement(selectedRoom, x, y)) {
-      // Check budget
       const room = currentDesign.availableRooms.find(r => r.id === selectedRoom);
       if (room && totalCost + room.cost > currentDesign.maxBudget) {
-        setFeedback("Over budget!");
+        setFeedback("💰 Over budget!");
         return;
       }
       
       setPlacedRooms([...placedRooms, { roomId: selectedRoom, x, y }]);
       setFeedback("");
+      audioSystem.playClickSound();
     } else {
-      setFeedback("Can't place room here - no space!");
+      setFeedback("❌ Can't place room here - no space!");
     }
   };
 
@@ -279,15 +266,14 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
 
   const submitDesign = () => {
     if (satisfiedRequirements < currentDesign.requirements.length) {
-      setFeedback("Client requirements not met!");
+      setFeedback("❌ Client requirements not met!");
       return;
     }
     if (totalCost > currentDesign.maxBudget) {
-      setFeedback("Over budget!");
+      setFeedback("💰 Over budget!");
       return;
     }
 
-    // Calculate score
     const budgetEfficiency = Math.round(((currentDesign.maxBudget - totalCost) / currentDesign.maxBudget) * 100);
     const requirementBonus = satisfiedRequirements * 30;
     const points = currentDesign.points + requirementBonus + budgetEfficiency;
@@ -306,7 +292,7 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
   if (showSuccess) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-teal-600 via-cyan-500 to-blue-600 p-4 md:p-8 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center transform scale-100 animate-bounce">
           <div className="text-6xl mb-4">🏠</div>
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Design Complete!</h2>
           <p className="text-gray-600 mb-4">
@@ -323,7 +309,7 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
           </div>
           <button
             onClick={handleFinish}
-            className="w-full py-3 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all"
+            className="w-full py-3 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all transform hover:scale-105"
           >
             Continue
           </button>
@@ -333,9 +319,8 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-600 via-cyan-500 to-blue-600 p-4 md:p-8">
+    <div className={`min-h-screen bg-gradient-to-br from-teal-600 via-cyan-500 to-blue-600 p-4 md:p-8 transition-all duration-500 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-bold text-white">🏛️ Dream House Design</h1>
@@ -352,12 +337,11 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
           </div>
         </div>
 
-        {/* Client Info */}
         <div className="bg-white/10 backdrop-blur rounded-xl p-4 mb-4">
           <div className="flex items-center gap-3 mb-2">
-            <span className="text-3xl">{currentDesign.clientAvatar}</span>
+            <span className="text-4xl">{currentDesign.clientAvatar}</span>
             <div>
-              <div className="text-white font-bold">{currentDesign.client}</div>
+              <div className="text-white font-bold text-lg">{currentDesign.client}</div>
               <div className="text-cyan-200 text-sm">{currentDesign.description}</div>
             </div>
           </div>
@@ -365,42 +349,40 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
             {currentDesign.requirements.map((req) => (
               <span 
                 key={req.id}
-                className={`px-2 py-1 rounded text-xs font-bold ${
+                className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
                   updatedRequirements.find(r => r.id === req.id)?.met 
-                    ? "bg-green-500 text-white" 
+                    ? "bg-green-500 text-white shadow-lg" 
                     : "bg-gray-600 text-white"
                 }`}
               >
-                {req.met ? "✓" : "○"} {req.description}
+                {updatedRequirements.find(r => r.id === req.id)?.met ? "✓" : "○"} {req.description}
               </span>
             ))}
           </div>
         </div>
 
-        {/* Feedback */}
         {feedback && (
-          <div className="bg-red-500/20 border border-red-500 rounded-xl p-2 mb-4 text-center">
+          <div className="bg-red-500/20 border border-red-500 rounded-xl p-2 mb-4 text-center animate-pulse">
             <span className="text-red-300 font-bold">{feedback}</span>
           </div>
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* Room Selection */}
           <div>
             <h3 className="text-white font-bold mb-3">🏗️ Available Rooms</h3>
-            <div className="space-y-2">
+            <div className="space-y-2 max-h-[500px] overflow-y-auto pr-2">
               {currentDesign.availableRooms.map((room) => (
                 <button
                   key={room.id}
                   onClick={() => handleRoomClick(room.id)}
-                  className={`w-full rounded-lg p-3 text-left transition-all ${
+                  className={`w-full rounded-lg p-3 text-left transition-all duration-200 transform hover:scale-[1.02] ${
                     selectedRoom === room.id 
-                      ? "ring-2 ring-white bg-teal-600" 
+                      ? "ring-2 ring-white bg-teal-600 shadow-lg" 
                       : "bg-white/90 hover:bg-white"
                   }`}
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-xl">{room.emoji}</span>
+                    <span className="text-2xl">{room.emoji}</span>
                     <div className="flex-1">
                       <div className="font-bold text-gray-800 text-sm">{room.name}</div>
                       <div className="text-xs text-gray-500">{room.width}x{room.height}</div>
@@ -412,11 +394,10 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
             </div>
           </div>
 
-          {/* Design Grid */}
           <div>
             <h3 className="text-white font-bold mb-3">📐 Design Grid</h3>
             <div 
-              className="bg-green-300 rounded-lg p-2 relative"
+              className="bg-green-300 rounded-lg p-2 relative shadow-2xl"
               style={{ 
                 display: "grid",
                 gridTemplateColumns: `repeat(${currentDesign.gridSize}, 1fr)`,
@@ -429,7 +410,6 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
                 const x = i % currentDesign.gridSize;
                 const y = Math.floor(i / currentDesign.gridSize);
                 
-                // Find room at this position
                 const roomAtPos = placedRooms.find(p => {
                   const room = currentDesign.availableRooms.find(r => r.id === p.roomId);
                   return room && x >= p.x && x < p.x + room.width && y >= p.y && y < p.y + room.height;
@@ -442,11 +422,11 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
                 return (
                   <div
                     key={i}
-                    className={`border border-green-400 rounded m-0.5 flex items-center justify-center cursor-pointer transition-all ${
+                    className={`border border-green-400 rounded m-0.5 flex items-center justify-center cursor-pointer transition-all duration-200 ${
                       room 
-                        ? "bg-teal-500" 
+                        ? "bg-teal-500 shadow-lg" 
                         : isHovered && canPlace 
-                          ? "bg-teal-300" 
+                          ? "bg-teal-300 animate-pulse" 
                           : isHovered && !canPlace 
                             ? "bg-red-300" 
                             : "bg-green-200"
@@ -461,19 +441,18 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
             </div>
           </div>
 
-          {/* Stats & Actions */}
           <div>
             <h3 className="text-white font-bold mb-3">📊 Design Stats</h3>
             
             <div className="space-y-3 mb-4">
-              <div className="bg-white/10 rounded-lg p-3 text-center">
+              <div className="bg-white/10 rounded-lg p-3 text-center transition-all duration-300">
                 <div className="text-white/70 text-sm">Budget</div>
                 <div className={`text-2xl font-bold ${totalCost <= currentDesign.maxBudget ? "text-green-400" : "text-red-400"}`}>
                   ${totalCost} / ${currentDesign.maxBudget}
                 </div>
               </div>
               
-              <div className="bg-white/10 rounded-lg p-3 text-center">
+              <div className="bg-white/10 rounded-lg p-3 text-center transition-all duration-300">
                 <div className="text-white/70 text-sm">Requirements Met</div>
                 <div className={`text-2xl font-bold ${satisfactionPercent >= 80 ? "text-green-400" : satisfactionPercent >= 50 ? "text-yellow-400" : "text-red-400"}`}>
                   {satisfiedRequirements} / {currentDesign.requirements.length}
@@ -482,9 +461,11 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
               </div>
 
               <div className="bg-white/10 rounded-lg p-3">
-                <div className="text-white/70 text-sm mb-2">Zoning Rules:</div>
+                <div className="text-white/70 text-sm mb-2">📜 Zoning Rules:</div>
                 {currentDesign.zoningRules.map((rule, i) => (
-                  <div key={i} className="text-white text-xs">• {rule}</div>
+                  <div key={i} className="text-white text-xs flex items-center gap-1">
+                    <span>•</span> {rule}
+                  </div>
                 ))}
               </div>
             </div>
@@ -492,7 +473,7 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
             <div className="space-y-2">
               <button
                 onClick={submitDesign}
-                className="w-full py-3 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all"
+                className="w-full py-3 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all transform hover:scale-[1.02] shadow-lg shadow-teal-500/25"
               >
                 ✓ Submit Design
               </button>

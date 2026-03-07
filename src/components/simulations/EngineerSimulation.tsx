@@ -36,7 +36,7 @@ interface BridgeTask {
   requiredLoad: number;
   maxBudget: number;
   availableMaterials: Material[];
-  testVehicles: { name: string; weight: number }[];
+  testVehicles: { name: string; weight: number; emoji: string }[];
   points: number;
 }
 
@@ -55,9 +55,9 @@ const bridgeTasks: Record<Difficulty, BridgeTask[]> = {
         { id: "steel", name: "Steel Cable", strength: 800, cost: 100, color: "bg-gray-500", emoji: "⛓️" },
       ],
       testVehicles: [
-        { name: "Pedestrian", weight: 80 },
-        { name: "Runner", weight: 100 },
-        { name: "Cyclist", weight: 150 },
+        { name: "Pedestrian", weight: 80, emoji: "🚶" },
+        { name: "Runner", weight: 100, emoji: "🏃" },
+        { name: "Cyclist", weight: 150, emoji: "🚴" },
       ],
       points: 100,
     },
@@ -77,9 +77,9 @@ const bridgeTasks: Record<Difficulty, BridgeTask[]> = {
         { id: "cable", name: "Steel Cables", strength: 2500, cost: 150, emoji: "⛓️", color: "bg-slate-500" },
       ],
       testVehicles: [
-        { name: "Car", weight: 1500 },
-        { name: "SUV", weight: 2500 },
-        { name: "Delivery Truck", weight: 5000 },
+        { name: "Car", weight: 1500, emoji: "🚗" },
+        { name: "SUV", weight: 2500, emoji: "🚙" },
+        { name: "Delivery Truck", weight: 5000, emoji: "🚚" },
       ],
       points: 150,
     },
@@ -100,9 +100,9 @@ const bridgeTasks: Record<Difficulty, BridgeTask[]> = {
         { id: "titanium", name: "Titanium Alloy", strength: 20000, cost: 1000, color: "bg-slate-700", emoji: "⚙️" },
       ],
       testVehicles: [
-        { name: "Sedan", weight: 1800 },
-        { name: "Semi Truck", weight: 15000 },
-        { name: "Heavy Crane", weight: 20000 },
+        { name: "Sedan", weight: 1800, emoji: "🚗" },
+        { name: "Semi Truck", weight: 15000, emoji: "🚛" },
+        { name: "Heavy Crane", weight: 20000, emoji: "🏗️" },
       ],
       points: 200,
     },
@@ -121,8 +121,13 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
   const [totalScore, setTotalScore] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
   const [feedback, setFeedback] = useState<string>("");
+  const [fadeIn, setFadeIn] = useState(false);
 
   const currentTask = tasks[currentTaskIndex];
+
+  useEffect(() => {
+    setFadeIn(true);
+  }, []);
 
   const calculateTotalStrength = () => {
     return bridgeParts.reduce((sum, part) => {
@@ -158,6 +163,7 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
     };
     setBridgeParts([...bridgeParts, newPart]);
     setFeedback("");
+    audioSystem.playClickSound();
   };
 
   const addSupport = (x: number) => {
@@ -180,6 +186,7 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
     };
     setBridgeParts([...bridgeParts, newPart]);
     setFeedback("");
+    audioSystem.playClickSound();
   };
 
   const clearBridge = () => {
@@ -203,7 +210,6 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
     setTestResult(null);
   };
 
-  // Vehicle crossing simulation
   useEffect(() => {
     if (testPhase !== "testing") return;
 
@@ -217,9 +223,7 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
     const timer = setInterval(() => {
       setVehicleProgress((prev) => {
         if (prev >= 100) {
-          // Vehicle reached other side
           if (vehicleStress > 1 || bridgeEfficiency < 1.2) {
-            // Bridge fails
             setTestResult("fail");
             audioSystem.playFailureSound();
             setTimeout(() => {
@@ -232,13 +236,10 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
               }
             }, 1500);
           } else {
-            // Vehicle passes
             if (currentVehicleIndex === currentTask.testVehicles.length - 1) {
-              // All vehicles passed
               setTestResult("pass");
               audioSystem.playSuccessSound();
               
-              // Calculate score
               const budgetUsed = calculateTotalCost();
               const budgetBonus = Math.floor((currentTask.maxBudget - budgetUsed) / 10);
               const vehicleBonus = currentTask.testVehicles.length * 20;
@@ -255,9 +256,9 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
           }
           return 100;
         }
-        return prev + 5;
+        return prev + 4;
       });
-    }, 100);
+    }, 80);
 
     return () => clearInterval(timer);
   }, [testPhase, currentVehicleIndex, currentTask, bridgeParts]);
@@ -274,7 +275,7 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
   if (showSuccess) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-amber-700 via-orange-600 to-yellow-500 p-4 md:p-8 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center transform scale-100 animate-bounce">
           <div className="text-6xl mb-4">🌉</div>
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Bridge Complete!</h2>
           <p className="text-gray-600 mb-4">
@@ -286,7 +287,7 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
           </div>
           <button
             onClick={handleFinish}
-            className="w-full py-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white font-bold rounded-xl hover:from-amber-700 hover:to-orange-700 transition-all"
+            className="w-full py-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white font-bold rounded-xl hover:from-amber-700 hover:to-orange-700 transition-all transform hover:scale-105"
           >
             Continue
           </button>
@@ -299,7 +300,6 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
     return (
       <div className="min-h-screen bg-gradient-to-br from-amber-700 via-orange-600 to-yellow-500 p-4 md:p-8">
         <div className="max-w-4xl mx-auto">
-          {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <div>
               <h1 className="text-2xl font-bold text-white">🌉 Bridge Stress Test</h1>
@@ -308,7 +308,6 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
             <div className="text-2xl font-bold text-white">{totalScore} pts</div>
           </div>
 
-          {/* Test Info */}
           <div className="bg-white/10 backdrop-blur rounded-xl p-4 mb-6">
             <div className="flex justify-between items-center mb-4">
               <span className="text-white font-bold">Test Progress</span>
@@ -318,7 +317,7 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
               {currentTask.testVehicles.map((v, i) => (
                 <div
                   key={i}
-                  className={`flex-1 h-2 rounded-full ${
+                  className={`flex-1 h-2 rounded-full transition-all duration-500 ${
                     i < currentVehicleIndex ? "bg-green-500" :
                     i === currentVehicleIndex ? "bg-yellow-500" :
                     "bg-gray-600"
@@ -326,74 +325,70 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
                 />
               ))}
             </div>
-            <div className="text-center text-white mb-2">
-              {currentVehicle && `Testing: ${currentVehicle.name} (${currentVehicle.weight}kg)`}
-            </div>
+            {currentVehicle && (
+              <div className="text-center text-white text-lg font-bold">
+                Testing: {currentVehicle.emoji} {currentVehicle.name} ({currentVehicle.weight}kg)
+              </div>
+            )}
           </div>
 
           {/* Bridge Visualization */}
-          <div className="bg-sky-300 rounded-xl p-8 mb-6 relative overflow-hidden" style={{ minHeight: "300px" }}>
-            {/* Water */}
+          <div className="bg-sky-300 rounded-xl p-8 mb-6 relative overflow-hidden shadow-2xl" style={{ minHeight: "300px" }}>
             <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-blue-400">
               <div className="wave"></div>
             </div>
             
-            {/* River banks */}
             <div className="absolute bottom-0 left-0 w-8 h-32 bg-green-600 rounded-t-lg"></div>
             <div className="absolute bottom-0 right-0 w-8 h-32 bg-green-600 rounded-t-lg"></div>
 
-            {/* Bridge */}
             <div className="absolute bottom-32 left-8 right-8 flex items-end justify-center">
-              {/* Supports */}
               {bridgeParts.filter(p => p.type === "support").map((part) => {
                 const material = currentTask.availableMaterials.find(m => m.id === part.materialId);
                 return (
                   <div
                     key={part.id}
-                    className={`w-8 ${material?.color} rounded-t`}
+                    className={`w-8 ${material?.color} rounded-t transform transition-all duration-300`}
                     style={{ height: "80px", margin: "0 8px" }}
                   />
                 );
               })}
-              {/* Deck */}
               <div className="flex items-end">
                 {bridgeParts.filter(p => p.type === "deck").map((part) => {
                   const material = currentTask.availableMaterials.find(m => m.id === part.materialId);
                   return (
                     <div
                       key={part.id}
-                      className={`w-12 h-4 ${material?.color} rounded`}
+                      className={`w-12 h-4 ${material?.color} rounded transform transition-all duration-300`}
                     />
                   );
                 })}
               </div>
             </div>
 
-            {/* Vehicle */}
             {currentVehicle && (
               <div
-                className="absolute bottom-32 transition-all"
+                className="absolute bottom-32 transition-all duration-100"
                 style={{ 
                   left: `calc(8px + ${vehicleProgress}% * (100% - 16px) / 100)`,
                   transform: "translateX(-50%)"
                 }}
               >
-                <div className="text-4xl">🚗</div>
+                <div className="text-4xl animate-bounce">{currentVehicle.emoji}</div>
                 <div className="text-xs text-center font-bold text-gray-800">{currentVehicle.weight}kg</div>
               </div>
             )}
 
-            {/* Test Result */}
             {testResult && (
-              <div className={`absolute inset-0 flex items-center justify-center bg-black/50`}>
-                <div className={`text-6xl font-bold ${testResult === "pass" ? "text-green-400" : "text-red-400"}`}>
+              <div className={`absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm`}>
+                <div className={`text-6xl font-bold transform scale-100 animate-bounce ${
+                  testResult === "pass" ? "text-green-400" : "text-red-400"
+                }`}>
                   {testResult === "pass" ? "✓ PASS" : "✗ FAIL"}
                 </div>
               </div>
             )}
           </div>
 
-          {/* Bridge Stats */}
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="bg-white/10 rounded-xl p-4 text-center">
               <div className="text-white/70 text-sm">Total Strength</div>
@@ -413,13 +408,13 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
 
           {testPhase === "complete" && !showSuccess && (
             <div className="text-center">
-              <p className="text-white mb-4">Bridge needs improvements!</p>
+              <p className="text-white mb-4 text-lg">Bridge needs improvements!</p>
               <button
                 onClick={() => {
                   setTestPhase("building");
                   setTestResult(null);
                 }}
-                className="px-6 py-3 bg-amber-600 text-white font-bold rounded-xl"
+                className="px-6 py-3 bg-amber-600 text-white font-bold rounded-xl hover:bg-amber-700 transition-all transform hover:scale-105"
               >
                 Try Again
               </button>
@@ -431,9 +426,8 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-700 via-orange-600 to-yellow-500 p-4 md:p-8">
+    <div className={`min-h-screen bg-gradient-to-br from-amber-700 via-orange-600 to-yellow-500 p-4 md:p-8 transition-all duration-500 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-bold text-white">🌉 Bridge Builder</h1>
@@ -450,66 +444,58 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
           </div>
         </div>
 
-        {/* Task Description */}
         <div className="bg-white/10 backdrop-blur rounded-xl p-4 mb-4">
           <p className="text-amber-100">{currentTask.description}</p>
           <div className="flex gap-6 mt-3 text-sm">
             <div className="text-white">
-              <span className="font-bold">River Width:</span> {currentTask.riverWidth} sections
+              <span className="font-bold">🌊 River Width:</span> {currentTask.riverWidth} sections
             </div>
             <div className="text-white">
-              <span className="font-bold">Required Load:</span> {currentTask.requiredLoad} kg
+              <span className="font-bold">⚖️ Required Load:</span> {currentTask.requiredLoad} kg
             </div>
             <div className="text-white">
-              <span className="font-bold">Budget:</span> ${currentTask.maxBudget}
+              <span className="font-bold">💰 Budget:</span> ${currentTask.maxBudget}
             </div>
           </div>
         </div>
 
-        {/* Feedback */}
         {feedback && (
-          <div className="bg-red-500/20 border border-red-500 rounded-xl p-3 mb-4 text-center">
+          <div className="bg-red-500/20 border border-red-500 rounded-xl p-3 mb-4 text-center animate-pulse">
             <span className="text-red-300 font-bold">{feedback}</span>
           </div>
         )}
 
         {/* Bridge Preview */}
-        <div className="bg-sky-300 rounded-xl p-6 mb-4 relative" style={{ minHeight: "200px" }}>
-          {/* Water */}
+        <div className="bg-sky-300 rounded-xl p-6 mb-4 relative shadow-2xl" style={{ minHeight: "200px" }}>
           <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-blue-400 rounded-b-xl"></div>
-          
-          {/* River banks */}
           <div className="absolute bottom-0 left-0 w-6 h-20 bg-green-600 rounded-t-lg"></div>
           <div className="absolute bottom-0 right-0 w-6 h-20 bg-green-600 rounded-t-lg"></div>
 
-          {/* Bridge building area */}
           <div className="absolute bottom-20 left-6 right-6">
             <div className="flex items-end justify-center gap-1">
               {Array.from({ length: currentTask.riverWidth }).map((_, i) => (
                 <button
                   key={i}
                   onClick={() => addDeck(i)}
-                  className="w-10 h-10 bg-gray-300 hover:bg-gray-400 border-2 border-dashed border-gray-500 rounded flex items-center justify-center text-2xl transition-all"
+                  className="w-10 h-10 bg-gray-300 hover:bg-gray-400 border-2 border-dashed border-gray-500 rounded flex items-center justify-center text-2xl transition-all transform hover:scale-110"
                 >
                   +
                 </button>
               ))}
             </div>
-            {/* Support buttons */}
             <div className="flex justify-center gap-2 mt-2">
               <button
                 onClick={() => {
                   const midIndex = Math.floor(currentTask.riverWidth / 2);
                   addSupport(midIndex);
                 }}
-                className="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-white text-xs rounded"
+                className="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-white text-xs rounded transition-all transform hover:scale-105"
               >
                 + Support
               </button>
             </div>
           </div>
 
-          {/* Current bridge parts */}
           <div className="absolute bottom-20 left-6 right-6">
             <div className="flex items-end justify-center gap-1">
               {Array.from({ length: currentTask.riverWidth }).map((_, i) => {
@@ -518,12 +504,11 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
                 return (
                   <div
                     key={i}
-                    className={`w-10 h-4 ${material?.color || "bg-transparent"} rounded`}
+                    className={`w-10 h-4 ${material?.color || "bg-transparent"} rounded transition-all duration-300`}
                   />
                 );
               })}
             </div>
-            {/* Supports */}
             {bridgeParts.filter(p => p.type === "support").length > 0 && (
               <div className="flex justify-center gap-1 mt-1">
                 {bridgeParts.filter(p => p.type === "support").map((part) => {
@@ -531,7 +516,7 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
                   return (
                     <div
                       key={part.id}
-                      className={`w-4 h-8 ${material?.color} rounded-t`}
+                      className={`w-4 h-8 ${material?.color} rounded-t transition-all duration-300`}
                     />
                   );
                 })}
@@ -541,7 +526,6 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* Materials Selection */}
           <div>
             <h3 className="text-white font-bold mb-3">🔧 Materials</h3>
             <div className="space-y-2">
@@ -549,8 +533,8 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
                 <button
                   key={material.id}
                   onClick={() => setSelectedMaterial(material.id)}
-                  className={`w-full ${material.color} hover:opacity-80 rounded-lg p-3 text-left transition-all ${
-                    selectedMaterial === material.id ? "ring-2 ring-white" : ""
+                  className={`w-full ${material.color} hover:opacity-80 rounded-lg p-3 text-left transition-all duration-200 transform hover:scale-[1.02] ${
+                    selectedMaterial === material.id ? "ring-2 ring-white shadow-lg" : ""
                   }`}
                 >
                   <div className="flex items-center gap-2">
@@ -565,18 +549,17 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
             </div>
           </div>
 
-          {/* Stats */}
           <div>
             <h3 className="text-white font-bold mb-3">📊 Bridge Stats</h3>
             <div className="space-y-3">
-              <div className="bg-white/10 rounded-lg p-3 text-center">
+              <div className="bg-white/10 rounded-lg p-3 text-center transition-all duration-300">
                 <div className="text-white/70 text-sm">Total Strength</div>
                 <div className={`text-2xl font-bold ${totalStrength >= currentTask.requiredLoad ? "text-green-400" : "text-red-400"}`}>
                   {totalStrength} kg {totalStrength >= currentTask.requiredLoad ? "✓" : "✗"}
                 </div>
                 <div className="text-white/50 text-xs">Need: {currentTask.requiredLoad} kg</div>
               </div>
-              <div className="bg-white/10 rounded-lg p-3 text-center">
+              <div className="bg-white/10 rounded-lg p-3 text-center transition-all duration-300">
                 <div className="text-white/70 text-sm">Total Cost</div>
                 <div className={`text-2xl font-bold ${totalCost <= currentTask.maxBudget ? "text-green-400" : "text-red-400"}`}>
                   ${totalCost} {totalCost <= currentTask.maxBudget ? "✓" : "✗"}
@@ -586,13 +569,12 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
             </div>
           </div>
 
-          {/* Actions */}
           <div>
             <h3 className="text-white font-bold mb-3">⚙️ Actions</h3>
             <div className="space-y-2">
               <button
                 onClick={startTest}
-                className="w-full py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all"
+                className="w-full py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all transform hover:scale-[1.02] shadow-lg shadow-green-500/25"
               >
                 🧪 Test Bridge
               </button>
@@ -604,13 +586,12 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
               </button>
             </div>
 
-            {/* Test Vehicles Preview */}
             <div className="mt-4 bg-white/10 rounded-lg p-3">
-              <div className="text-white/70 text-sm mb-2">Test Vehicles:</div>
-              <div className="flex flex-wrap gap-1">
+              <div className="text-white/70 text-sm mb-2">🧪 Test Vehicles:</div>
+              <div className="flex flex-wrap gap-2">
                 {currentTask.testVehicles.map((v, i) => (
-                  <span key={i} className="px-2 py-1 bg-gray-700 text-white text-xs rounded">
-                    {v.name} ({v.weight}kg)
+                  <span key={i} className="px-3 py-1 bg-gray-700 text-white text-xs rounded-full font-medium">
+                    {v.emoji} {v.name} ({v.weight}kg)
                   </span>
                 ))}
               </div>

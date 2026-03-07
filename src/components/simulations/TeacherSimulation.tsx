@@ -214,6 +214,22 @@ const lessonPlans: Record<Difficulty, LessonPlan[]> = {
   ],
 };
 
+const eventTypeIcons: Record<string, string> = {
+  question: "❓",
+  distraction: "🎮",
+  disruption: "⚡",
+  quiz: "📝",
+  break: "☕",
+};
+
+const eventTypeColors: Record<string, string> = {
+  question: "bg-blue-500",
+  distraction: "bg-purple-500",
+  disruption: "bg-red-500",
+  quiz: "bg-green-500",
+  break: "bg-orange-500",
+};
+
 export default function TeacherSimulation({ difficulty, onComplete, onOpenSettings, onExit }: TeacherSimulationProps) {
   const plans = lessonPlans[difficulty];
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0);
@@ -225,11 +241,15 @@ export default function TeacherSimulation({ difficulty, onComplete, onOpenSettin
   const [totalScore, setTotalScore] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
   const [lessonProgress, setLessonProgress] = useState(0);
+  const [fadeIn, setFadeIn] = useState(false);
 
   const currentPlan = plans[currentPlanIndex];
   const currentEvent = currentPlan.events[currentEventIndex];
 
-  // Simulate natural engagement decay over time
+  useEffect(() => {
+    setFadeIn(true);
+  }, []);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setEngagement((prev) => Math.max(0, prev - 2));
@@ -248,7 +268,6 @@ export default function TeacherSimulation({ difficulty, onComplete, onOpenSettin
     const selected = currentEvent.options.find((o) => o.id === selectedOption);
     if (!selected) return;
 
-    // Update engagement
     const newEngagement = Math.min(100, Math.max(0, engagement + selected.engagementChange));
     setEngagement(newEngagement);
 
@@ -268,10 +287,14 @@ export default function TeacherSimulation({ difficulty, onComplete, onOpenSettin
 
     setTimeout(() => {
       if (currentEventIndex < currentPlan.events.length - 1) {
-        setCurrentEventIndex((prev) => prev + 1);
-        setSelectedOption(null);
-        setShowExplanation(false);
-        setFeedback(null);
+        setFadeIn(false);
+        setTimeout(() => {
+          setCurrentEventIndex((prev) => prev + 1);
+          setSelectedOption(null);
+          setShowExplanation(false);
+          setFeedback(null);
+          setFadeIn(true);
+        }, 300);
       } else {
         setShowSuccess(true);
       }
@@ -285,9 +308,9 @@ export default function TeacherSimulation({ difficulty, onComplete, onOpenSettin
   };
 
   const getEngagementColor = () => {
-    if (engagement >= 70) return "text-green-400";
-    if (engagement >= 40) return "text-yellow-400";
-    return "text-red-400";
+    if (engagement >= 70) return "bg-green-500";
+    if (engagement >= 40) return "bg-yellow-500";
+    return "bg-red-500";
   };
 
   const getEngagementEmoji = () => {
@@ -299,7 +322,7 @@ export default function TeacherSimulation({ difficulty, onComplete, onOpenSettin
   if (showSuccess) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-500 to-purple-600 p-4 md:p-8 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center transform scale-100 animate-bounce">
           <div className="text-6xl mb-4">📚</div>
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Lesson Complete!</h2>
           <p className="text-gray-600 mb-4">
@@ -316,7 +339,7 @@ export default function TeacherSimulation({ difficulty, onComplete, onOpenSettin
           </div>
           <button
             onClick={handleFinish}
-            className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all"
+            className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105"
           >
             Continue
           </button>
@@ -328,7 +351,6 @@ export default function TeacherSimulation({ difficulty, onComplete, onOpenSettin
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-500 to-purple-600 p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-bold text-white">🍎 Classroom Management</h1>
@@ -349,15 +371,11 @@ export default function TeacherSimulation({ difficulty, onComplete, onOpenSettin
         <div className="bg-white/10 backdrop-blur rounded-xl p-4 mb-6">
           <div className="flex justify-between items-center mb-2">
             <span className="text-white font-bold">📊 Class Engagement {getEngagementEmoji()}</span>
-            <span className={`text-2xl font-bold ${getEngagementColor()}`}>{engagement}%</span>
+            <span className={`text-2xl font-bold ${engagement >= 70 ? "text-green-400" : engagement >= 40 ? "text-yellow-400" : "text-red-400"}`}>{engagement}%</span>
           </div>
-          <div className="w-full bg-gray-700 rounded-full h-4">
+          <div className="w-full bg-gray-700 rounded-full h-4 overflow-hidden">
             <div
-              className={`h-4 rounded-full transition-all ${
-                engagement >= 70 ? "bg-green-500" :
-                engagement >= 40 ? "bg-yellow-500" :
-                "bg-red-500"
-              }`}
+              className={`h-4 rounded-full transition-all duration-500 ${getEngagementColor()}`}
               style={{ width: `${engagement}%` }}
             />
           </div>
@@ -368,23 +386,19 @@ export default function TeacherSimulation({ difficulty, onComplete, onOpenSettin
         </div>
 
         {/* Event Card */}
-        <div className="bg-white rounded-xl p-6 mb-6 shadow-xl">
+        <div className={`bg-white rounded-xl p-6 mb-6 shadow-xl transition-all duration-300 transform ${fadeIn ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
           <div className="flex items-center gap-3 mb-4">
-            <span className="text-3xl">
-              {currentEvent.type === "question" ? "❓" :
-               currentEvent.type === "distraction" ? "🎮" :
-               currentEvent.type === "disruption" ? "⚡" :
-               currentEvent.type === "quiz" ? "📝" : "☕"}
+            <span className={`text-4xl p-3 rounded-xl ${eventTypeColors[currentEvent.type]} text-white shadow-lg`}>
+              {eventTypeIcons[currentEvent.type]}
             </span>
             <div>
               <h2 className="text-xl font-bold text-gray-900">{currentEvent.title}</h2>
-              <span className="text-sm text-gray-500 capitalize">{currentEvent.type}</span>
+              <span className="text-sm text-gray-500 capitalize px-2 py-1 bg-gray-100 rounded">{currentEvent.type}</span>
             </div>
           </div>
 
-          <p className="text-gray-700 text-lg mb-6">{currentEvent.description}</p>
+          <p className="text-gray-700 text-lg mb-6 bg-gray-50 p-4 rounded-lg">{currentEvent.description}</p>
 
-          {/* Options */}
           <div className="space-y-3">
             {currentEvent.options.map((option) => {
               const isSelected = selectedOption === option.id;
@@ -392,12 +406,12 @@ export default function TeacherSimulation({ difficulty, onComplete, onOpenSettin
               
               if (showExplanation) {
                 if (option.correct) {
-                  borderColor = "border-green-500 bg-green-50";
+                  borderColor = "border-green-500 bg-green-50 shadow-lg shadow-green-500/20";
                 } else if (isSelected) {
                   borderColor = "border-red-500 bg-red-50";
                 }
               } else if (isSelected) {
-                borderColor = "border-blue-500 bg-blue-50";
+                borderColor = "border-blue-500 bg-blue-50 shadow-lg shadow-blue-500/20";
               }
 
               return (
@@ -405,17 +419,22 @@ export default function TeacherSimulation({ difficulty, onComplete, onOpenSettin
                   key={option.id}
                   onClick={() => handleSelectOption(option.id)}
                   disabled={showExplanation}
-                  className={`w-full text-left p-4 rounded-xl border-2 ${borderColor} hover:opacity-80 transition-all`}
+                  className={`w-full text-left p-4 rounded-xl border-2 ${borderColor} hover:opacity-80 transition-all duration-200 transform hover:scale-[1.01]`}
                 >
                   <div className="flex items-start gap-3">
-                    <span className="text-lg font-bold text-gray-700 mt-1">{option.id.toUpperCase()}.</span>
+                    <span className={`text-lg font-bold w-8 h-8 flex items-center justify-center rounded-lg ${
+                      isSelected ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"
+                    }`}>
+                      {option.id.toUpperCase()}
+                    </span>
                     <div className="flex-1">
                       <span className="font-medium text-gray-800">{option.text}</span>
                       {showExplanation && (
-                        <div className={`mt-2 text-sm ${option.correct ? "text-green-600" : "text-red-600"}`}>
-                          {option.correct ? "✓ " : "✗ "}{option.explanation}
+                        <div className={`mt-3 text-sm ${option.correct ? "text-green-600" : "text-red-600"}`}>
+                          <span className="font-bold">{option.correct ? "✓ Great choice!" : "✗ Not ideal"}</span>
+                          <span className="ml-2">- {option.explanation}</span>
                           <span className="ml-2 font-bold">
-                            (Engagement: {option.engagementChange > 0 ? "+" : ""}{option.engagementChange}%)
+                            ({option.engagementChange > 0 ? "+" : ""}{option.engagementChange}% engagement)
                           </span>
                         </div>
                       )}
@@ -427,23 +446,35 @@ export default function TeacherSimulation({ difficulty, onComplete, onOpenSettin
           </div>
         </div>
 
-        {/* Submit */}
         <button
           onClick={handleSubmit}
           disabled={!selectedOption || showExplanation}
-          className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className={`w-full py-4 text-white font-bold rounded-xl transition-all duration-300 transform ${
+            !selectedOption || showExplanation
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:scale-[1.02] shadow-lg shadow-blue-500/25"
+          }`}
         >
-          {showExplanation ? (feedback === "correct" ? "✓ Great Choice!" : "✗ Try Better Next Time") : "✓ Make Decision"}
+          {showExplanation ? (
+            feedback === "correct" ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="animate-bounce">✓</span> Excellent Decision!
+              </span>
+            ) : (
+              "✗ Could Be Better"
+            )
+          ) : (
+            "✓ Make Decision"
+          )}
         </button>
 
-        {/* Progress */}
         <div className="mt-6 flex gap-2">
           {currentPlan.events.map((_, idx) => (
             <div
               key={idx}
-              className={`h-2 flex-1 rounded-full transition-all ${
+              className={`h-2 flex-1 rounded-full transition-all duration-300 ${
                 idx < currentEventIndex ? "bg-green-500" :
-                idx === currentEventIndex ? "bg-white" :
+                idx === currentEventIndex ? "bg-white shadow-lg" :
                 "bg-gray-600"
               }`}
             />

@@ -104,46 +104,61 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
   const [actionLog, setActionLog] = useState<string[]>([]);
   const [totalScore, setTotalScore] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [showVitals, setShowVitals] = useState(false);
+  const [fadeIn, setFadeIn] = useState(false);
 
   const currentTask = tasks[currentTaskIndex];
 
-  // Initialize patients
+  useEffect(() => {
+    setFadeIn(true);
+  }, []);
+
   useEffect(() => {
     if (currentTask) {
       setPatients(JSON.parse(JSON.stringify(currentTask.patients)));
-      setActionLog([`Shift started: ${currentTask.title}`]);
+      setActionLog([`🏥 Shift started: ${currentTask.title}`]);
     }
   }, [currentTask]);
 
   const getTriageLevel = (patient: Patient): "critical" | "urgent" | "stable" => {
-    const vitals = patient.vitals;
-    
-    // Critical: not breathing, very low O2, severe vitals
+    const { vitals } = patient;
     if (vitals.oxygenSat < 85 || vitals.heartRate > 120 || vitals.heartRate < 50 || 
-    vitals.bloodPressure.split('/')[0] === "0" || vitals.painLevel >= 9) {
+        vitals.bloodPressure.split('/')[0] === "0" || vitals.painLevel >= 9) {
       return "critical";
     }
-    
-    // Urgent: elevated vitals, moderate pain, concerning symptoms
     if (vitals.oxygenSat < 95 || vitals.heartRate > 100 || vitals.temperature > 101 ||
         vitals.bloodPressure.split('/')[0] !== "0" && parseInt(vitals.bloodPressure.split('/')[0]) > 130 ||
         vitals.painLevel >= 5) {
       return "urgent";
     }
-    
     return "stable";
+  };
+
+  const getVitalStatus = (value: number, type: string) => {
+    if (type === "heartRate") {
+      return value > 100 || value < 60 ? "text-red-500" : "text-green-500";
+    }
+    if (type === "oxygenSat") {
+      return value < 95 ? "text-red-500" : "text-green-500";
+    }
+    if (type === "temperature") {
+      return value > 101 ? "text-red-500" : value > 99 ? "text-yellow-500" : "text-green-500";
+    }
+    if (type === "painLevel") {
+      return value >= 7 ? "text-red-500" : value >= 4 ? "text-yellow-500" : "text-green-500";
+    }
+    return "text-gray-700";
   };
 
   const assignTriage = (patientId: string, level: "critical" | "urgent" | "stable") => {
     setPatients((prev) => prev.map((p) => {
       if (p.id === patientId) {
-        const newLog = [...actionLog, `Triaged ${p.name} as ${level.toUpperCase()}`];
+        const newLog = [...actionLog, `🏷️ Triaged ${p.name} as ${level.toUpperCase()}`];
         setActionLog(newLog);
         return { ...p, triageLevel: level, status: "triage" };
       }
       return p;
     }));
+    audioSystem.playClickSound();
   };
 
   const performAction = (actionId: string) => {
@@ -155,13 +170,11 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
     const action = treatmentActions.find(a => a.id === actionId);
     if (!action) return;
 
-    // Check if action requires specific triage level
     if (action.requiredTriage && patient.triageLevel && 
         !action.requiredTriage.includes(patient.triageLevel)) {
       return;
     }
 
-    // Check if can release
     if (actionId === "release" && patient.triageLevel !== "stable") {
       return;
     }
@@ -185,13 +198,9 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
     if (actionId === "release") {
       audioSystem.playSuccessSound();
       setSelectedPatient(null);
+    } else {
+      audioSystem.playClickSound();
     }
-  };
-
-  const checkAllTreated = () => {
-    const allStable = patients.every(p => p.triageLevel !== null);
-    const allReleased = patients.every(p => p.status === "released");
-    return allStable && allReleased;
   };
 
   const handleFinish = useCallback(() => {
@@ -201,25 +210,28 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
     onComplete(success, totalScore, maxScore);
   }, [patients, totalScore, currentTask, onComplete]);
 
-  // Auto-check completion
   useEffect(() => {
-    if (patients.length > 0 && checkAllTreated()) {
-      setTimeout(() => setShowSuccess(true), 1000);
+    if (patients.length > 0) {
+      const allStable = patients.every(p => p.triageLevel !== null);
+      const allReleased = patients.every(p => p.status === "released");
+      if (allStable && allReleased) {
+        setTimeout(() => setShowSuccess(true), 1000);
+      }
     }
   }, [patients]);
 
   const getPatientStatus = (patient: Patient) => {
-    if (patient.status === "released") return "✅ Released";
-    if (patient.treatmentsGiven.length > 0) return `💊 ${patient.treatmentsGiven.length} treatment(s)`;
-    if (patient.triageLevel) return `🏷️ ${patient.triageLevel.toUpperCase()}`;
-    return "⏳ Waiting";
+    if (patient.status === "released") return { text: "✅ Released", color: "bg-green-600" };
+    if (patient.treatmentsGiven.length > 0) return { text: `💊 ${patient.treatmentsGiven.length} treatment(s)`, color: "bg-blue-600" };
+    if (patient.triageLevel) return { text: `🏷️ ${patient.triageLevel.toUpperCase()}`, color: patient.triageLevel === "critical" ? "bg-red-600" : patient.triageLevel === "urgent" ? "bg-orange-600" : "bg-green-600" };
+    return { text: "⏳ Waiting", color: "bg-gray-600" };
   };
 
   if (showSuccess) {
     const releasedCount = patients.filter(p => p.status === "released").length;
     return (
       <div className="min-h-screen bg-gradient-to-br from-rose-600 via-red-500 to-orange-500 p-4 md:p-8 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center transform scale-100 animate-bounce">
           <div className="text-6xl mb-4">🏥</div>
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Shift Complete!</h2>
           <p className="text-gray-600 mb-4">
@@ -236,7 +248,7 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
           </div>
           <button
             onClick={handleFinish}
-            className="w-full py-3 bg-gradient-to-r from-red-600 to-orange-600 text-white font-bold rounded-xl hover:from-red-700 hover:to-orange-700 transition-all"
+            className="w-full py-3 bg-gradient-to-r from-red-600 to-orange-600 text-white font-bold rounded-xl hover:from-red-700 hover:to-orange-700 transition-all transform hover:scale-105"
           >
             Continue
           </button>
@@ -246,7 +258,7 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-600 via-red-500 to-orange-500 p-4 md:p-8">
+    <div className={`min-h-screen bg-gradient-to-br from-rose-600 via-red-500 to-orange-500 p-4 md:p-8 transition-all duration-500 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
@@ -268,18 +280,33 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
         {/* Task Description */}
         <div className="bg-white/10 backdrop-blur rounded-xl p-4 mb-4">
           <p className="text-red-100">{currentTask.description}</p>
-          <p className="text-red-200 text-sm mt-2">
-            1. Select a patient → 2. Assign triage level → 3. Give treatments → 4. Release when stable
-          </p>
+          <div className="flex gap-4 mt-3 text-sm">
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+              <span className="text-red-200">1. Select patient</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 bg-orange-500 rounded-full animate-pulse"></span>
+              <span className="text-red-200">2. Assign triage</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
+              <span className="text-red-200">3. Treat & release</span>
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Patient List */}
           <div className="lg:col-span-1">
-            <h3 className="text-white font-bold mb-3">📋 Patients ({patients.length})</h3>
-            <div className="space-y-2 max-h-[400px] overflow-y-auto">
+            <h3 className="text-white font-bold mb-3 flex items-center gap-2">
+              📋 Patients ({patients.length})
+              <span className="text-xs font-normal text-red-200">Tap to select</span>
+            </h3>
+            <div className="space-y-2 max-h-[450px] overflow-y-auto pr-2">
               {patients.map((patient) => {
                 const isSelected = selectedPatient === patient.id;
+                const statusInfo = getPatientStatus(patient);
                 const triageColor = patient.triageLevel === "critical" ? "bg-red-600" :
                                    patient.triageLevel === "urgent" ? "bg-orange-500" :
                                    patient.triageLevel === "stable" ? "bg-green-500" : "bg-gray-600";
@@ -287,20 +314,26 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
                 return (
                   <button
                     key={patient.id}
-                    onClick={() => { setSelectedPatient(patient.id); setShowVitals(true); }}
-                    className={`w-full p-3 rounded-xl text-left transition-all ${
-                      isSelected ? "ring-2 ring-white" : ""
-                    } ${patient.status === "released" ? "bg-green-600/50" : "bg-white/90"}`}
+                    onClick={() => setSelectedPatient(patient.id)}
+                    className={`w-full p-3 rounded-xl text-left transition-all duration-200 transform hover:scale-[1.02] ${
+                      isSelected ? "ring-2 ring-white shadow-lg" : ""
+                    } ${patient.status === "released" ? "bg-green-600/50 opacity-60" : "bg-white/90 hover:bg-white"}`}
                   >
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl">{patient.avatar}</span>
+                    <div className="flex items-center gap-3">
+                      <div className="relative">
+                        <span className="text-3xl">{patient.avatar}</span>
+                        {patient.triageLevel && (
+                          <span className={`absolute -top-1 -right-1 w-4 h-4 rounded-full ${triageColor} border-2 border-white`}></span>
+                        )}
+                      </div>
                       <div className="flex-1">
                         <div className="font-bold text-gray-800 text-sm">{patient.name}</div>
-                        <div className="text-xs text-gray-600 truncate">{patient.symptoms}</div>
+                        <div className="text-xs text-gray-500 truncate">{patient.symptoms}</div>
                       </div>
-                      <div className={`w-3 h-3 rounded-full ${triageColor}`} />
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">{getPatientStatus(patient)}</div>
+                    <div className={`mt-2 px-2 py-1 rounded text-xs text-white font-bold text-center ${statusInfo.color}`}>
+                      {statusInfo.text}
+                    </div>
                   </button>
                 );
               })}
@@ -317,56 +350,61 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
                   if (!patient) return null;
                   
                   return (
-                    <div className="bg-white rounded-xl p-4 mb-4">
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className="text-4xl">{patient.avatar}</span>
+                    <div className="bg-white rounded-xl p-4 mb-4 shadow-lg">
+                      <div className="flex items-center gap-4 mb-4">
+                        <span className="text-5xl">{patient.avatar}</span>
                         <div>
-                          <div className="font-bold text-gray-900 text-lg">{patient.name}</div>
-                          <div className="text-gray-500 text-sm">Age: {patient.age}</div>
+                          <div className="font-bold text-gray-900 text-xl">{patient.name}</div>
+                          <div className="text-gray-500">Age: {patient.age} years</div>
                         </div>
                       </div>
                       
-                      <div className="bg-gray-100 rounded-lg p-3 mb-3">
+                      <div className="bg-gray-50 rounded-lg p-3 mb-4">
                         <div className="font-bold text-gray-700 text-sm mb-1">📝 Symptoms:</div>
                         <div className="text-gray-600 text-sm">{patient.symptoms}</div>
                       </div>
 
-                      {/* Vitals Display */}
+                      {/* Vitals Grid */}
                       <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-3">
-                        <div className="bg-red-50 rounded-lg p-2 text-center">
-                          <div className="text-lg">❤️</div>
-                          <div className="text-xs text-gray-600">HR</div>
-                          <div className={`font-bold ${patient.vitals.heartRate > 100 || patient.vitals.heartRate < 60 ? "text-red-600" : "text-green-600"}`}>
+                        <div className="bg-red-50 rounded-lg p-2 text-center border border-red-100">
+                          <div className="text-xl">❤️</div>
+                          <div className="text-xs text-gray-500">Heart Rate</div>
+                          <div className={`font-bold text-lg ${getVitalStatus(patient.vitals.heartRate, "heartRate")}`}>
                             {patient.vitals.heartRate}
                           </div>
+                          <div className="text-xs text-gray-400">bpm</div>
                         </div>
-                        <div className="bg-red-50 rounded-lg p-2 text-center">
-                          <div className="text-lg">🩸</div>
-                          <div className="text-xs text-gray-600">BP</div>
-                          <div className={`font-bold ${parseInt(patient.vitals.bloodPressure.split('/')[0]) > 130 || parseInt(patient.vitals.bloodPressure.split('/')[0]) < 90 ? "text-red-600" : "text-green-600"}`}>
+                        <div className="bg-red-50 rounded-lg p-2 text-center border border-red-100">
+                          <div className="text-xl">🩸</div>
+                          <div className="text-xs text-gray-500">Blood Pressure</div>
+                          <div className={`font-bold text-lg ${getVitalStatus(parseInt(patient.vitals.bloodPressure.split('/')[0]), "bp")}`}>
                             {patient.vitals.bloodPressure}
                           </div>
+                          <div className="text-xs text-gray-400">mmHg</div>
                         </div>
-                        <div className="bg-red-50 rounded-lg p-2 text-center">
-                          <div className="text-lg">🌡️</div>
-                          <div className="text-xs text-gray-600">Temp</div>
-                          <div className={`font-bold ${patient.vitals.temperature > 101 ? "text-red-600" : "text-green-600"}`}>
-                            {patient.vitals.temperature}°F
+                        <div className="bg-red-50 rounded-lg p-2 text-center border border-red-100">
+                          <div className="text-xl">🌡️</div>
+                          <div className="text-xs text-gray-500">Temperature</div>
+                          <div className={`font-bold text-lg ${getVitalStatus(patient.vitals.temperature, "temperature")}`}>
+                            {patient.vitals.temperature}°
                           </div>
+                          <div className="text-xs text-gray-400">Fahrenheit</div>
                         </div>
-                        <div className="bg-red-50 rounded-lg p-2 text-center">
-                          <div className="text-lg">💨</div>
-                          <div className="text-xs text-gray-600">O2</div>
-                          <div className={`font-bold ${patient.vitals.oxygenSat < 95 ? "text-red-600" : "text-green-600"}`}>
+                        <div className="bg-red-50 rounded-lg p-2 text-center border border-red-100">
+                          <div className="text-xl">💨</div>
+                          <div className="text-xs text-gray-500">O2 Saturation</div>
+                          <div className={`font-bold text-lg ${getVitalStatus(patient.vitals.oxygenSat, "oxygenSat")}`}>
                             {patient.vitals.oxygenSat}%
                           </div>
+                          <div className="text-xs text-gray-400">SpO2</div>
                         </div>
-                        <div className="bg-red-50 rounded-lg p-2 text-center">
-                          <div className="text-lg">� Pain</div>
-                          <div className="text-xs text-gray-600">Level</div>
-                          <div className={`font-bold ${patient.vitals.painLevel >= 7 ? "text-red-600" : patient.vitals.painLevel >= 4 ? "text-yellow-600" : "text-green-600"}`}>
-                            {patient.vitals.painLevel}/10
+                        <div className="bg-red-50 rounded-lg p-2 text-center border border-red-100">
+                          <div className="text-xl">😫</div>
+                          <div className="text-xs text-gray-500">Pain Level</div>
+                          <div className={`font-bold text-lg ${getVitalStatus(patient.vitals.painLevel, "painLevel")}`}>
+                            {patient.vitals.painLevel}
                           </div>
+                          <div className="text-xs text-gray-400">/ 10</div>
                         </div>
                       </div>
                     </div>
@@ -379,26 +417,29 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
                   if (!patient || patient.triageLevel) return null;
                   
                   return (
-                    <div className="bg-white rounded-xl p-4 mb-4">
+                    <div className="bg-white rounded-xl p-4 mb-4 shadow-lg animate-fade-in">
                       <h3 className="font-bold text-gray-800 mb-3">🏷️ Assign Triage Level</h3>
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className="grid grid-cols-3 gap-3">
                         <button
                           onClick={() => assignTriage(selectedPatient, "critical")}
-                          className="p-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-bold"
+                          className="p-4 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold transition-all transform hover:scale-105 shadow-lg shadow-red-500/30"
                         >
-                          🔴 CRITICAL
+                          <div className="text-2xl mb-1">🔴</div>
+                          CRITICAL
                         </button>
                         <button
                           onClick={() => assignTriage(selectedPatient, "urgent")}
-                          className="p-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-bold"
+                          className="p-4 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold transition-all transform hover:scale-105 shadow-lg shadow-orange-500/30"
                         >
-                          🟠 URGENT
+                          <div className="text-2xl mb-1">🟠</div>
+                          URGENT
                         </button>
                         <button
                           onClick={() => assignTriage(selectedPatient, "stable")}
-                          className="p-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-bold"
+                          className="p-4 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold transition-all transform hover:scale-105 shadow-lg shadow-green-500/30"
                         >
-                          🟢 STABLE
+                          <div className="text-2xl mb-1">🟢</div>
+                          STABLE
                         </button>
                       </div>
                     </div>
@@ -411,27 +452,27 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
                   if (!patient || !patient.triageLevel || patient.status === "released") return null;
                   
                   return (
-                    <div className="bg-white rounded-xl p-4">
+                    <div className="bg-white rounded-xl p-4 shadow-lg">
                       <h3 className="font-bold text-gray-800 mb-3">💊 Treatment Actions</h3>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                         {treatmentActions.map((action) => {
-                          // Check if action is available
                           const isAvailable = !action.requiredTriage || 
                             (patient.triageLevel && action.requiredTriage.includes(patient.triageLevel));
                           const canRelease = action.requiresStable ? patient.triageLevel === "stable" : true;
+                          const isDisabled = !isAvailable || !canRelease;
                           
                           return (
                             <button
                               key={action.id}
                               onClick={() => performAction(action.id)}
-                              disabled={!isAvailable || !canRelease}
-                              className={`p-2 rounded-lg text-center transition-all ${
-                                isAvailable && canRelease
-                                  ? "bg-blue-500 hover:bg-blue-600 text-white"
-                                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                              disabled={isDisabled}
+                              className={`p-3 rounded-xl text-center transition-all transform hover:scale-105 ${
+                                isDisabled
+                                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                                  : "bg-blue-500 hover:bg-blue-600 text-white shadow-lg shadow-blue-500/30"
                               }`}
                             >
-                              <div className="text-xl mb-1">{action.icon}</div>
+                              <div className="text-2xl mb-1">{action.icon}</div>
                               <div className="text-xs font-bold">{action.name}</div>
                               <div className="text-xs opacity-75">+{action.points} pts</div>
                             </button>
@@ -439,14 +480,13 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
                         })}
                       </div>
 
-                      {/* Current Treatments */}
                       {patient.treatmentsGiven.length > 0 && (
-                        <div className="mt-3 pt-3 border-t border-gray-200">
-                          <div className="text-sm text-gray-600">Treatments given:</div>
-                          <div className="flex flex-wrap gap-1 mt-1">
+                        <div className="mt-4 pt-3 border-t border-gray-200">
+                          <div className="text-sm text-gray-600 mb-2">Treatments given:</div>
+                          <div className="flex flex-wrap gap-2">
                             {patient.treatmentsGiven.map((t, i) => (
-                              <span key={i} className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">
-                                {t}
+                              <span key={i} className="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
+                                ✓ {t}
                               </span>
                             ))}
                           </div>
@@ -457,20 +497,21 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
                 })()}
               </>
             ) : (
-              <div className="bg-white/50 rounded-xl p-8 text-center">
-                <div className="text-4xl mb-4">👆</div>
-                <p className="text-white font-bold">Select a patient to begin triage</p>
+              <div className="bg-white/30 backdrop-blur rounded-xl p-12 text-center">
+                <div className="text-6xl mb-4 animate-bounce">👆</div>
+                <p className="text-white font-bold text-lg">Select a patient to begin triage</p>
+                <p className="text-white/70 text-sm mt-2">Click on a patient card on the left</p>
               </div>
             )}
           </div>
         </div>
 
         {/* Action Log */}
-        <div className="mt-4 bg-gray-900/50 rounded-xl p-3">
+        <div className="mt-4 bg-gray-900/70 backdrop-blur rounded-xl p-3">
           <div className="text-white font-bold text-sm mb-2">📜 Action Log</div>
-          <div className="text-white/70 text-xs max-h-20 overflow-y-auto">
-            {actionLog.slice(-5).map((log, i) => (
-              <div key={i}>{log}</div>
+          <div className="text-white/70 text-xs max-h-24 overflow-y-auto space-y-1">
+            {actionLog.slice(-6).reverse().map((log, i) => (
+              <div key={i} className="border-l-2 border-white/30 pl-2">{log}</div>
             ))}
           </div>
         </div>
