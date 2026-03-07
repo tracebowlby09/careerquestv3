@@ -101,18 +101,18 @@ const difficultyIcons: Record<Difficulty, string> = {
 };
 
 export default function TrophyScreen({ trophies, onBack }: TrophyScreenProps) {
-  // Group trophies by career
-  const trophiesByCareer = trophies.reduce((acc, trophy) => {
+  // Separate secret trophies from regular trophies
+  const regularTrophies = trophies.filter((t) => !t.isSecret);
+  const secretTrophiesList = trophies.filter((t) => t.isSecret);
+
+  // Group REGULAR trophies by career (exclude secret trophies)
+  const trophiesByCareer = regularTrophies.reduce((acc, trophy) => {
     if (!acc[trophy.career]) {
       acc[trophy.career] = [];
     }
     acc[trophy.career].push(trophy);
     return acc;
   }, {} as Record<Career, Trophy[]>);
-
-  // Separate secret trophies from regular trophies
-  const regularTrophies = trophies.filter((t) => !t.isSecret);
-  const secretTrophiesList = trophies.filter((t) => t.isSecret);
 
   const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect"];
   const earnedCareers = new Set(regularTrophies.map((t) => t.career));
