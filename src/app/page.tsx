@@ -159,6 +159,7 @@ export default function Home() {
   const [trophies, setTrophies] = useState<Trophy[]>(() => loadTrophies());
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [showSecretTrophyPopup, setShowSecretTrophyPopup] = useState(false);
+  const [currentAchievementType, setCurrentAchievementType] = useState<string | null>(null);
 
   // Admin code detection (5839201746)
   const adminCode = ["5", "8", "3", "9", "2", "0", "1", "7", "4", "6"];
@@ -216,6 +217,7 @@ export default function Home() {
           setTrophies([...trophies, secretTrophy]);
           saveTrophies([...trophies, secretTrophy]);
           setShowSecretTrophyPopup(true);
+          setCurrentAchievementType("konami-master");
         }
         
         // Reset index
@@ -343,6 +345,7 @@ export default function Home() {
           
           // Show popup for achievements
           setShowSecretTrophyPopup(true);
+          setCurrentAchievementType(newAchievements[0]);
         } else {
           setTrophies(allTrophies);
           saveTrophies(allTrophies);
@@ -524,7 +527,11 @@ export default function Home() {
         {settingsModal}
         <SecretTrophyPopup 
           show={showSecretTrophyPopup} 
-          onClose={() => setShowSecretTrophyPopup(false)} 
+          achievementType={currentAchievementType}
+          onClose={() => {
+            setShowSecretTrophyPopup(false);
+            setCurrentAchievementType(null);
+          }} 
         />
         {renderAdminPanel()}
       </>
@@ -543,7 +550,11 @@ export default function Home() {
         {settingsModal}
         <SecretTrophyPopup 
           show={showSecretTrophyPopup} 
-          onClose={() => setShowSecretTrophyPopup(false)} 
+          achievementType={currentAchievementType}
+          onClose={() => {
+            setShowSecretTrophyPopup(false);
+            setCurrentAchievementType(null);
+          }} 
         />
         {adminMode && renderAdminPanel()}
       </>
@@ -563,7 +574,11 @@ export default function Home() {
         {settingsModal}
         <SecretTrophyPopup 
           show={showSecretTrophyPopup} 
-          onClose={() => setShowSecretTrophyPopup(false)} 
+          achievementType={currentAchievementType}
+          onClose={() => {
+            setShowSecretTrophyPopup(false);
+            setCurrentAchievementType(null);
+          }} 
         />
       </>
     );
@@ -688,7 +703,11 @@ export default function Home() {
         {settingsModal}
         <SecretTrophyPopup 
           show={showSecretTrophyPopup} 
-          onClose={() => setShowSecretTrophyPopup(false)} 
+          achievementType={currentAchievementType}
+          onClose={() => {
+            setShowSecretTrophyPopup(false);
+            setCurrentAchievementType(null);
+          }} 
         />
       </ScreenWrapper>
     );
@@ -703,7 +722,11 @@ export default function Home() {
         />
         <SecretTrophyPopup 
           show={showSecretTrophyPopup} 
-          onClose={() => setShowSecretTrophyPopup(false)} 
+          achievementType={currentAchievementType}
+          onClose={() => {
+            setShowSecretTrophyPopup(false);
+            setCurrentAchievementType(null);
+          }} 
         />
       </>
     );
@@ -729,7 +752,11 @@ export default function Home() {
         {settingsModal}
         <SecretTrophyPopup 
           show={showSecretTrophyPopup} 
-          onClose={() => setShowSecretTrophyPopup(false)} 
+          achievementType={currentAchievementType}
+          onClose={() => {
+            setShowSecretTrophyPopup(false);
+            setCurrentAchievementType(null);
+          }} 
         />
       </>
     );
