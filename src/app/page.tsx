@@ -166,7 +166,7 @@ export default function Home() {
   const [adminMode, setAdminMode] = useState(false);
   const [alwaysCorrect, setAlwaysCorrect] = useState(false);
   const [adminMinimized, setAdminMinimized] = useState(false);
-  const [adminPosition, setAdminPosition] = useState({ x: 0, y: 0 });
+  const [adminPosition, setAdminPosition] = useState({ x: 20, y: 20 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
@@ -389,6 +389,129 @@ export default function Home() {
   // Render Settings modal (always available)
   const settingsModal = <Settings isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />;
 
+  // Admin panel functions
+  const handleClearTrophies = () => {
+    setTrophies([]);
+    saveTrophies([]);
+    audioSystem.playSuccessSound();
+  };
+
+  const handleToggleAlwaysCorrect = () => {
+    setAlwaysCorrect(!alwaysCorrect);
+    audioSystem.playClickSound();
+  };
+
+  const handleCloseAdmin = () => {
+    setAdminMode(false);
+  };
+
+  const handleAdminMouseDown = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('button')) return;
+    setIsDragging(true);
+    setDragOffset({
+      x: e.clientX - adminPosition.x,
+      y: e.clientY - adminPosition.y
+    });
+  };
+
+  const handleAdminMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    setAdminPosition({
+      x: e.clientX - dragOffset.x,
+      y: e.clientY - dragOffset.y
+    });
+  };
+
+  const handleAdminMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // Admin panel JSX
+  const renderAdminPanel = () => {
+    if (!adminMode) return null;
+    
+    return (
+      <div 
+        className="fixed z-50"
+        style={{ 
+          left: adminPosition.x, 
+          top: adminPosition.y,
+          transform: isDragging ? 'none' : 'none'
+        }}
+        onMouseMove={handleAdminMouseMove}
+        onMouseUp={handleAdminMouseUp}
+        onMouseLeave={handleAdminMouseUp}
+      >
+        {adminMinimized ? (
+          // Minimized version - just a bar
+          <div 
+            className="bg-gradient-to-r from-purple-800 to-indigo-800 rounded-full px-4 py-2 cursor-move shadow-lg border border-purple-500 flex items-center gap-2"
+            onMouseDown={handleAdminMouseDown}
+          >
+            <span className="text-white text-lg">🔧</span>
+            <button
+              onClick={() => setAdminMinimized(false)}
+              className="text-white/70 hover:text-white text-sm"
+            >
+              ▲ Expand
+            </button>
+          </div>
+        ) : (
+          // Full version
+          <div className="bg-gradient-to-br from-purple-900 to-indigo-900 rounded-2xl p-6 max-w-sm w-full shadow-2xl border-2 border-purple-500">
+            <div 
+              className="flex justify-between items-center mb-6 cursor-move -mx-2 -mt-2 p-2 rounded-t-xl hover:bg-purple-800/30"
+              onMouseDown={handleAdminMouseDown}
+            >
+              <h2 className="text-2xl font-bold text-white">🔧 Admin Panel</h2>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setAdminMinimized(true)}
+                  className="text-white/70 hover:text-white text-xl"
+                  title="Minimize"
+                >
+                  ▼
+                </button>
+                <button
+                  onClick={handleCloseAdmin}
+                  className="text-white/70 hover:text-white text-xl"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <button
+                onClick={handleToggleAlwaysCorrect}
+                className={`w-full py-3 px-4 rounded-xl font-bold transition-all transform hover:scale-105 ${
+                  alwaysCorrect 
+                    ? "bg-green-500 text-white shadow-lg shadow-green-500/50" 
+                    : "bg-gray-600 text-gray-300"
+                }`}
+              >
+                {alwaysCorrect ? "✅ Always Correct: ON" : "⬜ Always Correct: OFF"}
+              </button>
+              
+              <button
+                onClick={handleClearTrophies}
+                className="w-full py-3 px-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all transform hover:scale-105"
+              >
+                🗑️ Clear All Trophies
+              </button>
+              
+              <div className="pt-4 border-t border-purple-700">
+                <p className="text-purple-300 text-sm text-center">
+                  Code: 5839201746
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   // Render current game state
   if (gameState === "title") {
     return (
@@ -403,6 +526,7 @@ export default function Home() {
           show={showSecretTrophyPopup} 
           onClose={() => setShowSecretTrophyPopup(false)} 
         />
+        {renderAdminPanel()}
       </>
     );
   }
@@ -421,6 +545,7 @@ export default function Home() {
           show={showSecretTrophyPopup} 
           onClose={() => setShowSecretTrophyPopup(false)} 
         />
+        {adminMode && renderAdminPanel()}
       </>
     );
   }
@@ -609,127 +734,4 @@ export default function Home() {
       </>
     );
   }
-
-  // Admin panel functions
-  const handleClearTrophies = () => {
-    setTrophies([]);
-    saveTrophies([]);
-    audioSystem.playSuccessSound();
-  };
-
-  const handleToggleAlwaysCorrect = () => {
-    setAlwaysCorrect(!alwaysCorrect);
-    audioSystem.playClickSound();
-  };
-
-  const handleCloseAdmin = () => {
-    setAdminMode(false);
-  };
-
-  const handleAdminMouseDown = (e: React.MouseEvent) => {
-    if ((e.target as HTMLElement).closest('button')) return;
-    setIsDragging(true);
-    setDragOffset({
-      x: e.clientX - adminPosition.x,
-      y: e.clientY - adminPosition.y
-    });
-  };
-
-  const handleAdminMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
-    setAdminPosition({
-      x: e.clientX - dragOffset.x,
-      y: e.clientY - dragOffset.y
-    });
-  };
-
-  const handleAdminMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  // Render admin panel overlay
-  if (adminMode) {
-    return (
-      <div 
-        className="fixed z-50"
-        style={{ 
-          left: adminPosition.x, 
-          top: adminPosition.y,
-          transform: isDragging ? 'none' : 'none'
-        }}
-        onMouseMove={handleAdminMouseMove}
-        onMouseUp={handleAdminMouseUp}
-        onMouseLeave={handleAdminMouseUp}
-      >
-        {adminMinimized ? (
-          // Minimized version - just a bar
-          <div 
-            className="bg-gradient-to-r from-purple-800 to-indigo-800 rounded-full px-4 py-2 cursor-move shadow-lg border border-purple-500 flex items-center gap-2"
-            onMouseDown={handleAdminMouseDown}
-          >
-            <span className="text-white text-lg">🔧</span>
-            <button
-              onClick={() => setAdminMinimized(false)}
-              className="text-white/70 hover:text-white text-sm"
-            >
-              ▲ Expand
-            </button>
-          </div>
-        ) : (
-          // Full version
-          <div className="bg-gradient-to-br from-purple-900 to-indigo-900 rounded-2xl p-6 max-w-sm w-full shadow-2xl border-2 border-purple-500">
-            <div 
-              className="flex justify-between items-center mb-6 cursor-move -mx-2 -mt-2 p-2 rounded-t-xl hover:bg-purple-800/30"
-              onMouseDown={handleAdminMouseDown}
-            >
-              <h2 className="text-2xl font-bold text-white">🔧 Admin Panel</h2>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setAdminMinimized(true)}
-                  className="text-white/70 hover:text-white text-xl"
-                  title="Minimize"
-                >
-                  ▼
-                </button>
-                <button
-                  onClick={handleCloseAdmin}
-                  className="text-white/70 hover:text-white text-xl"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-            
-            <div className="space-y-4">
-              <button
-                onClick={handleToggleAlwaysCorrect}
-                className={`w-full py-3 px-4 rounded-xl font-bold transition-all transform hover:scale-105 ${
-                  alwaysCorrect 
-                    ? "bg-green-500 text-white shadow-lg shadow-green-500/50" 
-                    : "bg-gray-600 text-gray-300"
-                }`}
-              >
-                {alwaysCorrect ? "✅ Always Correct: ON" : "⬜ Always Correct: OFF"}
-              </button>
-              
-              <button
-                onClick={handleClearTrophies}
-                className="w-full py-3 px-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all transform hover:scale-105"
-              >
-                🗑️ Clear All Trophies
-              </button>
-              
-              <div className="pt-4 border-t border-purple-700">
-                <p className="text-purple-300 text-sm text-center">
-                  Code: 5839201746
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  return null;
 }
