@@ -11,334 +11,308 @@ interface TeacherSimulationProps {
   onExit?: () => void;
 }
 
-interface Scenario {
+interface Student {
   id: string;
-  situation: string;
-  student: string;
+  name: string;
   avatar: string;
+  engagement: number;
+  questionProbability: number;
+}
+
+interface ClassroomEvent {
+  id: string;
+  type: "question" | "distraction" | "disruption" | "quiz" | "break";
+  title: string;
+  description: string;
+  student?: Student;
   options: {
     id: string;
     text: string;
     correct: boolean;
-    consequence: string;
+    engagementChange: number;
+    explanation: string;
   }[];
 }
 
-interface LessonTopic {
-  id: string;
-  topic: string;
-  correctOrder: number;
-}
-
-interface TeacherTask {
+interface LessonPlan {
   id: string;
   title: string;
-  description: string;
-  scenarios?: Scenario[];
-  lessonTopics?: LessonTopic[];
-  timeLimit: number;
-  points: number;
-  type: "scenario" | "ordering";
+  topic: string;
+  duration: number;
+  events: ClassroomEvent[];
+  targetEngagement: number;
 }
 
-const teacherTasks: Record<Difficulty, TeacherTask[]> = {
+const lessonPlans: Record<Difficulty, LessonPlan[]> = {
   easy: [
     {
-      id: "tea-e1",
-      title: "Classroom Management",
-      description: "Handle these classroom situations. Choose the best response for each.",
-      type: "scenario",
-      scenarios: [
+      id: "lesson-e1",
+      title: "Basic Math",
+      topic: "Addition and Subtraction",
+      duration: 5,
+      targetEngagement: 50,
+      events: [
         {
-          id: "s1",
-          situation: "A student is talking while you're explaining a lesson",
-          student: "Alex",
-          avatar: "👦",
+          id: "e1",
+          type: "question",
+          title: "Student Question",
+          description: "Emma raises her hand: \"Teacher, what is 5 + 7?\"",
+          student: { id: "s1", name: "Emma", avatar: "👧", engagement: 60, questionProbability: 0.3 },
           options: [
-            { id: "a", text: "Ignore it and continue teaching", correct: false, consequence: "Other students will also start talking" },
-            { id: "b", text: "Pause and make eye contact, then continue", correct: true, consequence: "Student stops, class stays focused" },
-            { id: "c", text: "Yell at the student to be quiet", correct: false, consequence: "Creates negative atmosphere" },
+            { id: "a", text: "Give the answer directly: 12", correct: false, engagementChange: -10, explanation: "Students don't learn by just getting answers" },
+            { id: "b", text: "Ask Emma to count on her fingers", correct: true, engagementChange: 15, explanation: "Hands-on learning helps!" },
+            { id: "c", text: "Ignore her for now", correct: false, engagementChange: -20, explanation: "Student loses interest" },
           ],
         },
         {
-          id: "s2",
-          situation: "Two students are arguing over a pencil",
-          student: "Sam & Jordan",
-          avatar: "👧👦",
+          id: "e2",
+          type: "distraction",
+          title: "Side Conversation",
+          description: "Two students in the back are whispering about a video game.",
           options: [
-            { id: "a", text: "Send both to the principal's office", correct: false, consequence: "Misses learning opportunity" },
-            { id: "b", text: "Ask them to solve it peacefully, then continue", correct: true, consequence: "Students learn conflict resolution" },
-            { id: "c", text: "Take the pencil away from both", correct: false, consequence: "Doesn't teach problem-solving" },
-          ],
-        },
-      ],
-      timeLimit: 60,
-      points: 100,
-    },
-    {
-      id: "tea-e2",
-      title: "First Day Jitters",
-      description: "Handle common first-day-of-school situations.",
-      type: "scenario",
-      scenarios: [
-        {
-          id: "s1",
-          situation: "A student is crying because they're scared and miss their parents",
-          student: "Emma",
-          avatar: "👧",
-          options: [
-            { id: "a", text: "Tell them to stop crying and be brave", correct: false, consequence: "Invalidates their feelings" },
-            { id: "b", text: "Comfort them and reassure them parents will be back", correct: true, consequence: "Student feels validated and calms down" },
-            { id: "c", text: "Ignore them - they'll get over it", correct: false, consequence: "Student becomes more distressed" },
+            { id: "a", text: "Continue teaching - they'll stop eventually", correct: false, engagementChange: -15, explanation: "Distraction spreads to others" },
+            { id: "b", text: "Make eye contact and gesture to focus", correct: true, engagementChange: 5, explanation: "Non-verbal correction works!" },
+            { id: "c", text: "Stop class and yell at them", correct: false, engagementChange: -20, explanation: "Creates negative atmosphere" },
           ],
         },
         {
-          id: "s2",
-          situation: "Students don't know where to sit",
-          student: "Class",
-          avatar: "👨‍👩‍👧",
+          id: "e3",
+          type: "quiz",
+          title: "Pop Quiz Time!",
+          description: "Time for a quick quiz on today's lesson!",
           options: [
-            { id: "a", text: "Let them figure it out themselves", correct: false, consequence: "Chaos and arguments" },
-            { id: "b", text: "Assign seats quickly and clearly", correct: true, consequence: "Class begins smoothly" },
-            { id: "c", text: "Let them stand until they behave", correct: false, consequence: "Unnecessary confrontation" },
+            { id: "a", text: "Make it a fun team competition", correct: true, engagementChange: 20, explanation: "Students love friendly competition!" },
+            { id: "b", text: "Silent individual quiz", correct: false, engagementChange: -10, explanation: "Too stressful for young students" },
+            { id: "c", text: "Skip the quiz today", correct: false, engagementChange: -15, explanation: "Missed learning opportunity" },
           ],
         },
       ],
-      timeLimit: 50,
-      points: 100,
     },
   ],
   medium: [
     {
-      id: "tea-m1",
-      title: "Diverse Classroom",
-      description: "Handle escalating situations with multiple factors to consider.",
-      type: "scenario",
-      scenarios: [
+      id: "lesson-m1",
+      title: "Science Experiment",
+      topic: "Chemical Reactions",
+      duration: 7,
+      targetEngagement: 60,
+      events: [
         {
-          id: "s1",
-          situation: "A student with ADHD is having trouble sitting still during a 30-minute lecture",
-          student: "Taylor",
-          avatar: "👧",
+          id: "e1",
+          type: "question",
+          title: "Science Question",
+          description: "Jake asks: \"Why does baking soda bubble when we add vinegar?\"",
+          student: { id: "s1", name: "Jake", avatar: "👦", engagement: 70, questionProbability: 0.4 },
           options: [
-            { id: "a", text: "Tell them to sit down and be quiet", correct: false, consequence: "Student becomes frustrated and disruptive" },
-            { id: "b", text: "Give them a fidget tool and let them stand in back", correct: true, consequence: "Student can focus while moving" },
-            { id: "c", text: "Send them out of the classroom", correct: false, consequence: "Student misses learning, feels excluded" },
+            { id: "a", text: "Explain the acid-base reaction in simple terms", correct: true, engagementChange: 20, explanation: "Great teachable moment!" },
+            { id: "b", text: "That's beyond today's lesson", correct: false, engagementChange: -15, explanation: "Discourages curiosity" },
+            { id: "c", text: "Because magic!", correct: false, engagementChange: -5, explanation: "Misleading answer" },
           ],
         },
         {
-          id: "s2",
-          situation: "A student is struggling with reading comprehension while others are finishing quickly",
-          student: "Morgan",
-          avatar: "👦",
+          id: "e2",
+          type: "disruption",
+          title: "Lab Accident",
+          description: "A student's experiment is fizzing over onto the desk!",
           options: [
-            { id: "a", text: "Move to the next lesson - they'll catch up later", correct: false, consequence: "Student falls further behind" },
-            { id: "b", text: "Pair them with a peer tutor for extra help", correct: true, consequence: "Student gets support, peer learns by teaching" },
-            { id: "c", text: "Give them more homework to practice", correct: false, consequence: "Overwhelms the struggling student" },
+            { id: "a", text: "Stay calm, have student clean it up, continue lesson", correct: true, engagementChange: 10, explanation: "Good crisis management!" },
+            { id: "b", text: "Panic and send everyone out of class", correct: false, engagementChange: -25, explanation: "Overreaction scares students" },
+            { id: "c", text: "Ignore it and keep teaching", correct: false, engagementChange: -20, explanation: "Safety issue!" },
           ],
         },
         {
-          id: "s3",
-          situation: "Parents complain their child is being bullied but the accused student denies it",
-          student: "Casey",
-          avatar: "👧",
+          id: "e3",
+          type: "distraction",
+          title: "Phone Notification",
+          description: "A student's phone buzzes loudly during the experiment.",
           options: [
-            { id: "a", text: "Ignore it - kids will be kids", correct: false, consequence: "Bullying may escalate" },
-            { id: "b", text: "Investigate privately and mediate a conversation", correct: true, consequence: "Addresses issue while being fair to all" },
-            { id: "c", text: "Suspend both students immediately", correct: false, consequence: "Punishes potentially innocent student" },
-          ],
-        },
-      ],
-      timeLimit: 90,
-      points: 150,
-    },
-    {
-      id: "tea-m2",
-      title: "Academic Integrity",
-      description: "Handle situations involving cheating and academic honesty.",
-      type: "scenario",
-      scenarios: [
-        {
-          id: "s1",
-          situation: "You catch a student copying from another student's test",
-          student: "Kyle",
-          avatar: "👦",
-          options: [
-            { id: "a", text: "Yell at both students in front of class", correct: false, consequence: "Embarrasses students, escalates situation" },
-            { id: "b", text: "Collect tests and address privately after class", correct: true, consequence: "Maintains dignity, addresses issue properly" },
-            { id: "c", text: "Give them both an F immediately", correct: false, consequence: "Too harsh without investigation" },
+            { id: "a", text: "Remind about phone policy, continue", correct: true, engagementChange: 5, explanation: "Firm but fair" },
+            { id: "b", text: "Confiscate phone for the rest of class", correct: false, engagementChange: -10, explanation: "Too harsh for first offense" },
+            { id: "c", text: "Let it go this time", correct: false, engagementChange: -15, explanation: "Policy must be consistent" },
           ],
         },
         {
-          id: "s2",
-          situation: "A student submits a paper that's clearly not their writing level",
-          student: "Lisa",
-          avatar: "👩",
+          id: "e4",
+          type: "break",
+          title: "Energy Dip",
+          description: "The class seems tired after the experiment. Engagement is dropping.",
           options: [
-            { id: "a", text: "Accuse them of plagiarism right away", correct: false, consequence: "Could be wrong - need evidence" },
-            { id: "b", text: "Ask student to explain their work in person", correct: true, consequence: "Fair investigation" },
-            { id: "c", text: "Ignore it - not your problem", correct: false, consequence: "Academic dishonesty continues" },
+            { id: "a", text: "Do a quick stretch break then continue", correct: true, engagementChange: 15, explanation: "Physical activity helps refocus!" },
+            { id: "b", text: "Push through - there's more content", correct: false, engagementChange: -20, explanation: "Exhausted students can't learn" },
+            { id: "c", text: "Let them have free time", correct: false, engagementChange: -10, explanation: "Loses momentum" },
           ],
         },
       ],
-      timeLimit: 75,
-      points: 150,
     },
   ],
   hard: [
     {
-      id: "tea-h1",
-      title: "Full Classroom Challenge",
-      description: "Multiple issues happening at once. Prioritize and address them all!",
-      type: "scenario",
-      scenarios: [
+      id: "lesson-h1",
+      title: "History Essay Workshop",
+      topic: "American Revolution",
+      duration: 10,
+      targetEngagement: 70,
+      events: [
         {
-          id: "s1",
-          situation: "A fire drill starts during an important test",
-          student: "Entire Class",
-          avatar: "👨‍👩‍👧‍👦",
+          id: "e1",
+          type: "question",
+          title: "Complex Question",
+          description: "Morgan asks: \"Was the American Revolution justified? Isn't that just rebellion?\"",
+          student: { id: "s1", name: "Morgan", avatar: "👤", engagement: 80, questionProbability: 0.5 },
           options: [
-            { id: "a", text: "Have students leave papers open for when you return", correct: false, consequence: "Test integrity compromised" },
-            { id: "b", text: "Collect all papers quickly, resume after drill", correct: true, consequence: "Fair to all, maintains academic integrity" },
-            { id: "c", text: "Cancel the test entirely", correct: false, consequence: "Rewards disruption, wastes preparation" },
+            { id: "a", text: "Guide a class discussion about perspectives", correct: true, engagementChange: 25, explanation: "Critical thinking at its best!" },
+            { id: "b", text: "Give your opinion and move on", correct: false, engagementChange: 0, explanation: "Missed teaching moment" },
+            { id: "c", text: "That's not appropriate to discuss", correct: false, engagementChange: -20, explanation: "Shuts down intellectual curiosity" },
           ],
         },
         {
-          id: "s2",
-          situation: "A student comes to class upset after receiving bad news. They won't participate.",
-          student: "Riley",
-          avatar: "👦",
+          id: "e2",
+          type: "disruption",
+          title: "Plagiarism Accusation",
+          description: "You notice two essays that are suspiciously similar.",
           options: [
-            { id: "a", text: "Force them to participate in group work", correct: false, consequence: "Doesn't respect student's emotional needs" },
-            { id: "b", text: "Check in privately, offer to catch them up later", correct: true, consequence: "Shows empathy while maintaining expectations" },
-            { id: "c", text: "Send them to the counselor immediately", correct: false, consequence: "May embarrass student, removes agency" },
+            { id: "a", text: "Meet with students privately after class", correct: true, engagementChange: 10, explanation: "Fair investigation" },
+            { id: "b", text: "Publicly accuse them of cheating now", correct: false, engagementChange: -25, explanation: "Embarrasses students, could be wrong" },
+            { id: "c", text: "Ignore it this time", correct: false, engagementChange: -30, explanation: "Academic dishonesty must be addressed" },
           ],
         },
         {
-          id: "s3",
-          situation: "A parent volunteers in class but is giving unsolicited advice to other students",
-          student: "Parent",
-          avatar: "👨",
+          id: "e3",
+          type: "distraction",
+          title: "Parent Complaint",
+          description: "A parent emails complaining their child isn't being challenged enough.",
           options: [
-            { id: "a", text: "Publicly tell them to stop interfering", correct: false, consequence: "Creates conflict, embarrasses parent" },
-            { id: "b", text: "Thank them and redirect: 'Let's let the students try first'", correct: true, consequence: "Polite but maintains boundaries" },
-            { id: "c", text: "Ask them to not volunteer anymore", correct: false, consequence: "Loses potential help, creates tension" },
+            { id: "a", text: "Acknowledge concern, offer extra resources", correct: true, engagementChange: 15, explanation: "Good parent communication!" },
+            { id: "b", text: "Defend your teaching methods", correct: false, engagementChange: -10, explanation: "Defensive response" },
+            { id: "c", text: "Ignore the email", correct: false, engagementChange: -20, explanation: "Parent relations suffer" },
           ],
         },
         {
-          id: "s4",
-          situation: "Technology fails during a critical presentation - no projector works",
-          student: "Class",
-          avatar: "👨‍👩‍👧‍👦",
+          id: "e4",
+          type: "quiz",
+          title: "Surprise Quiz",
+          description: "Test scores were low. How do you address this?",
           options: [
-            { id: "a", text: "Cancel the lesson and have free time", correct: false, consequence: "Wasted class time" },
-            { id: "b", text: "Pivot to discussion-based lesson using whiteboard", correct: true, consequence: "Adaptable teaching, maintains engagement" },
-            { id: "c", text: "Have students read from textbooks silently", correct: false, consequence: "Missed learning opportunity" },
+            { id: "a", text: "Review together, offer retake option", correct: true, engagementChange: 20, explanation: "Growth mindset approach!" },
+            { id: "b", text: "Lecture about the importance of studying", correct: false, engagementChange: -15, explanation: "Too negative" },
+            { id: "c", text: "Make the next quiz easier", correct: false, engagementChange: -5, explanation: "Dumbing down doesn't help" },
+          ],
+        },
+        {
+          id: "e5",
+          type: "break",
+          title: "End-of-Day Fatigue",
+          description: "It's the last period on a Friday. Students are checked out.",
+          options: [
+            { id: "a", text: "Interactive debate on the revolution topic", correct: true, engagementChange: 20, explanation: "Engaging format keeps attention!" },
+            { id: "b", text: "Give them free time - it's Friday", correct: false, engagementChange: -15, explanation: "Gives up on teaching" },
+            { id: "c", text: "Show a documentary", correct: false, engagementChange: 5, explanation: "Too passive for tired students" },
           ],
         },
       ],
-      timeLimit: 120,
-      points: 200,
     },
   ],
 };
 
 export default function TeacherSimulation({ difficulty, onComplete, onOpenSettings, onExit }: TeacherSimulationProps) {
-  const tasks = teacherTasks[difficulty];
-  const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
-  const [showConsequence, setShowConsequence] = useState<Record<string, string>>({});
+  const plans = lessonPlans[difficulty];
+  const [currentPlanIndex, setCurrentPlanIndex] = useState(0);
+  const [currentEventIndex, setCurrentEventIndex] = useState(0);
+  const [engagement, setEngagement] = useState(70);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [showExplanation, setShowExplanation] = useState(false);
   const [feedback, setFeedback] = useState<"correct" | "incorrect" | null>(null);
   const [totalScore, setTotalScore] = useState(0);
-  const [completedTasks, setCompletedTasks] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [lessonProgress, setLessonProgress] = useState(0);
 
-  const currentTask = tasks[currentTaskIndex];
+  const currentPlan = plans[currentPlanIndex];
+  const currentEvent = currentPlan.events[currentEventIndex];
 
-  // Initialize
+  // Simulate natural engagement decay over time
   useEffect(() => {
-    if (currentTask) {
-      setSelectedAnswers({});
-      setShowConsequence({});
-      setFeedback(null);
-    }
-  }, [currentTask]);
+    const timer = setInterval(() => {
+      setEngagement((prev) => Math.max(0, prev - 2));
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
-  const handleOptionSelect = (scenarioId: string, optionId: string) => {
-    if (showConsequence[scenarioId]) return; // Already answered
-    
-    const scenario = currentTask.scenarios?.find(s => s.id === scenarioId);
-    const option = scenario?.options.find(o => o.id === optionId);
-    
-    setSelectedAnswers({ ...selectedAnswers, [scenarioId]: optionId });
-    setShowConsequence({ ...showConsequence, [scenarioId]: option?.consequence || "" });
+  const handleSelectOption = (optionId: string) => {
+    if (showExplanation) return;
+    setSelectedOption(optionId);
   };
 
   const handleSubmit = useCallback(() => {
-    if (!currentTask || !currentTask.scenarios) return;
+    if (!selectedOption || !currentEvent) return;
 
-    let correctCount = 0;
-    const totalScenarios = currentTask.scenarios.length;
+    const selected = currentEvent.options.find((o) => o.id === selectedOption);
+    if (!selected) return;
 
-    currentTask.scenarios.forEach((scenario) => {
-      const selectedOption = scenario.options.find(o => o.id === selectedAnswers[scenario.id]);
-      if (selectedOption?.correct) {
-        correctCount++;
-      }
-    });
+    // Update engagement
+    const newEngagement = Math.min(100, Math.max(0, engagement + selected.engagementChange));
+    setEngagement(newEngagement);
 
-    const percentage = correctCount / totalScenarios;
-    let pointsEarned = 0;
-
-    if (percentage === 1) {
+    if (selected.correct) {
       audioSystem.playSuccessSound();
-      pointsEarned = currentTask.points;
-    } else if (percentage >= 0.6) {
-      audioSystem.playSuccessSound();
-      pointsEarned = Math.floor(currentTask.points * 0.5);
+      const basePoints = difficulty === "easy" ? 50 : difficulty === "medium" ? 75 : 100;
+      const engagementBonus = Math.floor(newEngagement / 10);
+      setTotalScore((prev) => prev + basePoints + engagementBonus);
+      setFeedback("correct");
     } else {
       audioSystem.playFailureSound();
+      setFeedback("incorrect");
     }
 
-    setTotalScore((prev) => prev + pointsEarned);
-    
-    if (percentage >= 0.6) {
-      setFeedback("correct");
-      setTimeout(() => {
-        if (currentTaskIndex < tasks.length - 1) {
-          setCurrentTaskIndex((prev) => prev + 1);
-          setCompletedTasks((prev) => prev + 1);
-        } else {
-          setShowSuccess(true);
-        }
-      }, 2000);
-    } else {
-      setFeedback("incorrect");
-      setTimeout(() => {
-        setSelectedAnswers({});
-        setShowConsequence({});
+    setShowExplanation(true);
+    setLessonProgress(((currentEventIndex + 1) / currentPlan.events.length) * 100);
+
+    setTimeout(() => {
+      if (currentEventIndex < currentPlan.events.length - 1) {
+        setCurrentEventIndex((prev) => prev + 1);
+        setSelectedOption(null);
+        setShowExplanation(false);
         setFeedback(null);
-      }, 2000);
-    }
-  }, [currentTask, selectedAnswers, currentTaskIndex, tasks.length]);
+      } else {
+        setShowSuccess(true);
+      }
+    }, 2000);
+  }, [selectedOption, currentEvent, currentEventIndex, currentPlan, engagement, difficulty]);
 
   const handleFinish = () => {
-    const success = totalScore > 0;
-    onComplete(success, totalScore, tasks.length * 200);
+    const success = engagement >= currentPlan.targetEngagement;
+    const maxScore = currentPlan.events.length * 150;
+    onComplete(success, totalScore, maxScore);
+  };
+
+  const getEngagementColor = () => {
+    if (engagement >= 70) return "text-green-400";
+    if (engagement >= 40) return "text-yellow-400";
+    return "text-red-400";
+  };
+
+  const getEngagementEmoji = () => {
+    if (engagement >= 70) return "😊";
+    if (engagement >= 40) return "😐";
+    return "😴";
   };
 
   if (showSuccess) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-500 to-purple-600 p-4 md:p-8 flex items-center justify-center">
         <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
-          <div className="text-6xl mb-4">👩‍🏫</div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Teaching Complete!</h2>
+          <div className="text-6xl mb-4">📚</div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Lesson Complete!</h2>
           <p className="text-gray-600 mb-4">
-            You demonstrated excellent classroom management!
+            Final class engagement: {engagement}%
           </p>
           <div className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl p-4 mb-6">
             <div className="text-white text-sm">Total Score</div>
             <div className="text-4xl font-bold text-white">{totalScore}</div>
+          </div>
+          <div className="text-sm text-gray-500 mb-4">
+            {engagement >= 80 ? "🌟 Outstanding teaching! The students learned a lot!" :
+             engagement >= 60 ? "👍 Good lesson! Room for improvement." :
+             "⚠️ Consider different strategies for next time."}
           </div>
           <button
             onClick={handleFinish}
@@ -357,8 +331,8 @@ export default function TeacherSimulation({ difficulty, onComplete, onOpenSettin
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-white">👩‍🏫 Teacher Simulation</h1>
-            <p className="text-indigo-200">Task {currentTaskIndex + 1} of {tasks.length}</p>
+            <h1 className="text-2xl font-bold text-white">🍎 Classroom Management</h1>
+            <p className="text-indigo-200">{currentPlan.title} - {currentPlan.topic}</p>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-2xl font-bold text-white">{totalScore} pts</div>
@@ -371,91 +345,106 @@ export default function TeacherSimulation({ difficulty, onComplete, onOpenSettin
           </div>
         </div>
 
-        {/* Task Info */}
+        {/* Engagement Meter */}
         <div className="bg-white/10 backdrop-blur rounded-xl p-4 mb-6">
-          <h2 className="text-xl font-bold text-white mb-2">{currentTask.title}</h2>
-          <p className="text-indigo-100">{currentTask.description}</p>
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-white font-bold">📊 Class Engagement {getEngagementEmoji()}</span>
+            <span className={`text-2xl font-bold ${getEngagementColor()}`}>{engagement}%</span>
+          </div>
+          <div className="w-full bg-gray-700 rounded-full h-4">
+            <div
+              className={`h-4 rounded-full transition-all ${
+                engagement >= 70 ? "bg-green-500" :
+                engagement >= 40 ? "bg-yellow-500" :
+                "bg-red-500"
+              }`}
+              style={{ width: `${engagement}%` }}
+            />
+          </div>
+          <div className="flex justify-between text-xs text-white/50 mt-1">
+            <span>Target: {currentPlan.targetEngagement}%</span>
+            <span>Event {currentEventIndex + 1} of {currentPlan.events.length}</span>
+          </div>
         </div>
 
-        {/* Scenarios */}
-        <div className="space-y-6">
-          {currentTask.scenarios?.map((scenario) => (
-            <div
-              key={scenario.id}
-              className="bg-white rounded-xl p-5 shadow-lg"
-            >
-              <div className="flex items-start gap-3 mb-4">
-                <span className="text-3xl">{scenario.avatar}</span>
-                <div>
-                  <div className="font-bold text-gray-800">{scenario.student}</div>
-                  <div className="text-gray-600">{scenario.situation}</div>
-                </div>
-              </div>
+        {/* Event Card */}
+        <div className="bg-white rounded-xl p-6 mb-6 shadow-xl">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-3xl">
+              {currentEvent.type === "question" ? "❓" :
+               currentEvent.type === "distraction" ? "🎮" :
+               currentEvent.type === "disruption" ? "⚡" :
+               currentEvent.type === "quiz" ? "📝" : "☕"}
+            </span>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">{currentEvent.title}</h2>
+              <span className="text-sm text-gray-500 capitalize">{currentEvent.type}</span>
+            </div>
+          </div>
 
-              <div className="space-y-2">
-                {scenario.options.map((option) => {
-                  const isSelected = selectedAnswers[scenario.id] === option.id;
-                  const showResult = showConsequence[scenario.id];
-                  const isCorrect = option.correct;
-                  
-                  let borderColor = "border-gray-200";
-                  if (showResult) {
-                    if (isCorrect) borderColor = "border-green-500 bg-green-50";
-                    else if (isSelected) borderColor = "border-red-500 bg-red-50";
-                  }
-                  
-                  return (
-                    <button
-                      key={option.id}
-                      onClick={() => handleOptionSelect(scenario.id, option.id)}
-                      disabled={!!showResult}
-                      className={`w-full text-left p-3 rounded-lg border-2 ${borderColor} hover:bg-gray-50 transition-all disabled:cursor-not-allowed`}
-                    >
+          <p className="text-gray-700 text-lg mb-6">{currentEvent.description}</p>
+
+          {/* Options */}
+          <div className="space-y-3">
+            {currentEvent.options.map((option) => {
+              const isSelected = selectedOption === option.id;
+              let borderColor = "border-gray-200 bg-gray-50";
+              
+              if (showExplanation) {
+                if (option.correct) {
+                  borderColor = "border-green-500 bg-green-50";
+                } else if (isSelected) {
+                  borderColor = "border-red-500 bg-red-50";
+                }
+              } else if (isSelected) {
+                borderColor = "border-blue-500 bg-blue-50";
+              }
+
+              return (
+                <button
+                  key={option.id}
+                  onClick={() => handleSelectOption(option.id)}
+                  disabled={showExplanation}
+                  className={`w-full text-left p-4 rounded-xl border-2 ${borderColor} hover:opacity-80 transition-all`}
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-lg font-bold text-gray-700 mt-1">{option.id.toUpperCase()}.</span>
+                    <div className="flex-1">
                       <span className="font-medium text-gray-800">{option.text}</span>
-                      
-                      {showResult && (
-                        <div className={`mt-2 text-sm ${isCorrect ? "text-green-600" : "text-red-600"}`}>
-                          {isCorrect ? "✓ " : "✗ "}{option.consequence}
+                      {showExplanation && (
+                        <div className={`mt-2 text-sm ${option.correct ? "text-green-600" : "text-red-600"}`}>
+                          {option.correct ? "✓ " : "✗ "}{option.explanation}
+                          <span className="ml-2 font-bold">
+                            (Engagement: {option.engagementChange > 0 ? "+" : ""}{option.engagementChange}%)
+                          </span>
                         </div>
                       )}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
-
-        {/* Feedback */}
-        {feedback === "correct" && (
-          <div className="bg-green-500/20 border border-green-500 rounded-xl p-4 mt-6 text-center">
-            <span className="text-green-300 font-bold text-lg">✓ Excellent teaching decisions!</span>
-          </div>
-        )}
-        {feedback === "incorrect" && (
-          <div className="bg-red-500/20 border border-red-500 rounded-xl p-4 mt-6 text-center">
-            <span className="text-red-300 font-bold text-lg">✗ Some decisions need improvement. Try again!</span>
-          </div>
-        )}
 
         {/* Submit */}
         <button
           onClick={handleSubmit}
-          disabled={feedback !== null || Object.keys(selectedAnswers).length < (currentTask.scenarios?.length || 0)}
-          className="w-full py-3 mt-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={!selectedOption || showExplanation}
+          className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          ✓ Submit Decisions
+          {showExplanation ? (feedback === "correct" ? "✓ Great Choice!" : "✗ Try Better Next Time") : "✓ Make Decision"}
         </button>
 
         {/* Progress */}
         <div className="mt-6 flex gap-2">
-          {tasks.map((_, idx) => (
+          {currentPlan.events.map((_, idx) => (
             <div
               key={idx}
               className={`h-2 flex-1 rounded-full transition-all ${
-                idx < currentTaskIndex ? "bg-green-500" :
-                idx === currentTaskIndex ? "bg-white" :
-                "bg-white/30"
+                idx < currentEventIndex ? "bg-green-500" :
+                idx === currentEventIndex ? "bg-white" :
+                "bg-gray-600"
               }`}
             />
           ))}

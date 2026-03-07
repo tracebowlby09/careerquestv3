@@ -26,11 +26,15 @@ Career Quest V3 is a career simulation game with multiple career paths (Programm
 - [x] Fixed background music overlapping issue when switching between different music packs
 - [x] Added music transition lock to prevent concurrent music changes
 - [x] **NEW**: Career Simulation Mode - interactive job experience
-- [x] **NEW**: ProgrammerSimulation - code-fixing challenges
-- [x] **NEW**: All 6 career simulations (Programmer, Nurse, Engineer, Teacher, Chef, Architect)
+- [x] **NEW**: ProgrammerSimulation - Bug Fix Sprint (multiple choice code fixing)
+- [x] **NEW**: NurseSimulation - Emergency Room Shift (triage + treatment actions)
+- [x] **NEW**: EngineerSimulation - Bridge Builder (visual bridge building with stress test)
+- [x] **NEW**: TeacherSimulation - Classroom Management (engagement meter, student events)
+- [x] **NEW**: ChefSimulation - Dinner Rush (order management, cooking, special requests)
+- [x] **NEW**: ArchitectSimulation - Dream House Design (client requirements, zoning, budget)
 - [x] Removed timers from all simulations for stress-free gameplay
 - [x] Added exit buttons to all simulations
-- [x] Redesigned ArchitectSimulation to be easier and more fun (click-to-place, hints, visual feedback)
+- [x] Redesigned all simulations with enhanced gameplay mechanics
 
 ## Current Structure
 
@@ -41,16 +45,25 @@ Career Quest V3 is a career simulation game with multiple career paths (Programm
 | `src/app/globals.css` | Global styles | ✅ Ready |
 | `src/components/ScreenWrapper.tsx` | Screen wrapper with exit warning | ✅ Ready |
 | `src/components/careers/*.tsx` | Career world components | ✅ Ready |
-| `src/components/simulations/` | Interactive simulations | 🔄 Expanding |
+| `src/components/simulations/` | Interactive simulations | ✅ Complete |
 | `src/lib/audio.ts` | Audio system | ✅ Ready |
 | `.kilocode/` | AI context & recipes | ✅ Ready |
 
 ## Current Focus
 
-**Career Simulation Mode**: New interactive game mode where players experience what jobs are actually like through hands-on challenges.
+**Career Simulation Mode Rework**: All 6 career simulations have been reworked with new gameplay mechanics matching real job experiences:
 
-- Currently: All 6 career simulations complete (Programmer, Nurse, Engineer, Teacher, Chef, Architect)
-- All simulations now have exit buttons and no timers for stress-free gameplay
+1. **ProgrammerSimulation - "Bug Fix Sprint"**: Multiple choice code fixes, release deadline urgency, bug types (syntax/logic/algorithm/null-check)
+
+2. **NurseSimulation - "Emergency Room Shift"**: Patient triage + treatment actions, vital signs display, call doctor for critical cases
+
+3. **EngineerSimulation - "Bridge Builder"**: Visual bridge building with grid, material selection, stress testing with vehicles
+
+4. **TeacherSimulation - "Classroom Management"**: Engagement meter, classroom events (questions/distractions/disruptions/quiz), decisions affect engagement
+
+5. **ChefSimulation - "Dinner Rush"**: Order generation, cooking stations, ingredient prep, special requests, burning mechanic
+
+6. **ArchitectSimulation - "Dream House Design"**: Client requirements tracking, room placement on grid, budget management, zoning rules
 
 ## Game Modes
 
@@ -58,18 +71,18 @@ Career Quest V3 is a career simulation game with multiple career paths (Programm
 |------|-------------|
 | Challenge Mode | Full game with difficulty selection, earn trophies |
 | Quick Recall | Fast-paced trivia, no difficulty, immediate play |
-| **Simulation** | Interactive job experience (NEW!) |
+| **Simulation** | Interactive job experience |
 
 ## Available Simulations
 
 | Career | Simulation | Status |
 |--------|------------|--------|
-| Programmer | Code-fixing challenges | ✅ Ready |
-| Nurse | Patient triage challenges | ✅ Ready |
-| Engineer | Structural challenges | ✅ Ready |
-| Teacher | Classroom scenarios | ✅ Ready |
-| Chef | Cooking challenges | ✅ Ready |
-| Architect | Design puzzles | ✅ Ready |
+| Programmer | Bug Fix Sprint - Multiple choice code fixing | ✅ Ready |
+| Nurse | Emergency Room Shift - Triage + treatments | ✅ Ready |
+| Engineer | Bridge Builder - Visual construction + stress test | ✅ Ready |
+| Teacher | Classroom Management - Engagement meter + events | ✅ Ready |
+| Chef | Dinner Rush - Order management + cooking | ✅ Ready |
+| Architect | Dream House Design - Client requirements + budget | ✅ Ready |
 
 ### To add a new career:
 
@@ -95,13 +108,10 @@ Enter the Konami code (↑↑↓↓←→←→BA) anywhere in the game to unloc
 
 ## Pending Improvements
 
-- [ ] Add NurseSimulation - patient triage scenarios
-- [ ] Add EngineerSimulation - structural challenges
-- [ ] Add TeacherSimulation - classroom scenarios
-- [ ] Add ChefSimulation - cooking challenges
-- [ ] Add ArchitectSimulation - design puzzles
+- [x] All simulations implemented with enhanced gameplay
 - [ ] Statistics/analytics screen
 - [ ] Timer & streak system
+- [ ] Additional difficulty levels
 
 ## Session History
 
@@ -118,4 +128,10 @@ Enter the Konami code (↑↑↓↓←→←→BA) anywhere in the game to unloc
 | 2026-03-06 | Removed timers from all simulations, added exit buttons to all simulations |
 | 2026-03-06 | Redesigned ArchitectSimulation to be easier and more fun |
 | 2026-03-06 | Added music transition lock to prevent concurrent music changes |
-| 2026-03-06 | Implemented Career Simulation Mode feature |
+| 2026-03-07 | **Major Rework**: All 6 career simulations reworked with new gameplay mechanics |
+| 2026-03-07 | ProgrammerSimulation now Bug Fix Sprint with multiple choice |
+| 2026-03-07 | NurseSimulation now Emergency Room Shift with triage + treatments |
+| 2026-03-07 | EngineerSimulation now Bridge Builder with visual construction |
+| 2026-03-07 | TeacherSimulation now Classroom Management with engagement meter |
+| 2026-03-07 | ChefSimulation now Dinner Rush with order management |
+| 2026-03-07 | ArchitectSimulation now Dream House Design with client requirements |

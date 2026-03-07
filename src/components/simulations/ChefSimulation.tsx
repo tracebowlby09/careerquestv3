@@ -11,141 +11,182 @@ interface ChefSimulationProps {
   onExit?: () => void;
 }
 
-interface Order {
+interface Dish {
   id: string;
-  dish: string;
+  name: string;
+  emoji: string;
   ingredients: string[];
   prepTime: number;
+  cookTime: number;
   difficulty: number;
+  specialRequests?: string[];
+}
+
+interface Order {
+  id: string;
+  dish: Dish;
+  status: "pending" | "cooking" | "ready" | "burnt" | "served";
+  progress: number;
+  patience: number;
+  specialRequest?: string;
 }
 
 interface Station {
   id: string;
   name: string;
   icon: string;
-  occupiedBy: string | null;
+  occupiedBy: Order | null;
   progress: number;
+  type: "grill" | "pan" | "oven" | "plate";
 }
 
-interface ChefTask {
-  id: string;
-  title: string;
-  description: string;
-  orders: Order[];
-  timeLimit: number;
-  points: number;
-}
-
-const chefTasks: Record<Difficulty, ChefTask[]> = {
+const menu: Record<Difficulty, Dish[]> = {
   easy: [
-    {
-      id: "chef-e1",
-      title: "Simple Orders",
-      description: "Complete these 3 orders. Click ingredients in order, then cook!",
-      orders: [
-        { id: "o1", dish: "Caesar Salad", ingredients: ["lettuce", "croutons", "parmesan"], prepTime: 10, difficulty: 1 },
-        { id: "o2", dish: "Grilled Cheese", ingredients: ["bread", "cheese", "butter"], prepTime: 10, difficulty: 1 },
-        { id: "o3", dish: "Tomato Soup", ingredients: ["tomatoes", "cream", "basil"], prepTime: 10, difficulty: 1 },
-      ],
-      timeLimit: 60,
-      points: 100,
-    },
+    { id: "salad", name: "Caesar Salad", emoji: "🥗", ingredients: ["lettuce", "croutons", "parmesan", "dressing"], prepTime: 2, cookTime: 0, difficulty: 1 },
+    { id: "grilled_cheese", name: "Grilled Cheese", emoji: "🧀", ingredients: ["bread", "cheese", "butter"], prepTime: 1, cookTime: 3, difficulty: 1 },
+    { id: "soup", name: "Tomato Soup", emoji: "🍅", ingredients: ["tomatoes", "cream", "basil"], prepTime: 2, cookTime: 4, difficulty: 1 },
   ],
   medium: [
-    {
-      id: "chef-m1",
-      title: "Busy Kitchen",
-      description: "Handle 4 orders with varying prep times. Don't burn anything!",
-      orders: [
-        { id: "o1", dish: "Steak Frites", ingredients: ["steak", "fries", "garlic"], prepTime: 15, difficulty: 2 },
-        { id: "o2", dish: "Pasta Carbonara", ingredients: ["pasta", "eggs", "bacon", "cheese"], prepTime: 12, difficulty: 2 },
-        { id: "o3", dish: "Fish & Chips", ingredients: ["fish", "potatoes", "tartar"], prepTime: 14, difficulty: 2 },
-        { id: "o4", dish: "Chicken Wrap", ingredients: ["chicken", "tortilla", "lettuce", "sauce"], prepTime: 10, difficulty: 1 },
-      ],
-      timeLimit: 90,
-      points: 150,
-    },
+    { id: "steak", name: "Steak Frites", emoji: "🥩", ingredients: ["steak", "potatoes", "garlic", "herbs"], prepTime: 2, cookTime: 6, difficulty: 2 },
+    { id: "pasta", name: "Pasta Carbonara", emoji: "🍝", ingredients: ["pasta", "eggs", "bacon", "cheese"], prepTime: 2, cookTime: 5, difficulty: 2 },
+    { id: "fish", name: "Fish & Chips", emoji: "🐟", ingredients: ["fish", "potatoes", "tartar", "lemon"], prepTime: 2, cookTime: 5, difficulty: 2 },
+    { id: "wrap", name: "Chicken Wrap", emoji: "🌯", ingredients: ["chicken", "tortilla", "lettuce", "sauce"], prepTime: 2, cookTime: 3, difficulty: 1 },
   ],
   hard: [
-    {
-      id: "chef-h1",
-      title: "Rush Hour",
-      description: "6 orders coming in! Multi-task efficiently or orders will pile up!",
-      orders: [
-        { id: "o1", dish: "Beef Wellington", ingredients: ["beef", "puff pastry", "mushrooms", "ham"], prepTime: 20, difficulty: 3 },
-        { id: "o2", dish: "Seafood Paella", ingredients: ["rice", "shrimp", "mussels", "saffron"], prepTime: 18, difficulty: 3 },
-        { id: "o3", dish: "Duck Confit", ingredients: ["duck", "potatoes", "thyme", "garlic"], prepTime: 16, difficulty: 3 },
-        { id: "o4", dish: "Risotto Milanese", ingredients: ["rice", "saffron", "parmesan", "butter"], prepTime: 15, difficulty: 2 },
-        { id: "o5", dish: "Lamb Chops", ingredients: ["lamb", "rosemary", "garlic", "mint"], prepTime: 14, difficulty: 2 },
-        { id: "o6", dish: "Tiramisu", ingredients: ["mascarpone", "espresso", "eggs", "cocoa"], prepTime: 12, difficulty: 2 },
-      ],
-      timeLimit: 120,
-      points: 200,
-    },
+    { id: "wellington", name: "Beef Wellington", emoji: "🥘", ingredients: ["beef", "puff pastry", "mushrooms", "ham"], prepTime: 3, cookTime: 8, difficulty: 3 },
+    { id: "paella", name: "Seafood Paella", emoji: "🥘", ingredients: ["rice", "shrimp", "mussels", "saffron"], prepTime: 3, cookTime: 7, difficulty: 3 },
+    { id: "duck", name: "Duck Confit", emoji: "🦆", ingredients: ["duck", "potatoes", "thyme", "garlic"], prepTime: 3, cookTime: 6, difficulty: 3 },
+    { id: "risotto", name: "Risotto Milanese", emoji: "🍚", ingredients: ["rice", "saffron", "parmesan", "butter"], prepTime: 2, cookTime: 5, difficulty: 2 },
+    { id: "lamb", name: "Lamb Chops", emoji: "🍖", ingredients: ["lamb", "rosemary", "garlic", "mint"], prepTime: 2, cookTime: 5, difficulty: 2 },
   ],
 };
 
+const specialRequests = [
+  "No onions",
+  "Extra spicy",
+  "Gluten-free",
+  "Well done",
+  "Rare",
+  "Extra cheese",
+  "No salt",
+  "Extra sauce",
+];
+
 export default function ChefSimulation({ difficulty, onComplete, onOpenSettings, onExit }: ChefSimulationProps) {
-  const tasks = chefTasks[difficulty];
-  const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
-  const [completedOrders, setCompletedOrders] = useState<string[]>([]);
-  const [failedOrders, setFailedOrders] = useState<string[]>([]);
-  const [totalScore, setTotalScore] = useState(0);
-  const [completedTasks, setCompletedTasks] = useState(0);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [stations, setStations] = useState<Station[]>([
+    { id: "grill", name: "Grill", icon: "🔥", occupiedBy: null, progress: 0, type: "grill" },
+    { id: "pan1", name: "Pan 1", icon: "🍳", occupiedBy: null, progress: 0, type: "pan" },
+    { id: "pan2", name: "Pan 2", icon: "🍳", occupiedBy: null, progress: 0, type: "pan" },
+    { id: "oven", name: "Oven", icon: "♨️", occupiedBy: null, progress: 0, type: "oven" },
+  ]);
+  const [prepQueue, setPrepQueue] = useState<string[]>([]);
+  const [score, setScore] = useState(0);
+  const [completedOrders, setCompletedOrders] = useState(0);
+  const [burntOrders, setBurntOrders] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
-  const [activeOrders, setActiveOrders] = useState<Order[]>([]);
-  const [prepQueue, setPrepQueue] = useState<string[]>([]);
-  const [cookingStations, setCookingStations] = useState<Station[]>([
-    { id: "grill", name: "Grill", icon: "🔥", occupiedBy: null, progress: 0 },
-    { id: "pan", name: "Pan", icon: "🍳", occupiedBy: null, progress: 0 },
-    { id: "oven", name: "Oven", icon: "♨️", occupiedBy: null, progress: 0 },
-  ]);
+  const [feedback, setFeedback] = useState("");
+  const [targetOrders, setTargetOrders] = useState(5);
 
-  const currentTask = tasks[currentTaskIndex];
+  const currentMenu = menu[difficulty];
 
-  // Initialize
-  useEffect(() => {
-    if (currentTask && gameStarted) {
-      setActiveOrders(currentTask.orders);
-    }
-  }, [currentTask, gameStarted]);
-
-  // Cooking progress timer
+  // Generate new orders
   useEffect(() => {
     if (!gameStarted) return;
-    
-    const cookingTimer = setInterval(() => {
-      setCookingStations((stations) => 
-        stations.map((station) => {
-          if (station.occupiedBy && station.progress < 100) {
-            const newProgress = station.progress + 10;
-            if (newProgress >= 100) {
-              // Order complete
-              setCompletedOrders((prev) => [...prev, station.occupiedBy!]);
-              setTimeout(() => {
-                setCookingStations((s) =>
-                  s.map((st) =>
-                    st.id === station.id
-                      ? { ...st, occupiedBy: null, progress: 0 }
-                      : st
-                  )
-                );
-              }, 500);
-              return { ...station, progress: 100 };
-            }
-            return { ...station, progress: newProgress };
-          }
-          return station;
-        })
-      );
+
+    const generateOrder = () => {
+      if (orders.length >= 6) return;
+      
+      const randomDish = currentMenu[Math.floor(Math.random() * currentMenu.length)];
+      const randomRequest = Math.random() > 0.7 ? specialRequests[Math.floor(Math.random() * specialRequests.length)] : undefined;
+      
+      const newOrder: Order = {
+        id: `order-${Date.now()}`,
+        dish: randomDish,
+        status: "pending",
+        progress: 0,
+        patience: 100,
+        specialRequest: randomRequest,
+      };
+      
+      setOrders((prev) => [...prev, newOrder]);
+      audioSystem.playClickSound();
+    };
+
+    generateOrder();
+    const interval = setInterval(generateOrder, 8000);
+    return () => clearInterval(interval);
+  }, [gameStarted, currentMenu, orders.length]);
+
+  // Game tick - cooking progress and patience decay
+  useEffect(() => {
+    if (!gameStarted) return;
+
+    const tick = setInterval(() => {
+      // Decrease patience for pending orders
+      setOrders((prev) => prev.map((order) => ({
+        ...order,
+        patience: Math.max(0, order.patience - 2),
+      })));
+
+      // Progress cooking orders
+      setStations((prev) => prev.map((station) => {
+        if (!station.occupiedBy) return station;
+
+        const newProgress = station.progress + 8;
+        const cookTime = station.occupiedBy.dish.cookTime * 10;
+
+        if (newProgress >= cookTime) {
+          // Order cooked
+          setOrders((prev) => prev.map((o) => 
+            o.id === station.occupiedBy!.id 
+              ? { ...o, status: "ready", progress: cookTime }
+              : o
+          ));
+          return { ...station, occupiedBy: null, progress: 0 };
+        }
+
+        // Check for burnt (overcooked)
+        if (newProgress >= cookTime + 20) {
+          setOrders((prev) => prev.map((o) => 
+            o.id === station.occupiedBy!.id 
+              ? { ...o, status: "burnt", progress: cookTime + 20 }
+              : o
+          ));
+          audioSystem.playFailureSound();
+          setBurntOrders((prev) => prev + 1);
+          setFeedback("Order burnt! Customer will complain!");
+          return { ...station, occupiedBy: null, progress: 0 };
+        }
+
+        // Update order progress
+        setOrders((prev) => prev.map((o) => 
+          o.id === station.occupiedBy!.id 
+            ? { ...o, progress: newProgress }
+            : o
+        ));
+
+        return { ...station, progress: newProgress };
+      }));
+
+      // Remove orders that ran out of patience
+      setOrders((prev) => {
+        const removed = prev.filter((o) => o.patience <= 0 && o.status === "pending");
+        if (removed.length > 0) {
+          audioSystem.playFailureSound();
+          setFeedback("Customer left! Too slow!");
+        }
+        return prev.filter((o) => o.patience > 0 || o.status !== "pending");
+      });
     }, 500);
 
-    return () => clearInterval(cookingTimer);
+    return () => clearInterval(tick);
   }, [gameStarted]);
 
   const startGame = () => {
     setGameStarted(true);
+    setTargetOrders(difficulty === "easy" ? 5 : difficulty === "medium" ? 8 : 10);
     audioSystem.playClickSound();
   };
 
@@ -160,50 +201,78 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
   };
 
   const startCooking = (stationId: string) => {
-    if (prepQueue.length === 0) return;
-    
-    const order = activeOrders.find((o) => {
-      const ingredientsMatch = o.ingredients.every((i) => prepQueue.includes(i));
-      return ingredientsMatch && !completedOrders.includes(o.id) && !failedOrders.includes(o.id);
+    const station = stations.find((s) => s.id === stationId);
+    if (station?.occupiedBy) return;
+
+    // Find an order that matches the prep queue
+    const matchingOrder = orders.find((order) => {
+      if (order.status !== "pending") return false;
+      const hasAllIngredients = order.dish.ingredients.every((i) => prepQueue.includes(i));
+      return hasAllIngredients;
     });
 
-    if (!order) {
-      // Wrong ingredients
-      setPrepQueue([]);
+    if (!matchingOrder) {
+      setFeedback("Wrong ingredients! Check the order requirements.");
       return;
     }
 
-    const station = cookingStations.find((s) => s.id === stationId);
-    if (station?.occupiedBy) return;
+    // Start cooking
+    setOrders((prev) => prev.map((o) => 
+      o.id === matchingOrder.id 
+        ? { ...o, status: "cooking", progress: 0 }
+        : o
+    ));
 
-    setCookingStations((stations) =>
-      stations.map((s) =>
-        s.id === stationId ? { ...s, occupiedBy: order.id, progress: 0 } : s
-      )
-    );
+    setStations((prev) => prev.map((s) => 
+      s.id === stationId 
+        ? { ...s, occupiedBy: matchingOrder, progress: 0 }
+        : s
+    ));
+
     setPrepQueue([]);
+    setFeedback("");
   };
 
-  const handleGameEnd = useCallback(() => {
-    const passed = completedOrders.length >= currentTask.orders.length * 0.6;
-    
-    if (passed) {
-      audioSystem.playSuccessSound();
-      const points = completedOrders.length * 30;
-      setTotalScore(points);
-      setShowSuccess(true);
-    } else {
-      audioSystem.playFailureSound();
-      setShowSuccess(true);
+  const serveOrder = (orderId: string) => {
+    const order = orders.find((o) => o.id === orderId);
+    if (!order || order.status !== "ready") return;
+
+    // Check special request
+    let bonus = 0;
+    if (order.specialRequest) {
+      bonus = 20; // Bonus for handling special request
     }
-  }, [completedOrders, currentTask]);
+
+    // Points based on remaining patience and difficulty
+    const basePoints = order.dish.difficulty * 30;
+    const patienceBonus = Math.floor(order.patience / 10);
+    const points = basePoints + patienceBonus + bonus;
+
+    setScore((prev) => prev + points);
+    setCompletedOrders((prev) => prev + 1);
+    audioSystem.playSuccessSound();
+    setFeedback(`Served ${order.dish.name}! +${points} points`);
+
+    // Remove order
+    setOrders((prev) => prev.filter((o) => o.id !== orderId));
+
+    // Check win condition
+    if (completedOrders + 1 >= targetOrders) {
+      setTimeout(() => setShowSuccess(true), 1000);
+    }
+  };
+
+  const trashOrder = (orderId: string) => {
+    setOrders((prev) => prev.filter((o) => o.id !== orderId));
+    setFeedback("Order trashed");
+  };
 
   const handleFinish = () => {
-    const success = completedOrders.length >= currentTask.orders.length * 0.6;
-    onComplete(success, totalScore, currentTask.orders.length * 30);
+    const success = completedOrders >= targetOrders * 0.6;
+    onComplete(success, score, targetOrders * 100);
   };
 
-  const allIngredients = [...new Set(currentTask.orders.flatMap((o) => o.ingredients))];
+  const allIngredients = [...new Set(currentMenu.flatMap((d) => d.ingredients))];
 
   if (showSuccess) {
     return (
@@ -212,11 +281,14 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
           <div className="text-6xl mb-4">👨‍🍳</div>
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Kitchen Closed!</h2>
           <p className="text-gray-600 mb-4">
-            You completed {completedOrders.length} of {currentTask.orders.length} orders!
+            You served {completedOrders} of {targetOrders} orders!
           </p>
           <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-xl p-4 mb-6">
             <div className="text-white text-sm">Total Score</div>
-            <div className="text-4xl font-bold text-white">{totalScore}</div>
+            <div className="text-4xl font-bold text-white">{score}</div>
+          </div>
+          <div className="text-sm text-gray-500 mb-4">
+            {burntOrders > 0 && <span>🔥 {burntOrders} orders burnt</span>}
           </div>
           <button
             onClick={handleFinish}
@@ -234,17 +306,32 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
       <div className="min-h-screen bg-gradient-to-br from-orange-600 via-red-500 to-yellow-500 p-4 md:p-8 flex items-center justify-center">
         <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
           <div className="text-6xl mb-4">👨‍🍳</div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">{currentTask.title}</h2>
-          <p className="text-gray-600 mb-6">{currentTask.description}</p>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Dinner Rush</h2>
+          <p className="text-gray-600 mb-6">
+            Serve {targetOrders} orders before customers leave!
+          </p>
           
           <div className="text-left bg-gray-100 rounded-lg p-4 mb-6">
-            <h3 className="font-bold text-gray-800 mb-2">📋 Orders:</h3>
-            <ul className="space-y-1">
-              {currentTask.orders.map((order) => (
-                <li key={order.id} className="text-gray-600">
-                  • {order.dish} ({order.ingredients.join(", ")})
-                </li>
+            <h3 className="font-bold text-gray-800 mb-2">📋 Menu:</h3>
+            <div className="space-y-1">
+              {currentMenu.map((dish) => (
+                <div key={dish.id} className="text-gray-600 flex items-center gap-2">
+                  <span>{dish.emoji}</span>
+                  <span>{dish.name}</span>
+                  <span className="text-xs text-gray-400">({dish.ingredients.join(", ")})</span>
+                </div>
               ))}
+            </div>
+          </div>
+
+          <div className="text-left bg-gray-100 rounded-lg p-4 mb-6">
+            <h3 className="font-bold text-gray-800 mb-2">🎮 How to Play:</h3>
+            <ul className="text-gray-600 text-sm space-y-1">
+              <li>• Orders appear automatically</li>
+              <li>• Click ingredients to prepare</li>
+              <li>• Put on a station to cook</li>
+              <li>• Serve before it burns!</li>
+              <li>• Watch out for special requests!</li>
             </ul>
           </div>
 
@@ -252,7 +339,7 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
             onClick={startGame}
             className="w-full py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white font-bold rounded-xl hover:from-orange-700 hover:to-red-700 transition-all"
           >
-            🔥 Start Cooking!
+            🔥 Start Service!
           </button>
         </div>
       </div>
@@ -265,11 +352,11 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-white">👨‍🍳 Chef Simulation</h1>
-            <p className="text-orange-200">Orders: {completedOrders.length}/{currentTask.orders.length}</p>
+            <h1 className="text-2xl font-bold text-white">👨‍🍳 Dinner Rush</h1>
+            <p className="text-orange-200">Served: {completedOrders}/{targetOrders}</p>
           </div>
           <div className="flex items-center gap-4">
-            <div className="text-2xl font-bold text-white">{totalScore} pts</div>
+            <div className="text-2xl font-bold text-white">{score} pts</div>
             <button
               onClick={onExit}
               className="px-4 py-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg transition-colors border border-red-500/30"
@@ -279,33 +366,90 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
           </div>
         </div>
 
-        {/* Active Orders */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
-          {currentTask.orders.map((order) => {
-            const isComplete = completedOrders.includes(order.id);
-            const isFailed = failedOrders.includes(order.id);
-            return (
-              <div
-                key={order.id}
-                className={`rounded-lg p-2 text-center ${
-                  isComplete ? "bg-green-500" : isFailed ? "bg-red-500" : "bg-white/90"
-                }`}
-              >
-                <div className={`font-bold text-sm ${isComplete || isFailed ? "text-white" : "text-gray-800"}`}>
-                  {order.dish}
+        {/* Feedback */}
+        {feedback && (
+          <div className="bg-white/20 backdrop-blur rounded-lg p-2 mb-4 text-center text-white font-bold">
+            {feedback}
+          </div>
+        )}
+
+        {/* Orders */}
+        <div className="mb-4">
+          <h3 className="text-white font-bold mb-2">📋 Orders ({orders.length})</h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+            {orders.map((order) => {
+              const statusColor = 
+                order.status === "burnt" ? "bg-red-600" :
+                order.status === "ready" ? "bg-green-500" :
+                order.status === "cooking" ? "bg-yellow-500" :
+                order.patience < 30 ? "bg-red-400" : "bg-white";
+              
+              return (
+                <div
+                  key={order.id}
+                  className={`${statusColor} rounded-lg p-2 text-center relative`}
+                >
+                  <div className="text-2xl">{order.dish.emoji}</div>
+                  <div className="font-bold text-sm text-gray-800">{order.dish.name}</div>
+                  {order.specialRequest && (
+                    <div className="text-xs bg-purple-500 text-white px-1 rounded mt-1">
+                      {order.specialRequest}
+                    </div>
+                  )}
+                  
+                  {/* Patience bar */}
+                  {order.status === "pending" && (
+                    <div className="w-full bg-gray-300 rounded-full h-1 mt-1">
+                      <div 
+                        className={`h-1 rounded-full ${order.patience < 30 ? "bg-red-500" : "bg-green-500"}`}
+                        style={{ width: `${order.patience}%` }}
+                      />
+                    </div>
+                  )}
+                  
+                  {/* Cooking progress */}
+                  {order.status === "cooking" && (
+                    <div className="w-full bg-gray-300 rounded-full h-1 mt-1">
+                      <div 
+                        className="bg-yellow-700 h-1 rounded-full"
+                        style={{ width: `${(order.progress / (order.dish.cookTime * 10)) * 100}%` }}
+                      />
+                    </div>
+                  )}
+                  
+                  {/* Action buttons */}
+                  {order.status === "ready" && (
+                    <button
+                      onClick={() => serveOrder(order.id)}
+                      className="mt-1 w-full py-1 bg-green-600 hover:bg-green-700 text-white text-xs rounded font-bold"
+                    >
+                      ✓ Serve!
+                    </button>
+                  )}
+                  {(order.status === "burnt" || order.patience <= 0) && (
+                    <button
+                      onClick={() => trashOrder(order.id)}
+                      className="mt-1 w-full py-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded font-bold"
+                    >
+                      🗑️ Trash
+                    </button>
+                  )}
                 </div>
-                {isComplete && <span className="text-white">✓ Done!</span>}
-                {isFailed && <span className="text-white">✗ Burnt!</span>}
+              );
+            })}
+            {orders.length === 0 && (
+              <div className="col-span-3 text-center text-white/50 py-4">
+                Waiting for orders...
               </div>
-            );
-          })}
+            )}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Ingredients */}
           <div>
-            <h3 className="text-white font-bold mb-3">🥗 Ingredients</h3>
-            <p className="text-orange-200 text-sm mb-2">Click ingredients to add to prep (must match an order)</p>
+            <h3 className="text-white font-bold mb-2">🥗 Ingredients</h3>
+            <p className="text-orange-200 text-xs mb-2">Click to add to prep (must match an order)</p>
             <div className="flex flex-wrap gap-2">
               {allIngredients.map((ingredient) => (
                 <button
@@ -344,33 +488,34 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
 
           {/* Cooking Stations */}
           <div>
-            <h3 className="text-white font-bold mb-3">🔥 Cooking Stations</h3>
-            <div className="space-y-3">
-              {cookingStations.map((station) => (
-                <div key={station.id} className="bg-gray-900 rounded-lg p-4">
-                  <div className="flex justify-between items-center mb-2">
+            <h3 className="text-white font-bold mb-2">🔥 Cooking Stations</h3>
+            <div className="space-y-2">
+              {stations.map((station) => (
+                <div key={station.id} className="bg-gray-900 rounded-lg p-3">
+                  <div className="flex justify-between items-center">
                     <span className="text-white font-bold">{station.icon} {station.name}</span>
-                    <button
-                      onClick={() => startCooking(station.id)}
-                      disabled={station.occupiedBy !== null || prepQueue.length === 0}
-                      className="px-3 py-1 bg-green-600 text-white rounded text-sm disabled:opacity-50"
-                    >
-                      Cook!
-                    </button>
+                    {station.occupiedBy ? (
+                      <div className="flex items-center gap-2">
+                        <span className="text-white text-sm">{station.occupiedBy.dish.emoji} {station.occupiedBy.dish.name}</span>
+                        <div className="w-20 bg-gray-700 rounded-full h-2">
+                          <div 
+                            className={`h-2 rounded-full ${
+                              station.progress > station.occupiedBy.dish.cookTime * 10 ? "bg-red-500" : "bg-green-500"
+                            }`}
+                            style={{ width: `${Math.min(100, (station.progress / (station.occupiedBy.dish.cookTime * 10)) * 100)}%` }}
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => startCooking(station.id)}
+                        disabled={prepQueue.length === 0}
+                        className="px-3 py-1 bg-green-600 text-white rounded text-sm disabled:opacity-50"
+                      >
+                        Cook
+                      </button>
+                    )}
                   </div>
-                  {station.occupiedBy && (
-                    <div>
-                      <div className="text-white text-sm mb-1">
-                        Cooking: {currentTask.orders.find((o) => o.id === station.occupiedBy)?.dish}
-                      </div>
-                      <div className="w-full bg-gray-700 rounded-full h-2">
-                        <div
-                          className="bg-green-500 h-2 rounded-full transition-all"
-                          style={{ width: `${station.progress}%` }}
-                        />
-                      </div>
-                    </div>
-                  )}
                 </div>
               ))}
             </div>

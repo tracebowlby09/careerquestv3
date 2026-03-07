@@ -17,148 +17,122 @@ interface Room {
   emoji: string;
   width: number;
   height: number;
+  cost: number;
 }
 
-interface ArchitectTask {
+interface ClientRequirement {
   id: string;
-  title: string;
+  type: "room" | "feature" | "style";
   description: string;
-  hint: string;
-  rooms: Room[];
+  met: boolean;
+}
+
+interface HouseDesign {
+  id: string;
+  name: string;
+  client: string;
+  clientAvatar: string;
+  description: string;
+  requirements: ClientRequirement[];
+  availableRooms: Room[];
   gridSize: number;
-  requiredPlacements: { roomId: string; area: string }[];
+  maxBudget: number;
+  zoningRules: string[];
   points: number;
 }
 
-const architectTasks: Record<Difficulty, ArchitectTask[]> = {
+const houseDesigns: Record<Difficulty, HouseDesign[]> = {
   easy: [
     {
-      id: "arch-e1",
-      title: "Cozy Studio Apartment",
-      description: "Design a simple studio apartment!",
-      hint: "Place the bed in a quiet corner 🛏️",
+      id: "house-e1",
+      name: "Cozy Cottage",
+      client: "Sarah & Tom",
+      clientAvatar: "👫",
+      description: "A young couple wants a simple starter home.",
       gridSize: 4,
-      rooms: [
-        { id: "bed", name: "Bed", emoji: "🛏️", width: 2, height: 2 },
-        { id: "kitchen", name: "Kitchen", emoji: "🍳", width: 1, height: 1 },
-        { id: "bath", name: "Bathroom", emoji: "🚿", width: 1, height: 1 },
+      maxBudget: 500,
+      zoningRules: ["Must have outdoor space"],
+      requirements: [
+        { id: "r1", type: "room", description: "2 bedrooms", met: false },
+        { id: "r2", type: "feature", description: "Kitchen", met: false },
+        { id: "r3", type: "feature", description: "Bathroom", met: false },
       ],
-      requiredPlacements: [
-        { roomId: "bed", area: "corner" },
-      ],
-      points: 100,
-    },
-    {
-      id: "arch-e2",
-      title: "Tiny House",
-      description: "Build a tiny house with all essentials!",
-      hint: "Put the kitchen near the living area 🍳",
-      gridSize: 4,
-      rooms: [
-        { id: "bed", name: "Bed", emoji: "🛏️", width: 2, height: 1 },
-        { id: "kitchen", name: "Kitchen", emoji: "🍳", width: 1, height: 1 },
-        { id: "bath", name: "Bathroom", emoji: "🚿", width: 1, height: 1 },
-        { id: "living", name: "Living", emoji: "🛋️", width: 1, height: 1 },
-      ],
-      requiredPlacements: [
-        { roomId: "kitchen", area: "top" },
-      ],
-      points: 100,
-    },
-    {
-      id: "arch-e3",
-      title: "Dream Bedroom",
-      description: "Design your perfect bedroom!",
-      hint: "Bed goes in the center or corner",
-      gridSize: 4,
-      rooms: [
-        { id: "bed", name: "Bed", emoji: "🛏️", width: 2, height: 2 },
-        { id: "desk", name: "Desk", emoji: "🖥️", width: 1, height: 1 },
-        { id: "closet", name: "Closet", emoji: "👕", width: 1, height: 1 },
-      ],
-      requiredPlacements: [
-        { roomId: "desk", area: "edge" },
+      availableRooms: [
+        { id: "bed1", name: "Bedroom", emoji: "🛏️", width: 2, height: 2, cost: 100 },
+        { id: "bed2", name: "Bedroom 2", emoji: "🛏️", width: 2, height: 2, cost: 100 },
+        { id: "living", name: "Living Room", emoji: "🛋️", width: 2, height: 2, cost: 80 },
+        { id: "kitchen", name: "Kitchen", emoji: "🍳", width: 1, height: 2, cost: 60 },
+        { id: "bath", name: "Bathroom", emoji: "🚿", width: 1, height: 1, cost: 40 },
+        { id: "garden", name: "Garden", emoji: "🌻", width: 2, height: 1, cost: 30 },
       ],
       points: 100,
     },
   ],
   medium: [
     {
-      id: "arch-m1",
-      title: "Family Home",
-      description: "Design a 3-room family apartment!",
-      hint: "Bedrooms on one side, living areas on the other",
+      id: "house-m1",
+      name: "Family Home",
+      client: "The Johnson Family",
+      clientAvatar: "👨‍👩‍👧‍👦",
+      description: "A family of 4 needs more space.",
       gridSize: 5,
-      rooms: [
-        { id: "master", name: "Master Bed", emoji: "🛏️", width: 2, height: 2 },
-        { id: "kid", name: "Kids Room", emoji: "🧸", width: 2, height: 2 },
-        { id: "living", name: "Living Room", emoji: "🛋️", width: 2, height: 2 },
-        { id: "kitchen", name: "Kitchen", emoji: "🍳", width: 1, height: 2 },
-        { id: "bath", name: "Bathroom", emoji: "🚿", width: 1, height: 1 },
+      maxBudget: 800,
+      zoningRules: ["Must have backyard", "Garage required"],
+      requirements: [
+        { id: "r1", type: "room", description: "3 bedrooms", met: false },
+        { id: "r2", type: "room", description: "2 bathrooms", met: false },
+        { id: "r3", type: "feature", description: "Large kitchen", met: false },
+        { id: "r4", type: "feature", description: "Living room", met: false },
+        { id: "r5", type: "feature", description: "Garage", met: false },
       ],
-      requiredPlacements: [
-        { roomId: "master", area: "corner" },
-        { roomId: "living", area: "bottom" },
-      ],
-      points: 150,
-    },
-    {
-      id: "arch-m2",
-      title: "Pet Shop",
-      description: "Create a friendly pet shop layout!",
-      hint: "Reception at the front, cages in the back",
-      gridSize: 5,
-      rooms: [
-        { id: "reception", name: "Reception", emoji: "🏪", width: 2, height: 1 },
-        { id: "dogs", name: "Dog Area", emoji: "🐕", width: 2, height: 2 },
-        { id: "cats", name: "Cat Area", emoji: "🐱", width: 1, height: 2 },
-        { id: "food", name: "Food Storage", emoji: "🦴", width: 1, height: 1 },
-      ],
-      requiredPlacements: [
-        { roomId: "reception", area: "top" },
+      availableRooms: [
+        { id: "master", name: "Master Bedroom", emoji: "🛏️", width: 2, height: 2, cost: 120 },
+        { id: "bed1", name: "Kids Room", emoji: "🧸", width: 2, height: 2, cost: 90 },
+        { id: "bed2", name: "Guest Room", emoji: "🛏️", width: 2, height: 2, cost: 80 },
+        { id: "living", name: "Living Room", emoji: "🛋️", width: 2, height: 2, cost: 80 },
+        { id: "kitchen", name: "Kitchen", emoji: "🍳", width: 2, height: 1, cost: 70 },
+        { id: "bath1", name: "Bathroom", emoji: "🚿", width: 1, height: 1, cost: 40 },
+        { id: "bath2", name: "Bathroom 2", emoji: "🚿", width: 1, height: 1, cost: 40 },
+        { id: "garage", name: "Garage", emoji: "🚗", width: 2, height: 2, cost: 100 },
+        { id: "yard", name: "Backyard", emoji: "🌳", width: 2, height: 1, cost: 30 },
       ],
       points: 150,
     },
   ],
   hard: [
     {
-      id: "arch-h1",
-      title: "Luxury Penthouse",
-      description: "Design an amazing penthouse suite!",
-      hint: "Master suite in corner, views everywhere!",
+      id: "house-h1",
+      name: "Luxury Estate",
+      client: "Mansion Client",
+      clientAvatar: "💼",
+      description: "A wealthy client wants their dream home with eco-friendly features.",
       gridSize: 6,
-      rooms: [
-        { id: "master", name: "Master Suite", emoji: "🛏️", width: 2, height: 2 },
-        { id: "living", name: "Living Room", emoji: "🛋️", width: 2, height: 2 },
-        { id: "kitchen", name: "Gourmet Kitchen", emoji: "🍳", width: 2, height: 1 },
-        { id: "dining", name: "Dining Room", emoji: "🍽️", width: 1, height: 2 },
-        { id: "bath1", name: "Master Bath", emoji: "🛁", width: 1, height: 1 },
-        { id: "balcony", name: "Balcony", emoji: "🌅", width: 2, height: 1 },
+      maxBudget: 1500,
+      zoningRules: ["Must have solar panels", "Energy efficient", "Minimum 4 bedrooms"],
+      requirements: [
+        { id: "r1", type: "room", description: "4 bedrooms", met: false },
+        { id: "r2", type: "room", description: "3 bathrooms", met: false },
+        { id: "r3", type: "feature", description: "Gourmet kitchen", met: false },
+        { id: "r4", type: "feature", description: "Home office", met: false },
+        { id: "r5", type: "feature", description: "Solar panels", met: false },
+        { id: "r6", type: "style", description: "Eco-friendly materials", met: false },
+        { id: "r7", type: "feature", description: "Pool", met: false },
       ],
-      requiredPlacements: [
-        { roomId: "master", area: "corner" },
-        { roomId: "balcony", area: "edge" },
-        { roomId: "living", area: "corner" },
-      ],
-      points: 200,
-    },
-    {
-      id: "arch-h2",
-      title: "Vet Clinic",
-      description: "Build a functional veterinary clinic!",
-      hint: "Waiting room front, exam rooms in back",
-      gridSize: 6,
-      rooms: [
-        { id: "waiting", name: "Waiting Room", emoji: "🪑", width: 2, height: 2 },
-        { id: "reception", name: "Reception", emoji: "🏥", width: 1, height: 1 },
-        { id: "exam1", name: "Exam Room 1", emoji: "🩺", width: 1, height: 1 },
-        { id: "exam2", name: "Exam Room 2", emoji: "🩺", width: 1, height: 1 },
-        { id: "surgery", name: "Surgery", emoji: "💉", width: 1, height: 2 },
-        { id: "storage", name: "Storage", emoji: "📦", width: 1, height: 1 },
-      ],
-      requiredPlacements: [
-        { roomId: "reception", area: "top" },
-        { roomId: "surgery", area: "bottom" },
+      availableRooms: [
+        { id: "master", name: "Master Suite", emoji: "🛏️", width: 2, height: 2, cost: 150 },
+        { id: "bed1", name: "Bedroom 2", emoji: "🛏️", width: 2, height: 2, cost: 100 },
+        { id: "bed2", name: "Bedroom 3", emoji: "🛏️", width: 2, height: 2, cost: 100 },
+        { id: "bed3", name: "Bedroom 4", emoji: "🛏️", width: 2, height: 2, cost: 100 },
+        { id: "living", name: "Living Room", emoji: "🛋️", width: 2, height: 2, cost: 100 },
+        { id: "dining", name: "Dining Room", emoji: "🍽️", width: 2, height: 2, cost: 80 },
+        { id: "kitchen", name: "Gourmet Kitchen", emoji: "🍳", width: 2, height: 2, cost: 150 },
+        { id: "office", name: "Home Office", emoji: "💼", width: 1, height: 1, cost: 60 },
+        { id: "bath1", name: "Master Bath", emoji: "🛁", width: 1, height: 1, cost: 60 },
+        { id: "bath2", name: "Bathroom 2", emoji: "🚿", width: 1, height: 1, cost: 40 },
+        { id: "bath3", name: "Bathroom 3", emoji: "🚿", width: 1, height: 1, cost: 40 },
+        { id: "solar", name: "Solar Panels", emoji: "☀️", width: 2, height: 1, cost: 100 },
+        { id: "pool", name: "Pool", emoji: "🏊", width: 2, height: 2, cost: 150 },
+        { id: "eco", name: "Eco Materials", emoji: "🌿", width: 1, height: 1, cost: 50 },
       ],
       points: 200,
     },
@@ -166,43 +140,89 @@ const architectTasks: Record<Difficulty, ArchitectTask[]> = {
 };
 
 export default function ArchitectSimulation({ difficulty, onComplete, onOpenSettings, onExit }: ArchitectSimulationProps) {
-  const tasks = architectTasks[difficulty];
-  const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
+  const designs = houseDesigns[difficulty];
+  const [currentDesignIndex, setCurrentDesignIndex] = useState(0);
   const [placedRooms, setPlacedRooms] = useState<{ roomId: string; x: number; y: number }[]>([]);
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
   const [hoverPos, setHoverPos] = useState<{ x: number; y: number } | null>(null);
-  const [feedback, setFeedback] = useState<"correct" | "incorrect" | null>(null);
   const [totalScore, setTotalScore] = useState(0);
-  const [completedTasks, setCompletedTasks] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [showHint, setShowHint] = useState(false);
+  const [clientSatisfaction, setClientSatisfaction] = useState(0);
+  const [feedback, setFeedback] = useState("");
 
-  const currentTask = tasks[currentTaskIndex];
+  const currentDesign = designs[currentDesignIndex];
 
-  // Initialize
-  useEffect(() => {
-    if (currentTask) {
-      setPlacedRooms([]);
-      setSelectedRoom(null);
-      setFeedback(null);
-      setShowHint(false);
-    }
-  }, [currentTask]);
+  // Calculate budget
+  const calculateTotalCost = () => {
+    return placedRooms.reduce((sum, placement) => {
+      const room = currentDesign.availableRooms.find(r => r.id === placement.roomId);
+      return sum + (room?.cost || 0);
+    }, 0);
+  };
 
-  // Check if a placement is valid
+  // Check requirements
+  const checkRequirements = () => {
+    const newRequirements = currentDesign.requirements.map((req) => {
+      let met = false;
+      
+      if (req.type === "room") {
+        // Count specific room types
+        const bedroomCount = placedRooms.filter(p => {
+          const room = currentDesign.availableRooms.find(r => r.id === p.roomId);
+          return room?.name.includes("Bedroom");
+        }).length;
+        
+        if (req.description.includes("2 bedrooms") && bedroomCount >= 2) met = true;
+        if (req.description.includes("3 bedrooms") && bedroomCount >= 3) met = true;
+        if (req.description.includes("4 bedrooms") && bedroomCount >= 4) met = true;
+      }
+      
+      if (req.type === "feature") {
+        // Check for specific features
+        met = placedRooms.some(p => {
+          const room = currentDesign.availableRooms.find(r => r.id === p.roomId);
+          if (req.description === "Kitchen") return room?.name.includes("Kitchen");
+          if (req.description === "Bathroom") return room?.name.includes("Bath");
+          if (req.description === "Large kitchen") return room?.name.includes("Gourmet");
+          if (req.description === "Living room") return room?.name.includes("Living");
+          if (req.description === "Garage") return room?.name.includes("Garage");
+          if (req.description === "Solar panels") return room?.name.includes("Solar");
+          if (req.description === "Pool") return room?.name.includes("Pool");
+          if (req.description === "Home office") return room?.name.includes("Office");
+          return false;
+        });
+      }
+      
+      if (req.type === "style") {
+        met = placedRooms.some(p => {
+          const room = currentDesign.availableRooms.find(r => r.id === p.roomId);
+          return room?.name.includes("Eco");
+        });
+      }
+      
+      return { ...req, met };
+    });
+
+    return newRequirements;
+  };
+
+  const updatedRequirements = checkRequirements();
+  const totalCost = calculateTotalCost();
+  const satisfiedRequirements = updatedRequirements.filter(r => r.met).length;
+  const satisfactionPercent = Math.round((satisfiedRequirements / currentDesign.requirements.length) * 100);
+
   const isValidPlacement = (roomId: string, x: number, y: number): boolean => {
-    if (!currentTask) return false;
-    const room = currentTask.rooms.find(r => r.id === roomId);
+    const room = currentDesign.availableRooms.find(r => r.id === roomId);
     if (!room) return false;
     
     // Check bounds
-    if (x + room.width > currentTask.gridSize || y + room.height > currentTask.gridSize) {
+    if (x + room.width > currentDesign.gridSize || y + room.height > currentDesign.gridSize) {
       return false;
     }
     
-    // Check overlap with existing rooms
+    // Check overlap
     for (const placed of placedRooms) {
-      const existing = currentTask.rooms.find(r => r.id === placed.roomId);
+      const existing = currentDesign.availableRooms.find(r => r.id === placed.roomId);
       if (!existing) continue;
       
       const overlaps = !(
@@ -218,118 +238,92 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
     return true;
   };
 
-  // Check if all requirements are met
-  const checkRequirements = (): boolean => {
-    if (!currentTask) return false;
-    
-    for (const req of currentTask.requiredPlacements) {
-      const placed = placedRooms.find(p => p.roomId === req.roomId);
-      if (!placed) return false;
-      
-      const room = currentTask.rooms.find(r => r.id === req.roomId);
-      if (!room) return false;
-      
-      if (req.area === "corner") {
-        const isCorner = 
-          (placed.x === 0 || placed.x + room.width === currentTask.gridSize) &&
-          (placed.y === 0 || placed.y + room.height === currentTask.gridSize);
-        if (!isCorner) return false;
-      } else if (req.area === "edge") {
-        const isEdge = 
-          placed.x === 0 || 
-          placed.x + room.width === currentTask.gridSize ||
-          placed.y === 0 || 
-          placed.y + room.height === currentTask.gridSize;
-        if (!isEdge) return false;
-      } else if (req.area === "top") {
-        if (placed.y !== 0) return false;
-      } else if (req.area === "bottom") {
-        if (placed.y + room.height !== currentTask.gridSize) return false;
+  const handleRoomClick = (roomId: string) => {
+    setSelectedRoom(roomId === selectedRoom ? null : roomId);
+  };
+
+  const handleGridClick = (x: number, y: number) => {
+    if (!selectedRoom) {
+      // Remove room if clicking on it
+      const roomIndex = placedRooms.findIndex(p => 
+        p.x === x && placedRooms.filter(p2 => p2.roomId === placedRooms.find(p3 => p3.x === x && p3.y === y)?.roomId).some(p2 => {
+          const room = currentDesign.availableRooms.find(r => r.id === p2.roomId);
+          return room && x >= p2.x && x < p2.x + room.width && y >= p2.y && y < p2.y + room.height;
+        })
+      );
+      if (roomIndex >= 0) {
+        setPlacedRooms(placedRooms.filter((_, i) => i !== roomIndex));
       }
-    }
-    
-    return true;
-  };
-
-  const handleCellClick = (x: number, y: number) => {
-    if (!selectedRoom || !currentTask) return;
-    
-    if (placedRooms.some(p => p.roomId === selectedRoom)) {
-      // Room already placed, don't allow repositioning in this simple version
       return;
     }
-    
+
     if (isValidPlacement(selectedRoom, x, y)) {
+      // Check budget
+      const room = currentDesign.availableRooms.find(r => r.id === selectedRoom);
+      if (room && totalCost + room.cost > currentDesign.maxBudget) {
+        setFeedback("Over budget!");
+        return;
+      }
+      
       setPlacedRooms([...placedRooms, { roomId: selectedRoom, x, y }]);
-      setSelectedRoom(null);
-      audioSystem.playClickSound();
+      setFeedback("");
     } else {
-      // Invalid placement feedback
-      audioSystem.playFailureSound();
+      setFeedback("Can't place room here - no space!");
     }
   };
 
-  const handleSubmit = () => {
-    if (!currentTask) return;
-    
-    // Check if all rooms are placed
-    if (placedRooms.length < currentTask.rooms.length) {
-      audioSystem.playFailureSound();
+  const clearDesign = () => {
+    setPlacedRooms([]);
+    setFeedback("");
+  };
+
+  const submitDesign = () => {
+    if (satisfiedRequirements < currentDesign.requirements.length) {
+      setFeedback("Client requirements not met!");
       return;
     }
-    
-    const success = checkRequirements();
-    
-    if (success) {
-      audioSystem.playSuccessSound();
-      setTotalScore((prev) => prev + currentTask.points);
-      setFeedback("correct");
-      
-      setTimeout(() => {
-        if (currentTaskIndex < tasks.length - 1) {
-          setCurrentTaskIndex((prev) => prev + 1);
-          setCompletedTasks((prev) => prev + 1);
-        } else {
-          setShowSuccess(true);
-        }
-      }, 1500);
-    } else {
-      audioSystem.playFailureSound();
-      setFeedback("incorrect");
-      setTimeout(() => {
-        setFeedback(null);
-      }, 1500);
+    if (totalCost > currentDesign.maxBudget) {
+      setFeedback("Over budget!");
+      return;
     }
+
+    // Calculate score
+    const budgetEfficiency = Math.round(((currentDesign.maxBudget - totalCost) / currentDesign.maxBudget) * 100);
+    const requirementBonus = satisfiedRequirements * 30;
+    const points = currentDesign.points + requirementBonus + budgetEfficiency;
+    
+    setTotalScore(points);
+    setClientSatisfaction(satisfactionPercent);
+    audioSystem.playSuccessSound();
+    setShowSuccess(true);
   };
 
   const handleFinish = () => {
-    const success = totalScore > 0;
-    onComplete(success, totalScore, tasks.reduce((sum, t) => sum + t.points, 0));
+    const success = satisfactionPercent >= 80;
+    onComplete(success, totalScore, currentDesign.points + 300);
   };
-
-  // Get preview room at hover position
-  const getPreviewRoom = () => {
-    if (!selectedRoom || !hoverPos || !currentTask) return null;
-    const room = currentTask.rooms.find(r => r.id === selectedRoom);
-    if (!room) return null;
-    
-    const isValid = isValidPlacement(selectedRoom, hoverPos.x, hoverPos.y);
-    return { room, isValid };
-  };
-
-  const preview = getPreviewRoom();
 
   if (showSuccess) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-teal-600 via-cyan-500 to-blue-600 p-4 md:p-8 flex items-center justify-center">
         <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
-          <div className="text-6xl mb-4">🎉</div>
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">Architect Complete!</h2>
-          <p className="text-xl text-gray-600 mb-2">Final Score: {totalScore}</p>
-          <p className="text-gray-500 mb-6">You designed {completedTasks + 1} amazing buildings!</p>
+          <div className="text-6xl mb-4">🏠</div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Design Complete!</h2>
+          <p className="text-gray-600 mb-4">
+            Client satisfaction: {clientSatisfaction}%
+          </p>
+          <div className="bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl p-4 mb-6">
+            <div className="text-white text-sm">Total Score</div>
+            <div className="text-4xl font-bold text-white">{totalScore}</div>
+          </div>
+          <div className="text-sm text-gray-500 mb-4">
+            {clientSatisfaction >= 100 ? "🌟 Perfect design! Client loves it!" :
+             clientSatisfaction >= 80 ? "👍 Great design! Client is happy." :
+             "⚠️ Client wants some changes."}
+          </div>
           <button
             onClick={handleFinish}
-            className="w-full py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-bold rounded-xl hover:from-teal-600 hover:to-cyan-600 transition-all"
+            className="w-full py-3 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all"
           >
             Continue
           </button>
@@ -340,12 +334,12 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-600 via-cyan-500 to-blue-600 p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-white">🏛️ Architect Simulation</h1>
-            <p className="text-cyan-200">Task {currentTaskIndex + 1} of {tasks.length}</p>
+            <h1 className="text-2xl font-bold text-white">🏛️ Dream House Design</h1>
+            <p className="text-cyan-200">{currentDesign.name}</p>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-2xl font-bold text-white">{totalScore} pts</div>
@@ -358,143 +352,156 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
           </div>
         </div>
 
-        {/* Task Info */}
+        {/* Client Info */}
         <div className="bg-white/10 backdrop-blur rounded-xl p-4 mb-4">
-          <div className="flex justify-between items-start">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-3xl">{currentDesign.clientAvatar}</span>
             <div>
-              <h2 className="text-xl font-bold text-white mb-1">{currentTask.title}</h2>
-              <p className="text-cyan-100">{currentTask.description}</p>
+              <div className="text-white font-bold">{currentDesign.client}</div>
+              <div className="text-cyan-200 text-sm">{currentDesign.description}</div>
             </div>
-            <button
-              onClick={() => setShowHint(!showHint)}
-              className="px-3 py-1 bg-yellow-500/20 hover:bg-yellow-500/40 text-yellow-300 rounded-lg text-sm"
-            >
-              💡 Hint
-            </button>
           </div>
-          {showHint && (
-            <div className="mt-3 p-3 bg-yellow-500/20 rounded-lg">
-              <p className="text-yellow-200">{currentTask.hint}</p>
-            </div>
-          )}
+          <div className="flex flex-wrap gap-2">
+            {currentDesign.requirements.map((req) => (
+              <span 
+                key={req.id}
+                className={`px-2 py-1 rounded text-xs font-bold ${
+                  updatedRequirements.find(r => r.id === req.id)?.met 
+                    ? "bg-green-500 text-white" 
+                    : "bg-gray-600 text-white"
+                }`}
+              >
+                {req.met ? "✓" : "○"} {req.description}
+              </span>
+            ))}
+          </div>
         </div>
 
-        {/* Main Game Area */}
+        {/* Feedback */}
+        {feedback && (
+          <div className="bg-red-500/20 border border-red-500 rounded-xl p-2 mb-4 text-center">
+            <span className="text-red-300 font-bold">{feedback}</span>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Room Selection */}
-          <div className="bg-white/10 backdrop-blur rounded-xl p-4">
-            <h3 className="text-white font-bold mb-3">🧱 Rooms</h3>
+          <div>
+            <h3 className="text-white font-bold mb-3">🏗️ Available Rooms</h3>
             <div className="space-y-2">
-              {currentTask.rooms.map((room) => {
-                const isPlaced = placedRooms.some(p => p.roomId === room.id);
-                const isSelected = selectedRoom === room.id;
-                
-                return (
-                  <button
-                    key={room.id}
-                    onClick={() => !isPlaced && setSelectedRoom(isSelected ? null : room.id)}
-                    disabled={isPlaced}
-                    className={`w-full p-3 rounded-lg flex items-center gap-3 transition-all ${
-                      isPlaced 
-                        ? "bg-green-500/30 text-green-200 cursor-not-allowed"
-                        : isSelected
-                          ? "bg-cyan-500 text-white ring-2 ring-cyan-300"
-                          : "bg-white/10 text-white hover:bg-white/20"
-                    }`}
-                  >
-                    <span className="text-2xl">{room.emoji}</span>
-                    <div className="text-left">
-                      <div className="font-bold">{room.name}</div>
-                      <div className="text-xs opacity-70">{room.width}x{room.height}</div>
+              {currentDesign.availableRooms.map((room) => (
+                <button
+                  key={room.id}
+                  onClick={() => handleRoomClick(room.id)}
+                  className={`w-full rounded-lg p-3 text-left transition-all ${
+                    selectedRoom === room.id 
+                      ? "ring-2 ring-white bg-teal-600" 
+                      : "bg-white/90 hover:bg-white"
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">{room.emoji}</span>
+                    <div className="flex-1">
+                      <div className="font-bold text-gray-800 text-sm">{room.name}</div>
+                      <div className="text-xs text-gray-500">{room.width}x{room.height}</div>
                     </div>
-                    {isPlaced && <span className="ml-auto">✅</span>}
-                  </button>
-                );
-              })}
+                    <div className="text-sm font-bold text-gray-600">${room.cost}</div>
+                  </div>
+                </button>
+              ))}
             </div>
-            
-            {selectedRoom && (
-              <div className="mt-4 p-3 bg-cyan-500/20 rounded-lg">
-                <p className="text-cyan-200 text-sm">Click on the grid to place {currentTask.rooms.find(r => r.id === selectedRoom)?.name}!</p>
-              </div>
-            )}
-            
-            {/* Submit Button */}
-            <button
-              onClick={handleSubmit}
-              disabled={placedRooms.length < currentTask.rooms.length}
-              className={`w-full mt-4 py-3 rounded-lg font-bold transition-all ${
-                placedRooms.length < currentTask.rooms.length
-                  ? "bg-gray-500/50 text-gray-300 cursor-not-allowed"
-                  : feedback === "correct"
-                    ? "bg-green-500 text-white"
-                    : feedback === "incorrect"
-                      ? "bg-red-500 text-white"
-                      : "bg-gradient-to-r from-teal-500 to-cyan-500 text-white hover:from-teal-600 hover:to-cyan-600"
-              }`}
-            >
-              {feedback === "correct" ? "✅ Perfect!" : feedback === "incorrect" ? "❌ Try Again!" : "🏁 Submit Design"}
-            </button>
           </div>
 
-          {/* Grid */}
-          <div className="lg:col-span-2">
-            <h3 className="text-white font-bold mb-3">📐 Your Building ({currentTask.gridSize}x{currentTask.gridSize})</h3>
+          {/* Design Grid */}
+          <div>
+            <h3 className="text-white font-bold mb-3">📐 Design Grid</h3>
             <div 
-              className="grid gap-1 bg-gray-800 p-2 rounded-lg"
+              className="bg-green-300 rounded-lg p-2 relative"
               style={{ 
-                gridTemplateColumns: `repeat(${currentTask.gridSize}, 1fr)`,
-                aspectRatio: '1'
+                display: "grid",
+                gridTemplateColumns: `repeat(${currentDesign.gridSize}, 1fr)`,
+                gridTemplateRows: `repeat(${currentDesign.gridSize}, 1fr)`,
+                aspectRatio: "1/1"
               }}
+              onMouseLeave={() => setHoverPos(null)}
             >
-              {Array.from({ length: currentTask.gridSize * currentTask.gridSize }).map((_, i) => {
-                const x = i % currentTask.gridSize;
-                const y = Math.floor(i / currentTask.gridSize);
+              {Array.from({ length: currentDesign.gridSize * currentDesign.gridSize }).map((_, i) => {
+                const x = i % currentDesign.gridSize;
+                const y = Math.floor(i / currentDesign.gridSize);
                 
-                // Find if a room is here
-                const placedRoom = placedRooms.find(p => {
-                  const room = currentTask.rooms.find(r => r.id === p.roomId);
+                // Find room at this position
+                const roomAtPos = placedRooms.find(p => {
+                  const room = currentDesign.availableRooms.find(r => r.id === p.roomId);
                   return room && x >= p.x && x < p.x + room.width && y >= p.y && y < p.y + room.height;
                 });
                 
-                const room = placedRoom ? currentTask.rooms.find(r => r.id === placedRoom.roomId) : null;
-                
-                // Preview at hover position
-                const isPreview = preview && hoverPos && x >= hoverPos.x && x < hoverPos.x + preview.room.width && y >= hoverPos.y && y < hoverPos.y + preview.room.height;
-                
+                const room = roomAtPos ? currentDesign.availableRooms.find(r => r.id === roomAtPos.roomId) : null;
+                const isHovered = hoverPos?.x === x && hoverPos?.y === y && selectedRoom;
+                const canPlace = selectedRoom && isValidPlacement(selectedRoom, x, y);
+
                 return (
                   <div
                     key={i}
-                    onMouseEnter={() => setHoverPos({ x, y })}
-                    onMouseLeave={() => setHoverPos(null)}
-                    onClick={() => handleCellClick(x, y)}
-                    className={`rounded transition-all cursor-pointer ${
+                    className={`border border-green-400 rounded m-0.5 flex items-center justify-center cursor-pointer transition-all ${
                       room 
-                        ? "bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-2xl"
-                        : isPreview
-                          ? preview.isValid 
-                            ? "bg-green-500/50 border-2 border-green-400 dashed"
-                            : "bg-red-500/50 border-2 border-red-400 dashed"
-                        : selectedRoom
-                          ? "bg-white/10 hover:bg-white/20"
-                          : "bg-gray-700"
+                        ? "bg-teal-500" 
+                        : isHovered && canPlace 
+                          ? "bg-teal-300" 
+                          : isHovered && !canPlace 
+                            ? "bg-red-300" 
+                            : "bg-green-200"
                     }`}
+                    onClick={() => handleGridClick(x, y)}
+                    onMouseEnter={() => setHoverPos({ x, y })}
                   >
-                    {room && (
-                      <span className="drop-shadow-lg">{room.emoji}</span>
-                    )}
-                    {isPreview && !room && (
-                      <span className="text-2xl opacity-50">{preview.room.emoji}</span>
-                    )}
+                    {room && <span className="text-lg">{room.emoji}</span>}
                   </div>
                 );
               })}
             </div>
+          </div>
+
+          {/* Stats & Actions */}
+          <div>
+            <h3 className="text-white font-bold mb-3">📊 Design Stats</h3>
             
-            {/* Progress */}
-            <div className="mt-4 flex justify-between text-white">
-              <span>Rooms placed: {placedRooms.length}/{currentTask.rooms.length}</span>
-              <span>Score: {totalScore}</span>
+            <div className="space-y-3 mb-4">
+              <div className="bg-white/10 rounded-lg p-3 text-center">
+                <div className="text-white/70 text-sm">Budget</div>
+                <div className={`text-2xl font-bold ${totalCost <= currentDesign.maxBudget ? "text-green-400" : "text-red-400"}`}>
+                  ${totalCost} / ${currentDesign.maxBudget}
+                </div>
+              </div>
+              
+              <div className="bg-white/10 rounded-lg p-3 text-center">
+                <div className="text-white/70 text-sm">Requirements Met</div>
+                <div className={`text-2xl font-bold ${satisfactionPercent >= 80 ? "text-green-400" : satisfactionPercent >= 50 ? "text-yellow-400" : "text-red-400"}`}>
+                  {satisfiedRequirements} / {currentDesign.requirements.length}
+                </div>
+                <div className="text-white/50 text-xs">Client satisfaction: {satisfactionPercent}%</div>
+              </div>
+
+              <div className="bg-white/10 rounded-lg p-3">
+                <div className="text-white/70 text-sm mb-2">Zoning Rules:</div>
+                {currentDesign.zoningRules.map((rule, i) => (
+                  <div key={i} className="text-white text-xs">• {rule}</div>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <button
+                onClick={submitDesign}
+                className="w-full py-3 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all"
+              >
+                ✓ Submit Design
+              </button>
+              <button
+                onClick={clearDesign}
+                className="w-full py-2 bg-red-600/50 hover:bg-red-600 text-white font-bold rounded-xl transition-all"
+              >
+                🗑️ Clear All
+              </button>
             </div>
           </div>
         </div>
