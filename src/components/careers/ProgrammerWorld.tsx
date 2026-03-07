@@ -17,6 +17,7 @@ interface ProgrammerWorldProps {
   difficulty: Difficulty;
   onComplete: (success: boolean, score: number, total: number) => void;
   isQuickRecall?: boolean;
+  alwaysCorrect?: boolean;
 }
 
 interface Question {
@@ -519,7 +520,7 @@ const quickRecallQuestions: Question[] = [
   },
 ];
 
-export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall }: ProgrammerWorldProps) {
+export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect }: ProgrammerWorldProps) {
   const [stage, setStage] = useState<"intro" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -577,6 +578,21 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall 
     : questions[difficulty];
   const currentQuestion = currentQuestions[currentQuestionIndex];
   const totalQuestions = currentQuestions.length;
+
+  // Auto-select correct answer when alwaysCorrect is enabled
+  useEffect(() => {
+    if (alwaysCorrect && currentQuestion) {
+      const correctOption = currentQuestion.options.find(opt => opt.correct);
+      if (correctOption) {
+        setSelectedAnswer(correctOption.id);
+        // Auto-submit after a brief delay
+        setTimeout(() => {
+          const submitBtn = document.getElementById('submit-btn');
+          if (submitBtn) submitBtn.click();
+        }, 300);
+      }
+    }
+  }, [alwaysCorrect, currentQuestionIndex, currentQuestion]);
 
   // Shuffle options for current question
   const shuffledOptions = useMemo(() => {

@@ -17,6 +17,7 @@ interface EngineerWorldProps {
   difficulty: Difficulty;
   onComplete: (success: boolean, score: number, total: number) => void;
   isQuickRecall?: boolean;
+  alwaysCorrect?: boolean;
 }
 
 interface DesignOption {
@@ -528,7 +529,7 @@ const quickRecallQuestions: Question[] = [
   },
 ];
 
-export default function EngineerWorld({ difficulty, onComplete, isQuickRecall }: EngineerWorldProps) {
+export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect }: EngineerWorldProps) {
   const [stage, setStage] = useState<"intro" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedDesign, setSelectedDesign] = useState<string | null>(null);

@@ -17,6 +17,7 @@ interface ArchitectWorldProps {
   difficulty: Difficulty;
   onComplete: (success: boolean, score: number, total: number) => void;
   isQuickRecall?: boolean;
+  alwaysCorrect?: boolean;
 }
 
 interface Question {
@@ -429,7 +430,7 @@ const quickRecallQuestions: Question[] = [
   },
 ];
 
-export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall }: ArchitectWorldProps) {
+export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect }: ArchitectWorldProps) {
   const [stage, setStage] = useState<"intro" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);

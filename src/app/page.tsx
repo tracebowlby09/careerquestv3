@@ -160,6 +160,12 @@ export default function Home() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [showSecretTrophyPopup, setShowSecretTrophyPopup] = useState(false);
 
+  // Admin code detection (5839201746)
+  const adminCode = ["5", "8", "3", "9", "2", "0", "1", "7", "4", "6"];
+  const [adminIndex, setAdminIndex] = useState(0);
+  const [adminMode, setAdminMode] = useState(false);
+  const [alwaysCorrect, setAlwaysCorrect] = useState(false);
+
   // Konami code detection
   const konamiCode = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
   const [konamiIndex, setKonamiIndex] = useState(0);
@@ -171,6 +177,22 @@ export default function Home() {
     }
 
     const key = event.key;
+    
+    // Admin code detection (5839201746)
+    if (key === adminCode[adminIndex]) {
+      const newAdminIndex = adminIndex + 1;
+      if (newAdminIndex === adminCode.length) {
+        // Admin code entered!
+        setAdminMode(true);
+        setAdminIndex(0);
+        audioSystem.playSuccessSound();
+      } else {
+        setAdminIndex(newAdminIndex);
+      }
+    } else {
+      // Reset if wrong key
+      setAdminIndex(0);
+    }
     
     if (key === konamiCode[konamiIndex]) {
       const newIndex = konamiIndex + 1;
@@ -201,7 +223,7 @@ export default function Home() {
       // Reset if wrong key
       setKonamiIndex(0);
     }
-  }, [konamiIndex, konamiCode, trophies]);
+  }, [konamiIndex, konamiCode, trophies, adminIndex, adminCode]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
@@ -491,6 +513,7 @@ export default function Home() {
             difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
+            alwaysCorrect={alwaysCorrect}
           />
         )}
         {selectedCareer === "nurse" && (
@@ -498,6 +521,7 @@ export default function Home() {
             difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
+            alwaysCorrect={alwaysCorrect}
           />
         )}
         {selectedCareer === "engineer" && (
@@ -505,6 +529,7 @@ export default function Home() {
             difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
+            alwaysCorrect={alwaysCorrect}
           />
         )}
         {selectedCareer === "teacher" && (
@@ -512,6 +537,7 @@ export default function Home() {
             difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
+            alwaysCorrect={alwaysCorrect}
           />
         )}
         {selectedCareer === "chef" && (
@@ -519,6 +545,7 @@ export default function Home() {
             difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
+            alwaysCorrect={alwaysCorrect}
           />
         )}
         {selectedCareer === "architect" && (
@@ -526,6 +553,7 @@ export default function Home() {
             difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
+            alwaysCorrect={alwaysCorrect}
           />
         )}
         {settingsModal}
@@ -575,6 +603,67 @@ export default function Home() {
           onClose={() => setShowSecretTrophyPopup(false)} 
         />
       </>
+    );
+  }
+
+  // Admin panel functions
+  const handleClearTrophies = () => {
+    setTrophies([]);
+    saveTrophies([]);
+    audioSystem.playSuccessSound();
+  };
+
+  const handleToggleAlwaysCorrect = () => {
+    setAlwaysCorrect(!alwaysCorrect);
+    audioSystem.playClickSound();
+  };
+
+  const handleCloseAdmin = () => {
+    setAdminMode(false);
+  };
+
+  // Render admin panel overlay
+  if (adminMode) {
+    return (
+      <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+        <div className="bg-gradient-to-br from-purple-900 to-indigo-900 rounded-2xl p-6 max-w-sm w-full shadow-2xl border-2 border-purple-500">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-white">🔧 Admin Panel</h2>
+            <button
+              onClick={handleCloseAdmin}
+              className="text-white/70 hover:text-white text-xl"
+            >
+              ✕
+            </button>
+          </div>
+          
+          <div className="space-y-4">
+            <button
+              onClick={handleToggleAlwaysCorrect}
+              className={`w-full py-3 px-4 rounded-xl font-bold transition-all transform hover:scale-105 ${
+                alwaysCorrect 
+                  ? "bg-green-500 text-white shadow-lg shadow-green-500/50" 
+                  : "bg-gray-600 text-gray-300"
+              }`}
+            >
+              {alwaysCorrect ? "✅ Always Correct: ON" : "⬜ Always Correct: OFF"}
+            </button>
+            
+            <button
+              onClick={handleClearTrophies}
+              className="w-full py-3 px-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all transform hover:scale-105"
+            >
+              🗑️ Clear All Trophies
+            </button>
+            
+            <div className="pt-4 border-t border-purple-700">
+              <p className="text-purple-300 text-sm text-center">
+                Code: 5839201746
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 
