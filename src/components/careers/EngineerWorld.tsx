@@ -582,6 +582,13 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, a
   const currentQuestion = currentQuestions[currentQuestionIndex];
   const totalQuestions = currentQuestions.length;
 
+  // Auto-select correct answer when alwaysCorrect is enabled
+  useEffect(() => {
+    if (alwaysCorrect && currentQuestion) {
+      setSelectedDesign(currentQuestion.correctDesign);
+    }
+  }, [alwaysCorrect, currentQuestionIndex]);
+
   // Shuffle designs for current question
   const shuffledDesigns = useMemo(() => {
     return shuffleArray(currentQuestion.designs);

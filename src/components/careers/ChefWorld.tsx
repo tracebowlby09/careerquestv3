@@ -483,6 +483,14 @@ export default function ChefWorld({ difficulty, onComplete, isQuickRecall, alway
   const currentQuestion = currentQuestions[currentQuestionIndex];
   const totalQuestions = currentQuestions.length;
 
+  // Auto-select correct answer when alwaysCorrect is enabled
+  useEffect(() => {
+    if (alwaysCorrect && currentQuestion) {
+      const correctOpt = currentQuestion.options.find(opt => opt.correct);
+      if (correctOpt) setSelectedAnswer(correctOpt.id);
+    }
+  }, [alwaysCorrect, currentQuestionIndex]);
+
   // Shuffle options for current question
   const shuffledOptions = useMemo(() => {
     return shuffleArray(currentQuestion.options);

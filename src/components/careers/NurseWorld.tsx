@@ -502,6 +502,13 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall, alwa
   const currentQuestion = currentQuestions[currentQuestionIndex];
   const totalQuestions = currentQuestions.length;
 
+  // Auto-select correct answer when alwaysCorrect is enabled
+  useEffect(() => {
+    if (alwaysCorrect && currentQuestion) {
+      setSelectedOrder(currentQuestion.correctOrder);
+    }
+  }, [alwaysCorrect, currentQuestionIndex]);
+
   // Shuffle patients for current question
   const shuffledPatients = useMemo(() => {
     return shuffleArray(currentQuestion.patients);
