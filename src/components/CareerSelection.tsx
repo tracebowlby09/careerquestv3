@@ -175,16 +175,16 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
             <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="relative z-10">
               <div className="text-5xl mb-4 text-center transform group-hover:scale-110 transition-transform duration-300">💻</div>
-              <h3 className="text-2xl font-bold text-white mb-2 text-center">Bug Fix Sprint</h3>
-              <p className="text-indigo-300 text-center mb-4 text-sm">
+              <h3 className="text-2xl font-bold text-white mb-2 text-center font-mono">Bug Fix Sprint</h3>
+              <p className="text-indigo-300 text-center mb-4 text-sm font-mono">
                 Fix code bugs under deadline pressure. Multiple choice challenges!
               </p>
               <div className="flex flex-wrap justify-center gap-2 mb-4">
-                <span className="bg-indigo-600/50 text-indigo-200 text-xs px-3 py-1 rounded-full">🐛 Debug</span>
-                <span className="bg-indigo-600/50 text-indigo-200 text-xs px-3 py-1 rounded-full">⏱️ Speed</span>
+                <span className="bg-indigo-600/50 text-indigo-200 text-xs px-3 py-1 rounded-full font-mono">🐛 Debug</span>
+                <span className="bg-indigo-600/50 text-indigo-200 text-xs px-3 py-1 rounded-full font-mono">⏱️ Speed</span>
               </div>
               <div className="text-center">
-                <span className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-indigo-500 transition-colors">
+                <span className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-indigo-500 transition-colors font-mono">
                   Start Simulation →
                 </span>
               </div>
@@ -207,16 +207,16 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
             <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="relative z-10">
               <div className="text-5xl mb-4 text-center transform group-hover:scale-110 transition-transform duration-300">🏥</div>
-              <h3 className="text-2xl font-bold text-white mb-2 text-center">Emergency Room Shift</h3>
-              <p className="text-red-300 text-center mb-4 text-sm">
+              <h3 className="text-2xl font-bold text-white mb-2 text-center font-serif">Emergency Room Shift</h3>
+              <p className="text-red-300 text-center mb-4 text-sm font-serif">
                 Triage patients and provide life-saving treatments!
               </p>
               <div className="flex flex-wrap justify-center gap-2 mb-4">
-                <span className="bg-red-600/50 text-red-200 text-xs px-3 py-1 rounded-full">🚑 Triage</span>
-                <span className="bg-red-600/50 text-red-200 text-xs px-3 py-1 rounded-full">💊 Treatment</span>
+                <span className="bg-red-600/50 text-red-200 text-xs px-3 py-1 rounded-full font-serif">🚑 Triage</span>
+                <span className="bg-red-600/50 text-red-200 text-xs px-3 py-1 rounded-full font-serif">💊 Treatment</span>
               </div>
               <div className="text-center">
-                <span className="inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-red-500 transition-colors">
+                <span className="inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-red-500 transition-colors font-serif">
                   Start Simulation →
                 </span>
               </div>
@@ -239,16 +239,16 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="relative z-10">
               <div className="text-5xl mb-4 text-center transform group-hover:scale-110 transition-transform duration-300">🏗️</div>
-              <h3 className="text-2xl font-bold text-white mb-2 text-center">Bridge Builder</h3>
-              <p className="text-cyan-300 text-center mb-4 text-sm">
+              <h3 className="text-2xl font-bold text-white mb-2 text-center font-sans">Bridge Builder</h3>
+              <p className="text-cyan-300 text-center mb-4 text-sm font-sans">
                 Design and stress-test bridges. Build structures that last!
               </p>
               <div className="flex flex-wrap justify-center gap-2 mb-4">
-                <span className="bg-cyan-600/50 text-cyan-200 text-xs px-3 py-1 rounded-full">📐 Design</span>
-                <span className="bg-cyan-600/50 text-cyan-200 text-xs px-3 py-1 rounded-full">🧪 Stress Test</span>
+                <span className="bg-cyan-600/50 text-cyan-200 text-xs px-3 py-1 rounded-full font-sans">📐 Design</span>
+                <span className="bg-cyan-600/50 text-cyan-200 text-xs px-3 py-1 rounded-full font-sans">🧪 Stress Test</span>
               </div>
               <div className="text-center">
-                <span className="inline-flex items-center gap-2 bg-cyan-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-cyan-500 transition-colors">
+                <span className="inline-flex items-center gap-2 bg-cyan-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-cyan-500 transition-colors font-sans">
                   Start Simulation →
                 </span>
               </div>
@@ -271,16 +271,16 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
             <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="relative z-10">
               <div className="text-5xl mb-4 text-center transform group-hover:scale-110 transition-transform duration-300">👩‍🏫</div>
-              <h3 className="text-2xl font-bold text-white mb-2 text-center">Classroom Management</h3>
-              <p className="text-green-300 text-center mb-4 text-sm">
+              <h3 className="text-2xl font-bold text-white mb-2 text-center font-serif">Classroom Management</h3>
+              <p className="text-green-300 text-center mb-4 text-sm font-serif">
                 Keep students engaged and handle classroom events!
               </p>
               <div className="flex flex-wrap justify-center gap-2 mb-4">
-                <span className="bg-green-600/50 text-green-200 text-xs px-3 py-1 rounded-full">📚 Teach</span>
-                <span className="bg-green-600/50 text-green-200 text-xs px-3 py-1 rounded-full">🎯 Engage</span>
+                <span className="bg-green-600/50 text-green-200 text-xs px-3 py-1 rounded-full font-serif">📚 Teach</span>
+                <span className="bg-green-600/50 text-green-200 text-xs px-3 py-1 rounded-full font-serif">🎯 Engage</span>
               </div>
               <div className="text-center">
-                <span className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-green-500 transition-colors">
+                <span className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-green-500 transition-colors font-serif">
                   Start Simulation →
                 </span>
               </div>
@@ -303,16 +303,16 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
             <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="relative z-10">
               <div className="text-5xl mb-4 text-center transform group-hover:scale-110 transition-transform duration-300">👨‍🍳</div>
-              <h3 className="text-2xl font-bold text-white mb-2 text-center">Dinner Rush</h3>
-              <p className="text-amber-300 text-center mb-4 text-sm">
+              <h3 className="text-2xl font-bold text-white mb-2 text-center font-serif italic">Dinner Rush</h3>
+              <p className="text-amber-300 text-center mb-4 text-sm font-serif italic">
                 Manage orders, cook dishes, and handle special requests!
               </p>
               <div className="flex flex-wrap justify-center gap-2 mb-4">
-                <span className="bg-amber-600/50 text-amber-200 text-xs px-3 py-1 rounded-full">🍳 Cook</span>
-                <span className="bg-amber-600/50 text-amber-200 text-xs px-3 py-1 rounded-full">🛎️ Orders</span>
+                <span className="bg-amber-600/50 text-amber-200 text-xs px-3 py-1 rounded-full font-serif italic">🍳 Cook</span>
+                <span className="bg-amber-600/50 text-amber-200 text-xs px-3 py-1 rounded-full font-serif italic">🛎️ Orders</span>
               </div>
               <div className="text-center">
-                <span className="inline-flex items-center gap-2 bg-amber-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-amber-500 transition-colors">
+                <span className="inline-flex items-center gap-2 bg-amber-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-amber-500 transition-colors font-serif italic">
                   Start Simulation →
                 </span>
               </div>
@@ -335,16 +335,16 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-violet-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="relative z-10">
               <div className="text-5xl mb-4 text-center transform group-hover:scale-110 transition-transform duration-300">🏛️</div>
-              <h3 className="text-2xl font-bold text-white mb-2 text-center">Dream House Design</h3>
-              <p className="text-purple-300 text-center mb-4 text-sm">
+              <h3 className="text-2xl font-bold text-white mb-2 text-center font-mono tracking-wider">Dream House Design</h3>
+              <p className="text-purple-300 text-center mb-4 text-sm font-mono">
                 Create client dream homes within budget and zoning rules!
               </p>
               <div className="flex flex-wrap justify-center gap-2 mb-4">
-                <span className="bg-purple-600/50 text-purple-200 text-xs px-3 py-1 rounded-full">🏠 Design</span>
-                <span className="bg-purple-600/50 text-purple-200 text-xs px-3 py-1 rounded-full">💰 Budget</span>
+                <span className="bg-purple-600/50 text-purple-200 text-xs px-3 py-1 rounded-full font-mono">🏠 Design</span>
+                <span className="bg-purple-600/50 text-purple-200 text-xs px-3 py-1 rounded-full font-mono">💰 Budget</span>
               </div>
               <div className="text-center">
-                <span className="inline-flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-purple-500 transition-colors">
+                <span className="inline-flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-purple-500 transition-colors font-mono">
                   Start Simulation →
                 </span>
               </div>
