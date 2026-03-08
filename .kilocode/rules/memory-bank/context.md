@@ -35,6 +35,8 @@ Career Quest V3 is a career simulation game with multiple career paths (Programm
 - [x] Removed timers from all simulations for stress-free gameplay
 - [x] Added exit buttons to all simulations
 - [x] Redesigned all simulations with enhanced gameplay mechanics
+- [x] Added unique Simulation Mode selection screen with career-specific themed cards
+- [x] Enhanced TitleScreen with animated background particles and improved styling
 
 ## Current Structure
 
@@ -138,3 +140,5 @@ Enter the Konami code (↑↑↓↓←→←→BA) anywhere in the game to unloc
 | 2026-03-07 | TeacherSimulation now Classroom Management with engagement meter |
 | 2026-03-07 | ChefSimulation now Dinner Rush with order management |
 | 2026-03-07 | ArchitectSimulation now Dream House Design with client requirements |
+| 2026-03-08 | **Unique Simulation Pick Screen**: Added career-specific themed selection UI |
+| 2026-03-08 | **TitleScreen Polish**: Added animated background particles and improved styling |

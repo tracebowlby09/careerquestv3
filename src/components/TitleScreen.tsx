@@ -18,24 +18,32 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies }:
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-700 via-slate-800 to-gray-900 flex items-center justify-center p-4 relative">
+    <div className="min-h-screen bg-gradient-to-br from-slate-700 via-slate-800 to-gray-900 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated background particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 right-1/3 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+      </div>
+      
       <button
         onClick={() => {
           audioSystem.playClickSound();
           onOpenSettings();
         }}
-        className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
+        className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors z-10"
         title="Settings"
       >
         ⚙️
       </button>
-      <div className="max-w-2xl w-full bg-white rounded-2xl shadow-2xl p-8 md:p-12 text-center">
+      
+      <div className="max-w-2xl w-full bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 md:p-12 text-center relative z-10">
         <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
           Career Quest
         </h1>
         
         <div className="mb-8">
-          <div className="text-6xl mb-4">🎯</div>
+          <div className="text-6xl mb-4 animate-bounce">🎯</div>
           <p className="text-xl text-gray-700 mb-4">
             Explore careers through interactive challenges
           </p>
@@ -48,23 +56,29 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies }:
         <div className="space-y-4">
           <button
             onClick={() => handleStart("challenge")}
-            className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-xl font-bold py-4 px-12 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200 w-full"
+            className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-xl font-bold py-4 px-12 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200 w-full group"
           >
-            🎮 Challenge Mode
+            <span className="flex items-center justify-center gap-3">
+              🎮 Challenge Mode
+            </span>
           </button>
           
           <button
             onClick={() => handleStart("quick-recall")}
-            className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xl font-bold py-4 px-12 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200 w-full"
+            className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xl font-bold py-4 px-12 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200 w-full group"
           >
-            ⚡ Quick Recall
+            <span className="flex items-center justify-center gap-3">
+              ⚡ Quick Recall
+            </span>
           </button>
 
           <button
             onClick={() => handleStart("simulation")}
-            className="bg-gradient-to-r from-purple-500 to-pink-600 text-white text-xl font-bold py-4 px-12 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200 w-full"
+            className="bg-gradient-to-r from-purple-500 to-pink-600 text-white text-xl font-bold py-4 px-12 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200 w-full group"
           >
-            🔬 Career Simulation
+            <span className="flex items-center justify-center gap-3">
+              🔬 Career Simulation
+            </span>
           </button>
         </div>
 

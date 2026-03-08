@@ -65,6 +65,7 @@ const careers: CareerOption[] = [
 
 export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit, gameMode }: CareerSelectionProps) {
   const isQuickRecall = gameMode === "quick-recall";
+  const isSimulation = gameMode === "simulation";
 
   const handleSelect = (career: Career) => {
     if (typeof window !== 'undefined') {
@@ -75,7 +76,7 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
   };
 
   // Challenge Mode - Original Card Design
-  if (!isQuickRecall) {
+  if (!isQuickRecall && !isSimulation) {
     return (
       <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit}>
         <div className="text-center mb-12">
@@ -127,6 +128,229 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
               </div>
             </button>
           ))}
+        </div>
+      </ScreenWrapper>
+    );
+  }
+
+  // Simulation Mode - Unique Interactive Career Experiences
+  if (isSimulation) {
+    return (
+      <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit}>
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-2 rounded-full mb-4 shadow-lg animate-pulse">
+            <span className="text-2xl">🎮</span>
+            <span className="text-white font-bold text-lg">SIMULATION MODE</span>
+            <span className="text-2xl">🎮</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Experience Real Careers
+          </h2>
+          <p className="text-xl text-white/80">
+            Choose a simulation to dive into an interactive job experience
+          </p>
+        </div>
+
+        {/* Simulation Cards - Each with unique career-specific design */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Programmer - Bug Fix Sprint */}
+          <button
+            onClick={() => handleSelect("programmer")}
+            className="group relative overflow-hidden rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 hover:-translate-y-2"
+            style={{
+              background: 'linear-gradient(145deg, #1e1e2e 0%, #2d2d44 100%)',
+              border: '2px solid #6366f1',
+            }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative z-10">
+              <div className="text-5xl mb-4 text-center transform group-hover:scale-110 transition-transform duration-300">💻</div>
+              <h3 className="text-2xl font-bold text-white mb-2 text-center">Bug Fix Sprint</h3>
+              <p className="text-indigo-300 text-center mb-4 text-sm">
+                Fix code bugs under deadline pressure. Multiple choice challenges!
+              </p>
+              <div className="flex flex-wrap justify-center gap-2 mb-4">
+                <span className="bg-indigo-600/50 text-indigo-200 text-xs px-3 py-1 rounded-full">🐛 Debug</span>
+                <span className="bg-indigo-600/50 text-indigo-200 text-xs px-3 py-1 rounded-full">⏱️ Speed</span>
+              </div>
+              <div className="text-center">
+                <span className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-indigo-500 transition-colors">
+                  Start Simulation →
+                </span>
+              </div>
+            </div>
+            {/* Code pattern decoration */}
+            <div className="absolute bottom-0 right-0 text-8xl opacity-5 group-hover:opacity-10 transition-opacity font-mono">
+              {'</>'}
+            </div>
+          </button>
+
+          {/* Nurse - Emergency Room Shift */}
+          <button
+            onClick={() => handleSelect("nurse")}
+            className="group relative overflow-hidden rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 hover:-translate-y-2"
+            style={{
+              background: 'linear-gradient(145deg, #1a1a2e 0%, #16213e 100%)',
+              border: '2px solid #ef4444',
+            }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative z-10">
+              <div className="text-5xl mb-4 text-center transform group-hover:scale-110 transition-transform duration-300">🏥</div>
+              <h3 className="text-2xl font-bold text-white mb-2 text-center">Emergency Room Shift</h3>
+              <p className="text-red-300 text-center mb-4 text-sm">
+                Triage patients and provide life-saving treatments!
+              </p>
+              <div className="flex flex-wrap justify-center gap-2 mb-4">
+                <span className="bg-red-600/50 text-red-200 text-xs px-3 py-1 rounded-full">🚑 Triage</span>
+                <span className="bg-red-600/50 text-red-200 text-xs px-3 py-1 rounded-full">💊 Treatment</span>
+              </div>
+              <div className="text-center">
+                <span className="inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-red-500 transition-colors">
+                  Start Simulation →
+                </span>
+              </div>
+            </div>
+            {/* Heartbeat decoration */}
+            <div className="absolute bottom-0 right-0 text-8xl opacity-5 group-hover:opacity-10 transition-opacity">
+              ❤️
+            </div>
+          </button>
+
+          {/* Engineer - Bridge Builder */}
+          <button
+            onClick={() => handleSelect("engineer")}
+            className="group relative overflow-hidden rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 hover:-translate-y-2"
+            style={{
+              background: 'linear-gradient(145deg, #0f172a 0%, #1e293b 100%)',
+              border: '2px solid #06b6d4',
+            }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative z-10">
+              <div className="text-5xl mb-4 text-center transform group-hover:scale-110 transition-transform duration-300">🏗️</div>
+              <h3 className="text-2xl font-bold text-white mb-2 text-center">Bridge Builder</h3>
+              <p className="text-cyan-300 text-center mb-4 text-sm">
+                Design and stress-test bridges. Build structures that last!
+              </p>
+              <div className="flex flex-wrap justify-center gap-2 mb-4">
+                <span className="bg-cyan-600/50 text-cyan-200 text-xs px-3 py-1 rounded-full">📐 Design</span>
+                <span className="bg-cyan-600/50 text-cyan-200 text-xs px-3 py-1 rounded-full">🧪 Stress Test</span>
+              </div>
+              <div className="text-center">
+                <span className="inline-flex items-center gap-2 bg-cyan-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-cyan-500 transition-colors">
+                  Start Simulation →
+                </span>
+              </div>
+            </div>
+            {/* Bridge decoration */}
+            <div className="absolute bottom-0 right-0 text-8xl opacity-5 group-hover:opacity-10 transition-opacity">
+              🌉
+            </div>
+          </button>
+
+          {/* Teacher - Classroom Management */}
+          <button
+            onClick={() => handleSelect("teacher")}
+            className="group relative overflow-hidden rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 hover:-translate-y-2"
+            style={{
+              background: 'linear-gradient(145deg, #14532d 0%, #166534 100%)',
+              border: '2px solid #22c55e',
+            }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative z-10">
+              <div className="text-5xl mb-4 text-center transform group-hover:scale-110 transition-transform duration-300">👩‍🏫</div>
+              <h3 className="text-2xl font-bold text-white mb-2 text-center">Classroom Management</h3>
+              <p className="text-green-300 text-center mb-4 text-sm">
+                Keep students engaged and handle classroom events!
+              </p>
+              <div className="flex flex-wrap justify-center gap-2 mb-4">
+                <span className="bg-green-600/50 text-green-200 text-xs px-3 py-1 rounded-full">📚 Teach</span>
+                <span className="bg-green-600/50 text-green-200 text-xs px-3 py-1 rounded-full">🎯 Engage</span>
+              </div>
+              <div className="text-center">
+                <span className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-green-500 transition-colors">
+                  Start Simulation →
+                </span>
+              </div>
+            </div>
+            {/* Books decoration */}
+            <div className="absolute bottom-0 right-0 text-8xl opacity-5 group-hover:opacity-10 transition-opacity">
+              📚
+            </div>
+          </button>
+
+          {/* Chef - Dinner Rush */}
+          <button
+            onClick={() => handleSelect("chef")}
+            className="group relative overflow-hidden rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 hover:-translate-y-2"
+            style={{
+              background: 'linear-gradient(145deg, #451a03 0%, #78350f 100%)',
+              border: '2px solid #f59e0b',
+            }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative z-10">
+              <div className="text-5xl mb-4 text-center transform group-hover:scale-110 transition-transform duration-300">👨‍🍳</div>
+              <h3 className="text-2xl font-bold text-white mb-2 text-center">Dinner Rush</h3>
+              <p className="text-amber-300 text-center mb-4 text-sm">
+                Manage orders, cook dishes, and handle special requests!
+              </p>
+              <div className="flex flex-wrap justify-center gap-2 mb-4">
+                <span className="bg-amber-600/50 text-amber-200 text-xs px-3 py-1 rounded-full">🍳 Cook</span>
+                <span className="bg-amber-600/50 text-amber-200 text-xs px-3 py-1 rounded-full">🛎️ Orders</span>
+              </div>
+              <div className="text-center">
+                <span className="inline-flex items-center gap-2 bg-amber-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-amber-500 transition-colors">
+                  Start Simulation →
+                </span>
+              </div>
+            </div>
+            {/* Fire decoration */}
+            <div className="absolute bottom-0 right-0 text-8xl opacity-5 group-hover:opacity-10 transition-opacity">
+              🔥
+            </div>
+          </button>
+
+          {/* Architect - Dream House Design */}
+          <button
+            onClick={() => handleSelect("architect")}
+            className="group relative overflow-hidden rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 hover:-translate-y-2"
+            style={{
+              background: 'linear-gradient(145deg, #2e1065 0%, #4c1d95 100%)',
+              border: '2px solid #a855f7',
+            }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-violet-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative z-10">
+              <div className="text-5xl mb-4 text-center transform group-hover:scale-110 transition-transform duration-300">🏛️</div>
+              <h3 className="text-2xl font-bold text-white mb-2 text-center">Dream House Design</h3>
+              <p className="text-purple-300 text-center mb-4 text-sm">
+                Create client dream homes within budget and zoning rules!
+              </p>
+              <div className="flex flex-wrap justify-center gap-2 mb-4">
+                <span className="bg-purple-600/50 text-purple-200 text-xs px-3 py-1 rounded-full">🏠 Design</span>
+                <span className="bg-purple-600/50 text-purple-200 text-xs px-3 py-1 rounded-full">💰 Budget</span>
+              </div>
+              <div className="text-center">
+                <span className="inline-flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-full font-semibold group-hover:bg-purple-500 transition-colors">
+                  Start Simulation →
+                </span>
+              </div>
+            </div>
+            {/* Blueprint decoration */}
+            <div className="absolute bottom-0 right-0 text-8xl opacity-5 group-hover:opacity-10 transition-opacity">
+              📐
+            </div>
+          </button>
+        </div>
+
+        {/* Simulation Footer */}
+        <div className="mt-8 text-center">
+          <p className="text-white/60 text-sm">
+            🎯 No timers - take your time to experience each role!
+          </p>
         </div>
       </ScreenWrapper>
     );
