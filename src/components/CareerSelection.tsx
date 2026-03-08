@@ -129,6 +129,16 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
             </button>
           ))}
         </div>
+
+        {/* Challenge Mode Footer */}
+        <div className="mt-8 text-center">
+          <button
+            onClick={onExit}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white/80 rounded-xl transition-colors border border-white/20"
+          >
+            ← Back to Title
+          </button>
+        </div>
       </ScreenWrapper>
     );
   }
@@ -348,9 +358,15 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
 
         {/* Simulation Footer */}
         <div className="mt-8 text-center">
-          <p className="text-white/60 text-sm">
+          <p className="text-white/60 text-sm mb-4">
             🎯 No timers - take your time to experience each role!
           </p>
+          <button
+            onClick={onExit}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white/80 rounded-xl transition-colors border border-white/20"
+          >
+            ← Back to Title
+          </button>
         </div>
       </ScreenWrapper>
     );
@@ -413,9 +429,15 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
 
       {/* Quick Recall Footer */}
       <div className="mt-8 text-center">
-        <p className="text-white/60 text-sm">
+        <p className="text-white/60 text-sm mb-4">
           ⏱️ Answer as many questions as you can before time runs out!
         </p>
+        <button
+          onClick={onExit}
+          className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white/80 rounded-xl transition-colors border border-white/20"
+        >
+          ← Back to Title
+        </button>
       </div>
     </ScreenWrapper>
   );
