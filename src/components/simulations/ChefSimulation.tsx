@@ -287,8 +287,8 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
       <div className="max-w-5xl mx-auto">
         <div className="flex justify-between items-center mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-white">👨‍🍳 Dinner Rush</h1>
-            <p className="text-orange-200">Served: {completedOrders}/{targetOrders}</p>
+            <h1 className="text-2xl font-bold text-white font-serif italic">👨‍🍳 Dinner Rush</h1>
+            <p className="text-orange-200 font-serif italic">Served: {completedOrders}/{targetOrders}</p>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-2xl font-bold text-white">{score} pts</div>

@@ -323,8 +323,8 @@ export default function ArchitectSimulation({ difficulty, onComplete, onOpenSett
       <div className="max-w-5xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-white">🏛️ Dream House Design</h1>
-            <p className="text-cyan-200">{currentDesign.name}</p>
+            <h1 className="text-2xl font-bold text-white font-mono tracking-wider">🏛️ Dream House Design</h1>
+            <p className="text-cyan-200 font-mono tracking-wider">{currentDesign.name}</p>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-2xl font-bold text-white">{totalScore} pts</div>

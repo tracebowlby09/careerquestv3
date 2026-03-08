@@ -353,8 +353,8 @@ export default function TeacherSimulation({ difficulty, onComplete, onOpenSettin
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-white">🍎 Classroom Management</h1>
-            <p className="text-indigo-200">{currentPlan.title} - {currentPlan.topic}</p>
+            <h1 className="text-2xl font-bold text-white font-serif">🍎 Classroom Management</h1>
+            <p className="text-indigo-200 font-serif">{currentPlan.title} - {currentPlan.topic}</p>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-2xl font-bold text-white">{totalScore} pts</div>

@@ -263,8 +263,8 @@ export default function NurseSimulation({ difficulty, onComplete, onOpenSettings
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-white">🏥 Emergency Room Shift</h1>
-            <p className="text-red-200">{currentTask.title}</p>
+            <h1 className="text-2xl font-bold text-white font-serif">🏥 Emergency Room Shift</h1>
+            <p className="text-red-200 font-serif">{currentTask.title}</p>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-2xl font-bold text-white">{totalScore} pts</div>

@@ -302,8 +302,8 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-white">🌉 Bridge Stress Test</h1>
-              <p className="text-amber-200">Testing your bridge design...</p>
+              <h1 className="text-2xl font-bold text-white font-sans">🌉 Bridge Stress Test</h1>
+              <p className="text-amber-200 font-sans">Testing your bridge design...</p>
             </div>
             <div className="text-2xl font-bold text-white">{totalScore} pts</div>
           </div>
@@ -430,8 +430,8 @@ export default function EngineerSimulation({ difficulty, onComplete, onOpenSetti
       <div className="max-w-5xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-white">🌉 Bridge Builder</h1>
-            <p className="text-amber-200">{currentTask.title}</p>
+            <h1 className="text-2xl font-bold text-white font-sans">🌉 Bridge Builder</h1>
+            <p className="text-amber-200 font-sans">{currentTask.title}</p>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-2xl font-bold text-white">{totalScore} pts</div>
