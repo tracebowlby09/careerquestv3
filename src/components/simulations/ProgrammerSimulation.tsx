@@ -366,8 +366,8 @@ export default function ProgrammerSimulation({ difficulty, onComplete, onOpenSet
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-white">💻 Bug Fix Sprint</h1>
-            <p className="text-purple-300">Fix {currentIndex + 1} of {challenges.length}</p>
+            <h1 className="text-2xl font-bold text-white font-mono">💻 Bug Fix Sprint</h1>
+            <p className="text-purple-300 font-mono">Fix {currentIndex + 1} of {challenges.length}</p>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-2xl font-bold text-white">{totalScore} pts</div>

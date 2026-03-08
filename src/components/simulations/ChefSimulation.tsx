@@ -85,9 +85,8 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
   const [completedOrders, setCompletedOrders] = useState(0);
   const [burntOrders, setBurntOrders] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [gameStarted, setGameStarted] = useState(false);
   const [feedback, setFeedback] = useState("");
-  const [targetOrders, setTargetOrders] = useState(5);
+  const [targetOrders, setTargetOrders] = useState(difficulty === "easy" ? 5 : difficulty === "medium" ? 8 : 10);
   const [fadeIn, setFadeIn] = useState(false);
 
   const currentMenu = menu[difficulty];
@@ -97,8 +96,6 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
   }, []);
 
   useEffect(() => {
-    if (!gameStarted) return;
-
     const generateOrder = () => {
       if (orders.length >= 6) return;
       
@@ -121,11 +118,9 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
     generateOrder();
     const interval = setInterval(generateOrder, 8000);
     return () => clearInterval(interval);
-  }, [gameStarted, currentMenu, orders.length]);
+  }, [currentMenu, orders.length]);
 
   useEffect(() => {
-    if (!gameStarted) return;
-
     const tick = setInterval(() => {
       setOrders((prev) => prev.map((order) => ({
         ...order,
@@ -179,13 +174,7 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
     }, 500);
 
     return () => clearInterval(tick);
-  }, [gameStarted]);
-
-  const startGame = () => {
-    setGameStarted(true);
-    setTargetOrders(difficulty === "easy" ? 5 : difficulty === "medium" ? 8 : 10);
-    audioSystem.playClickSound();
-  };
+  }, []);
 
   const addToPrep = (ingredient: string) => {
     if (!prepQueue.includes(ingredient)) {
@@ -287,51 +276,6 @@ export default function ChefSimulation({ difficulty, onComplete, onOpenSettings,
             className="w-full py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white font-bold rounded-xl hover:from-orange-700 hover:to-red-700 transition-all transform hover:scale-105"
           >
             Continue
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (!gameStarted) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-600 via-red-500 to-yellow-500 p-4 md:p-8 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
-          <div className="text-6xl mb-4 animate-bounce">👨‍🍳</div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Dinner Rush</h2>
-          <p className="text-gray-600 mb-6">
-            Serve {targetOrders} orders before customers leave!
-          </p>
-          
-          <div className="text-left bg-gray-100 rounded-lg p-4 mb-6">
-            <h3 className="font-bold text-gray-800 mb-2">📋 Menu:</h3>
-            <div className="space-y-1">
-              {currentMenu.map((dish) => (
-                <div key={dish.id} className="text-gray-600 flex items-center gap-2">
-                  <span>{dish.emoji}</span>
-                  <span>{dish.name}</span>
-                  <span className="text-xs text-gray-400">({dish.ingredients.join(", ")})</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="text-left bg-gray-100 rounded-lg p-4 mb-6">
-            <h3 className="font-bold text-gray-800 mb-2">🎮 How to Play:</h3>
-            <ul className="text-gray-600 text-sm space-y-1">
-              <li>• Orders appear automatically</li>
-              <li>• Click ingredients to prepare</li>
-              <li>• Put on a station to cook</li>
-              <li>• Serve before it burns!</li>
-              <li>• Watch out for special requests!</li>
-            </ul>
-          </div>
-
-          <button
-            onClick={startGame}
-            className="w-full py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white font-bold rounded-xl hover:from-orange-700 hover:to-red-700 transition-all transform hover:scale-105"
-          >
-            🔥 Start Service!
           </button>
         </div>
       </div>
