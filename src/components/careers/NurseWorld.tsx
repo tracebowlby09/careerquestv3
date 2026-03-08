@@ -623,7 +623,7 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall, alwa
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-2xl font-bold text-gray-900">
+            <h3 className="text-2xl font-bold text-gray-900 font-serif">
               🚨 Scenario {currentQuestionIndex + 1} of {totalQuestions}
             </h3>
             <div className="flex items-center gap-4">
