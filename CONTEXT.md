@@ -2,14 +2,14 @@
 
 ## Project Purpose
 
-Career Quest is an educational game designed for TSA's Computer Game & Simulation Programming event. It allows players to explore different career paths through interactive, skill-based challenges that simulate real job tasks.
+Career Quest is an educational game that allows players to explore different career paths through interactive challenges and quick recall trivia. Players can test their knowledge across 6 different careers.
 
 ## Key Features
 
-- **3 Career Paths**: Programmer, Nurse, and Engineer
-- **Skill-Based Challenges**: Each career has a meaningful task that teaches real skills
-- **Multiple Outcomes**: Success and failure paths with educational feedback
-- **Progressive Flow**: Title Screen → Career Selection → Career World → Challenge → Outcome
+- **6 Career Paths**: Programmer, Nurse, Engineer, Teacher, Chef, and Architect
+- **Two Game Modes**: Challenge Mode (with difficulty selection) and Quick Recall (fast-paced trivia)
+- **Trophy System**: Earn trophies for completing challenges across difficulties
+- **Achievements**: Special achievements for completing all careers, perfect scores, and secret easter eggs
 
 ## Technology Stack
 
@@ -19,24 +19,21 @@ Career Quest is an educational game designed for TSA's Computer Game & Simulatio
 - **State Management**: React hooks (useState) for game state
 - **Package Manager**: Bun
 
-## Architecture Decisions
+## Game Modes
 
-### Game State Management
-- Client-side state using React hooks
-- Game flow: TITLE → CAREER_SELECT → CAREER_INTRO → CHALLENGE → OUTCOME
-- Each career is a self-contained module with intro, challenge, and outcome logic
+| Mode | Description |
+|------|-------------|
+| Challenge Mode | Full game with difficulty selection (Easy/Medium/Hard), earn trophies |
+| Quick Recall | Fast-paced trivia, no difficulty, immediate play |
 
-### Career Structure
-Each career includes:
-1. **Intro Scene**: Explains the job and what you'll do
-2. **Challenge**: Interactive skill-based task (not trivia)
-3. **Outcome**: Success/failure feedback with skill explanation
+## Careers Available
 
-### Careers Implemented
-
-1. **Programmer**: Debug a broken code logic flow
-2. **Nurse**: Prioritize patient cases in triage
-3. **Engineer**: Balance constraints to design a bridge
+1. **Software Programmer**: Debug code and solve programming challenges
+2. **Registered Nurse**: Answer healthcare and medical questions
+3. **Civil Engineer**: Test engineering knowledge
+4. **Teacher**: Educational questions and classroom scenarios
+5. **Head Chef**: Culinary knowledge and cooking challenges
+6. **Architect**: Architecture and design questions
 
 ## File Structure
 
@@ -49,26 +46,24 @@ src/
 ├── components/
 │   ├── TitleScreen.tsx       # Game title and start
 │   ├── CareerSelection.tsx   # Choose career
+│   ├── DifficultySelection.tsx # Choose difficulty
+│   ├── OutcomeScreen.tsx     # Success/failure results
+│   ├── TrophyScreen.tsx      # View earned trophies
 │   ├── careers/
 │   │   ├── ProgrammerWorld.tsx
 │   │   ├── NurseWorld.tsx
-│   │   └── EngineerWorld.tsx
-│   └── OutcomeScreen.tsx     # Success/failure results
+│   │   ├── EngineerWorld.tsx
+│   │   ├── TeacherWorld.tsx
+│   │   ├── ChefWorld.tsx
+│   │   └── ArchitectWorld.tsx
+│   └── ...
+├── lib/
+│   └── audio.ts              # Audio system
+└── types/
+    └── game.ts               # TypeScript types
 ```
 
-## Major Changes
+## Secret Features
 
-- **Initial Setup**: Created MVP game structure with 3 careers
-- **Game Flow**: Implemented state machine for game progression
-- **Challenges**: Built interactive, skill-based tasks for each career
-- **UX**: Clean, readable interface with clear navigation
-
-## MVP Scope
-
-This is a proof-of-concept demonstrating:
-- Career exploration through simulation
-- Skill-based learning (not just trivia)
-- Multiple outcomes based on player choices
-- Clear, playable game loop
-
-Future enhancements could include: more careers, scoring system, progression tracking, audio/visual polish.
+- **Konami Code**: Enter ↑↑↓↓←→←→BA on any screen to unlock a secret trophy
+- **Admin Panel**: Enter code 5839201746 to access debug features
