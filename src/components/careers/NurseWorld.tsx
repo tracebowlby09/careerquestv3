@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { Difficulty } from "@/types/game";
+import TutorialScreen from "@/components/TutorialScreen";
 
 // Fisher-Yates shuffle algorithm
 function shuffleArray<T>(array: T[]): T[] {
@@ -449,7 +450,7 @@ const quickRecallQuestions: Question[] = [
 ];
 
 export default function NurseWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect }: NurseWorldProps) {
-  const [stage, setStage] = useState<"intro" | "challenge">("intro");
+  const [stage, setStage] = useState<"intro" | "tutorial" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOrder, setSelectedOrder] = useState<string[]>([]);
   const [score, setScore] = useState(0);
@@ -575,46 +576,37 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall, alwa
 
   if (stage === "intro") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-teal-600 via-cyan-600 to-blue-600 p-4 md:p-8 flex items-center justify-center">
-        <div className="max-w-3xl w-full bg-white rounded-2xl shadow-2xl p-8">
-          <div className="text-center mb-6">
-            <div className="text-6xl mb-4">🏥</div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Registered Nurse - {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-            </h2>
-          </div>
-
-          <div className="space-y-4 text-gray-700">
-            <p className="text-lg">
-              <strong>Scenario:</strong> You&apos;re working in a busy emergency department. 
-              You&apos;ll face {totalQuestions} triage scenarios where you must prioritize patient care.
-            </p>
-            
-            <div className="bg-teal-50 border-l-4 border-teal-500 p-4">
-              <p className="font-semibold text-teal-900">Your Task:</p>
-              <p className="text-teal-800">
-                Complete {totalQuestions} triage scenarios. You need {Math.ceil(totalQuestions * 0.6)} correct to pass!
-              </p>
-            </div>
-
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <p className="text-sm text-yellow-800">
-                <strong>Difficulty: {difficulty.toUpperCase()}</strong> - 
-                {difficulty === "easy" && " Basic triage scenarios"}
-                {difficulty === "medium" && " Complex multi-patient situations"}
-                {difficulty === "hard" && " Mass casualty and critical care"}
-              </p>
-            </div>
-          </div>
-
-          <button
-            onClick={() => setStage("challenge")}
-            className="w-full mt-8 bg-teal-600 text-white font-bold py-4 rounded-lg hover:bg-teal-700 transition-colors"
-          >
-            Begin Triage →
-          </button>
-        </div>
-      </div>
+      <TutorialScreen
+        careerName="Registered Nurse"
+        careerIcon="🏥"
+        gradient="bg-gradient-to-br from-teal-600 via-cyan-600 to-blue-600"
+        steps={[
+          {
+            title: "Understand Each Scenario",
+            content: "Each question describes a patient situation. Read it carefully to understand what's wrong.",
+            icon: "📖",
+          },
+          {
+            title: "Prioritize Patients",
+            content: "In triage, you must decide which patient needs care first. Life-threatening conditions come first.",
+            icon: "⚡",
+          },
+          {
+            title: "Choose the Most Urgent Case",
+            content: "Look for signs like: not breathing, severe bleeding, chest pain, or altered consciousness.",
+            icon: "👆",
+          },
+          {
+            title: "Pass the Challenge",
+            content: `You need ${Math.ceil(questions[difficulty].length * 0.6)} out of ${questions[difficulty].length} correct to pass. Good luck!`,
+            icon: "🏆",
+          },
+        ]}
+        onStart={() => setStage("challenge")}
+        onBack={() => {
+          // Go back handled by parent
+        }}
+      />
     );
   }
 

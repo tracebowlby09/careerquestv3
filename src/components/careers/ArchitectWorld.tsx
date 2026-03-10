@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { Difficulty } from "@/types/game";
+import TutorialScreen from "@/components/TutorialScreen";
 
 // Fisher-Yates shuffle algorithm
 function shuffleArray<T>(array: T[]): T[] {
@@ -431,7 +432,7 @@ const quickRecallQuestions: Question[] = [
 ];
 
 export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect }: ArchitectWorldProps) {
-  const [stage, setStage] = useState<"intro" | "challenge">("intro");
+  const [stage, setStage] = useState<"intro" | "tutorial" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [score, setScore] = useState(0);
@@ -552,46 +553,37 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
 
   if (stage === "intro") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-700 via-slate-600 to-zinc-700 p-4 md:p-8 flex items-center justify-center">
-        <div className="max-w-3xl w-full bg-white rounded-2xl shadow-2xl p-8">
-          <div className="text-center mb-6">
-            <div className="text-6xl mb-4">🏛️</div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Architect - {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-            </h2>
-          </div>
-
-          <div className="space-y-4 text-gray-700">
-            <p className="text-lg">
-              <strong>Scenario:</strong> You&apos;re an architect facing {totalQuestions} different 
-              design challenges. Make decisions that balance aesthetics, function, and safety.
-            </p>
-            
-            <div className="bg-slate-50 border-l-4 border-slate-500 p-4">
-              <p className="font-semibold text-slate-900">Your Task:</p>
-              <p className="text-slate-800">
-                Solve {totalQuestions} architectural challenges. You need {Math.ceil(totalQuestions * 0.6)} correct to pass!
-              </p>
-            </div>
-
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <p className="text-sm text-yellow-800">
-                <strong>Difficulty: {difficulty.toUpperCase()}</strong> - 
-                {difficulty === "easy" && " Basic design principles"}
-                {difficulty === "medium" && " Complex design problems"}
-                {difficulty === "hard" && " Professional practice and ethics"}
-              </p>
-            </div>
-          </div>
-
-          <button
-            onClick={() => setStage("challenge")}
-            className="w-full mt-8 bg-slate-600 text-white font-bold py-4 rounded-lg hover:bg-slate-700 transition-colors"
-          >
-            Start Designing →
-          </button>
-        </div>
-      </div>
+      <TutorialScreen
+        careerName="Architect"
+        careerIcon="🏛️"
+        gradient="bg-gradient-to-br from-gray-700 via-slate-600 to-zinc-700"
+        steps={[
+          {
+            title: "Understand the Design Brief",
+            content: "Each question describes a building project. Read what the client needs and what constraints exist.",
+            icon: "📖",
+          },
+          {
+            title: "Balance Multiple Needs",
+            content: "Great architecture balances: aesthetics (looks), function (use), safety (codes), and budget.",
+            icon: "⚖️",
+          },
+          {
+            title: "Choose the Best Solution",
+            content: "Pick the design that best meets ALL requirements while being practical and safe.",
+            icon: "👆",
+          },
+          {
+            title: "Pass the Challenge",
+            content: `You need ${Math.ceil(questions[difficulty].length * 0.6)} out of ${questions[difficulty].length} correct to pass. Good luck!`,
+            icon: "🏆",
+          },
+        ]}
+        onStart={() => setStage("challenge")}
+        onBack={() => {
+          // Go back handled by parent
+        }}
+      />
     );
   }
 

@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { Difficulty } from "@/types/game";
+import TutorialScreen from "@/components/TutorialScreen";
 
 // Fisher-Yates shuffle algorithm
 function shuffleArray<T>(array: T[]): T[] {
@@ -521,7 +522,7 @@ const quickRecallQuestions: Question[] = [
 ];
 
 export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect }: ProgrammerWorldProps) {
-  const [stage, setStage] = useState<"intro" | "challenge">("intro");
+  const [stage, setStage] = useState<"intro" | "tutorial" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [score, setScore] = useState(0);
@@ -659,59 +660,37 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
 
   if (stage === "intro") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-4 md:p-8 flex items-center justify-center">
-        <div className="max-w-3xl w-full bg-white rounded-2xl shadow-2xl p-8">
-          <div className="text-center mb-6">
-            <div className="text-6xl mb-4">💻</div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Software Programmer - {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-            </h2>
-          </div>
-
-          <div className="space-y-4 text-gray-700">
-            <p className="text-lg">
-              <strong>Scenario:</strong> You&apos;re a developer reviewing code and fixing bugs. 
-              Your team needs you to identify and solve {totalQuestions} programming challenges.
-            </p>
-            
-            <div className="bg-blue-50 border-l-4 border-blue-500 p-4">
-              <p className="font-semibold text-blue-900">Your Task:</p>
-              <p className="text-blue-800">
-                Answer {totalQuestions} debugging questions correctly. You need {Math.ceil(totalQuestions * 0.6)} correct to pass!
-              </p>
-            </div>
-
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <p className="text-sm text-yellow-800">
-                <strong>Difficulty: {difficulty.toUpperCase()}</strong> - 
-                {difficulty === "easy" && " Perfect for beginners"}
-                {difficulty === "medium" && " Intermediate challenges"}
-                {difficulty === "hard" && " Expert-level problems"}
-              </p>
-            </div>
-
-            {/* Quick Recall Mode Info */}
-            {isQuickRecall && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mt-4">
-                <p className="font-semibold text-red-900 mb-2">⚡ Quick Recall Mode:</p>
-                <ul className="text-sm text-red-800 space-y-1">
-                  <li>❤️ You have 3 hearts</li>
-                  <li>❌ Lose 1 heart for each wrong answer</li>
-                  <li>⏱️ Lose 1 heart if time runs out (20 seconds per question)</li>
-                  <li>🏆 Complete all questions to win!</li>
-                </ul>
-              </div>
-            )}
-          </div>
-
-          <button
-            onClick={() => setStage("challenge")}
-            className="w-full mt-8 bg-blue-600 text-white font-bold py-4 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Start Debugging →
-          </button>
-        </div>
-      </div>
+      <TutorialScreen
+        careerName="Software Programmer"
+        careerIcon="💻"
+        gradient="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900"
+        steps={[
+          {
+            title: "Read the Code",
+            content: "Each question shows a piece of code. Read it carefully to understand what it does.",
+            icon: "📖",
+          },
+          {
+            title: "Find the Bug",
+            content: "Look for what's wrong - syntax errors, logic errors, or runtime issues.",
+            icon: "🔍",
+          },
+          {
+            title: "Choose the Fix",
+            content: "Pick the option that correctly identifies or fixes the problem.",
+            icon: "👆",
+          },
+          {
+            title: "Pass the Challenge",
+            content: `You need ${Math.ceil(questions[difficulty].length * 0.6)} out of ${questions[difficulty].length} correct to pass. Good luck!`,
+            icon: "🏆",
+          },
+        ]}
+        onStart={() => setStage("challenge")}
+        onBack={() => {
+          // Go back handled by parent
+        }}
+      />
     );
   }
 

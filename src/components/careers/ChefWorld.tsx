@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { Difficulty } from "@/types/game";
+import TutorialScreen from "@/components/TutorialScreen";
 
 // Fisher-Yates shuffle algorithm
 function shuffleArray<T>(array: T[]): T[] {
@@ -431,7 +432,7 @@ const quickRecallQuestions: Question[] = [
 ];
 
 export default function ChefWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect }: ChefWorldProps) {
-  const [stage, setStage] = useState<"intro" | "challenge">("intro");
+  const [stage, setStage] = useState<"intro" | "tutorial" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [score, setScore] = useState(0);
@@ -552,46 +553,37 @@ export default function ChefWorld({ difficulty, onComplete, isQuickRecall, alway
 
   if (stage === "intro") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-600 via-orange-600 to-red-600 p-4 md:p-8 flex items-center justify-center">
-        <div className="max-w-3xl w-full bg-white rounded-2xl shadow-2xl p-8">
-          <div className="text-center mb-6">
-            <div className="text-6xl mb-4">👨‍🍳</div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Professional Chef - {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-            </h2>
-          </div>
-
-          <div className="space-y-4 text-gray-700">
-            <p className="text-lg">
-              <strong>Scenario:</strong> You&apos;re a professional chef managing {totalQuestions} different 
-              kitchen situations. Make the right culinary decisions under pressure.
-            </p>
-            
-            <div className="bg-amber-50 border-l-4 border-amber-500 p-4">
-              <p className="font-semibold text-amber-900">Your Task:</p>
-              <p className="text-amber-800">
-                Handle {totalQuestions} kitchen challenges. You need {Math.ceil(totalQuestions * 0.6)} correct to pass!
-              </p>
-            </div>
-
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <p className="text-sm text-yellow-800">
-                <strong>Difficulty: {difficulty.toUpperCase()}</strong> - 
-                {difficulty === "easy" && " Basic cooking decisions"}
-                {difficulty === "medium" && " Kitchen management and timing"}
-                {difficulty === "hard" && " High-pressure professional scenarios"}
-              </p>
-            </div>
-          </div>
-
-          <button
-            onClick={() => setStage("challenge")}
-            className="w-full mt-8 bg-amber-600 text-white font-bold py-4 rounded-lg hover:bg-amber-700 transition-colors"
-          >
-            Enter Kitchen →
-          </button>
-        </div>
-      </div>
+      <TutorialScreen
+        careerName="Professional Chef"
+        careerIcon="👨‍🍳"
+        gradient="bg-gradient-to-br from-amber-600 via-orange-600 to-red-600"
+        steps={[
+          {
+            title: "Read Each Scenario",
+            content: "Each question presents a kitchen situation. Read it carefully to understand what's happening.",
+            icon: "📖",
+          },
+          {
+            title: "Make a Decision",
+            content: "Choose the best answer that shows proper kitchen procedures and food safety.",
+            icon: "👆",
+          },
+          {
+            title: "Learn from Feedback",
+            content: "After each answer, you'll see an explanation. Use this to learn cooking techniques!",
+            icon: "💡",
+          },
+          {
+            title: "Pass the Challenge",
+            content: `You need ${Math.ceil(questions[difficulty].length * 0.6)} out of ${questions[difficulty].length} correct to pass. Good luck!`,
+            icon: "🏆",
+          },
+        ]}
+        onStart={() => setStage("challenge")}
+        onBack={() => {
+          // Go back handled by parent
+        }}
+      />
     );
   }
 

@@ -18,7 +18,7 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies }:
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-700 via-slate-800 to-gray-900 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-700 via-slate-800 to-gray-900 p-4 md:p-8 flex items-center justify-center">
       {/* Animated background particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -26,18 +26,18 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies }:
         <div className="absolute top-1/2 right-1/3 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
       
-      <button
-        onClick={() => {
-          audioSystem.playClickSound();
-          onOpenSettings();
-        }}
-        className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors z-10"
-        title="Settings"
-      >
-        ⚙️
-      </button>
-      
-      <div className="max-w-2xl w-full bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 md:p-12 text-center relative z-10">
+      <div className="max-w-2xl w-full relative">
+        <button
+          onClick={() => {
+            audioSystem.playClickSound();
+            onOpenSettings();
+          }}
+          className="absolute top-0 right-0 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors z-10"
+          title="Settings"
+        >
+          ⚙️
+        </button>
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 md:p-12 text-center">
         <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
           Career Quest
         </h1>
@@ -95,6 +95,7 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies }:
         >
           🏆 View Trophies
         </button>
+        </div>
       </div>
     </div>
   );

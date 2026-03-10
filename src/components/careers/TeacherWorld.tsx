@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { Difficulty } from "@/types/game";
+import TutorialScreen from "@/components/TutorialScreen";
 
 // Fisher-Yates shuffle algorithm
 function shuffleArray<T>(array: T[]): T[] {
@@ -431,7 +432,7 @@ const quickRecallQuestions: Question[] = [
 ];
 
 export default function TeacherWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect }: TeacherWorldProps) {
-  const [stage, setStage] = useState<"intro" | "challenge">("intro");
+  const [stage, setStage] = useState<"intro" | "tutorial" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [score, setScore] = useState(0);
@@ -568,59 +569,37 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall, al
 
   if (stage === "intro") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-4 md:p-8 flex items-center justify-center">
-        <div className="max-w-3xl w-full bg-white rounded-2xl shadow-2xl p-8">
-          <div className="text-center mb-6">
-            <div className="text-6xl mb-4">👩‍🏫</div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Teacher - {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-            </h2>
-          </div>
-
-          <div className="space-y-4 text-gray-700">
-            <p className="text-lg">
-              <strong>Scenario:</strong> You&apos;re a classroom teacher facing {totalQuestions} different 
-              situations. Make the best professional decisions for your students.
-            </p>
-            
-            <div className="bg-indigo-50 border-l-4 border-indigo-500 p-4">
-              <p className="font-semibold text-indigo-900">Your Task:</p>
-              <p className="text-indigo-800">
-                Handle {totalQuestions} classroom scenarios. You need {Math.ceil(totalQuestions * 0.6)} correct to pass!
-              </p>
-            </div>
-
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <p className="text-sm text-yellow-800">
-                <strong>Difficulty: {difficulty.toUpperCase()}</strong> - 
-                {difficulty === "easy" && " Basic classroom management"}
-                {difficulty === "medium" && " Complex student situations"}
-                {difficulty === "hard" && " Critical professional decisions"}
-              </p>
-            </div>
-
-            {/* Quick Recall Mode Info */}
-            {isQuickRecall && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mt-4">
-                <p className="font-semibold text-red-900 mb-2">⚡ Quick Recall Mode:</p>
-                <ul className="text-sm text-red-800 space-y-1">
-                  <li>❤️ You have 3 hearts</li>
-                  <li>❌ Lose 1 heart for each wrong answer</li>
-                  <li>⏱️ Lose 1 heart if time runs out (20 seconds per question)</li>
-                  <li>🏆 Complete all questions to win!</li>
-                </ul>
-              </div>
-            )}
-          </div>
-
-          <button
-            onClick={() => setStage("challenge")}
-            className="w-full mt-8 bg-indigo-600 text-white font-bold py-4 rounded-lg hover:bg-indigo-700 transition-colors"
-          >
-            Enter Classroom →
-          </button>
-        </div>
-      </div>
+      <TutorialScreen
+        careerName="Teacher"
+        careerIcon="👩‍🏫"
+        gradient="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600"
+        steps={[
+          {
+            title: "Read Each Scenario",
+            content: "Each question describes a classroom situation. Read it carefully to understand what's happening.",
+            icon: "📖",
+          },
+          {
+            title: "Think Like a Teacher",
+            content: "Consider student safety, learning needs, and professional ethics when making decisions.",
+            icon: "🎓",
+          },
+          {
+            title: "Choose the Best Action",
+            content: "Pick the option that puts students first and follows best teaching practices.",
+            icon: "👆",
+          },
+          {
+            title: "Pass the Challenge",
+            content: `You need ${Math.ceil(questions[difficulty].length * 0.6)} out of ${questions[difficulty].length} correct to pass. Good luck!`,
+            icon: "🏆",
+          },
+        ]}
+        onStart={() => setStage("challenge")}
+        onBack={() => {
+          // Go back handled by parent
+        }}
+      />
     );
   }
 

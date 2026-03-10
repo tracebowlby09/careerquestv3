@@ -18,10 +18,8 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
     ? "bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900" 
     : "bg-gradient-to-br from-slate-700 via-indigo-800 to-gray-900";
 
-  // For dark mode (playing state), use full-screen without padding or max-width
-  const containerClass = dark 
-    ? "min-h-screen" 
-    : "min-h-screen p-4 md:p-8";
+  // Always use consistent layout with padding and max-width to prevent UI jumping
+  const containerClass = "min-h-screen p-4 md:p-8";
 
   const handleExitClick = () => {
     if (showExitWarning && onExit) {
@@ -46,63 +44,32 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
   return (
     <>
       <div className={`${bgClass} ${containerClass}`}>
-        {!dark && (
-          <div className="max-w-6xl mx-auto">
-            <div className="flex justify-end gap-2 mb-4">
-              {onOpenSettings && (
-                <button
-                  onClick={() => {
-                    audioSystem.playClickSound();
-                    onOpenSettings();
-                  }}
-                  className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
-                  title="Settings"
-                >
-                  ⚙️
-                </button>
-              )}
-              {onExit && (
-                <button
-                  onClick={handleExitClick}
-                  className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
-                  title="Exit to Title"
-                >
-                  🏠
-                </button>
-              )}
-            </div>
-            {children}
+        <div className="max-w-6xl mx-auto">
+          <div className="flex justify-end gap-2 mb-4">
+            {onOpenSettings && (
+              <button
+                onClick={() => {
+                  audioSystem.playClickSound();
+                  onOpenSettings();
+                }}
+                className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
+                title="Settings"
+              >
+                ⚙️
+              </button>
+            )}
+            {onExit && (
+              <button
+                onClick={handleExitClick}
+                className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
+                title="Exit to Title"
+              >
+                🏠
+              </button>
+            )}
           </div>
-        )}
-        {/* For dark mode (playing), render children without container constraints */}
-        {dark && (
-          <>
-            <div className="fixed top-4 right-4 flex gap-2 z-10">
-              {onOpenSettings && (
-                <button
-                  onClick={() => {
-                    audioSystem.playClickSound();
-                    onOpenSettings();
-                  }}
-                  className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
-                  title="Settings"
-                >
-                  ⚙️
-                </button>
-              )}
-              {onExit && (
-                <button
-                  onClick={handleExitClick}
-                  className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
-                  title="Exit to Title"
-                >
-                  🏠
-                </button>
-              )}
-            </div>
-            {children}
-          </>
-        )}
+          {children}
+        </div>
       </div>
 
       {/* Exit Warning Modal */}

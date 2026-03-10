@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { Difficulty } from "@/types/game";
+import TutorialScreen from "@/components/TutorialScreen";
 
 // Fisher-Yates shuffle algorithm
 function shuffleArray<T>(array: T[]): T[] {
@@ -530,7 +531,7 @@ const quickRecallQuestions: Question[] = [
 ];
 
 export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect }: EngineerWorldProps) {
-  const [stage, setStage] = useState<"intro" | "challenge">("intro");
+  const [stage, setStage] = useState<"intro" | "tutorial" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedDesign, setSelectedDesign] = useState<string | null>(null);
   const [score, setScore] = useState(0);
@@ -655,46 +656,37 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, a
 
   if (stage === "intro") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 p-4 md:p-8 flex items-center justify-center">
-        <div className="max-w-3xl w-full bg-white rounded-2xl shadow-2xl p-8">
-          <div className="text-center mb-6">
-            <div className="text-6xl mb-4">🏗️</div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Civil Engineer - {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-            </h2>
-          </div>
-
-          <div className="space-y-4 text-gray-700">
-            <p className="text-lg">
-              <strong>Scenario:</strong> You&apos;re a civil engineer working on {totalQuestions} different 
-              projects. Each requires balancing cost, strength, and timeline constraints.
-            </p>
-            
-            <div className="bg-orange-50 border-l-4 border-orange-500 p-4">
-              <p className="font-semibold text-orange-900">Your Task:</p>
-              <p className="text-orange-800">
-                Complete {totalQuestions} design challenges. You need {Math.ceil(totalQuestions * 0.6)} correct to pass!
-              </p>
-            </div>
-
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <p className="text-sm text-yellow-800">
-                <strong>Difficulty: {difficulty.toUpperCase()}</strong> - 
-                {difficulty === "easy" && " Simple projects with clear constraints"}
-                {difficulty === "medium" && " Complex multi-constraint optimization"}
-                {difficulty === "hard" && " Advanced structural engineering"}
-              </p>
-            </div>
-          </div>
-
-          <button
-            onClick={() => setStage("challenge")}
-            className="w-full mt-8 bg-orange-600 text-white font-bold py-4 rounded-lg hover:bg-orange-700 transition-colors"
-          >
-            Review Designs →
-          </button>
-        </div>
-      </div>
+      <TutorialScreen
+        careerName="Civil Engineer"
+        careerIcon="🏗️"
+        gradient="bg-gradient-to-br from-orange-600 via-red-600 to-pink-600"
+        steps={[
+          {
+            title: "Understand the Project",
+            content: "Each question describes an engineering project. Read the requirements carefully.",
+            icon: "📖",
+          },
+          {
+            title: "Identify Constraints",
+            content: "Look for what's most important: cost, strength, safety, time, or environmental impact.",
+            icon: "⚖️",
+          },
+          {
+            title: "Choose the Best Design",
+            content: "Pick the option that meets ALL the requirements while being practical and safe.",
+            icon: "👆",
+          },
+          {
+            title: "Pass the Challenge",
+            content: `You need ${Math.ceil(questions[difficulty].length * 0.6)} out of ${questions[difficulty].length} correct to pass. Good luck!`,
+            icon: "🏆",
+          },
+        ]}
+        onStart={() => setStage("challenge")}
+        onBack={() => {
+          // Go back handled by parent
+        }}
+      />
     );
   }
 
