@@ -243,16 +243,6 @@ export default function Home() {
     setSelectedCareer(career);
     
     if (gameMode === "quick-recall") {
-      // Play career-specific background music
-      const musicUrls: Record<Career, string> = {
-        programmer: "/audio/Programmer.mp3",
-        nurse: "/audio/Nurse.mp3",
-        engineer: "/audio/Engineer.mp3",
-        teacher: "/audio/Teacher.mp3",
-        chef: "/audio/Chef.mp3",
-        architect: "/audio/Architect.mp3",
-      };
-      audioSystem.playMusic(musicUrls[career]);
       setGameState("playing");
     } else {
       setGameState("difficulty-select");
@@ -261,20 +251,6 @@ export default function Home() {
 
   const handleDifficultySelect = (difficulty: Difficulty) => {
     setSelectedDifficulty(difficulty);
-    
-    // Play career-specific background music
-    if (selectedCareer) {
-      const musicUrls: Record<Career, string> = {
-        programmer: "/audio/Programmer.mp3",
-        nurse: "/audio/Nurse.mp3",
-        engineer: "/audio/Engineer.mp3",
-        teacher: "/audio/Teacher.mp3",
-        chef: "/audio/Chef.mp3",
-        architect: "/audio/Architect.mp3",
-      };
-      audioSystem.playMusic(musicUrls[selectedCareer]);
-    }
-    
     setGameState("playing");
   };
 
