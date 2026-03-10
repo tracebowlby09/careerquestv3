@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { Difficulty } from "@/types/game";
+import { audioSystem } from "@/lib/audio";
 import TutorialScreen from "@/components/TutorialScreen";
 
 // Fisher-Yates shuffle algorithm
@@ -798,7 +799,10 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
                   name="answer"
                   value={option.id}
                   checked={selectedAnswer === option.id}
-                  onChange={(e) => setSelectedAnswer(e.target.value)}
+                  onChange={(e) => {
+                          setSelectedAnswer(e.target.value);
+                          audioSystem.playClickSound();
+                        }}
                   className="mr-3"
                 />
                 <span className="text-gray-800">{option.text}</span>

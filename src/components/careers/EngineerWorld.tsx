@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { Difficulty } from "@/types/game";
+import { audioSystem } from "@/lib/audio";
 import TutorialScreen from "@/components/TutorialScreen";
 
 // Fisher-Yates shuffle algorithm
@@ -788,7 +789,10 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, a
               return (
                 <button
                   key={design.id}
-                  onClick={() => setSelectedDesign(design.id)}
+                  onClick={() => {
+                        audioSystem.playClickSound();
+                        setSelectedDesign(design.id);
+                      }}
                   className={`w-full p-6 border-2 rounded-lg text-left transition-all ${
                     isSelected
                       ? "border-orange-600 bg-orange-50"

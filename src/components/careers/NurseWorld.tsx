@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { Difficulty } from "@/types/game";
+import { audioSystem } from "@/lib/audio";
 import TutorialScreen from "@/components/TutorialScreen";
 
 // Fisher-Yates shuffle algorithm
@@ -516,6 +517,7 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall, alwa
   }, [currentQuestionIndex]);
 
   const handlePatientClick = (patientId: string) => {
+    audioSystem.playClickSound();
     if (selectedOrder.includes(patientId)) {
       setSelectedOrder(selectedOrder.filter((id) => id !== patientId));
     } else {
