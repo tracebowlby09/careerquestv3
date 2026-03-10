@@ -20,6 +20,7 @@ interface ProgrammerWorldProps {
   onComplete: (success: boolean, score: number, total: number) => void;
   isQuickRecall?: boolean;
   alwaysCorrect?: boolean;
+  onExit?: () => void;
 }
 
 interface Question {
@@ -522,7 +523,7 @@ const quickRecallQuestions: Question[] = [
   },
 ];
 
-export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect }: ProgrammerWorldProps) {
+export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect, onExit }: ProgrammerWorldProps) {
   const [stage, setStage] = useState<"intro" | "tutorial" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -689,7 +690,10 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
         ]}
         onStart={() => setStage("challenge")}
         onBack={() => {
-          // Go back handled by parent
+          if (onExit) {
+            audioSystem.playClickSound();
+            onExit();
+          }
         }}
       />
     );

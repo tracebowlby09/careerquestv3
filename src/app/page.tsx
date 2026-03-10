@@ -557,6 +557,7 @@ export default function Home() {
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
+            onExit={handleExitToTitle}
           />
         )}
         {selectedCareer === "nurse" && (
@@ -565,6 +566,7 @@ export default function Home() {
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
+            onExit={handleExitToTitle}
           />
         )}
         {selectedCareer === "engineer" && (
@@ -573,6 +575,7 @@ export default function Home() {
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
+            onExit={handleExitToTitle}
           />
         )}
         {selectedCareer === "teacher" && (
@@ -581,6 +584,7 @@ export default function Home() {
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
+            onExit={handleExitToTitle}
           />
         )}
         {selectedCareer === "chef" && (
@@ -589,6 +593,7 @@ export default function Home() {
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
+            onExit={handleExitToTitle}
           />
         )}
         {selectedCareer === "architect" && (
@@ -597,6 +602,7 @@ export default function Home() {
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
+            onExit={handleExitToTitle}
           />
         )}
         {settingsModal}

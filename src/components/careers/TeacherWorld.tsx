@@ -20,6 +20,7 @@ interface TeacherWorldProps {
   onComplete: (success: boolean, score: number, total: number) => void;
   isQuickRecall?: boolean;
   alwaysCorrect?: boolean;
+  onExit?: () => void;
 }
 
 interface Question {
@@ -432,7 +433,7 @@ const quickRecallQuestions: Question[] = [
   },
 ];
 
-export default function TeacherWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect }: TeacherWorldProps) {
+export default function TeacherWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect, onExit }: TeacherWorldProps) {
   const [stage, setStage] = useState<"intro" | "tutorial" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -598,7 +599,10 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall, al
         ]}
         onStart={() => setStage("challenge")}
         onBack={() => {
-          // Go back handled by parent
+          if (onExit) {
+            audioSystem.playClickSound();
+            onExit();
+          }
         }}
       />
     );

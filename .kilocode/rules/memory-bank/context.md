@@ -26,6 +26,7 @@ Career Quest V3 is a career exploration game with multiple career paths (Program
 - [x] Fixed background music overlapping issue when switching between different music packs
 - [x] Added music transition lock to prevent concurrent music changes
 - [x] Enhanced TitleScreen with animated background particles and improved styling
+- [x] Fixed back button on TutorialScreen instructions to properly exit to title screen
 
 ## Current Structure
 
@@ -93,3 +94,4 @@ Enter the Konami code (↑↑↓↓←→←→BA) anywhere in the game to unloc
 | 2026-03-06 | Added music transition lock to prevent concurrent music changes |
 | 2026-03-08 | Enhanced TitleScreen with animated background particles and improved styling |
 | 2026-03-10 | Removed Career Simulation Mode - deleted all simulation components and references |
+| 2026-03-10 | Fixed back button on TutorialScreen instructions to properly exit to title screen |
