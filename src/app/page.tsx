@@ -550,6 +550,7 @@ export default function Home() {
         onExit={handleExitToTitle}
         showExitWarning={true}
         dark={true}
+        fullScreen={true}
       >
         {selectedCareer === "programmer" && (
           <ProgrammerWorld

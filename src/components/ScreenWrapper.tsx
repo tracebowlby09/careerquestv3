@@ -9,17 +9,20 @@ interface ScreenWrapperProps {
   onExit?: () => void;
   dark?: boolean;
   showExitWarning?: boolean;
+  fullScreen?: boolean;
 }
 
-export default function ScreenWrapper({ children, onOpenSettings, onExit, dark = false, showExitWarning = false }: ScreenWrapperProps) {
+export default function ScreenWrapper({ children, onOpenSettings, onExit, dark = false, showExitWarning = false, fullScreen = false }: ScreenWrapperProps) {
   const [showWarning, setShowWarning] = useState(false);
   
   const bgClass = dark 
     ? "bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900" 
     : "bg-gradient-to-br from-slate-700 via-indigo-800 to-gray-900";
 
-  // Always use consistent layout with padding and max-width to prevent UI jumping
-  const containerClass = "min-h-screen p-4 md:p-8";
+  // Full screen mode removes max-width constraint for career worlds
+  const containerClass = fullScreen 
+    ? "min-h-screen" 
+    : "min-h-screen p-4 md:p-8";
 
   const handleExitClick = () => {
     if (showExitWarning && onExit) {
@@ -44,32 +47,61 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
   return (
     <>
       <div className={`${bgClass} ${containerClass}`}>
-        <div className="max-w-6xl mx-auto">
-          <div className="flex justify-end gap-2 mb-4">
-            {onOpenSettings && (
-              <button
-                onClick={() => {
-                  audioSystem.playClickSound();
-                  onOpenSettings();
-                }}
-                className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
-                title="Settings"
-              >
-                ⚙️
-              </button>
-            )}
-            {onExit && (
-              <button
-                onClick={handleExitClick}
-                className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
-                title="Exit to Title"
-              >
-                🏠
-              </button>
-            )}
+        {fullScreen ? (
+          <>
+            <div className="fixed top-4 right-4 flex gap-2 z-10">
+              {onOpenSettings && (
+                <button
+                  onClick={() => {
+                    audioSystem.playClickSound();
+                    onOpenSettings();
+                  }}
+                  className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
+                  title="Settings"
+                >
+                  ⚙️
+                </button>
+              )}
+              {onExit && (
+                <button
+                  onClick={handleExitClick}
+                  className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
+                  title="Exit to Title"
+                >
+                  🏠
+                </button>
+              )}
+            </div>
+            {children}
+          </>
+        ) : (
+          <div className="max-w-6xl mx-auto">
+            <div className="flex justify-end gap-2 mb-4">
+              {onOpenSettings && (
+                <button
+                  onClick={() => {
+                    audioSystem.playClickSound();
+                    onOpenSettings();
+                  }}
+                  className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
+                  title="Settings"
+                >
+                  ⚙️
+                </button>
+              )}
+              {onExit && (
+                <button
+                  onClick={handleExitClick}
+                  className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
+                  title="Exit to Title"
+                >
+                  🏠
+                </button>
+              )}
+            </div>
+            {children}
           </div>
-          {children}
-        </div>
+        )}
       </div>
 
       {/* Exit Warning Modal */}

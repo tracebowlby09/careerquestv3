@@ -13,7 +13,7 @@ Career Quest V3 is a career exploration game with multiple career paths (Program
 - [x] Tailwind CSS 4 integration
 - [x] ESLint configuration
 - [x] Memory bank documentation
-- [x] Recipe system for common features
+- [x] Recipe system for common features 
 - [x] Career worlds with ScreenWrapper and exit warning popup
 - [x] Added progress loss warning when exiting career worlds during tests
 - [x] Added multiple patients to nurse quick recall questions
@@ -27,6 +27,7 @@ Career Quest V3 is a career exploration game with multiple career paths (Program
 - [x] Added music transition lock to prevent concurrent music changes
 - [x] Enhanced TitleScreen with animated background particles and improved styling
 - [x] Fixed back button on TutorialScreen instructions to properly exit to title screen
+- [x] Made all career worlds full screen without outline (Challenge Mode and Quick Recall)
 
 ## Current Structure
 
@@ -95,3 +96,4 @@ Enter the Konami code (↑↑↓↓←→←→BA) anywhere in the game to unloc
 | 2026-03-08 | Enhanced TitleScreen with animated background particles and improved styling |
 | 2026-03-10 | Removed Career Simulation Mode - deleted all simulation components and references |
 | 2026-03-10 | Fixed back button on TutorialScreen instructions to properly exit to title screen |
+| 2026-03-11 | Made all career worlds full screen without outline (Challenge Mode and Quick Recall) |
