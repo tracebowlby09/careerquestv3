@@ -45,6 +45,78 @@ const trophyContent: Record<string, { icon: string; title: string; message: stri
     message: "You've completed Quick Recall for ALL careers!",
     gradient: "from-indigo-400 via-purple-500 to-pink-500",
   },
+  "lightning-reflex": {
+    icon: "⚡",
+    title: "LIGHTNING REFLEX!",
+    message: "Answered 5 questions correctly in under 10 seconds each!",
+    gradient: "from-yellow-300 via-orange-400 to-red-400",
+  },
+  "marathon-runner": {
+    icon: "🏃",
+    title: "MARATHON RUNNER!",
+    message: "Completed a career without making any mistakes!",
+    gradient: "from-emerald-400 via-teal-500 to-cyan-500",
+  },
+  "speed-demon": {
+    icon: "🔥",
+    title: "SPEED DEMON!",
+    message: "Completed Quick Recall with a perfect score in under 30 seconds!",
+    gradient: "from-red-400 via-orange-500 to-yellow-500",
+  },
+  "jack-of-all-trades": {
+    icon: "🎭",
+    title: "JACK OF ALL TRADES!",
+    message: "Played at least one question from each career!",
+    gradient: "from-violet-400 via-purple-500 to-fuchsia-500",
+  },
+  "lucky-star": {
+    icon: "🍀",
+    title: "LUCKY STAR!",
+    message: "Got a question wrong but still passed on Hard mode!",
+    gradient: "from-green-300 via-emerald-400 to-teal-500",
+  },
+  "night-owl": {
+    icon: "🦉",
+    title: "NIGHT OWL!",
+    message: "Playing the game after 10 PM - the career quest continues!",
+    gradient: "from-indigo-600 via-purple-700 to-slate-800",
+  },
+  "early-bird": {
+    icon: "🐦",
+    title: "EARLY BIRD!",
+    message: "Starting your career journey before 6 AM - rising star!",
+    gradient: "from-amber-300 via-yellow-400 to-orange-400",
+  },
+  "pi-pioneer": {
+    icon: "🥧",
+    title: "PI PIONEER!",
+    message: "You typed the first 3 digits of Pi: 3.14!",
+    gradient: "from-orange-400 via-red-500 to-pink-500",
+  },
+  "pi-explorer": {
+    icon: "🔢",
+    title: "PI EXPLORER!",
+    message: "You typed 4 digits of Pi: 3.141!",
+    gradient: "from-amber-500 via-orange-600 to-red-600",
+  },
+  "pi-master": {
+    icon: "🧮",
+    title: "PI MASTER!",
+    message: "You typed 5 digits of Pi: 3.1415!",
+    gradient: "from-yellow-500 via-amber-600 to-orange-700",
+  },
+  "pi-genius": {
+    icon: "💡",
+    title: "PI GENIUS!",
+    message: "You typed 6 digits of Pi: 3.14159!",
+    gradient: "from-blue-500 via-indigo-600 to-purple-700",
+  },
+  "pi-legend": {
+    icon: "🏆",
+    title: "PI LEGEND!",
+    message: "You typed 9 digits of Pi: 3.1415926! Mathematical!",
+    gradient: "from-cyan-400 via-blue-500 to-indigo-600",
+  },
 };
 
 export default function SecretTrophyPopup({ show, achievementType, onClose }: SecretTrophyPopupProps) {

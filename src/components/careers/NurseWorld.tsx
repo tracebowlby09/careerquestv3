@@ -21,6 +21,7 @@ interface NurseWorldProps {
   isQuickRecall?: boolean;
   alwaysCorrect?: boolean;
   onExit?: () => void;
+  onAnswerResult?: (isCorrect: boolean, timeMs: number) => void;
 }
 
 interface Patient {
@@ -451,7 +452,7 @@ const quickRecallQuestions: Question[] = [
   },
 ];
 
-export default function NurseWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect, onExit }: NurseWorldProps) {
+export default function NurseWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect, onExit, onAnswerResult }: NurseWorldProps) {
   const [stage, setStage] = useState<"intro" | "tutorial" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOrder, setSelectedOrder] = useState<string[]>([]);

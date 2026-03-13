@@ -21,6 +21,7 @@ interface ProgrammerWorldProps {
   isQuickRecall?: boolean;
   alwaysCorrect?: boolean;
   onExit?: () => void;
+  onAnswerResult?: (isCorrect: boolean, timeMs: number) => void;
 }
 
 interface Question {
@@ -523,7 +524,7 @@ const quickRecallQuestions: Question[] = [
   },
 ];
 
-export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect, onExit }: ProgrammerWorldProps) {
+export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect, onExit, onAnswerResult }: ProgrammerWorldProps) {
   const [stage, setStage] = useState<"intro" | "tutorial" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -539,6 +540,8 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
   const [heartLostMessage, setHeartLostMessage] = useState("");
 
   // Timer for Quick Recall mode
+  const [questionStartTime, setQuestionStartTime] = useState<number>(Date.now());
+  
   useEffect(() => {
     if (!isQuickRecall || stage !== "challenge" || hearts <= 0) return;
     
@@ -569,6 +572,7 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         setSelectedAnswer(null);
         setTimeLeft(20);
+        setQuestionStartTime(Date.now());
       } else {
         onComplete(true, score + 1, totalQuestions);
       }
@@ -607,6 +611,12 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
     if (!selected) return;
 
     const isCorrect = selected.correct;
+    const timeMs = Date.now() - questionStartTime;
+    
+    // Call the answer result callback if provided
+    if (onAnswerResult) {
+      onAnswerResult(isCorrect, timeMs);
+    }
     
     // Quick Recall mode: hearts system
     if (isQuickRecall) {
@@ -625,6 +635,7 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
           setCurrentQuestionIndex(currentQuestionIndex + 1);
           setSelectedAnswer(null);
           setTimeLeft(20);
+          setQuestionStartTime(Date.now());
         } else {
           onComplete(true, newScore, totalQuestions);
         }
@@ -653,6 +664,7 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
       // Move to next question
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedAnswer(null);
+      setQuestionStartTime(Date.now());
     } else {
       // All questions completed
       const passThreshold = Math.ceil(totalQuestions * 0.6); // Need 60% to pass

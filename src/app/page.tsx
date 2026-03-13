@@ -142,6 +142,82 @@ const checkAchievements = (
   return achievements;
 };
 
+// Check for easter egg achievements
+const checkEasterEggAchievements = (
+  allTrophies: Trophy[],
+  isQuickRecallMode: boolean,
+  score: number,
+  total: number,
+  difficulty: Difficulty | null,
+  currentConsecutiveCorrect: number,
+  quickRecallTimeMs: number | null,
+  careersPlayedSet: Set<Career>,
+  hadWrongAnswer: boolean,
+  passedWithWrong: boolean,
+  gameStartHourValue: number | null
+): AchievementType[] => {
+  const achievements: AchievementType[] = [];
+  const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect"];
+
+  // Lightning Reflex - 5 correct answers in a row
+  if (currentConsecutiveCorrect >= 5) {
+    const alreadyHas = allTrophies.some((t) => t.achievementType === "lightning-reflex");
+    if (!alreadyHas) {
+      achievements.push("lightning-reflex");
+    }
+  }
+
+  // Marathon Runner - Complete challenge mode with no wrong answers
+  if (!isQuickRecallMode && !hadWrongAnswer && score === total && total > 0) {
+    const alreadyHas = allTrophies.some((t) => t.achievementType === "marathon-runner");
+    if (!alreadyHas) {
+      achievements.push("marathon-runner");
+    }
+  }
+
+  // Speed Demon - Quick Recall perfect score under 30 seconds (30000ms)
+  if (isQuickRecallMode && score === total && total > 0 && quickRecallTimeMs !== null && quickRecallTimeMs < 30000) {
+    const alreadyHas = allTrophies.some((t) => t.achievementType === "speed-demon");
+    if (!alreadyHas) {
+      achievements.push("speed-demon");
+    }
+  }
+
+  // Jack of All Trades - Play at least one question from each career
+  if (careersPlayedSet.size === allCareers.length) {
+    const alreadyHas = allTrophies.some((t) => t.achievementType === "jack-of-all-trades");
+    if (!alreadyHas) {
+      achievements.push("jack-of-all-trades");
+    }
+  }
+
+  // Lucky Star - Got a question wrong but still passed on Hard mode
+  if (passedWithWrong && difficulty === "hard") {
+    const alreadyHas = allTrophies.some((t) => t.achievementType === "lucky-star");
+    if (!alreadyHas) {
+      achievements.push("lucky-star");
+    }
+  }
+
+  // Night Owl - Play after 10 PM (hour >= 22)
+  if (gameStartHourValue !== null && gameStartHourValue >= 22) {
+    const alreadyHas = allTrophies.some((t) => t.achievementType === "night-owl");
+    if (!alreadyHas) {
+      achievements.push("night-owl");
+    }
+  }
+
+  // Early Bird - Play before 6 AM (hour < 6)
+  if (gameStartHourValue !== null && gameStartHourValue < 6) {
+    const alreadyHas = allTrophies.some((t) => t.achievementType === "early-bird");
+    if (!alreadyHas) {
+      achievements.push("early-bird");
+    }
+  }
+
+  return achievements;
+};
+
 export default function Home() {
   const [gameState, setGameState] = useState<GameState>("title");
   const [gameMode, setGameMode] = useState<GameMode>("challenge");
@@ -168,6 +244,36 @@ export default function Home() {
   // Konami code detection
   const konamiCode = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
   const [konamiIndex, setKonamiIndex] = useState(0);
+
+  // Pi digit code detection (type the digits of Pi: 3.1415926...)
+  const piCode = ["3", ".", "1", "4", "1", "5", "9", "2", "6"];
+  const [piIndex, setPiIndex] = useState(0);
+
+  // Easter egg tracking
+  const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
+  const [questionStartTime, setQuestionStartTime] = useState<number | null>(null);
+  const [quickRecallStartTime, setQuickRecallStartTime] = useState<number | null>(null);
+  const [careersPlayed, setCareersPlayed] = useState<Set<Career>>(new Set());
+  const [hasWrongAnswer, setHasWrongAnswer] = useState(false);
+  const [gameStartHour, setGameStartHour] = useState<number | null>(null);
+  const [timeBasedTrophiesChecked, setTimeBasedTrophiesChecked] = useState(false);
+
+  // Callback to track answer results for easter eggs
+  const handleAnswerResult = useCallback((isCorrect: boolean, timeMs: number) => {
+    if (isCorrect) {
+      // Track consecutive correct for Lightning Reflex
+      setConsecutiveCorrect(prev => prev + 1);
+      
+      // Check if answer was fast (< 10 seconds = 10000ms)
+      if (timeMs < 10000) {
+        // This will be checked when the game completes
+      }
+    } else {
+      // Track wrong answers for Lucky Star and Marathon Runner
+      setHasWrongAnswer(true);
+      setConsecutiveCorrect(0);
+    }
+  }, []);
 
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
     // Ignore if user is typing in an input
@@ -223,7 +329,83 @@ export default function Home() {
       // Reset if wrong key
       setKonamiIndex(0);
     }
-  }, [konamiIndex, konamiCode, trophies, adminIndex, adminCode]);
+
+    // Pi digit code detection (type 3.1415926...)
+    if (key === piCode[piIndex]) {
+      const newPiIndex = piIndex + 1;
+      if (newPiIndex === piCode.length) {
+        // Full Pi code entered! Award highest Pi trophy
+        const piTrophy: Trophy = {
+          career: "programmer",
+          difficulty: "hard",
+          earnedAt: new Date(),
+          isSecret: true,
+          achievementType: "pi-legend",
+        };
+        
+        const alreadyHasLegend = trophies.some((t) => t.achievementType === "pi-legend");
+        if (!alreadyHasLegend) {
+          setTrophies([...trophies, piTrophy]);
+          saveTrophies([...trophies, piTrophy]);
+          setShowSecretTrophyPopup(true);
+          setCurrentAchievementType("pi-legend");
+        }
+        
+        setPiIndex(0);
+      } else {
+        // Check for intermediate achievements based on how many digits entered
+        const digitsEntered = newPiIndex;
+        let newAchievement: AchievementType | null = null;
+        
+        // 3 digits (3.1) is too short, need at least 3.14
+        if (digitsEntered >= 3) {
+          // Check which trophy to award based on progress
+          const piProgress = piCode.slice(0, digitsEntered).join("");
+          
+          // Check current progress
+          const alreadyHas = (type: string) => trophies.some((t) => t.achievementType === type);
+          
+          if (digitsEntered >= 9 && !alreadyHas("pi-legend")) {
+            newAchievement = "pi-legend";
+          } else if (digitsEntered >= 8 && !alreadyHas("pi-genius")) {
+            newAchievement = "pi-genius";
+          } else if (digitsEntered >= 6 && !alreadyHas("pi-master")) {
+            newAchievement = "pi-master";
+          } else if (digitsEntered >= 5 && !alreadyHas("pi-explorer")) {
+            newAchievement = "pi-explorer";
+          } else if (digitsEntered >= 3 && !alreadyHas("pi-pioneer")) {
+            // Need 3.14 (3 digits after the decimal point counts)
+            const currentInput = piCode.slice(0, digitsEntered).join("");
+            if (currentInput === "3.14" || currentInput === "3.141") {
+              newAchievement = "pi-pioneer";
+            }
+          }
+          
+          if (newAchievement) {
+            const trophy: Trophy = {
+              career: "programmer",
+              difficulty: "hard",
+              earnedAt: new Date(),
+              isSecret: true,
+              achievementType: newAchievement,
+            };
+            setTrophies([...trophies, trophy]);
+            saveTrophies([...trophies, trophy]);
+            setShowSecretTrophyPopup(true);
+            setCurrentAchievementType(newAchievement);
+          }
+        }
+        
+        setPiIndex(newPiIndex);
+      }
+    } else {
+      // Reset if wrong key (but only if it's not a digit we might need)
+      const validDigits = ["3", ".", "1", "4", "5", "9", "2", "6"];
+      if (!validDigits.includes(key)) {
+        setPiIndex(0);
+      }
+    }
+  }, [konamiIndex, konamiCode, trophies, adminIndex, adminCode, piIndex, piCode]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
@@ -237,12 +419,61 @@ export default function Home() {
     audioSystem.playTitleMusic();
     setGameMode(mode);
     setGameState("career-select");
+    
+    // Set game start hour for Night Owl / Early Bird trophies
+    const currentHour = new Date().getHours();
+    setGameStartHour(currentHour);
+    
+    // Reset easter egg tracking
+    setConsecutiveCorrect(0);
+    setCareersPlayed(new Set());
+    setHasWrongAnswer(false);
+    setQuickRecallStartTime(null);
+    
+    // Check time-based trophies immediately if not already checked
+    if (!timeBasedTrophiesChecked) {
+      const hour = currentHour;
+      const timeAchievements: AchievementType[] = [];
+      
+      if (hour >= 22) {
+        timeAchievements.push("night-owl");
+      }
+      if (hour < 6) {
+        timeAchievements.push("early-bird");
+      }
+      
+      if (timeAchievements.length > 0) {
+        const existingTrophies = loadTrophies();
+        const newTimeTrophies = timeAchievements.map((achievement) => ({
+          career: "programmer" as Career,
+          difficulty: "hard" as Difficulty,
+          earnedAt: new Date(),
+          isSecret: true,
+          achievementType: achievement,
+        }));
+        
+        setTrophies([...existingTrophies, ...newTimeTrophies]);
+        saveTrophies([...existingTrophies, ...newTimeTrophies]);
+        setShowSecretTrophyPopup(true);
+        setCurrentAchievementType(timeAchievements[0]);
+        setTimeBasedTrophiesChecked(true);
+      }
+    }
   };
 
   const handleCareerSelect = (career: Career) => {
     setSelectedCareer(career);
     
+    // Track careers played for Jack of All Trades trophy
+    setCareersPlayed(prev => {
+      const newSet = new Set(prev);
+      newSet.add(career);
+      return newSet;
+    });
+    
     if (gameMode === "quick-recall") {
+      // Start Quick Recall timer for Speed Demon trophy
+      setQuickRecallStartTime(Date.now());
       setGameState("playing");
     } else {
       setGameState("difficulty-select");
@@ -270,6 +501,28 @@ export default function Home() {
       }
     }
     
+    // Calculate quick recall time
+    let quickRecallTimeMs: number | null = null;
+    if (isQuickRecallMode && quickRecallStartTime !== null) {
+      quickRecallTimeMs = Date.now() - quickRecallStartTime;
+    }
+    
+    // Check for easter egg achievements
+    const passedWithWrong = success && hasWrongAnswer;
+    const easterEggAchievements = checkEasterEggAchievements(
+      trophies,
+      isQuickRecallMode,
+      finalScore,
+      total,
+      selectedDifficulty,
+      consecutiveCorrect,
+      quickRecallTimeMs,
+      careersPlayed,
+      hasWrongAnswer,
+      passedWithWrong,
+      gameStartHour
+    );
+    
     // Award trophy if successful
     if (success && selectedCareer) {
       // For challenge mode, use selected difficulty
@@ -287,9 +540,12 @@ export default function Home() {
         const allTrophies = [...trophies, newTrophy];
         const newAchievements = checkAchievements(allTrophies, isQuickRecallMode, finalScore, total);
         
-        if (newAchievements.length > 0) {
+        // Combine regular achievements with easter egg achievements
+        const allNewAchievements = [...newAchievements, ...easterEggAchievements];
+        
+        if (allNewAchievements.length > 0) {
           // Add achievement trophies
-          const achievementTrophies = newAchievements.map((achievement) => ({
+          const achievementTrophies = allNewAchievements.map((achievement) => ({
             career: selectedCareer,
             difficulty: "hard" as Difficulty,
             earnedAt: new Date(),
@@ -302,12 +558,28 @@ export default function Home() {
           
           // Show popup for achievements
           setShowSecretTrophyPopup(true);
-          setCurrentAchievementType(newAchievements[0]);
+          setCurrentAchievementType(allNewAchievements[0]);
         } else {
           setTrophies(allTrophies);
           saveTrophies(allTrophies);
         }
       }
+    } else if (easterEggAchievements.length > 0) {
+      // Even if not successful, check for easter egg achievements (like Lucky Star)
+      const achievementTrophies = easterEggAchievements.map((achievement) => ({
+        career: selectedCareer || "programmer",
+        difficulty: "hard" as Difficulty,
+        earnedAt: new Date(),
+        isSecret: true,
+        achievementType: achievement,
+      }));
+      
+      setTrophies([...trophies, ...achievementTrophies]);
+      saveTrophies([...trophies, ...achievementTrophies]);
+      
+      // Show popup for achievements
+      setShowSecretTrophyPopup(true);
+      setCurrentAchievementType(easterEggAchievements[0]);
     }
     
     setGameState("outcome");
@@ -559,6 +831,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
+            onAnswerResult={handleAnswerResult}
           />
         )}
         {selectedCareer === "nurse" && (
@@ -568,6 +841,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
+            onAnswerResult={handleAnswerResult}
           />
         )}
         {selectedCareer === "engineer" && (
@@ -577,6 +851,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
+            onAnswerResult={handleAnswerResult}
           />
         )}
         {selectedCareer === "teacher" && (
@@ -586,6 +861,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
+            onAnswerResult={handleAnswerResult}
           />
         )}
         {selectedCareer === "chef" && (
@@ -595,6 +871,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
+            onAnswerResult={handleAnswerResult}
           />
         )}
         {selectedCareer === "architect" && (
@@ -604,6 +881,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
+            onAnswerResult={handleAnswerResult}
           />
         )}
         {settingsModal}

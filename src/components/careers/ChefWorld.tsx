@@ -21,6 +21,7 @@ interface ChefWorldProps {
   isQuickRecall?: boolean;
   alwaysCorrect?: boolean;
   onExit?: () => void;
+  onAnswerResult?: (isCorrect: boolean, timeMs: number) => void;
 }
 
 interface Question {
@@ -433,7 +434,7 @@ const quickRecallQuestions: Question[] = [
   },
 ];
 
-export default function ChefWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect, onExit }: ChefWorldProps) {
+export default function ChefWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect, onExit, onAnswerResult }: ChefWorldProps) {
   const [stage, setStage] = useState<"intro" | "tutorial" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);

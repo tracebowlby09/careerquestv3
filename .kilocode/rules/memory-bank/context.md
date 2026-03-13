@@ -28,6 +28,7 @@ Career Quest V3 is a career exploration game with multiple career paths (Program
 - [x] Enhanced TitleScreen with animated background particles and improved styling
 - [x] Fixed back button on TutorialScreen instructions to properly exit to title screen
 - [x] Made all career worlds full screen without outline (Challenge Mode and Quick Recall)
+- [x] Added Pi digit typing secret trophies (Pi Pioneer at 3.14, Pi Explorer at 3.141, Pi Master at 3.1415, Pi Genius at 3.14159, Pi Legend at 3.1415926)
 
 ## Current Structure
 
@@ -70,6 +71,25 @@ The ScreenWrapper component now includes an optional exit warning when `showExit
 
 Enter the Konami code (↑↑↓↓←→←→BA) anywhere in the game to unlock a secret trophy. A popup will appear at the top of the screen when unlocked. The trophy only appears in the Trophy Case after unlocking.
 
+### Easter Egg Trophies:
+
+The game includes several secret easter egg trophies that can be unlocked through specific actions:
+
+| Trophy | How to Unlock | Icon |
+|--------|--------------|------|
+| Lightning Reflex | Answer 5 questions correctly in a row, each under 10 seconds | ⚡ |
+| Marathon Runner | Complete a Challenge Mode career with no wrong answers | 🏃 |
+| Speed Demon | Complete Quick Recall with a perfect score in under 30 seconds | 🔥 |
+| Jack of All Trades | Play at least one question from each career | 🎭 |
+| Lucky Star | Get a question wrong but still pass on Hard mode | 🍀 |
+| Night Owl | Play the game after 10 PM | 🦉 |
+| Early Bird | Play the game before 6 AM | 🐦 |
+| Pi Pioneer | Type the first 3 digits of Pi (3.14) | 🥧 |
+| Pi Explorer | Type 4 digits of Pi (3.141) | 🔢 |
+| Pi Master | Type 5 digits of Pi (3.1415) | 🧮 |
+| Pi Genius | Type 6 digits of Pi (3.14159) | 💡 |
+| Pi Legend | Type 9 digits of Pi (3.1415926) | 🏆 |
+
 ## Available Recipes
 
 | Recipe | File | Use Case |
@@ -97,3 +117,4 @@ Enter the Konami code (↑↑↓↓←→←→BA) anywhere in the game to unloc
 | 2026-03-10 | Removed Career Simulation Mode - deleted all simulation components and references |
 | 2026-03-10 | Fixed back button on TutorialScreen instructions to properly exit to title screen |
 | 2026-03-11 | Made all career worlds full screen without outline (Challenge Mode and Quick Recall) |
+| 2026-03-12 | Added 7 new easter egg trophies (Lightning Reflex, Marathon Runner, Speed Demon, Jack of All Trades, Lucky Star, Night Owl, Early Bird) |
