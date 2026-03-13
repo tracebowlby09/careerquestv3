@@ -71,6 +71,36 @@ const secretTrophies: SecretTrophyDisplay[] = [
     description: "Completed Quick Recall for ALL careers",
     icon: "🏅",
   },
+  {
+    id: "pi-pioneer",
+    name: "Pi Pioneer",
+    description: "Typed the first 3 digits of Pi (3.14)",
+    icon: "🥧",
+  },
+  {
+    id: "pi-explorer",
+    name: "Pi Explorer",
+    description: "Typed 4 digits of Pi (3.141)",
+    icon: "🔢",
+  },
+  {
+    id: "pi-master",
+    name: "Pi Master",
+    description: "Typed 5 digits of Pi (3.1415)",
+    icon: "🧮",
+  },
+  {
+    id: "pi-genius",
+    name: "Pi Genius",
+    description: "Typed 6 digits of Pi (3.14159)",
+    icon: "💡",
+  },
+  {
+    id: "pi-legend",
+    name: "Pi Legend",
+    description: "Typed 9 digits of Pi (3.1415926)",
+    icon: "🏆",
+  },
 ];
 
 const getAchievementInfo = (achievementType?: AchievementType): SecretTrophyDisplay | undefined => {
