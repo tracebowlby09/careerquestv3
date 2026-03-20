@@ -624,6 +624,12 @@ export default function Home() {
     setGameState("difficulty-select");
   };
 
+  const handleExitToCareerSelect = () => {
+    // Go back to career selection screen
+    setSelectedCareer(null);
+    setGameState("career-select");
+  };
+
   // Render Settings modal (always available)
   const settingsModal = <Settings isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />;
 
@@ -822,6 +828,9 @@ export default function Home() {
   if (gameState === "playing" && selectedCareer) {
     const isQuickRecall = gameMode === "quick-recall";
     
+    // Determine which handler to use for tutorial back button based on game mode
+    const tutorialBackHandler = isQuickRecall ? handleExitToCareerSelect : handleExitToDifficultySelect;
+    
     return (
       <ScreenWrapper
         onOpenSettings={() => setSettingsOpen(true)}
@@ -837,7 +846,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
-            onTutorialBack={handleExitToDifficultySelect}
+            onTutorialBack={tutorialBackHandler}
             onAnswerResult={handleAnswerResult}
           />
         )}
@@ -848,7 +857,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
-            onTutorialBack={handleExitToDifficultySelect}
+            onTutorialBack={tutorialBackHandler}
             onAnswerResult={handleAnswerResult}
           />
         )}
@@ -859,7 +868,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
-            onTutorialBack={handleExitToDifficultySelect}
+            onTutorialBack={tutorialBackHandler}
             onAnswerResult={handleAnswerResult}
           />
         )}
@@ -870,7 +879,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
-            onTutorialBack={handleExitToDifficultySelect}
+            onTutorialBack={tutorialBackHandler}
             onAnswerResult={handleAnswerResult}
           />
         )}
@@ -881,7 +890,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
-            onTutorialBack={handleExitToDifficultySelect}
+            onTutorialBack={tutorialBackHandler}
             onAnswerResult={handleAnswerResult}
           />
         )}
@@ -892,7 +901,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
-            onTutorialBack={handleExitToDifficultySelect}
+            onTutorialBack={tutorialBackHandler}
             onAnswerResult={handleAnswerResult}
           />
         )}
