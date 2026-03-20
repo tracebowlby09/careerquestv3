@@ -21,6 +21,7 @@ interface ArchitectWorldProps {
   isQuickRecall?: boolean;
   alwaysCorrect?: boolean;
   onExit?: () => void;
+  onTutorialBack?: () => void;
   onAnswerResult?: (isCorrect: boolean, timeMs: number) => void;
 }
 
@@ -434,7 +435,7 @@ const quickRecallQuestions: Question[] = [
   },
 ];
 
-export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect, onExit, onAnswerResult }: ArchitectWorldProps) {
+export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect, onExit, onTutorialBack, onAnswerResult }: ArchitectWorldProps) {
   const [stage, setStage] = useState<"intro" | "tutorial" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -584,7 +585,10 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
         ]}
         onStart={() => setStage("challenge")}
         onBack={() => {
-          if (onExit) {
+          if (onTutorialBack) {
+            audioSystem.playClickSound();
+            onTutorialBack();
+          } else if (onExit) {
             audioSystem.playClickSound();
             onExit();
           }

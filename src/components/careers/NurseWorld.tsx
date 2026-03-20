@@ -21,6 +21,7 @@ interface NurseWorldProps {
   isQuickRecall?: boolean;
   alwaysCorrect?: boolean;
   onExit?: () => void;
+  onTutorialBack?: () => void;
   onAnswerResult?: (isCorrect: boolean, timeMs: number) => void;
 }
 
@@ -452,7 +453,7 @@ const quickRecallQuestions: Question[] = [
   },
 ];
 
-export default function NurseWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect, onExit, onAnswerResult }: NurseWorldProps) {
+export default function NurseWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect, onExit, onTutorialBack, onAnswerResult }: NurseWorldProps) {
   const [stage, setStage] = useState<"intro" | "tutorial" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOrder, setSelectedOrder] = useState<string[]>([]);
@@ -608,7 +609,10 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall, alwa
         ]}
         onStart={() => setStage("challenge")}
         onBack={() => {
-          if (onExit) {
+          if (onTutorialBack) {
+            audioSystem.playClickSound();
+            onTutorialBack();
+          } else if (onExit) {
             audioSystem.playClickSound();
             onExit();
           }

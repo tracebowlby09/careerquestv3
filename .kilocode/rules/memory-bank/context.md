@@ -29,6 +29,7 @@ Career Quest V3 is a career exploration game with multiple career paths (Program
 - [x] Fixed back button on TutorialScreen instructions to properly exit to title screen
 - [x] Made all career worlds full screen without outline (Challenge Mode and Quick Recall)
 - [x] Added Pi digit typing secret trophies (Pi Pioneer at 3.14, Pi Explorer at 3.141, Pi Master at 3.1415, Pi Genius at 3.14159, Pi Legend at 3.1415926)
+- [x] Changed tutorial "Back" button to go to difficulty selection screen instead of title screen
 
 ## Current Structure
 

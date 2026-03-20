@@ -618,6 +618,12 @@ export default function Home() {
     setGameState("title");
   };
 
+  const handleExitToDifficultySelect = () => {
+    // Go back to difficulty selection screen
+    setSelectedDifficulty(null);
+    setGameState("difficulty-select");
+  };
+
   // Render Settings modal (always available)
   const settingsModal = <Settings isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />;
 
@@ -831,6 +837,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
+            onTutorialBack={handleExitToDifficultySelect}
             onAnswerResult={handleAnswerResult}
           />
         )}
@@ -841,6 +848,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
+            onTutorialBack={handleExitToDifficultySelect}
             onAnswerResult={handleAnswerResult}
           />
         )}
@@ -851,6 +859,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
+            onTutorialBack={handleExitToDifficultySelect}
             onAnswerResult={handleAnswerResult}
           />
         )}
@@ -861,6 +870,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
+            onTutorialBack={handleExitToDifficultySelect}
             onAnswerResult={handleAnswerResult}
           />
         )}
@@ -871,6 +881,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
+            onTutorialBack={handleExitToDifficultySelect}
             onAnswerResult={handleAnswerResult}
           />
         )}
@@ -881,6 +892,7 @@ export default function Home() {
             isQuickRecall={isQuickRecall}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
+            onTutorialBack={handleExitToDifficultySelect}
             onAnswerResult={handleAnswerResult}
           />
         )}
