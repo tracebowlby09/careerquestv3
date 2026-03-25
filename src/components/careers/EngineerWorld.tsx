@@ -663,7 +663,6 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, a
       <TutorialScreen
         careerName="Civil Engineer"
         careerIcon="🏗️"
-        gradient="bg-gradient-to-br from-orange-600 via-red-600 to-pink-600"
         steps={[
           {
             title: "Understand the Project",

@@ -560,7 +560,6 @@ export default function ChefWorld({ difficulty, onComplete, isQuickRecall, alway
       <TutorialScreen
         careerName="Professional Chef"
         careerIcon="👨‍🍳"
-        gradient="bg-gradient-to-br from-amber-600 via-orange-600 to-red-600"
         steps={[
           {
             title: "Read Each Scenario",

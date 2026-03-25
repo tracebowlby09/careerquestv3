@@ -11,7 +11,6 @@ interface TutorialStep {
 interface TutorialScreenProps {
   careerName: string;
   careerIcon: string;
-  gradient: string;
   steps: TutorialStep[];
   onStart: () => void;
   onBack?: () => void;
@@ -20,13 +19,12 @@ interface TutorialScreenProps {
 export default function TutorialScreen({
   careerName,
   careerIcon,
-  gradient,
   steps,
   onStart,
   onBack,
 }: TutorialScreenProps) {
   return (
-    <div className={`min-h-screen ${gradient} p-4 md:p-8`}>
+    <div className="min-h-screen p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           {/* Header */}

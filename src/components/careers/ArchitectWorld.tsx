@@ -560,7 +560,6 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
       <TutorialScreen
         careerName="Architect"
         careerIcon="🏛️"
-        gradient="bg-gradient-to-br from-gray-700 via-slate-600 to-zinc-700"
         steps={[
           {
             title: "Understand the Design Brief",

@@ -584,7 +584,6 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall, alwa
       <TutorialScreen
         careerName="Registered Nurse"
         careerIcon="🏥"
-        gradient="bg-gradient-to-br from-teal-600 via-cyan-600 to-blue-600"
         steps={[
           {
             title: "Understand Each Scenario",

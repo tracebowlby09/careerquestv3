@@ -576,7 +576,6 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall, al
       <TutorialScreen
         careerName="Teacher"
         careerIcon="👩‍🏫"
-        gradient="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600"
         steps={[
           {
             title: "Read Each Scenario",
