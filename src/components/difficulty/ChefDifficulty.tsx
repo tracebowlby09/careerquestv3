@@ -90,20 +90,20 @@ export default function ChefDifficultySelection({
             >
               <div className="text-6xl mb-4 text-center">{diff.icon}</div>
               
-              <h3 className="text-3xl font-extrabold text-black mb-3 text-center drop-shadow-lg tracking-wide">
+              <h3 className="text-3xl font-extrabold text-white mb-3 text-center drop-shadow-lg tracking-wide">
                 {diff.title}
               </h3>
               
-              <p className="text-black/80 mb-4 text-center drop-shadow-md font-medium">
+              <p className="text-white/80 mb-4 text-center drop-shadow-md font-medium">
                 {diff.description}
               </p>
               
-              <div className="bg-white/40 rounded-lg p-3 text-center font-bold text-black text-lg">
+              <div className="bg-white/40 rounded-lg p-3 text-center font-bold text-white text-lg">
                 {diff.questions} Questions
               </div>
               
               <div className="mt-4 text-center">
-                <span className="text-black font-bold text-lg">
+                <span className="text-white font-bold text-lg">
                   Start Challenge →
                 </span>
               </div>
