@@ -232,5 +232,9 @@ function getCareerTextColor(index: number): string {
   if (index === 4 || index === 5) {
     return 'text-black';
   }
+  // Teacher (index 3) uses light blue text
+  if (index === 3) {
+    return 'text-blue-100';
+  }
   return 'text-white';
 }
