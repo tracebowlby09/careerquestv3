@@ -180,7 +180,10 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
                 {career.icon}
               </div>
               
-              <h3 className={`text-xl font-bold mb-2 drop-shadow-md ${getCareerTextColor(index)}`}>
+              <h3 
+                className={`text-xl font-bold mb-2 drop-shadow-md ${getCareerTextColor(index)}`}
+                style={index === 3 ? { color: '#0077B6' } : undefined}
+              >
                 {career.title}
               </h3>
               
@@ -228,13 +231,6 @@ function getCareerGradient(index: number): { start: string; end: string } {
 
 // Helper function to get text color for careers with dark backgrounds
 function getCareerTextColor(index: number): string {
-  // Chef (index 4) and Architect (index 5) have darker backgrounds, use black text
-  if (index === 4 || index === 5) {
-    return 'text-black';
-  }
-  // Teacher (index 3) uses light blue text
-  if (index === 3) {
-    return 'text-blue-100';
-  }
+  // All careers use white text for better visibility on their colored backgrounds
   return 'text-white';
 }
