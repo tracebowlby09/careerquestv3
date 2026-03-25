@@ -3,7 +3,12 @@
 import { useState, useEffect, useCallback } from "react";
 import TitleScreen from "@/components/TitleScreen";
 import CareerSelection from "@/components/CareerSelection";
-import DifficultySelection from "@/components/DifficultySelection";
+import ProgrammerDifficulty from "@/components/difficulty/ProgrammerDifficulty";
+import NurseDifficulty from "@/components/difficulty/NurseDifficulty";
+import EngineerDifficulty from "@/components/difficulty/EngineerDifficulty";
+import TeacherDifficulty from "@/components/difficulty/TeacherDifficulty";
+import ChefDifficulty from "@/components/difficulty/ChefDifficulty";
+import ArchitectDifficulty from "@/components/difficulty/ArchitectDifficulty";
 import ProgrammerWorld from "@/components/careers/ProgrammerWorld";
 import NurseWorld from "@/components/careers/NurseWorld";
 import EngineerWorld from "@/components/careers/EngineerWorld";
@@ -813,16 +818,76 @@ export default function Home() {
     };
     const backgroundImage = selectedCareer ? careerBackgrounds[selectedCareer] : undefined;
     
+    const renderDifficultySelection = () => {
+      switch (selectedCareer) {
+        case 'programmer':
+          return (
+            <ProgrammerDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        case 'nurse':
+          return (
+            <NurseDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        case 'engineer':
+          return (
+            <EngineerDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        case 'teacher':
+          return (
+            <TeacherDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        case 'chef':
+          return (
+            <ChefDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        case 'architect':
+          return (
+            <ArchitectDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        default:
+          return null;
+      }
+    };
+    
     return (
       <>
-        <DifficultySelection
-          career={careerNames[selectedCareer]}
-          onSelectDifficulty={handleDifficultySelect}
-          onBack={handleBackToCareerSelect}
-          onOpenSettings={() => setSettingsOpen(true)}
-          onExit={handleExitToTitle}
-          backgroundImage={backgroundImage}
-        />
+        {renderDifficultySelection()}
         {settingsModal}
         <SecretTrophyPopup 
           show={showSecretTrophyPopup} 
