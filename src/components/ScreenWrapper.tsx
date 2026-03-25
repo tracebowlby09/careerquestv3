@@ -26,11 +26,6 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
     ? { backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }
     : {};
 
-  // Debug logging
-  if (typeof window !== 'undefined') {
-    console.log('[ScreenWrapper] backgroundImage:', backgroundImage);
-  }
-
   // Overlay to ensure text readability when using background image
   const overlayClass = backgroundImage ? "bg-black/50 min-h-screen" : "";
 
