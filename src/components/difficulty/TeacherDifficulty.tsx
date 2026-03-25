@@ -67,8 +67,8 @@ export default function TeacherDifficultySelection({
     <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit} backgroundImage={backgroundImage}>
       <button
         onClick={onBack}
-        style={{ color: '#0077B6' }}
-        className="mb-6 hover:opacity-80 transition-colors flex items-center gap-2"
+        className="mb-6 hover:opacity-80 transition-colors flex items-center gap-2 px-4 py-2 rounded-lg border-2"
+        style={{ color: '#0077B6', borderColor: 'white' }}
       >
         ← Back to Career Selection
       </button>

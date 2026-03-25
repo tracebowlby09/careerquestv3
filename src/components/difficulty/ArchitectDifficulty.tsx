@@ -67,7 +67,8 @@ export default function ArchitectDifficultySelection({
     <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit} backgroundImage={backgroundImage}>
       <button
         onClick={onBack}
-        className="mb-6 text-black hover:text-gray-600 transition-colors flex items-center gap-2"
+        className="mb-6 hover:opacity-80 transition-colors flex items-center gap-2 px-4 py-2 rounded-lg border-2"
+        style={{ color: 'white', borderColor: 'black' }}
       >
         ← Back to Career Selection
       </button>

@@ -67,7 +67,8 @@ export default function EngineerDifficultySelection({
     <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit} backgroundImage={backgroundImage}>
       <button
         onClick={onBack}
-        className="mb-6 text-white hover:text-white/80 transition-colors flex items-center gap-2"
+        className="mb-6 hover:opacity-80 transition-colors flex items-center gap-2 px-4 py-2 rounded-lg border-2"
+        style={{ color: 'white', borderColor: 'black' }}
       >
         ← Back to Career Selection
       </button>

@@ -133,7 +133,8 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
         <div className="mt-8 text-center">
           <button
             onClick={onExit}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white/80 rounded-xl transition-colors border border-white/20"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:opacity-80 transition-colors"
+            style={{ color: 'white', borderColor: 'black' }}
           >
             ← Back to Title
           </button>
@@ -207,7 +208,8 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
         </p>
         <button
           onClick={onExit}
-          className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white/80 rounded-xl transition-colors border border-white/20"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:opacity-80 transition-colors"
+          style={{ color: 'white', borderColor: 'black' }}
         >
           ← Back to Title
         </button>
