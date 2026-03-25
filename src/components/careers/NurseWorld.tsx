@@ -622,7 +622,7 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall, alwa
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-600 via-cyan-600 to-blue-600 p-4 md:p-8">
+    <div className="p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           <div className="flex justify-between items-center mb-6">

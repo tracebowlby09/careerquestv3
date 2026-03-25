@@ -701,7 +701,7 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, a
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 p-4 md:p-8">
+    <div className="p-4 md:p-8">
       <div className="max-w-5xl mx-auto">
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           <div className="flex justify-between items-center mb-6">

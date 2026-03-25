@@ -716,7 +716,7 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-4 md:p-8">
+    <div className="p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
         {/* Heart Lost Overlay */}
         {showHeartLost && (

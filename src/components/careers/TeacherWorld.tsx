@@ -614,7 +614,7 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall, al
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-4 md:p-8">
+    <div className="p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
         {/* Heart Lost Overlay */}
         {showHeartLost && (

@@ -598,7 +598,7 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-700 via-slate-600 to-zinc-700 p-4 md:p-8">
+    <div className="p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           <div className="flex justify-between items-center mb-6">

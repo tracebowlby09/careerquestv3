@@ -598,7 +598,7 @@ export default function ChefWorld({ difficulty, onComplete, isQuickRecall, alway
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-600 via-orange-600 to-red-600 p-4 md:p-8">
+    <div className="p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           <div className="flex justify-between items-center mb-6">
