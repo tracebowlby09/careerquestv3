@@ -106,7 +106,7 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
               
               <div className="border-t pt-4">
                 <p className="text-sm font-semibold text-gray-700 mb-2">
-                  Skills You&apos;ll Learn:
+                  Skills You'll Learn:
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {career.skills.map((skill) => (
@@ -180,12 +180,12 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
                 {career.icon}
               </div>
               
-              <h3 className="text-xl font-bold text-white mb-2 drop-shadow-md">
+              <h3 className={`text-xl font-bold mb-2 drop-shadow-md ${getCareerTextColor(index)}`}>
                 {career.title}
               </h3>
               
               <div className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
-                <span className="text-white text-sm font-medium">Start →</span>
+                <span className={`text-sm font-medium ${getCareerTextColor(index)}`}>Start →</span>
               </div>
             </div>
             
@@ -219,9 +219,18 @@ function getCareerGradient(index: number): { start: string; end: string } {
     { start: '#667eea', end: '#764ba2' }, // Purple - Programmer
     { start: '#f97316', end: '#ef4444' }, // Orange-Red - Nurse
     { start: '#06b6d4', end: '#3b82f6' }, // Cyan-Blue - Engineer
-    { start: '#10b981', end: '#059669' }, // Emerald - Teacher
+    { start: '#60a5fa', end: '#3b82f6' }, // Light Blue - Teacher
     { start: '#f59e0b', end: '#d97706' }, // Amber - Chef
     { start: '#8b5cf6', end: '#6366f1' }, // Violet-Indigo - Architect
   ];
   return gradients[index % gradients.length];
+}
+
+// Helper function to get text color for careers with dark backgrounds
+function getCareerTextColor(index: number): string {
+  // Chef (index 4) and Architect (index 5) have darker backgrounds, use black text
+  if (index === 4 || index === 5) {
+    return 'text-black';
+  }
+  return 'text-white';
 }

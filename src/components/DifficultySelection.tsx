@@ -88,7 +88,7 @@ export default function DifficultySelection({
             <button
               key={diff.id}
               onClick={() => handleSelect(diff.id)}
-              className="bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200"
+              className="bg-gradient-to-br from-white to-gray-100 rounded-2xl p-6 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200"
             >
               <div className="text-6xl mb-4 text-center">{diff.icon}</div>
               

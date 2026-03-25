@@ -66,7 +66,7 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
                     audioSystem.playClickSound();
                     onOpenSettings();
                   }}
-                  className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
+                  className="bg-gray-800/80 hover:bg-gray-700 text-white p-3 rounded-full transition-colors"
                   title="Settings"
                 >
                   ⚙️
@@ -75,7 +75,7 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
               {onExit && (
                 <button
                   onClick={handleExitClick}
-                  className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
+                  className="bg-gray-800/80 hover:bg-gray-700 text-white p-3 rounded-full transition-colors"
                   title="Exit to Title"
                 >
                   🏠
@@ -95,7 +95,7 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
                     audioSystem.playClickSound();
                     onOpenSettings();
                   }}
-                  className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
+                  className="bg-gray-800/80 hover:bg-gray-700 text-white p-3 rounded-full transition-colors"
                   title="Settings"
                 >
                   ⚙️
@@ -104,7 +104,7 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
               {onExit && (
                 <button
                   onClick={handleExitClick}
-                  className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
+                  className="bg-gray-800/80 hover:bg-gray-700 text-white p-3 rounded-full transition-colors"
                   title="Exit to Title"
                 >
                   🏠
