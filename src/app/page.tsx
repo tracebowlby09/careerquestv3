@@ -853,6 +853,8 @@ export default function Home() {
     };
     const backgroundImage = selectedCareer ? careerBackgrounds[selectedCareer] : undefined;
     
+    console.log('[page.tsx] selectedCareer:', selectedCareer, 'backgroundImage:', backgroundImage);
+    
     return (
       <ScreenWrapper
         onOpenSettings={() => setSettingsOpen(true)}
