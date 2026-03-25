@@ -67,16 +67,16 @@ export default function TeacherDifficultySelection({
     <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit} backgroundImage={backgroundImage}>
       <button
         onClick={onBack}
-        className="mb-6 text-black hover:text-gray-600 transition-colors flex items-center gap-2"
+        className="mb-6 text-blue-800 hover:text-blue-700 transition-colors flex items-center gap-2"
       >
         ← Back to Career Selection
       </button>
 
       <div className="text-center mb-12">
-        <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">
+        <h2 className="text-4xl md:text-5xl font-bold text-blue-800 mb-4">
           Choose Your Difficulty
         </h2>
-        <p className="text-xl text-black/80 font-medium">
+        <p className="text-xl text-blue-800/80 font-medium">
           Teacher - Select how challenging you want the experience
         </p>
       </div>
@@ -111,7 +111,7 @@ export default function TeacherDifficultySelection({
           ))}
         </div>
 
-        <div className="mt-8 text-center text-black/60 text-sm">
+        <div className="mt-8 text-center text-blue-800/60 text-sm">
           Complete all questions to earn a trophy! 🏆
         </div>
     </ScreenWrapper>
