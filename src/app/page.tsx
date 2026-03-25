@@ -831,6 +831,17 @@ export default function Home() {
     // Determine which handler to use for tutorial back button based on game mode
     const tutorialBackHandler = isQuickRecall ? handleExitToCareerSelect : handleExitToDifficultySelect;
     
+    // Get background image for the selected career
+    const careerBackgrounds: Record<string, string> = {
+      programmer: "/images/programmer-bg.jpg",
+      nurse: "/images/nurse-bg.jpg",
+      engineer: "/images/engineer-bg.jpg",
+      teacher: "/images/teacher-bg.jpg",
+      chef: "/images/chef-bg.jpg",
+      architect: "/images/architect-bg.jpg",
+    };
+    const backgroundImage = selectedCareer ? careerBackgrounds[selectedCareer] : undefined;
+    
     return (
       <ScreenWrapper
         onOpenSettings={() => setSettingsOpen(true)}
@@ -838,6 +849,7 @@ export default function Home() {
         showExitWarning={true}
         dark={true}
         fullScreen={true}
+        backgroundImage={backgroundImage}
       >
         {selectedCareer === "programmer" && (
           <ProgrammerWorld

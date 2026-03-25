@@ -10,14 +10,24 @@ interface ScreenWrapperProps {
   dark?: boolean;
   showExitWarning?: boolean;
   fullScreen?: boolean;
+  backgroundImage?: string;
 }
 
-export default function ScreenWrapper({ children, onOpenSettings, onExit, dark = false, showExitWarning = false, fullScreen = false }: ScreenWrapperProps) {
+export default function ScreenWrapper({ children, onOpenSettings, onExit, dark = false, showExitWarning = false, fullScreen = false, backgroundImage }: ScreenWrapperProps) {
   const [showWarning, setShowWarning] = useState(false);
   
-  const bgClass = dark 
-    ? "bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900" 
-    : "bg-gradient-to-br from-slate-700 via-indigo-800 to-gray-900";
+  const bgClass = backgroundImage 
+    ? ""
+    : dark 
+      ? "bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900" 
+      : "bg-gradient-to-br from-slate-700 via-indigo-800 to-gray-900";
+
+  const bgStyle = backgroundImage 
+    ? { backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }
+    : {};
+
+  // Overlay to ensure text readability when using background image
+  const overlayClass = backgroundImage ? "bg-black/50 min-h-screen" : "";
 
   // Full screen mode removes max-width constraint for career worlds
   const containerClass = fullScreen 
@@ -46,7 +56,7 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
 
   return (
     <>
-      <div className={`${bgClass} ${containerClass}`}>
+      <div className={`${bgClass} ${containerClass}`} style={bgStyle}>
         {fullScreen ? (
           <>
             <div className="fixed top-4 right-4 flex gap-2 z-10">
@@ -72,7 +82,9 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
                 </button>
               )}
             </div>
-            {children}
+            <div className={overlayClass}>
+              {children}
+            </div>
           </>
         ) : (
           <div className="max-w-6xl mx-auto">

@@ -30,6 +30,7 @@ Career Quest V3 is a career exploration game with multiple career paths (Program
 - [x] Made all career worlds full screen without outline (Challenge Mode and Quick Recall)
 - [x] Added Pi digit typing secret trophies (Pi Pioneer at 3.14, Pi Explorer at 3.141, Pi Master at 3.1415, Pi Genius at 3.14159, Pi Legend at 3.1415926)
 - [x] Changed tutorial "Back" button to go to difficulty selection screen instead of title screen
+- [x] Added career-specific background images for simulation screens (programmer, nurse, engineer, teacher, chef, architect)
 
 ## Current Structure
 
@@ -67,6 +68,10 @@ Edit the component files in `src/components/careers/`.
 ### Exit Warning System:
 
 The ScreenWrapper component now includes an optional exit warning when `showExitWarning={true}` is passed.
+
+### Background Images:
+
+The ScreenWrapper component supports career-specific background images via the `backgroundImage` prop. When provided, it displays a full-cover background image instead of the gradient. The images should be placed in the `public/images/` directory with the naming convention `career-bg.jpg` (e.g., `programmer-bg.jpg`, `nurse-bg.jpg`, etc.).
 
 ### Secret Konami Code Trophy:
 
@@ -119,3 +124,4 @@ The game includes several secret easter egg trophies that can be unlocked throug
 | 2026-03-10 | Fixed back button on TutorialScreen instructions to properly exit to title screen |
 | 2026-03-11 | Made all career worlds full screen without outline (Challenge Mode and Quick Recall) |
 | 2026-03-12 | Added 7 new easter egg trophies (Lightning Reflex, Marathon Runner, Speed Demon, Jack of All Trades, Lucky Star, Night Owl, Early Bird) |
+| 2026-03-25 | Added career-specific background images for simulation screens |
