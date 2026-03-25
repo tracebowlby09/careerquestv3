@@ -67,16 +67,16 @@ export default function ChefDifficultySelection({
     <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit} backgroundImage={backgroundImage}>
       <button
         onClick={onBack}
-        className="mb-6 text-white hover:text-white/80 transition-colors flex items-center gap-2"
+        className="mb-6 text-black hover:text-gray-600 transition-colors flex items-center gap-2"
       >
         ← Back to Career Selection
       </button>
 
       <div className="text-center mb-12">
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+        <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">
           Choose Your Difficulty
         </h2>
-        <p className="text-xl text-white/90">
+        <p className="text-xl text-black/80 font-medium">
           Head Chef - Select how challenging you want the experience
         </p>
       </div>
@@ -90,20 +90,20 @@ export default function ChefDifficultySelection({
             >
               <div className="text-6xl mb-4 text-center">{diff.icon}</div>
               
-              <h3 className="text-3xl font-extrabold text-white mb-3 text-center drop-shadow-lg tracking-wide">
+              <h3 className="text-3xl font-extrabold text-black mb-3 text-center drop-shadow-lg tracking-wide">
                 {diff.title}
               </h3>
               
-              <p className="text-white/95 mb-4 text-center drop-shadow-md font-medium">
+              <p className="text-black/80 mb-4 text-center drop-shadow-md font-medium">
                 {diff.description}
               </p>
               
-              <div className="bg-white/30 backdrop-blur-sm rounded-lg p-3 text-center font-bold text-white text-lg">
+              <div className="bg-white/40 backdrop-blur-sm rounded-lg p-3 text-center font-bold text-black text-lg">
                 {diff.questions} Questions
               </div>
               
               <div className="mt-4 text-center">
-                <span className="text-white font-bold text-lg">
+                <span className="text-black font-bold text-lg">
                   Start Challenge →
                 </span>
               </div>
@@ -111,7 +111,7 @@ export default function ChefDifficultySelection({
           ))}
         </div>
 
-        <div className="mt-8 text-center text-white/80 text-sm">
+        <div className="mt-8 text-center text-black/60 text-sm">
           Complete all questions to earn a trophy! 🏆
         </div>
     </ScreenWrapper>

@@ -27,7 +27,7 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
     : {};
 
   // Overlay to ensure text readability when using background image
-  const overlayClass = backgroundImage ? "bg-black/20 min-h-screen" : "";
+  const overlayClass = backgroundImage ? "bg-black/10 min-h-screen" : "";
 
   // Full screen mode removes max-width constraint for career worlds
   const containerClass = fullScreen 

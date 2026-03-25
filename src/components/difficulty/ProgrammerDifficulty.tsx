@@ -76,7 +76,7 @@ export default function ProgrammerDifficultySelection({
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
           Choose Your Difficulty
         </h2>
-        <p className="text-xl text-white/90">
+        <p className="text-xl text-white/90 font-medium">
           Software Programmer - Select how challenging you want the experience
         </p>
       </div>
