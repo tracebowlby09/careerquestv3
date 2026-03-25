@@ -98,7 +98,7 @@ export default function ChefDifficultySelection({
                 {diff.description}
               </p>
               
-              <div className="bg-white/40 backdrop-blur-sm rounded-lg p-3 text-center font-bold text-black text-lg">
+              <div className="bg-white/40 rounded-lg p-3 text-center font-bold text-black text-lg">
                 {diff.questions} Questions
               </div>
               

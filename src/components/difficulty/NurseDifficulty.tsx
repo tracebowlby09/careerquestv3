@@ -98,7 +98,7 @@ export default function NurseDifficultySelection({
                 {diff.description}
               </p>
               
-              <div className="bg-white/30 backdrop-blur-sm rounded-lg p-3 text-center font-bold text-white text-lg">
+              <div className="bg-white/30 rounded-lg p-3 text-center font-bold text-white text-lg">
                 {diff.questions} Questions
               </div>
               
