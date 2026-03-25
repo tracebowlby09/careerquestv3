@@ -66,7 +66,7 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
                     audioSystem.playClickSound();
                     onOpenSettings();
                   }}
-                  className="bg-gray-800/80 hover:bg-gray-700 text-white p-3 rounded-full transition-colors"
+                  className="bg-gradient-to-br from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-800 text-white p-3 rounded-full transition-colors shadow-lg"
                   title="Settings"
                 >
                   ⚙️
@@ -75,7 +75,7 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
               {onExit && (
                 <button
                   onClick={handleExitClick}
-                  className="bg-gray-800/80 hover:bg-gray-700 text-white p-3 rounded-full transition-colors"
+                  className="bg-gradient-to-br from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-800 text-white p-3 rounded-full transition-colors shadow-lg"
                   title="Exit to Title"
                 >
                   🏠
@@ -95,7 +95,7 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
                     audioSystem.playClickSound();
                     onOpenSettings();
                   }}
-                  className="bg-gray-800/80 hover:bg-gray-700 text-white p-3 rounded-full transition-colors"
+                  className="bg-gradient-to-br from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-800 text-white p-3 rounded-full transition-colors shadow-lg"
                   title="Settings"
                 >
                   ⚙️
@@ -104,7 +104,7 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
               {onExit && (
                 <button
                   onClick={handleExitClick}
-                  className="bg-gray-800/80 hover:bg-gray-700 text-white p-3 rounded-full transition-colors"
+                  className="bg-gradient-to-br from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-800 text-white p-3 rounded-full transition-colors shadow-lg"
                   title="Exit to Title"
                 >
                   🏠

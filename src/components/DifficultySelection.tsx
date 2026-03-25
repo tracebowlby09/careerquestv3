@@ -88,24 +88,24 @@ export default function DifficultySelection({
             <button
               key={diff.id}
               onClick={() => handleSelect(diff.id)}
-              className="bg-gradient-to-br from-white to-gray-100 rounded-2xl p-6 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200"
+              className={`bg-gradient-to-br ${diff.color} rounded-2xl p-6 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200`}
             >
               <div className="text-6xl mb-4 text-center">{diff.icon}</div>
               
-              <h3 className="text-2xl font-bold text-gray-900 mb-3 text-center">
+              <h3 className="text-2xl font-bold text-white mb-3 text-center drop-shadow-md">
                 {diff.title}
               </h3>
               
-              <p className="text-gray-600 mb-4 text-center">
+              <p className="text-white/90 mb-4 text-center drop-shadow-sm">
                 {diff.description}
               </p>
               
-              <div className={`bg-gradient-to-r ${diff.color} text-white rounded-lg p-3 text-center font-semibold`}>
+              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3 text-center font-semibold text-white">
                 {diff.questions} Questions
               </div>
               
               <div className="mt-4 text-center">
-                <span className="text-purple-600 font-semibold">
+                <span className="text-white font-semibold">
                   Start Challenge →
                 </span>
               </div>
