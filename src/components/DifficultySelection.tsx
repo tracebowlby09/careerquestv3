@@ -19,6 +19,7 @@ interface DifficultySelectionProps {
   onBack: () => void;
   onOpenSettings?: () => void;
   onExit?: () => void;
+  backgroundImage?: string;
 }
 
 const difficulties: DifficultyOption[] = [
@@ -54,6 +55,7 @@ export default function DifficultySelection({
   onBack,
   onOpenSettings,
   onExit,
+  backgroundImage,
 }: DifficultySelectionProps) {
   const handleSelect = (difficulty: Difficulty) => {
     if (typeof window !== 'undefined') {
@@ -64,7 +66,7 @@ export default function DifficultySelection({
   };
 
   return (
-    <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit}>
+    <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit} backgroundImage={backgroundImage}>
       <button
         onClick={onBack}
         className="mb-6 text-white hover:text-white/80 transition-colors flex items-center gap-2"

@@ -803,6 +803,16 @@ export default function Home() {
   }
 
   if (gameState === "difficulty-select" && selectedCareer) {
+    const careerBackgrounds: Record<string, string> = {
+      programmer: "/images/programmer-bg.jpg",
+      nurse: "/images/nurse-bg.jpg",
+      engineer: "/images/engineer-bg.jpg",
+      teacher: "/images/teacher-bg.jpg",
+      chef: "/images/chef-bg.jpg",
+      architect: "/images/architect-bg.jpg",
+    };
+    const backgroundImage = selectedCareer ? careerBackgrounds[selectedCareer] : undefined;
+    
     return (
       <>
         <DifficultySelection
@@ -811,6 +821,7 @@ export default function Home() {
           onBack={handleBackToCareerSelect}
           onOpenSettings={() => setSettingsOpen(true)}
           onExit={handleExitToTitle}
+          backgroundImage={backgroundImage}
         />
         {settingsModal}
         <SecretTrophyPopup 
