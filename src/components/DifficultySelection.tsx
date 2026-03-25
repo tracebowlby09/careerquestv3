@@ -29,7 +29,7 @@ const difficulties: DifficultyOption[] = [
     icon: "🌱",
     description: "Perfect for beginners. 2 questions to complete.",
     questions: 2,
-    color: "from-green-500 to-emerald-500",
+    color: "from-green-600 to-emerald-600",
   },
   {
     id: "medium",
@@ -37,7 +37,7 @@ const difficulties: DifficultyOption[] = [
     icon: "⚡",
     description: "A good challenge. 3 questions to master.",
     questions: 3,
-    color: "from-yellow-500 to-orange-500",
+    color: "from-amber-500 to-orange-600",
   },
   {
     id: "hard",
@@ -45,7 +45,7 @@ const difficulties: DifficultyOption[] = [
     icon: "🔥",
     description: "Expert level. 4 questions to conquer.",
     questions: 4,
-    color: "from-red-500 to-pink-500",
+    color: "from-red-600 to-rose-600",
   },
 ];
 
@@ -88,24 +88,24 @@ export default function DifficultySelection({
             <button
               key={diff.id}
               onClick={() => handleSelect(diff.id)}
-              className={`bg-gradient-to-br ${diff.color} rounded-2xl p-6 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200`}
+              className={`bg-gradient-to-br ${diff.color} rounded-2xl p-6 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200 border-4 border-white/30`}
             >
               <div className="text-6xl mb-4 text-center">{diff.icon}</div>
               
-              <h3 className="text-2xl font-bold text-white mb-3 text-center drop-shadow-md">
+              <h3 className="text-3xl font-extrabold text-white mb-3 text-center drop-shadow-lg tracking-wide">
                 {diff.title}
               </h3>
               
-              <p className="text-white/90 mb-4 text-center drop-shadow-sm">
+              <p className="text-white/95 mb-4 text-center drop-shadow-md font-medium">
                 {diff.description}
               </p>
               
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3 text-center font-semibold text-white">
+              <div className="bg-white/30 backdrop-blur-sm rounded-lg p-3 text-center font-bold text-white text-lg">
                 {diff.questions} Questions
               </div>
               
               <div className="mt-4 text-center">
-                <span className="text-white font-semibold">
+                <span className="text-white font-bold text-lg">
                   Start Challenge →
                 </span>
               </div>

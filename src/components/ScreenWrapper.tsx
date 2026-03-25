@@ -66,7 +66,7 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
                     audioSystem.playClickSound();
                     onOpenSettings();
                   }}
-                  className="bg-gradient-to-br from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-800 text-white p-3 rounded-full transition-colors shadow-lg"
+                  className="bg-gradient-to-br from-gray-800 to-black hover:from-gray-700 hover:to-gray-900 text-white p-4 rounded-full transition-all duration-200 shadow-xl border-2 border-white/50"
                   title="Settings"
                 >
                   ⚙️
@@ -75,7 +75,7 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
               {onExit && (
                 <button
                   onClick={handleExitClick}
-                  className="bg-gradient-to-br from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-800 text-white p-3 rounded-full transition-colors shadow-lg"
+                  className="bg-gradient-to-br from-gray-800 to-black hover:from-gray-700 hover:to-gray-900 text-white p-4 rounded-full transition-all duration-200 shadow-xl border-2 border-white/50"
                   title="Exit to Title"
                 >
                   🏠
@@ -95,7 +95,7 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
                     audioSystem.playClickSound();
                     onOpenSettings();
                   }}
-                  className="bg-gradient-to-br from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-800 text-white p-3 rounded-full transition-colors shadow-lg"
+                  className="bg-gradient-to-br from-gray-800 to-black hover:from-gray-700 hover:to-gray-900 text-white p-4 rounded-full transition-all duration-200 shadow-xl border-2 border-white/50"
                   title="Settings"
                 >
                   ⚙️
@@ -104,7 +104,7 @@ export default function ScreenWrapper({ children, onOpenSettings, onExit, dark =
               {onExit && (
                 <button
                   onClick={handleExitClick}
-                  className="bg-gradient-to-br from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-800 text-white p-3 rounded-full transition-colors shadow-lg"
+                  className="bg-gradient-to-br from-gray-800 to-black hover:from-gray-700 hover:to-gray-900 text-white p-4 rounded-full transition-all duration-200 shadow-xl border-2 border-white/50"
                   title="Exit to Title"
                 >
                   🏠
