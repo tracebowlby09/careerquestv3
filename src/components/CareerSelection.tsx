@@ -216,12 +216,12 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
 // Helper function to get career-specific gradients for Quick Recall
 function getCareerGradient(index: number): { start: string; end: string } {
   const gradients = [
-    { start: '#667eea', end: '#764ba2' }, // Purple - Programmer
-    { start: '#f97316', end: '#ef4444' }, // Orange-Red - Nurse
-    { start: '#06b6d4', end: '#3b82f6' }, // Cyan-Blue - Engineer
-    { start: '#60a5fa', end: '#3b82f6' }, // Light Blue - Teacher
-    { start: '#f59e0b', end: '#d97706' }, // Amber - Chef
-    { start: '#8b5cf6', end: '#6366f1' }, // Violet-Indigo - Architect
+    { start: '#6366f1', end: '#8b5cf6' }, // Purple - Programmer (brighter)
+    { start: '#f97316', end: '#ea580c' }, // Orange-Red - Nurse (brighter)
+    { start: '#0ea5e9', end: '#0284c7' }, // Cyan-Blue - Engineer (brighter)
+    { start: '#93c5fd', end: '#60a5fa' }, // Light Blue - Teacher (lighter)
+    { start: '#fbbf24', end: '#f59e0b' }, // Amber - Chef (brighter)
+    { start: '#a78bfa', end: '#8b5cf6' }, // Violet-Indigo - Architect (brighter)
   ];
   return gradients[index % gradients.length];
 }
