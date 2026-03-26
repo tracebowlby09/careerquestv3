@@ -182,14 +182,13 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
               </div>
               
               <h3 
-                className={`text-xl font-bold mb-2 drop-shadow-md ${getCareerTextColor(index)}`}
-                style={index === 3 ? { color: '#0077B6' } : undefined}
+                className="text-xl font-bold mb-2 drop-shadow-md text-white"
               >
                 {career.title}
               </h3>
               
               <div className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
-                <span className={`text-sm font-medium ${getCareerTextColor(index)}`}>Start →</span>
+                <span className="text-sm font-medium text-white">Start →</span>
               </div>
             </div>
             
