@@ -68,16 +68,16 @@ export default function TeacherDifficultySelection({
       <button
         onClick={onBack}
         className="mb-6 hover:opacity-80 transition-colors flex items-center gap-2 px-4 py-2 rounded-lg border-2"
-        style={{ color: '#0077B6', borderColor: 'white' }}
+        style={{ color: 'white', borderColor: 'black' }}
       >
         ← Back to Career Selection
       </button>
 
       <div className="text-center mb-12">
-        <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: '#0077B6' }}>
+        <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: 'white' }}>
           Choose Your Difficulty
         </h2>
-        <p className="text-xl font-medium mb-4" style={{ color: '#0077B6' }}>
+        <p className="text-xl font-medium mb-4" style={{ color: 'white' }}>
           Teacher - Select how challenging you want the experience
         </p>
       </div>
@@ -112,7 +112,7 @@ export default function TeacherDifficultySelection({
           ))}
         </div>
 
-        <div className="mt-8 text-center text-sm" style={{ color: '#0077B6' }}>
+        <div className="mt-8 text-center text-sm" style={{ color: 'white' }}>
           Complete all questions to earn a trophy! 🏆
         </div>
     </ScreenWrapper>
