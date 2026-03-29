@@ -8,6 +8,7 @@ Career Quest V3 is a career exploration game with multiple career paths (Program
 
 ## Recently Completed
 
+- [x] Added hints for all secret trophies in Trophy Case (locked trophies show cryptic hints, unlocked trophies show descriptions)
 - [x] Fixed music overlapping bug by ensuring proper music state reset before starting new tracks
 - [x] Removed redundant music start call in TitleScreen component
 - [x] Base Next.js 16 setup with App Router
@@ -127,4 +128,5 @@ The game includes several secret easter egg trophies that can be unlocked throug
 | 2026-03-11 | Made all career worlds full screen without outline (Challenge Mode and Quick Recall) |
 | 2026-03-12 | Added 7 new easter egg trophies (Lightning Reflex, Marathon Runner, Speed Demon, Jack of All Trades, Lucky Star, Night Owl, Early Bird) |
 | 2026-03-25 | Added career-specific background images for simulation screens |
-| 2026-03-27 | Fixed music overlapping bug - added proper state reset and removed redundant music start call |
+| 2026-03-27 | Fixed music overlapping bug - added proper music state reset and removed redundant music start call |
+| 2026-03-29 | Added hints for all secret trophies in Trophy Case (locked trophies show cryptic hints, unlocked trophies show descriptions) | - added proper state reset and removed redundant music start call |

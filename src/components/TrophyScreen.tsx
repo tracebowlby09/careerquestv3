@@ -32,6 +32,7 @@ interface SecretTrophyDisplay {
   name: string;
   description: string;
   icon: string;
+  hint: string;
 }
 
 const secretTrophies: SecretTrophyDisplay[] = [
@@ -40,66 +41,77 @@ const secretTrophies: SecretTrophyDisplay[] = [
     name: "Konami Code Master",
     description: "Entered the legendary Konami code",
     icon: "👾",
+    hint: "↑↑↓↓←→←→BA",
   },
   {
     id: "career-master",
     name: "Career Master",
     description: "Earned all trophies for a career",
     icon: "👑",
+    hint: "Master every challenge in a single career path",
   },
   {
     id: "quick-recall-champion",
     name: "Quick Recall Champion",
     description: "Completed Quick Recall mode",
     icon: "⚡",
+    hint: "Speed through the fast-paced trivia mode",
   },
   {
     id: "perfect-recall",
     name: "Perfect Recall",
     description: "Got all Quick Recall questions right",
     icon: "🎯",
+    hint: "Flawless memory in rapid-fire questions",
   },
   {
     id: "all-careers-master",
     name: "Ultimate Career Master",
     description: "Completed all difficulties for ALL careers",
     icon: "🌟",
+    hint: "Conquer every career on every difficulty level",
   },
   {
     id: "all-quick-recalls-master",
     name: "Quick Recall Legend",
     description: "Completed Quick Recall for ALL careers",
     icon: "🏅",
+    hint: "Speed master across all six career paths",
   },
   {
     id: "pi-pioneer",
     name: "Pi Pioneer",
     description: "Typed the first 3 digits of Pi (3.14)",
     icon: "🥧",
+    hint: "The ratio of circumference to diameter begins...",
   },
   {
     id: "pi-explorer",
     name: "Pi Explorer",
     description: "Typed 4 digits of Pi (3.141)",
     icon: "🔢",
+    hint: "One more digit into the infinite sequence",
   },
   {
     id: "pi-master",
     name: "Pi Master",
     description: "Typed 5 digits of Pi (3.1415)",
     icon: "🧮",
+    hint: "Halfway to a perfect circle's secret",
   },
   {
     id: "pi-genius",
     name: "Pi Genius",
     description: "Typed 6 digits of Pi (3.14159)",
     icon: "💡",
+    hint: "The mathematical constant reveals more",
   },
   {
     id: "pi-legend",
     name: "Pi Legend",
     description: "Typed 9 digits of Pi (3.1415926)",
     icon: "🏆",
+    hint: "Nine digits of transcendental perfection",
   },
 ];
 
@@ -221,40 +233,51 @@ export default function TrophyScreen({ trophies, onBack }: TrophyScreenProps) {
           )}
 
           {/* Secret Trophies Section */}
-          {secretTrophiesList.length > 0 && (
-            <div className="mt-8 pt-8 border-t-2 border-purple-300">
-              <div className="text-center mb-6">
-                <div className="text-4xl mb-2">🔮</div>
-                <h3 className="text-2xl font-bold text-purple-700">
-                  Secret Trophies
-                </h3>
-              </div>
-              <div className="grid grid-cols-1 gap-4">
-                {secretTrophiesList.map((trophy, idx) => {
-                  const secretInfo = getAchievementInfo(trophy.achievementType);
-                  return (
-                    <div
-                      key={idx}
-                      className="flex items-center justify-between bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white px-6 py-4 rounded-xl border-2 border-yellow-400 shadow-lg"
-                    >
-                      <div className="flex items-center gap-4">
-                        <span className="text-4xl">{secretInfo?.icon || "🏆"}</span>
-                        <div>
-                          <p className="font-bold text-lg text-yellow-300">
-                            {secretInfo?.name || "Secret Trophy"}
-                          </p>
-                          <p className="text-white text-sm">
-                            {secretInfo?.description || "A hidden achievement"}
-                          </p>
-                        </div>
-                      </div>
-                      <span className="text-3xl">⭐</span>
-                    </div>
-                  );
-                })}
-              </div>
+          <div className="mt-8 pt-8 border-t-2 border-purple-300">
+            <div className="text-center mb-6">
+              <div className="text-4xl mb-2">🔮</div>
+              <h3 className="text-2xl font-bold text-purple-700">
+                Secret Trophies
+              </h3>
+              <p className="text-gray-500 text-sm mt-1">
+                {secretTrophiesList.length} of {secretTrophies.length} discovered
+              </p>
             </div>
-          )}
+            <div className="grid grid-cols-1 gap-4">
+              {secretTrophies.map((secretTrophy) => {
+                const isUnlocked = secretTrophiesList.some(
+                  (t) => t.achievementType === secretTrophy.id
+                );
+                return (
+                  <div
+                    key={secretTrophy.id}
+                    className={`flex items-center justify-between px-6 py-4 rounded-xl border-2 shadow-lg transition-all duration-300 ${
+                      isUnlocked
+                        ? "bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white border-yellow-400"
+                        : "bg-gray-100 text-gray-400 border-gray-300"
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <span className={`text-4xl ${!isUnlocked ? "opacity-50" : ""}`}>
+                        {isUnlocked ? secretTrophy.icon : "🔒"}
+                      </span>
+                      <div>
+                        <p className={`font-bold text-lg ${isUnlocked ? "text-yellow-300" : "text-gray-500"}`}>
+                          {isUnlocked ? secretTrophy.name : "???"}
+                        </p>
+                        <p className={`text-sm ${isUnlocked ? "text-white" : "text-gray-400 italic"}`}>
+                          {isUnlocked ? secretTrophy.description : secretTrophy.hint}
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-3xl">
+                      {isUnlocked ? "⭐" : "❓"}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
 
           <button
             onClick={onBack}
