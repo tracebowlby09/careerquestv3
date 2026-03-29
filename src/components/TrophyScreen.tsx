@@ -41,7 +41,7 @@ const secretTrophies: SecretTrophyDisplay[] = [
     name: "Konami Code Master",
     description: "Entered the legendary Konami code",
     icon: "👾",
-    hint: "↑↑↓↓←→←→BA",
+    hint: "Only true OG's know this code",
   },
   {
     id: "career-master",
