@@ -12,7 +12,6 @@ interface TitleScreenProps {
 export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies }: TitleScreenProps) {
   const handleStart = (mode: GameMode) => {
     audioSystem.initialize();
-    audioSystem.startBackgroundMusic();
     audioSystem.playClickSound();
     onStart(mode);
   };

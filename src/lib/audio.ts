@@ -158,6 +158,9 @@ class AudioSystem {
       this.musicSource = null;
     }
 
+    // Reset playing state to ensure clean start
+    this.isMusicPlaying = false;
+
     if (!this.buffers.has("music")) {
       try {
         await this.loadSound("music");
@@ -205,6 +208,9 @@ class AudioSystem {
       this.musicSource.disconnect();
       this.musicSource = null;
     }
+
+    // Reset playing state to ensure clean start
+    this.isMusicPlaying = false;
 
     // Load the new track
     this.currentMusicUrl = trackUrl;
@@ -273,6 +279,9 @@ class AudioSystem {
       this.musicSource.disconnect();
       this.musicSource = null;
     }
+    
+    // Reset playing state to ensure clean start
+    this.isMusicPlaying = false;
     
     await this.playMusic(this.urls.music);
   }
