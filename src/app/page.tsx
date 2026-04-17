@@ -464,6 +464,51 @@ export default function Home() {
         setTimeBasedTrophiesChecked(true);
       }
     }
+    
+    // Check date-based trophies (State Week: April 27-29, 2026 and Today Check-in)
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth() + 1; // 1-indexed
+    const currentDay = now.getDate();
+    
+    // State Week trophy: April 27-29, 2026
+    const isStateWeek = currentMonth === 4 && currentDay >= 27 && currentDay <= 29 && currentYear === 2026;
+    
+    // Today Check-in trophy: any day (today is April 17, 2026)
+    const hasTodayCheckin = true;
+    
+    const existingTrophies = loadTrophies();
+    const dateAchievements: AchievementType[] = [];
+    
+    if (isStateWeek) {
+      const alreadyHasStateWeek = existingTrophies.some((t) => t.achievementType === "state-week");
+      if (!alreadyHasStateWeek) {
+        dateAchievements.push("state-week");
+      }
+    }
+    
+    if (hasTodayCheckin) {
+      const alreadyHasTodayCheckin = existingTrophies.some((t) => t.achievementType === "today-checkin");
+      if (!alreadyHasTodayCheckin) {
+        dateAchievements.push("today-checkin");
+      }
+    }
+    
+    if (dateAchievements.length > 0) {
+      const newDateTrophies = dateAchievements.map((achievement) => ({
+        career: "programmer" as Career,
+        difficulty: "hard" as Difficulty,
+        earnedAt: new Date(),
+        isSecret: true,
+        achievementType: achievement,
+      }));
+      
+      const allTrophies = [...existingTrophies, ...newDateTrophies];
+      setTrophies(allTrophies);
+      saveTrophies(allTrophies);
+      setShowSecretTrophyPopup(true);
+      setCurrentAchievementType(dateAchievements[0]);
+    }
   };
 
   const handleCareerSelect = (career: Career) => {

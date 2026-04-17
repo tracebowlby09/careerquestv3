@@ -117,6 +117,18 @@ const trophyContent: Record<string, { icon: string; title: string; message: stri
     message: "You typed 9 digits of Pi: 3.1415926! Mathematical!",
     gradient: "from-cyan-400 via-blue-500 to-indigo-600",
   },
+  "state-week": {
+    icon: "🗽",
+    title: "STATE WEEK!",
+    message: "You logged in during State Week (April 27-29, 2026)!",
+    gradient: "from-red-500 via-white-500 to-blue-500",
+  },
+  "today-checkin": {
+    icon: "📅",
+    title: "TODAY CHECK-IN!",
+    message: "You checked in today - thanks for playing Career Quest!",
+    gradient: "from-green-400 via-emerald-500 to-teal-500",
+  },
 };
 
 export default function SecretTrophyPopup({ show, achievementType, onClose }: SecretTrophyPopupProps) {
