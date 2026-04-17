@@ -370,20 +370,16 @@ export default function Home() {
           // Check current progress
           const alreadyHas = (type: string) => trophies.some((t) => t.achievementType === type);
           
-          if (digitsEntered >= 9 && !alreadyHas("pi-legend")) {
+if (digitsEntered >= 9 && !alreadyHas("pi-legend")) {
             newAchievement = "pi-legend";
-          } else if (digitsEntered >= 8 && !alreadyHas("pi-genius")) {
+          } else if (digitsEntered >= 7 && !alreadyHas("pi-genius")) {
             newAchievement = "pi-genius";
           } else if (digitsEntered >= 6 && !alreadyHas("pi-master")) {
             newAchievement = "pi-master";
           } else if (digitsEntered >= 5 && !alreadyHas("pi-explorer")) {
             newAchievement = "pi-explorer";
-          } else if (digitsEntered >= 3 && !alreadyHas("pi-pioneer")) {
-            // Need 3.14 (3 digits after the decimal point counts)
-            const currentInput = piCode.slice(0, digitsEntered).join("");
-            if (currentInput === "3.14" || currentInput === "3.141") {
-              newAchievement = "pi-pioneer";
-            }
+          } else if (digitsEntered >= 4 && !alreadyHas("pi-pioneer")) {
+            newAchievement = "pi-pioneer";
           }
           
           if (newAchievement) {
