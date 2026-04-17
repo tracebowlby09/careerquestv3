@@ -672,7 +672,25 @@ export default function Home() {
   };
 
   // Render Settings modal (always available)
-  const settingsModal = <Settings isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />;
+  const handleSettingsChange = useCallback(() => {
+    const existingTrophies = loadTrophies();
+    const alreadyHasTechSavvy = existingTrophies.some((t) => t.achievementType === "tech-savvy");
+    if (!alreadyHasTechSavvy) {
+      const techSavvyTrophy: Trophy = {
+        career: "programmer",
+        difficulty: "hard",
+        earnedAt: new Date(),
+        isSecret: true,
+        achievementType: "tech-savvy",
+      };
+      setTrophies([...existingTrophies, techSavvyTrophy]);
+      saveTrophies([...existingTrophies, techSavvyTrophy]);
+      setShowSecretTrophyPopup(true);
+      setCurrentAchievementType("tech-savvy");
+    }
+  }, []);
+
+  const settingsModal = <Settings isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} onSettingsChange={handleSettingsChange} />;
 
   // Admin panel functions
   const handleClearTrophies = () => {

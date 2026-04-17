@@ -129,6 +129,66 @@ const trophyContent: Record<string, { icon: string; title: string; message: stri
     message: "You checked in today - thanks for playing Career Quest!",
     gradient: "from-green-400 via-emerald-500 to-teal-500",
   },
+  "phoenix": {
+    icon: "🔥",
+    title: "PHOENIX!",
+    message: "You lost all hearts but still completed Quick Recall!",
+    gradient: "from-orange-400 via-red-500 to-yellow-500",
+  },
+  "keyboard-warrior": {
+    icon: "⌨️",
+    title: "KEYBOARD WARRIOR!",
+    message: "You played an entire game using only keyboard navigation!",
+    gradient: "from-gray-500 via-slate-600 to-zinc-700",
+  },
+  "explorer": {
+    icon: "🧭",
+    title: "EXPLORER!",
+    message: "You visited every screen in the game!",
+    gradient: "from-blue-400 via-indigo-500 to-purple-600",
+  },
+  "patience": {
+    icon: "⏳",
+    title: "PATIENCE!",
+    message: "You waited 60+ seconds before submitting your first answer!",
+    gradient: "from-amber-400 via-yellow-500 to-orange-400",
+  },
+  "streak-master": {
+    icon: "🔥",
+    title: "STREAK MASTER!",
+    message: "You won 5 games in a row!",
+    gradient: "from-red-500 via-orange-600 to-yellow-500",
+  },
+  "return-customer": {
+    icon: "🔄",
+    title: "RETURN CUSTOMER!",
+    message: "You played on 7 different days!",
+    gradient: "from-teal-400 via-cyan-500 to-blue-500",
+  },
+  "committed": {
+    icon: "⏰",
+    title: "COMMITTED!",
+    message: "You played for 30 minutes in one session!",
+    gradient: "from-violet-400 via-purple-500 to-indigo-600",
+  },
+  "tech-savvy": {
+    icon: "⚙️",
+    title: "TECH SAVVY!",
+    message: "You changed the settings!",
+    gradient: "from-slate-400 via-gray-500 to-zinc-600",
+  },
+  "variety-pack": {
+    icon: "📦",
+    title: "VARIETY PACK!",
+    message: "You completed games in all 3 difficulty levels in one session!",
+    gradient: "from-pink-400 via-rose-500 to-red-500",
+  },
+  "second-chance": {
+    icon: "🔄",
+    title: "SECOND CHANCE!",
+    message: "You retried a question twice and still got it right!",
+    gradient: "from-lime-400 via-green-500 to-emerald-500",
+  },
 };
 
 export default function SecretTrophyPopup({ show, achievementType, onClose }: SecretTrophyPopupProps) {

@@ -6,9 +6,10 @@ import { audioSystem } from "@/lib/audio";
 interface SettingsProps {
   isOpen: boolean;
   onClose: () => void;
+  onSettingsChange?: () => void;
 }
 
-export default function Settings({ isOpen, onClose }: SettingsProps) {
+export default function Settings({ isOpen, onClose, onSettingsChange }: SettingsProps) {
   const [musicVolume, setMusicVolume] = useState(30);
   const [sfxVolume, setSfxVolume] = useState(50);
 
@@ -23,6 +24,7 @@ export default function Settings({ isOpen, onClose }: SettingsProps) {
   const handleMusicVolumeChange = (value: number) => {
     setMusicVolume(value);
     audioSystem.setMusicVolume(value / 100);
+    onSettingsChange?.();
   };
 
   const handleSfxVolumeChange = (value: number) => {
@@ -30,6 +32,7 @@ export default function Settings({ isOpen, onClose }: SettingsProps) {
     audioSystem.setSfxVolume(value / 100);
     // Play click sound to test volume
     audioSystem.playClickSound();
+    onSettingsChange?.();
   };
 
   if (!isOpen) return null;
