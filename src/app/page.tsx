@@ -362,27 +362,24 @@ export default function Home() {
         const digitsEntered = newPiIndex;
         let newAchievement: AchievementType | null = null;
         
-        // 3 digits (3.1) is too short, need at least 3.14
-        if (digitsEntered >= 3) {
-          // Check which trophy to award based on progress
-          const piProgress = piCode.slice(0, digitsEntered).join("");
-          
-          // Check current progress
-          const alreadyHas = (type: string) => trophies.some((t) => t.achievementType === type);
-          
-if (digitsEntered >= 9 && !alreadyHas("pi-legend")) {
-            newAchievement = "pi-legend";
-          } else if (digitsEntered >= 7 && !alreadyHas("pi-genius")) {
-            newAchievement = "pi-genius";
-          } else if (digitsEntered >= 6 && !alreadyHas("pi-master")) {
-            newAchievement = "pi-master";
-          } else if (digitsEntered >= 5 && !alreadyHas("pi-explorer")) {
-            newAchievement = "pi-explorer";
-          } else if (digitsEntered >= 4 && !alreadyHas("pi-pioneer")) {
-            newAchievement = "pi-pioneer";
-          }
-          
-          if (newAchievement) {
+        // Check current progress
+        const alreadyHas = (type: string) => trophies.some((t) => t.achievementType === type);
+        
+        // Pi code has 9 characters: 3.1415926
+        // Check thresholds for each Pi trophy
+        if (digitsEntered >= 9 && !alreadyHas("pi-legend")) {
+          newAchievement = "pi-legend";
+        } else if (digitsEntered >= 7 && !alreadyHas("pi-genius")) {
+          newAchievement = "pi-genius";
+        } else if (digitsEntered >= 6 && !alreadyHas("pi-master")) {
+          newAchievement = "pi-master";
+        } else if (digitsEntered >= 5 && !alreadyHas("pi-explorer")) {
+          newAchievement = "pi-explorer";
+        } else if (digitsEntered >= 4 && !alreadyHas("pi-pioneer")) {
+          newAchievement = "pi-pioneer";
+        }
+        
+        if (newAchievement) {
             const trophy: Trophy = {
               career: "programmer",
               difficulty: "hard",
@@ -398,8 +395,6 @@ if (digitsEntered >= 9 && !alreadyHas("pi-legend")) {
         }
         
         setPiIndex(newPiIndex);
-      }
-    } else {
       // Reset if wrong key (but only if it's not a digit we might need)
       const validDigits = ["3", ".", "1", "4", "5", "9", "2", "6"];
       if (!validDigits.includes(key)) {
