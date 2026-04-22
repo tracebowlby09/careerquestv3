@@ -12,7 +12,6 @@ interface SettingsProps {
 export default function Settings({ isOpen, onClose, onSettingsChange }: SettingsProps) {
   const [musicVolume, setMusicVolume] = useState(30);
   const [sfxVolume, setSfxVolume] = useState(50);
-
   // Sync with audio system when settings opens
   useEffect(() => {
     if (isOpen) {

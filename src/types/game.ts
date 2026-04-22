@@ -15,3 +15,4 @@ export interface GameProgress {
   trophies: Trophy[];
   currentScore: number;
 }
+//game.ts pmo

@@ -14,7 +14,7 @@ function shuffleArray<T>(array: T[]): T[] {
   }
   return shuffled;
 }
-
+//
 interface ProgrammerWorldProps {
   difficulty: Difficulty;
   onComplete: (success: boolean, score: number, total: number) => void;
@@ -142,7 +142,7 @@ for (let i = 0; i <= 5; i++) {
     users.push(fetch(\`/api/user/\${id}\`));
   }
   return users;
-}`,
+}`,//Im Tung Tung Tung Sahtired 
       error: "Returns promises instead of user data",
       question: "How do you fix this async function?",
       options: [

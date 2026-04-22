@@ -16,59 +16,59 @@
 
 **Career Quest** is an interactive educational game where players:
 
-- 🎮 **Explore 6 different careers** through realistic challenges
-- 📚 **Answer career-specific questions** across 3 difficulty levels
-- 🏆 **Earn trophies and achievements** for completed challenges
-- ⚡ **Compete in Quick Recall** for fast-paced trivia action
+- 🎮 **Explore 6 different careers** through realistic challenges - Each career represents a real-world profession with job-specific scenarios
+- 📚 **Answer career-specific questions** across 3 difficulty levels - Questions are designed by considering actual job tasks and skills needed
+- 🏆 **Earn trophies and achievements** for completed challenges - Rewards provide sense of accomplishment and motivation to continue
+- ⚡ **Compete in Quick Recall** for fast-paced trivia action - Timed mode tests knowledge retention and quick thinking
 
 ---
 
 ## Slide 3: Game Modes
 
 ### Challenge Mode
-- Select a career and difficulty (Easy/Medium/Hard)
-- Complete career-specific challenges
-- Earn trophies for successful completion
-- Progress through all difficulties for bonuses
+- Select a career and difficulty (Easy/Medium/Hard) - Allows players to choose their comfort level
+- Complete career-specific challenges - Each career has unique question content
+- Earn trophies for successful completion - Trophies are saved to localStorage
+- Progress through all difficulties for bonuses - Completing all 3 difficulties yields achievement trophies
 
 ### Quick Recall
-- Fast-paced trivia mode
-- No difficulty selection
-- Immediate gameplay
-- Perfect for testing your knowledge
+- Fast-paced trivia mode - 15 random questions, 10 seconds each
+- No difficulty selection - All careers mixed together
+- Immediate gameplay - No navigation needed, starts right away
+- Perfect for testing your knowledge - Good for quick practice sessions
 
 ---
 
 ## Slide 4: Available Careers
 
-| Career | Icon | Key Skills |
-|--------|------|------------|
-| **Software Programmer** | 💻 | Logic, Debugging, Problem Solving |
-| **Registered Nurse** | 🏥 | Prioritization, Critical Thinking, Empathy |
-| **Civil Engineer** | 🏗️ | Analysis, Design, Constraint Management |
-| **Teacher** | 👩‍🏫 | Communication, Patience, Leadership |
-| **Head Chef** | 👨‍🍳 | Creativity, Time Management, Quality Control |
-| **Architect** | 🏛️ | Spatial Thinking, Problem Solving, Sustainability |
+| Career | Icon | Key Skills | What You'll Do |
+|--------|------|------------|---------------|
+| **Software Programmer** | 💻 | Logic, Debugging, Problem Solving | Debug code snippets, find syntax errors, fix logic bugs |
+| **Registered Nurse** | 🏥 | Prioritization, Critical Thinking, Empathy | Patient care scenarios, medical prioritization, healthcare decisions |
+| **Civil Engineer** | 🏗️ | Analysis, Design, Constraint Management | Structural analysis, safety calculations, design constraints |
+| **Teacher** | 👩‍🏫 | Communication, Patience, Leadership | Classroom scenarios, teaching methods, student engagement |
+| **Head Chef** | 👨‍🍳 | Creativity, Time Management, Quality Control | Kitchen challenges, recipe creation, timing dishes |
+| **Architect** | 🏛️ | Spatial Thinking, Problem Solving, Sustainability | Design projects, spatial planning, sustainable solutions |
 
 ---
 
 ## Slide 5: Career World Examples
 
 ### Programmer World
-- Debug code snippets
-- Find syntax errors
-- Fix logic bugs
-- Questions for each difficulty level
+- Debug code snippets - Identify bugs in provided code
+- Find syntax errors - Spot language violations
+- Fix logic bugs - Correct algorithmic mistakes
+- Questions for each difficulty level - 3-7 questions based on difficulty
 
 ### Nurse World
-- Patient care scenarios
-- Medical prioritization
-- Healthcare decision-making
+- Patient care scenarios - Realistic healthcare situations
+- Medical prioritization - Decide treatment order
+- Healthcare decision-making - Choose best patient outcomes
 
 ### Engineer World
-- Structural analysis
-- Safety calculations
-- Design constraints
+- Structural analysis - Evaluate building designs
+- Safety calculations - Compute load limits
+- Design constraints - Work within budgets/specs
 
 ---
 
@@ -76,38 +76,40 @@
 
 | Difficulty | Questions | Passing Score | Description |
 |------------|-----------|---------------|-------------|
-| **Easy** | 3 | 2/3 (67%) | Basic concepts, friendly guidance |
-| **Medium** | 5 | 3/5 (60%) | Intermediate challenges |
-| **Hard** | 7 | 5/7 (71%) | Expert-level scenarios |
+| **Easy** | 3 | 2/3 (67%) | Basic concepts, friendly guidance - Introductory level, more forgiving |
+| **Medium** | 5 | 3/5 (60%) | Intermediate challenges - Requires some domain knowledge |
+| **Hard** | 7 | 5/7 (71%) | Expert-level scenarios - Domain expert level questions |
+
+**Why passing scores vary:** Each difficulty has different thresholds to account for question complexity. Easy has fewer questions but higher percentage needed; Hard has more questions but slightly lower percentage threshold.
 
 ---
 
 ## Slide 7: Trophy System
 
 ### Regular Trophies
-- Earn a trophy for each career/difficulty combination
-- Collect all 18 regular trophies to complete the game
+- Earn a trophy for each career/difficulty combination - 6 careers × 3 difficulties = 18 trophies
+- Collect all 18 regular trophies to complete the game - Full completion requires mastery
 
 ### Achievement Trophies
-- **Career Master** - Complete all 3 difficulties for one career
-- **Quick Recall Champion** - Complete Quick Recall mode
-- **Perfect Recall** - Get perfect score in Quick Recall
+- **Career Master** - Complete all 3 difficulties for one career - Earned automatically when done
+- **Quick Recall Champion** - Complete Quick Recall mode - One-time achievement
+- **Perfect Recall** - Get perfect score in Quick Recall - All 15 correct
 
 ---
 
 ## Slide 8: Secret Easter Egg Trophies
 
-| Trophy | How to Unlock |
-|--------|---------------|
-| **Konami Master** | Enter ↑↑↓↓←→←→BA anywhere |
-| **Pi Pioneer/Explorer/Master/Genius/Legend** | Type digits of Pi (3.14...) |
-| **Lightning Reflex** | 5 correct answers under 10 seconds each |
-| **Marathon Runner** | Complete Challenge Mode with no wrong answers |
-| **Speed Demon** | Perfect Quick Recall under 30 seconds |
-| **Night Owl** | Play after 10 PM |
-| **Early Bird** | Play before 6 AM |
-| **Lucky Star** | Pass Hard mode with wrong answer |
-| **Jack of All Trades** | Play at least one question from each career |
+| Trophy | How to Unlock | Explanation |
+|--------|---------------|-------------|
+| **Konami Master** | Enter ↑↑↓↓←→←→BA anywhere | Classic Konami code pattern - hidden input |
+| **Pi Pioneer/Explorer/Master/Genius/Legend** | Type digits of Pi (3.14...) | Pi digit typing games - progressive difficulty |
+| **Lightning Reflex** | 5 correct answers under 10 seconds each | Speed achievement for fast answers |
+| **Marathon Runner** | Complete Challenge Mode with no wrong answers | Perfect game completion |
+| **Speed Demon** | Perfect Quick Recall under 30 seconds | Speed + accuracy in Quick Recall |
+| **Night Owl** | Play after 10 PM | Time-based achievement |
+| **Early Bird** | Play before 6 AM | Time-based achievement |
+| **Lucky Star** | Pass Hard mode with wrong answer | Screenshot-able unlikely event |
+| **Jack of All Trades** | Play at least one question from each career | Completion of all careers |
 
 ---
 
@@ -116,20 +118,20 @@
 ```
 src/
 ├── app/
-│   ├── page.tsx          # Main game state machine (1059 lines)
-│   ├── layout.tsx        # Root layout
-│   └── globals.css       # Tailwind CSS 4
+│   ├── page.tsx          # Main game state machine (1059 lines) - Handles all game logic
+│   ├── layout.tsx        # Root layout - HTML structure, fonts
+│   └── globals.css       # Tailwind CSS 4 - Global styles
 ├── components/
-│   ├── TitleScreen.tsx   # Start screen
-│   ├── CareerSelection.tsx  # Career picker
-│   ├── ScreenWrapper.tsx # Full-screen with exit warnings
-│   ├── TutorialScreen.tsx # Tutorial
-│   ├── OutcomeScreen.tsx # Results
-│   ├── TrophyScreen.tsx  # Trophy case
-│   ├── difficulty/       # 6 difficulty screens
-│   └── careers/          # 6 career worlds
+│   ├── TitleScreen.tsx   # Start screen - Entry point
+│   ├── CareerSelection.tsx  # Career picker - Career grid
+│   ├── ScreenWrapper.tsx # Full-screen with exit warnings - Navigation safety
+│   ├── TutorialScreen.tsx # Tutorial - First-time instructions
+│   ├── OutcomeScreen.tsx # Results - Post-question display
+│   ├── TrophyScreen.tsx  # Trophy case - Collection display
+│   ├── difficulty/       # 6 difficulty screens - Career-specific questions
+│   └── careers/          # 6 career worlds - Question content
 └── lib/
-    └── audio.ts          # Web Audio API system
+    └── audio.ts          # Web Audio API system - Sound management
 ```
 
 ---
@@ -146,6 +148,8 @@ const [selectedCareer, setSelectedCareer] = useState<Career | null>(null);
 const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | null>(null);
 const [trophies, setTrophies] = useState<Trophy[]>(() => loadTrophies());
 ```
+
+**State flow:** User progresses through states: title → career-select → difficulty-select → playing → outcome → trophy (repeat)
 
 ---
 
@@ -165,6 +169,8 @@ export interface Trophy {
 }
 ```
 
+**Type safety:** TypeScript ensures valid values are used throughout the app, preventing runtime errors
+
 ---
 
 ## Slide 12: Audio System (lib/audio.ts)
@@ -176,14 +182,16 @@ class AudioSystem {
   private musicGain: GainNode | null = null;
   private sfxGain: GainNode | null = null;
   
-  playClickSound()
-  playSuccessSound()
-  playFailureSound()
-  playMusic(trackUrl)
-  stopBackgroundMusic()
-  playTitleMusic()
+  playClickSound()    // Button interactions
+  playSuccessSound() // Correct answers
+  playFailureSound() // Wrong answers
+  playMusic(trackUrl) // Background music
+  stopBackgroundMusic() // Stop playback
+  playTitleMusic() // Title screen theme
 }
 ```
+
+**Audio architecture:** Uses Web Audio API with gain nodes for independent volume control of music vs sound effects
 
 ---
 
@@ -199,7 +207,7 @@ interface Question {
     id: string;
     text: string;
     correct: boolean;
-    explanation: string;
+    explanation: string;  // Why answer is right/wrong
   }[];
 }
 
@@ -214,72 +222,74 @@ interface Question {
   question: "What's causing this error?",
   options: [
     { id: "a", text: "Change <= to < in loop condition", correct: true },
-    // ...
+    // ... other options
   ]
 }
 ```
+
+**Question format:** Each question includes code, error description, and multiple choice options with explanations
 
 ---
 
 ## Slide 14: Features & Screens
 
 ### Title Screen
-- Animated background particles
-- Two game mode buttons (Challenge Mode, Quick Recall)
-- Settings gear button
-- Trophy case access
+- Animated background particles - Visual engagement
+- Two game mode buttons (Challenge Mode, Quick Recall) - Primary navigation
+- Settings gear button - Audio configuration
+- Trophy case access - View collected trophies
 
 ### Career Selection Screen
-- Grid of career cards with icons
-- Career descriptions and required skills
-- Unique gradient backgrounds per career
+- Grid of career cards with icons - Visual career overview
+- Career descriptions and required skills - Information display
+- Unique gradient backgrounds per career - Visual distinction
 
 ### Difficulty Selection
-- Three difficulty buttons
-- Career-specific background image
-- Back button support
+- Three difficulty buttons - Level selection
+- Career-specific background image - Immersion
+- Back button support - Navigation
 
 ---
 
 ## Slide 15: Additional Features
 
 ### Settings
-- Music volume slider
-- SFX volume slider
-- Persistent via localStorage
+- Music volume slider - Control background music
+- SFX volume slider - Control sound effects
+- Persistent via localStorage - Settings saved between sessions
 
 ### Exit Warning System
-- ScreenWrapper component shows warning when leaving mid-game
-- Prevents accidental progress loss
+- ScreenWrapper component shows warning when leaving mid-game - Prevents accidental progress loss
+- Triggers on browser back button or page leave - Navigation safety
 
 ### Background Images
-- Career-specific backgrounds for immersion
-- Stored in `/public/images/`
-- Naming: `career-bg.jpg` (programmer-bg.jpg, nurse-bg.jpg, etc.)
+- Career-specific backgrounds for immersion - Visual theming
+- Stored in `/public/images/` - Static asset storage
+- Naming: `career-bg.jpg` (programmer-bg.jpg, nurse-bg.jpg, etc.) - Consistent naming
 
 ---
 
 ## Slide 16: Tech Stack
 
-| Technology | Purpose |
-|------------|---------|
-| **Next.js 16** | Framework with App Router |
-| **TypeScript** | Type safety (strict mode) |
-| **Tailwind CSS 4** | Styling |
-| **Web Audio API** | Audio playback |
-| **localStorage** | Trophy persistence |
+| Technology | Purpose | Why Used |
+|------------|---------|----------|
+| **Next.js 16** | Framework with App Router | React framework with server components, optimized builds |
+| **TypeScript** | Type safety (strict mode) | Catches errors at compile time |
+| **Tailwind CSS 4** | Styling | Utility-first, maintainable styles |
+| **Web Audio API** | Audio playback | Low-latency, game-ready audio |
+| **localStorage** | Trophy persistence | Client-side data storage without backend |
 
 ---
 
 ## Slide 17: Future Enhancements
 
 From FEATURE_IDEAS.md:
-- 📊 Statistics & Analytics Dashboard
-- ⭐ XP & Leveling System
-- 📅 Daily Challenges & Streaks
-- 🏅 Expanded Achievement System
-- 📚 Career Information Pages
-- 📝 Question Review & Learning Mode
+- 📊 Statistics & Analytics Dashboard - Track player performance over time
+- ⭐ XP & Leveling System - Progression beyond trophies
+- 📅 Daily Challenges & Streaks - Daily engagement
+- 🏅 Expanded Achievement System - More goals to achieve
+- 📚 Career Information Pages - Educational content about each career
+- 📝 Question Review & Learning Mode - Review wrong answers
 
 ---
 
@@ -292,14 +302,18 @@ From FEATURE_IDEAS.md:
 5. **Earn Trophies** → Collect achievements
 6. **View Progress** → Check Trophy Case
 
+**Game loop:** Players repeat steps 2-5 to collect all trophies and achievements
+
 ---
 
 ## Slide 19: Admin Features
 
 Secret admin panel accessible by typing `5839201746`:
-- Toggle "Always Correct" mode
-- Clear all trophies
-- Draggable window
+- Toggle "Always Correct" mode - Debug/testing tool
+- Clear all trophies - Reset functionality
+- Draggable window - UI positioning
+
+**Purpose:** Developer testing and player debugging tools
 
 ---
 

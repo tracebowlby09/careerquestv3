@@ -6,7 +6,6 @@ interface TrophyScreenProps {
   trophies: Trophy[];
   onBack: () => void;
 }
-
 const careerNames: Record<Career, string> = {
   programmer: "Programmer",
   nurse: "Nurse",
