@@ -61,6 +61,27 @@ const careers: CareerOption[] = [
     description: "Design buildings that balance form, function, and safety",
     skills: ["Spatial Thinking", "Problem Solving", "Sustainability"],
   },
+  {
+    id: "lawyer",
+    title: "Lawyer",
+    icon: "⚖️",
+    description: "Analyze cases, apply legal reasoning, and advocate for clients",
+    skills: ["Critical Thinking", "Legal Knowledge", "Ethical Reasoning"],
+  },
+  {
+    id: "retail",
+    title: "Retail Worker",
+    icon: "🛍️",
+    description: "Serve customers and manage store operations efficiently",
+    skills: ["Customer Service", "Problem Solving", "Sales"],
+  },
+  {
+    id: "electrician",
+    title: "Electrician",
+    icon: "⚡",
+    description: "Install and maintain electrical systems safely",
+    skills: ["Technical Knowledge", "Safety Protocols", "Troubleshooting"],
+  },
 ];
 
 export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit, gameMode }: CareerSelectionProps) {
@@ -226,6 +247,9 @@ function getCareerGradient(index: number): { start: string; end: string } {
     { start: '#93c5fd', end: '#60a5fa' }, // Light Blue - Teacher (lighter)
     { start: '#fbbf24', end: '#f59e0b' }, // Amber - Chef (brighter)
     { start: '#a78bfa', end: '#8b5cf6' }, // Violet-Indigo - Architect (brighter)
+    { start: '#3b82f6', end: '#1d4ed8' }, // Blue - Lawyer
+    { start: '#ec4899', end: '#db2777' }, // Pink - Retail (brighter)
+    { start: '#facc15', end: '#eab308' }, // Yellow - Electrician
   ];
   return gradients[index % gradients.length];
 }

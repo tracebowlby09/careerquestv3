@@ -227,8 +227,7 @@ interface Question {
 }
 ```
 
-**Question format:** Each question includes code, error description, and multiple choice options with explanations
-
+**Question format:**
 ---
 
 ## Slide 14: Features & Screens

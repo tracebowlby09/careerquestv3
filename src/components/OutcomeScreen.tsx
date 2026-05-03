@@ -103,6 +103,48 @@ const careerData = {
       "Client communication and ethics",
     ],
   },
+  lawyer: {
+    icon: "⚖️",
+    title: "Lawyer",
+    successSkill: "Legal Analysis & Reasoning",
+    successMessage: "Excellent legal reasoning! You correctly applied legal principles to complex scenarios. Lawyers must analyze facts and identify relevant laws.",
+    failureSkill: "Case Analysis",
+    failureMessage: "Legal practice requires careful analysis of facts and relevant precedents. Review the scenarios and try again.",
+    keySkills: [
+      "Critical thinking and analysis",
+      "Legal research and writing",
+      "Ethical judgment and advocacy",
+      "Attention to detail",
+    ],
+  },
+  retail: {
+    icon: "🛍️",
+    title: "Retail Worker",
+    successSkill: "Customer Service & Problem Solving",
+    successMessage: "Great customer service skills! You handled challenging retail scenarios with professionalism and empathy.",
+    failureSkill: "Service Excellence",
+    failureMessage: "Retail work requires balancing customer satisfaction with store policies. Review the situations and try again.",
+    keySkills: [
+      "Customer service and communication",
+      "Problem-solving under pressure",
+      "Product knowledge and sales",
+      "Teamwork and reliability",
+    ],
+  },
+  electrician: {
+    icon: "⚡",
+    title: "Electrician",
+    successSkill: "Electrical Knowledge & Safety",
+    successMessage: "Excellent electrical work! You demonstrated proper knowledge of wiring, codes, and safety procedures.",
+    failureSkill: "Technical Competence",
+    failureMessage: "Electrical work requires understanding codes, safety, and proper procedures. Review the standards and try again.",
+    keySkills: [
+      "Electrical code knowledge",
+      "Safety protocols and procedures",
+      "Troubleshooting and problem-solving",
+      "Attention to detail",
+    ],
+  },
 };
 
 const trophyColors = {
@@ -204,14 +246,14 @@ export default function OutcomeScreen({
             <h4 className={`font-bold mb-3 ${isQR ? "text-white" : "text-gray-900"}`}>
               What {data.title}s Need:
             </h4>
-            <ul className="space-y-2">
-              {data.keySkills.map((skill, index) => (
-                <li key={index} className="flex items-start">
-                  <span className={isQR ? "text-amber-400 mr-2" : "text-green-600 mr-2"}>✓</span>
-                  <span className={isQR ? "text-purple-200" : "text-gray-700"}>{skill}</span>
-                </li>
-              ))}
-            </ul>
+<ul className="space-y-2">
+               {data.keySkills.map((skill: string, index: number) => (
+                 <li key={index} className="flex items-start">
+                   <span className={isQR ? "text-amber-400 mr-2" : "text-green-600 mr-2"}>✓</span>
+                   <span className={isQR ? "text-purple-200" : "text-gray-700"}>{skill}</span>
+                 </li>
+               ))}
+             </ul>
           </div>
         </div>
 

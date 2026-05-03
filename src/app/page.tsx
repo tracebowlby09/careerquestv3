@@ -9,12 +9,18 @@ import EngineerDifficulty from "@/components/difficulty/EngineerDifficulty";
 import TeacherDifficulty from "@/components/difficulty/TeacherDifficulty";
 import ChefDifficulty from "@/components/difficulty/ChefDifficulty";
 import ArchitectDifficulty from "@/components/difficulty/ArchitectDifficulty";
+import LawyerDifficulty from "@/components/difficulty/LawyerDifficulty";
+import RetailDifficulty from "@/components/difficulty/RetailDifficulty";
+import ElectricianDifficulty from "@/components/difficulty/ElectricianDifficulty";
 import ProgrammerWorld from "@/components/careers/ProgrammerWorld";
 import NurseWorld from "@/components/careers/NurseWorld";
 import EngineerWorld from "@/components/careers/EngineerWorld";
 import TeacherWorld from "@/components/careers/TeacherWorld";
 import ChefWorld from "@/components/careers/ChefWorld";
 import ArchitectWorld from "@/components/careers/ArchitectWorld";
+import LawyerWorld from "@/components/careers/LawyerWorld";
+import RetailWorld from "@/components/careers/RetailWorld";
+import ElectricianWorld from "@/components/careers/ElectricianWorld";
 import OutcomeScreen from "@/components/OutcomeScreen";
 import Settings from "@/components/Settings";
 import TrophyScreen from "@/components/TrophyScreen";
@@ -32,6 +38,9 @@ const careerNames: Record<Career, string> = {
   teacher: "Teacher",
   chef: "Head Chef",
   architect: "Architect",
+  lawyer: "Lawyer",
+  retail: "Retail Worker",
+  electrician: "Electrician",
 };
 
 // Load trophies from localStorage
@@ -67,7 +76,7 @@ const checkAchievements = (
   total: number
 ): AchievementType[] => {
   const achievements: AchievementType[] = [];
-  const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect"];
+  const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician"];
   const allDifficulties: Difficulty[] = ["easy", "medium", "hard"];
   
   // Check for Career Master - all 3 difficulties for any career
@@ -162,7 +171,7 @@ const checkEasterEggAchievements = (
   gameStartHourValue: number | null
 ): AchievementType[] => {
   const achievements: AchievementType[] = [];
-  const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect"];
+  const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician"];
 
   // Lightning Reflex - 5 correct answers in a row
   if (currentConsecutiveCorrect >= 5) {
@@ -869,6 +878,9 @@ export default function Home() {
       teacher: "/images/teacher-bg.jpg",
       chef: "/images/chef-bg.jpg",
       architect: "/images/architect-bg.jpg",
+      lawyer: "/images/lawyer-bg.jpg",
+      retail: "/images/retail-bg.jpg",
+      electrician: "/images/electrician-bg.jpg",
     };
     const backgroundImage = selectedCareer ? careerBackgrounds[selectedCareer] : undefined;
     
@@ -934,6 +946,36 @@ export default function Home() {
               backgroundImage={backgroundImage}
             />
           );
+        case 'lawyer':
+          return (
+            <LawyerDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        case 'retail':
+          return (
+            <RetailDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        case 'electrician':
+          return (
+            <ElectricianDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
         default:
           return null;
       }
@@ -969,6 +1011,9 @@ export default function Home() {
       teacher: "/images/teacher-bg.jpg",
       chef: "/images/chef-bg.jpg",
       architect: "/images/architect-bg.jpg",
+      lawyer: "/images/lawyer-bg.jpg",
+      retail: "/images/retail-bg.jpg",
+      electrician: "/images/electrician-bg.jpg",
     };
     const backgroundImage = selectedCareer ? careerBackgrounds[selectedCareer] : undefined;
     
@@ -1040,6 +1085,39 @@ export default function Home() {
         )}
         {selectedCareer === "architect" && (
           <ArchitectWorld
+            difficulty={selectedDifficulty ?? "easy"}
+            onComplete={handleChallengeComplete}
+            isQuickRecall={isQuickRecall}
+            alwaysCorrect={alwaysCorrect}
+            onExit={handleExitToTitle}
+            onTutorialBack={tutorialBackHandler}
+            onAnswerResult={handleAnswerResult}
+          />
+        )}
+        {selectedCareer === "lawyer" && (
+          <LawyerWorld
+            difficulty={selectedDifficulty ?? "easy"}
+            onComplete={handleChallengeComplete}
+            isQuickRecall={isQuickRecall}
+            alwaysCorrect={alwaysCorrect}
+            onExit={handleExitToTitle}
+            onTutorialBack={tutorialBackHandler}
+            onAnswerResult={handleAnswerResult}
+          />
+        )}
+        {selectedCareer === "retail" && (
+          <RetailWorld
+            difficulty={selectedDifficulty ?? "easy"}
+            onComplete={handleChallengeComplete}
+            isQuickRecall={isQuickRecall}
+            alwaysCorrect={alwaysCorrect}
+            onExit={handleExitToTitle}
+            onTutorialBack={tutorialBackHandler}
+            onAnswerResult={handleAnswerResult}
+          />
+        )}
+        {selectedCareer === "electrician" && (
+          <ElectricianWorld
             difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}

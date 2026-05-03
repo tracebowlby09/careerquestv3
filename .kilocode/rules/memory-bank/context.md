@@ -4,36 +4,19 @@
 
 **Game Status**: ✅ Fully playable career exploration game
 
-Career Quest V3 is a career exploration game with multiple career paths (Programmer, Nurse, Engineer, Teacher, Chef, Architect) featuring challenge modes and quick recall gameplay.
+Career Quest V3 is a career exploration game with multiple career paths (Programmer, Nurse, Engineer, Teacher, Chef, Architect, Lawyer, Retail Worker, Electrician) featuring challenge modes and quick recall gameplay.
 
 ## Recently Completed
 
-- [x] Added hints for all secret trophies in Trophy Case (locked trophies show cryptic hints, unlocked trophies show descriptions)
-- [x] Fixed music overlapping bug by ensuring proper music state reset before starting new tracks
-- [x] Removed redundant music start call in TitleScreen component
-- [x] Base Next.js 16 setup with App Router
-- [x] TypeScript configuration with strict mode
-- [x] Tailwind CSS 4 integration
-- [x] ESLint configuration
-- [x] Memory bank documentation
-- [x] Recipe system for common features 
-- [x] Career worlds with ScreenWrapper and exit warning popup
-- [x] Added progress loss warning when exiting career worlds during tests
-- [x] Added multiple patients to nurse quick recall questions
-- [x] Fixed pass/fail screen alignment (centered)
-- [x] Fixed career worlds to be full screen
-- [x] Added secret Konami code trophy easter egg
-- [x] Added unique Quick Recall career selection screen with gradient cards
-- [x] Added Ultimate Career Master trophy (complete all difficulties for ALL careers)
-- [x] Added Quick Recall Legend trophy (complete Quick Recall for ALL careers)
-- [x] Fixed background music overlapping issue when switching between different music packs
-- [x] Added music transition lock to prevent concurrent music changes
-- [x] Enhanced TitleScreen with animated background particles and improved styling
-- [x] Fixed back button on TutorialScreen instructions to properly exit to title screen
-- [x] Made all career worlds full screen without outline (Challenge Mode and Quick Recall)
-- [x] Added Pi digit typing secret trophies (Pi Pioneer at 3.14, Pi Explorer at 3.141, Pi Master at 3.1415, Pi Genius at 3.14159, Pi Legend at 3.1415926)
-- [x] Changed tutorial "Back" button to go to difficulty selection screen instead of title screen
-- [x] Added career-specific background images for simulation screens (programmer, nurse, engineer, teacher, chef, architect)
+- [x] Added 3 new careers: Lawyer, Retail Worker, and Electrician (May 2026)
+- [x] Updated types/game.ts with new career types
+- [x] Created LawyerWorld.tsx with legal reasoning questions
+- [x] Created RetailWorld.tsx with customer service scenarios
+- [x] Created ElectricianWorld.tsx with electrical code questions
+- [x] Created corresponding difficulty components for all 3 careers
+- [x] Updated CareerSelection.tsx with new career cards
+- [x] Updated OutcomeScreen.tsx with career data for new careers
+- [x] Updated TrophyScreen.tsx to display new careers
 
 ## Current Structure
 
@@ -43,7 +26,8 @@ Career Quest V3 is a career exploration game with multiple career paths (Program
 | `src/app/layout.tsx` | Root layout | ✅ Ready |
 | `src/app/globals.css` | Global styles | ✅ Ready |
 | `src/components/ScreenWrapper.tsx` | Screen wrapper with exit warning | ✅ Ready |
-| `src/components/careers/*.tsx` | Career world components | ✅ Ready |
+| `src/components/careers/*.tsx` | Career world components | ✅ Ready (6 original + 3 new) |
+| `src/components/difficulty/*.tsx` | Difficulty selection components | ✅ Ready (6 original + 3 new) |
 | `src/lib/audio.ts` | Audio system | ✅ Ready |
 | `.kilocode/` | AI context & recipes | ✅ Ready |
 
@@ -62,7 +46,7 @@ The game now supports two game modes:
 
 ### To add a new career:
 
-Create a new component in `src/components/careers/` and add it to `page.tsx`.
+Create a new component in `src/components/careers/`, add it to `page.tsx`, create a corresponding difficulty component, and update the types and supporting components.
 
 ### To modify career worlds:
 
@@ -129,4 +113,5 @@ The game includes several secret easter egg trophies that can be unlocked throug
 | 2026-03-12 | Added 7 new easter egg trophies (Lightning Reflex, Marathon Runner, Speed Demon, Jack of All Trades, Lucky Star, Night Owl, Early Bird) |
 | 2026-03-25 | Added career-specific background images for simulation screens |
 | 2026-03-27 | Fixed music overlapping bug - added proper music state reset and removed redundant music start call |
-| 2026-03-29 | Added hints for all secret trophies in Trophy Case (locked trophies show cryptic hints, unlocked trophies show descriptions) | - added proper state reset and removed redundant music start call |
+| 2026-03-29 | Added hints for all secret trophies in Trophy Case (locked trophies show cryptic hints, unlocked trophies show descriptions) |
+| 2026-05 | Added 3 new careers: Lawyer, Retail Worker, Electrician with full question sets and difficulty components |

@@ -13,6 +13,9 @@ const careerNames: Record<Career, string> = {
   teacher: "Teacher",
   chef: "Chef",
   architect: "Architect",
+  lawyer: "Lawyer",
+  retail: "Retail Worker",
+  electrician: "Electrician",
 };
 
 const careerIcons: Record<Career, string> = {
@@ -22,6 +25,9 @@ const careerIcons: Record<Career, string> = {
   teacher: "📚",
   chef: "👨‍🍳",
   architect: "🏛️",
+  lawyer: "⚖️",
+  retail: "🛍️",
+  electrician: "⚡",
 };
 
 const SECRET_TROPHY_ID = "konami-master";
@@ -288,7 +294,7 @@ export default function TrophyScreen({ trophies, onBack }: TrophyScreenProps) {
     return acc;
   }, {} as Record<Career, Trophy[]>);
 
-  const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect"];
+  const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician"];
   const earnedCareers = new Set(regularTrophies.map((t) => t.career));
 
   return (
