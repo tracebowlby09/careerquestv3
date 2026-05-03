@@ -17,6 +17,7 @@ Career Quest V3 is a career exploration game with multiple career paths (Program
 - [x] Updated CareerSelection.tsx with new career cards
 - [x] Updated OutcomeScreen.tsx with career data for new careers
 - [x] Updated TrophyScreen.tsx to display new careers
+- [x] Added background images for Lawyer, Retail, and Electrician careers
 
 ## Current Structure
 
