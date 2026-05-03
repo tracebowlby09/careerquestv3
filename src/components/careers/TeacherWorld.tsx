@@ -66,59 +66,6 @@ const questions: Record<Difficulty, Question[]> = {
       ],
     },
   ],
-    {
-      id: "e2",
-      scenario: "A student doesn't understand the material.",
-      question: "How do you help them?",
-      options: [
-        { id: "a", text: "Explain it again using a different approach", correct: true, explanation: "Different learning styles require different teaching methods." },
-        { id: "b", text: "Tell them to pay better attention", correct: false, explanation: "This doesn't address the learning need and may discourage the student." },
-        { id: "c", text: "Move on to keep the schedule", correct: false, explanation: "Leaving students behind creates gaps in understanding." },
-      ],
-    },
-    {
-      id: "e3",
-      scenario: "A parent emails you about their child's progress after school hours.",
-      question: "What's the most appropriate response time?",
-      options: [
-        { id: "a", text: "Respond within 24-48 hours during the school week", correct: true, explanation: "Setting professional boundaries while maintaining timely communication is standard practice." },
-        { id: "b", text: "Respond immediately to show dedication", correct: false, explanation: "This blurs professional boundaries and can lead to burnout." },
-        { id: "c", text: "Wait several days to respond", correct: false, explanation: "Delayed responses may frustrate parents and seem unprofessional." },
-      ],
-    },
-  ],
-    },
-    {
-      id: "e2",
-      scenario: "A student doesn't understand the material.",
-      question: "How do you help them?",
-      options: [
-        { id: "a", text: "Explain it again using a different approach", correct: true, explanation: "Different learning styles require different teaching methods." },
-        { id: "b", text: "Tell them to pay better attention", correct: false, explanation: "This doesn't address the learning need and may discourage the student." },
-        { id: "c", text: "Move on to keep the schedule", correct: false, explanation: "Leaving students behind creates gaps in understanding." },
-      ],
-    },
-    {
-      id: "e3",
-      scenario: "A parent emails you about their child's progress after school hours.",
-      question: "What's the most appropriate response time?",
-      options: [
-        { id: "a", text: "Respond within 24-48 hours during the school week", correct: true, explanation: "Setting professional boundaries while maintaining timely communication is standard practice." },
-        { id: "b", text: "Respond immediately to show dedication", correct: false, explanation: "This blurs professional boundaries and can lead to burnout." },
-        { id: "c", text: "Wait several days to respond", correct: false, explanation: "Delayed responses may frustrate parents and seem unprofessional." },
-      ],
-    },
-    {
-      id: "e4",
-      scenario: "You need to incorporate technology into your lesson plan.",
-      question: "What's the primary consideration when choosing digital tools?",
-      options: [
-        { id: "a", text: "Alignment with learning objectives and student needs", correct: true, explanation: "Technology should enhance learning outcomes, not distract from them." },
-        { id: "b", text: "How new and trendy the tool is", correct: false, explanation: "Novelty doesn't guarantee educational effectiveness." },
-        { id: "c", text: "Whether it's free to use", correct: false, explanation: "Cost is secondary to pedagogical effectiveness." },
-      ],
-    },
-  ],
   medium: [
     {
       id: "m1",
