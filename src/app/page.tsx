@@ -525,6 +525,10 @@ export default function Home() {
       // Start Quick Recall timer for Speed Demon trophy
       setQuickRecallStartTime(Date.now());
       setGameState("playing");
+    } else if (gameMode === "certification") {
+      // Certification mode goes directly to playing with hard difficulty
+      setSelectedDifficulty("hard");
+      setGameState("playing");
     } else {
       setGameState("difficulty-select");
     }
@@ -540,10 +544,12 @@ export default function Home() {
     setScore(finalScore);
     setTotalQuestions(total);
     
-    // Play success or failure sound (only for challenge mode)
+    // Determine game modes
     const isQuickRecallMode = gameMode === "quick-recall";
+    const isCertificationMode = gameMode === "certification";
     
-    if (!isQuickRecallMode) {
+    // Play success or failure sound (only for challenge mode)
+    if (!isQuickRecallMode && !isCertificationMode) {
       if (success) {
         audioSystem.playSuccessSound();
       } else {
@@ -564,7 +570,7 @@ export default function Home() {
       isQuickRecallMode,
       finalScore,
       total,
-      selectedDifficulty,
+      isCertificationMode ? "hard" : selectedDifficulty,
       consecutiveCorrect,
       quickRecallTimeMs,
       careersPlayed,
@@ -575,9 +581,18 @@ export default function Home() {
     
     // Award trophy if successful
     if (success && selectedCareer) {
-      // For challenge mode, use selected difficulty
-      // For quick recall, use "hard" as the difficulty (mastery level)
-      const difficulty = isQuickRecallMode ? "hard" : selectedDifficulty;
+      let difficulty: Difficulty | undefined;
+      
+      if (isCertificationMode) {
+        // Certification uses "hard" difficulty for the trophy
+        difficulty = "hard";
+      } else if (isQuickRecallMode) {
+        // Quick Recall uses "hard" as the difficulty (mastery level)
+        difficulty = "hard";
+      } else {
+        // Regular challenge mode uses selected difficulty
+        difficulty = selectedDifficulty || undefined;
+      }
       
       if (difficulty) {
         const newTrophy: Trophy = {
@@ -1033,6 +1048,7 @@ export default function Home() {
             difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
+            isCertification={gameMode === "certification"}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
             onTutorialBack={tutorialBackHandler}
@@ -1044,6 +1060,7 @@ export default function Home() {
             difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
+            isCertification={gameMode === "certification"}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
             onTutorialBack={tutorialBackHandler}
@@ -1055,6 +1072,7 @@ export default function Home() {
             difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
+            isCertification={gameMode === "certification"}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
             onTutorialBack={tutorialBackHandler}
@@ -1066,6 +1084,7 @@ export default function Home() {
             difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
+            isCertification={gameMode === "certification"}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
             onTutorialBack={tutorialBackHandler}
@@ -1077,6 +1096,7 @@ export default function Home() {
             difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
+            isCertification={gameMode === "certification"}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
             onTutorialBack={tutorialBackHandler}
@@ -1088,6 +1108,7 @@ export default function Home() {
             difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
+            isCertification={gameMode === "certification"}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
             onTutorialBack={tutorialBackHandler}
@@ -1099,6 +1120,7 @@ export default function Home() {
             difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
+            isCertification={gameMode === "certification"}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
             onTutorialBack={tutorialBackHandler}
@@ -1110,6 +1132,7 @@ export default function Home() {
             difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
+            isCertification={gameMode === "certification"}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
             onTutorialBack={tutorialBackHandler}
@@ -1121,6 +1144,7 @@ export default function Home() {
             difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
+            isCertification={gameMode === "certification"}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
             onTutorialBack={tutorialBackHandler}
@@ -1162,20 +1186,21 @@ export default function Home() {
   if (gameState === "outcome" && selectedCareer) {
     return (
       <>
-        <OutcomeScreen
-          career={selectedCareer}
-          difficulty={selectedDifficulty ?? "easy"}
-          success={challengeSuccess}
-          score={score}
-          total={totalQuestions}
-          onPlayAgain={handlePlayAgain}
-          onNewCareer={handleNewCareer}
-          onChangeDifficulty={handleChangeDifficulty}
-          onOpenSettings={() => setSettingsOpen(true)}
-          onExit={handleExitToTitle}
-          isQuickRecall={gameMode === "quick-recall"}
-          onBackToSelection={handleBackToSelection}
-        />
+         <OutcomeScreen
+           career={selectedCareer}
+           difficulty={selectedDifficulty ?? "easy"}
+           success={challengeSuccess}
+           score={score}
+           total={totalQuestions}
+           onPlayAgain={handlePlayAgain}
+           onNewCareer={handleNewCareer}
+           onChangeDifficulty={handleChangeDifficulty}
+           onOpenSettings={() => setSettingsOpen(true)}
+           onExit={handleExitToTitle}
+           isQuickRecall={gameMode === "quick-recall"}
+           isCertification={gameMode === "certification"}
+           onBackToSelection={handleBackToSelection}
+         />
         {settingsModal}
         <SecretTrophyPopup 
           show={showSecretTrophyPopup} 

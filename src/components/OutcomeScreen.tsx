@@ -15,6 +15,7 @@ interface OutcomeScreenProps {
   onOpenSettings?: () => void;
   onExit?: () => void;
   isQuickRecall?: boolean;
+  isCertification?: boolean;
   onBackToSelection?: () => void;
 }
 
@@ -171,11 +172,14 @@ export default function OutcomeScreen({
   onOpenSettings,
   onExit,
   isQuickRecall,
+  isCertification,
   onBackToSelection,
 }: OutcomeScreenProps) {
   const data = careerData[career];
   const percentage = Math.round((score / total) * 100);
   const isQR = isQuickRecall;
+  const isCert = isCertification || false;
+  const passingScore = isCert ? 80 : 60;
 
   return (
     <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit} dark>
@@ -183,52 +187,71 @@ export default function OutcomeScreen({
         <div className="text-center mb-6">
           <div className="text-6xl mb-4">{data.icon}</div>
           
-          {success && (
-            <div className="mb-4">
-              <div className={`inline-block bg-gradient-to-r ${isQR ? "from-amber-400 via-orange-500 to-red-500" : trophyColors[difficulty]} text-white px-6 py-3 rounded-full text-4xl font-bold shadow-lg`}>
-                {isQR ? "🏆" : trophyIcons[difficulty]} {isQR ? "Mastery Achieved!" : "Trophy Earned!"}
-              </div>
-            </div>
-          )}
+           {success && (
+             <div className="mb-4">
+               <div className={`inline-block bg-gradient-to-r ${isQR ? "from-amber-400 via-orange-500 to-red-500" : isCert ? "from-purple-500 to-pink-600" : trophyColors[difficulty]} text-white px-6 py-3 rounded-full text-4xl font-bold shadow-lg`}>
+                 {isQR ? "🏆 Mastery Achieved!" : isCert ? "🏆 Certification Earned!" : `${trophyIcons[difficulty]} Trophy Earned!`}
+               </div>
+             </div>
+           )}
           
           <div className={`text-5xl font-bold mb-4 ${
-            success ? (isQR ? "text-amber-300" : "text-green-600") : (isQR ? "text-purple-300" : "text-orange-600")
-          }`}>
-            {success ? (isQR ? "Mastery Complete! ✓" : "Success! ✓") : (isQR ? "Keep Practicing!" : "Keep Trying!")}
-          </div>
+             success 
+               ? (isQR ? "text-amber-300" : isCert ? "text-purple-300" : "text-green-600") 
+               : (isQR ? "text-purple-300" : isCert ? "text-pink-400" : "text-orange-600")
+           }`}>
+             {success 
+               ? (isQR ? "Mastery Complete! ✓" : isCert ? "Certification Complete! ✓" : "Success! ✓") 
+               : (isQR ? "Keep Practicing!" : isCert ? "Not Certified Yet" : "Keep Trying!")}
+           </div>
           
-          <h3 className={`text-2xl font-bold mb-2 ${isQR ? "text-white" : "text-gray-900"}`}>
-            {data.title}
-          </h3>
-          
-          <div className={`text-lg ${isQR ? "text-purple-200" : "text-gray-700"}`}>
-            {isQR ? "Quick Recall Mode" : `Difficulty: ${difficulty}`}
-          </div>
+           <h3 className={`text-2xl font-bold mb-2 ${isQR ? "text-white" : isCert ? "text-purple-300" : "text-gray-900"}`}>
+             {data.title}
+           </h3>
+           
+           {isCert && (
+             <div className="text-center mb-4">
+               <div className="inline-block bg-gradient-to-r from-purple-900/50 to-pink-900/50 border border-purple-500/30 rounded-lg px-4 py-2">
+                 <span className="flex items-center justify-center gap-1 text-purple-300 text-sm">
+                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                   </svg>
+                   Certification Exam (80% passing threshold)
+                 </span>
+               </div>
+             </div>
+           )}
+           
+           <div className={`text-lg ${isQR ? "text-purple-200" : isCert ? "text-purple-300" : "text-gray-700"}`}>
+             {isQR ? "Quick Recall Mode" : isCert ? "Certification Mode" : `Difficulty: ${difficulty}`}
+           </div>
         </div>
 
         <div className={`rounded-lg p-6 mb-6 ${isQR ? "bg-indigo-800/50" : "bg-gray-100"}`}>
-          <div className="text-center mb-4">
-            <div className={`text-5xl font-bold mb-2 ${isQR ? "text-white" : "text-gray-900"}`}>
-              {score} / {total}
-            </div>
-            <div className={`text-xl ${isQR ? "text-purple-200" : "text-gray-700"}`}>
-              {percentage}% Correct
-            </div>
-          </div>
-          
-          <div className="bg-gray-700 rounded-full h-4 overflow-hidden">
-            <div
-              className={`h-full transition-all duration-500 ${
-                percentage >= 60 ? "bg-green-500" : "bg-red-500"
-              }`}
-              style={{ width: `${percentage}%` }}
-            />
-          </div>
-          
-          <div className="text-center mt-2 text-sm text-gray-400">
-            {isQR 
-              ? (percentage >= 60 ? "Great job! You passed!" : "Keep practicing to improve!")
-              : (percentage >= 60 ? "Passed! (60% required)" : "Need 60% to pass")}
+           <div className="text-center mb-4">
+             <div className={`text-5xl font-bold mb-2 ${isQR ? "text-white" : isCert ? "text-purple-300" : "text-gray-900"}`}>
+               {score} / {total}
+             </div>
+             <div className={`text-xl ${isQR ? "text-purple-200" : isCert ? "text-purple-300" : "text-gray-700"}`}>
+               {percentage}% Correct
+             </div>
+           </div>
+
+           <div className="bg-gray-700 rounded-full h-4 overflow-hidden">
+             <div
+               className={`h-full transition-all duration-500 ${
+                 percentage >= passingScore ? "bg-green-500" : "bg-red-500"
+               }`}
+               style={{ width: `${percentage}%` }}
+             />
+           </div>
+            
+           <div className="text-center mt-2 text-sm text-gray-400">
+             {isQR 
+               ? (percentage >= 60 ? "Great job! You passed!" : "Keep practicing to improve!")
+               : isCert
+               ? (percentage >= 80 ? "Certification Earned! ✓" : `Need ${passingScore}% to certify`)
+               : (percentage >= 60 ? "Passed! (60% required)" : "Need 60% to pass")}
           </div>
         </div>
 

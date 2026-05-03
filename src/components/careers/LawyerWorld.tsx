@@ -18,6 +18,7 @@ interface LawyerWorldProps {
   difficulty: Difficulty;
   onComplete: (success: boolean, score: number, total: number) => void;
   isQuickRecall?: boolean;
+  isCertification?: boolean;
   alwaysCorrect?: boolean;
   onExit?: () => void;
   onTutorialBack?: () => void;

@@ -70,6 +70,15 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies }:
               ⚡ Quick Recall
             </span>
           </button>
+
+          <button
+            onClick={() => handleStart("certification")}
+            className="bg-gradient-to-r from-purple-500 to-pink-600 text-white text-xl font-bold py-4 px-12 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200 w-full group"
+          >
+            <span className="flex items-center justify-center gap-3">
+              📜 Certification Mode
+            </span>
+          </button>
         </div>
 
         <div className="mt-8 text-sm text-gray-500">
