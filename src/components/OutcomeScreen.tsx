@@ -15,6 +15,7 @@ interface OutcomeScreenProps {
   onOpenSettings?: () => void;
   onExit?: () => void;
   isQuickRecall?: boolean;
+  isCertification?: boolean;
   onBackToSelection?: () => void;
 }
 
@@ -22,6 +23,7 @@ const careerData = {
   programmer: {
     icon: "💻",
     title: "Software Programmer",
+    certification: "AWS Certified Developer",
     successSkill: "Debugging & Logical Thinking",
     successMessage: "You demonstrated strong debugging skills! Programmers need logical thinking to trace through code execution and spot where things go wrong.",
     failureSkill: "Root Cause Analysis",
@@ -36,6 +38,7 @@ const careerData = {
   nurse: {
     icon: "🏥",
     title: "Registered Nurse",
+    certification: "Registered Nurse (RN) License",
     successSkill: "Clinical Prioritization & Triage",
     successMessage: "Excellent triage skills! You correctly prioritized patients based on severity. Nurses must make life-or-death decisions under pressure.",
     failureSkill: "Critical Assessment",
@@ -50,6 +53,7 @@ const careerData = {
   engineer: {
     icon: "🏗️",
     title: "Civil Engineer",
+    certification: "Professional Engineer (PE) License",
     successSkill: "Constraint Optimization",
     successMessage: "Perfect engineering decisions! You balanced cost, strength, and timeline effectively. Engineers must find solutions that meet ALL requirements.",
     failureSkill: "Requirements Analysis",
@@ -62,8 +66,9 @@ const careerData = {
     ],
   },
   teacher: {
-    icon: "👩‍🏫",
+    icon: "🍎",
     title: "Teacher",
+    certification: "State Teaching License",
     successSkill: "Classroom Management & Professional Judgment",
     successMessage: "Excellent teaching decisions! You demonstrated the professional judgment needed to manage classrooms and support student learning effectively.",
     failureSkill: "Educational Decision-Making",
@@ -78,6 +83,7 @@ const careerData = {
   chef: {
     icon: "👨‍🍳",
     title: "Professional Chef",
+    certification: "ServSafe Food Handler",
     successSkill: "Culinary Expertise & Kitchen Management",
     successMessage: "Outstanding culinary decisions! You showed the expertise needed to manage a professional kitchen, from food safety to quality control.",
     failureSkill: "Kitchen Operations",
@@ -92,6 +98,7 @@ const careerData = {
   architect: {
     icon: "🏛️",
     title: "Architect",
+    certification: "Architect Registration Examination (ARE)",
     successSkill: "Design Integration & Professional Practice",
     successMessage: "Excellent architectural thinking! You balanced aesthetics, function, safety, and codes—the hallmarks of great architecture.",
     failureSkill: "Design Problem-Solving",
@@ -106,6 +113,7 @@ const careerData = {
   lawyer: {
     icon: "⚖️",
     title: "Lawyer",
+    certification: "Bar Exam",
     successSkill: "Legal Analysis & Reasoning",
     successMessage: "Excellent legal reasoning! You correctly applied legal principles to complex scenarios. Lawyers must analyze facts and identify relevant laws.",
     failureSkill: "Case Analysis",
@@ -120,6 +128,7 @@ const careerData = {
   retail: {
     icon: "🛍️",
     title: "Retail Worker",
+    certification: "Customer Service Certification",
     successSkill: "Customer Service & Problem Solving",
     successMessage: "Great customer service skills! You handled challenging retail scenarios with professionalism and empathy.",
     failureSkill: "Service Excellence",
@@ -134,6 +143,7 @@ const careerData = {
   electrician: {
     icon: "⚡",
     title: "Electrician",
+    certification: "Journeyman Electrician License",
     successSkill: "Electrical Knowledge & Safety",
     successMessage: "Excellent electrical work! You demonstrated proper knowledge of wiring, codes, and safety procedures.",
     failureSkill: "Technical Competence",
@@ -171,38 +181,43 @@ export default function OutcomeScreen({
   onOpenSettings,
   onExit,
   isQuickRecall,
+  isCertification,
   onBackToSelection,
 }: OutcomeScreenProps) {
   const data = careerData[career];
   const percentage = Math.round((score / total) * 100);
   const isQR = isQuickRecall;
+  const isCert = isCertification;
 
   return (
     <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit} dark>
       <div className={`max-w-3xl w-full rounded-2xl shadow-2xl p-8 mx-auto ${isQR ? "bg-gradient-to-br from-indigo-900 via-purple-900 to-violet-900" : "bg-white"}`}>
-        <div className="text-center mb-6">
+         <div className="text-center mb-6">
           <div className="text-6xl mb-4">{data.icon}</div>
           
           {success && (
             <div className="mb-4">
-              <div className={`inline-block bg-gradient-to-r ${isQR ? "from-amber-400 via-orange-500 to-red-500" : trophyColors[difficulty]} text-white px-6 py-3 rounded-full text-4xl font-bold shadow-lg`}>
-                {isQR ? "🏆" : trophyIcons[difficulty]} {isQR ? "Mastery Achieved!" : "Trophy Earned!"}
+              <div className={`inline-block bg-gradient-to-r ${isQR ? "from-amber-400 via-orange-500 to-red-500" : isCert ? "from-yellow-400 via-amber-500 to-orange-600" : trophyColors[difficulty]} text-white px-6 py-3 rounded-full text-4xl font-bold shadow-lg`}>
+                {isQR ? "🏆" : isCert ? "📜" : trophyIcons[difficulty]} {isQR ? "Mastery Achieved!" : isCert ? "Certification Earned!" : "Trophy Earned!"}
               </div>
             </div>
           )}
           
-          <div className={`text-5xl font-bold mb-4 ${
-            success ? (isQR ? "text-amber-300" : "text-green-600") : (isQR ? "text-purple-300" : "text-orange-600")
-          }`}>
-            {success ? (isQR ? "Mastery Complete! ✓" : "Success! ✓") : (isQR ? "Keep Practicing!" : "Keep Trying!")}
+          <div className={`text-5xl font-bold mb-2 ${success ? (isQR ? "text-amber-300" : isCert ? "text-yellow-300" : "text-green-600") : (isQR ? "text-purple-300" : isCert ? "text-yellow-300" : "text-orange-600")}`}>
+            {success ? (isQR ? "Mastery Complete! ✓" : isCert ? "Certified! ✓" : "Success! ✓") : (isQR ? "Keep Practicing!" : isCert ? "Certification Incomplete" : "Keep Trying!")}
           </div>
           
-          <h3 className={`text-2xl font-bold mb-2 ${isQR ? "text-white" : "text-gray-900"}`}>
+          <h3 className={`text-2xl font-bold mb-1 ${isQR ? "text-white" : "text-gray-900"}`}>
             {data.title}
           </h3>
+          {!isQR && (
+            <div className={`text-lg font-semibold mb-2 ${isQR ? "text-purple-200" : "text-blue-600"}`}>
+              {data.certification}
+            </div>
+          )}
           
           <div className={`text-lg ${isQR ? "text-purple-200" : "text-gray-700"}`}>
-            {isQR ? "Quick Recall Mode" : `Difficulty: ${difficulty}`}
+            {isQR ? "Quick Recall Mode" : isCert ? "Certification Exam" : `Difficulty: ${difficulty}`}
           </div>
         </div>
 
@@ -219,7 +234,7 @@ export default function OutcomeScreen({
           <div className="bg-gray-700 rounded-full h-4 overflow-hidden">
             <div
               className={`h-full transition-all duration-500 ${
-                percentage >= 60 ? "bg-green-500" : "bg-red-500"
+                (isCert && percentage >= 80) || (!isCert && percentage >= 60) ? "bg-green-500" : "bg-red-500"
               }`}
               style={{ width: `${percentage}%` }}
             />
@@ -228,6 +243,8 @@ export default function OutcomeScreen({
           <div className="text-center mt-2 text-sm text-gray-400">
             {isQR 
               ? (percentage >= 60 ? "Great job! You passed!" : "Keep practicing to improve!")
+              : isCert
+              ? (percentage >= 80 ? "Passed! (80% required for certification)" : "Need 80% for certification")
               : (percentage >= 60 ? "Passed! (60% required)" : "Need 60% to pass")}
           </div>
         </div>
@@ -246,16 +263,16 @@ export default function OutcomeScreen({
             <h4 className={`font-bold mb-3 ${isQR ? "text-white" : "text-gray-900"}`}>
               What {data.title}s Need:
             </h4>
-<ul className="space-y-2">
-               {data.keySkills.map((skill: string, index: number) => (
-                 <li key={index} className="flex items-start">
-                   <span className={isQR ? "text-amber-400 mr-2" : "text-green-600 mr-2"}>✓</span>
-                   <span className={isQR ? "text-purple-200" : "text-gray-700"}>{skill}</span>
-                 </li>
-               ))}
-             </ul>
-          </div>
-        </div>
+ <ul className="space-y-2">
+                {data.keySkills.map((skill: string, index: number) => (
+                  <li key={index} className="flex items-start">
+                    <span className={isQR ? "text-amber-400 mr-2" : "text-green-600 mr-2"}>✓</span>
+                    <span className={isQR ? "text-purple-200" : "text-gray-700"}>{skill}</span>
+                  </li>
+                ))}
+              </ul>
+           </div>
+         </div>
 
         <div className="space-y-3">
           <button
@@ -266,7 +283,7 @@ export default function OutcomeScreen({
                 : "bg-blue-600 text-white hover:bg-blue-700"
             }`}
           >
-            {isQR ? "Try Again" : "Try Same Difficulty Again"}
+            {isQR ? "Try Again" : isCert ? "Retake Certification" : "Try Same Difficulty Again"}
           </button>
           
           {isQR ? (
@@ -299,8 +316,8 @@ export default function OutcomeScreen({
 
         <div className={`mt-6 text-center text-sm ${isQR ? "text-purple-300" : "text-gray-600"}`}>
           {success
-            ? (isQR ? `Great job! You showed mastery in ${data.title}!` : `Great job! You earned the ${difficulty} trophy for ${data.title}!`)
-            : (isQR ? "Practice makes perfect! Keep trying!" : "Learning from mistakes is part of every career. Keep practicing!")}
+            ? (isQR ? `Great job! You showed mastery in ${data.title}!` : isCert ? `Congratulations! You passed the ${data.certification}!` : `Great job! You earned the ${difficulty} trophy for ${data.title}!`)
+            : (isQR ? "Practice makes perfect! Keep trying!" : isCert ? "Keep studying - you can pass this certification!" : "Learning from mistakes is part of every career. Keep practicing!")}
         </div>
         </div>
     </ScreenWrapper>

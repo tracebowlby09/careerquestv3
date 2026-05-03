@@ -19,6 +19,7 @@ interface ProgrammerWorldProps {
   difficulty: Difficulty;
   onComplete: (success: boolean, score: number, total: number) => void;
   isQuickRecall?: boolean;
+  isCertification?: boolean;
   alwaysCorrect?: boolean;
   onExit?: () => void;
   onTutorialBack?: () => void;
@@ -525,7 +526,120 @@ const quickRecallQuestions: Question[] = [
   },
 ];
 
-export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect, onExit, onTutorialBack, onAnswerResult }: ProgrammerWorldProps) {
+// Certification mode questions for Programmer - AWS Certified Developer
+const certificationQuestions: Question[] = [
+  {
+    id: "cert1",
+    code: `// AWS S3 bucket with public access block
+const s3 = new AWS.S3();
+const params = {
+  Bucket: 'my-app-bucket',
+  Key: 'user-uploads/file.txt',
+  Body: fileData,
+  ACL: 'public-read'
+};
+await s3.putObject(params).promise();
+`,
+    error: "Security: Public S3 access",
+    question: "What security issue exists in this code?",
+    options: [
+      { id: "a", text: "Granting public-read ACL exposes files to anyone", correct: true, explanation: "S3 objects with public-read ACL are accessible via URL without authentication. Use bucket policies or presigned URLs instead." },
+      { id: "b", text: "Missing encryption for S3 data", correct: false, explanation: "While encryption is important, the immediate risk is public access via ACL." },
+      { id: "c", text: "Missing versioning on bucket", correct: false, explanation: "Versioning is for data recovery, not access control." },
+      { id: "d", text: "Missing server-side encryption parameter", correct: false, explanation: "SSE is important but the ACL is the access control issue." },
+    ],
+  },
+  {
+    id: "cert2",
+    code: `// Lambda environment variables
+const dbPassword = process.env.DB_PASSWORD;
+const connectionString = \`mysql://admin:\${dbPassword}@prod-db.example.com:3306/appdb\`;
+`,
+    error: "Security: Credential management",
+    question: "What is the security best practice violation?",
+    options: [
+      { id: "a", text: "Hard-coded credentials in code/environment", correct: true, explanation: "DB credentials should use AWS Secrets Manager or Parameter Store, not environment variables directly." },
+      { id: "b", text: "Using mysql protocol instead of SSL", correct: false, explanation: "While SSL is important, the main issue is credential storage." },
+      { id: "c", text: "Database running on default port 3306", correct: false, explanation: "Port security is separate from credential management." },
+      { id: "d", text: "Connection string template literals", correct: false, explanation: "Template literals are not the issue." },
+    ],
+  },
+  {
+    id: "cert3",
+    code: `// API Gateway + Lambda
+exports.handler = async (event) => {
+  const userId = event.queryStringParameters.userId;
+  const query = \`SELECT * FROM users WHERE id = \${userId}\`;
+  const result = await db.query(query);
+  return { statusCode: 200, body: JSON.stringify(result) };
+};
+`,
+    error: "Security: SQL injection vulnerability",
+    question: "What security vulnerability should be fixed?",
+    options: [
+      { id: "a", text: "SQL injection via string concatenation", correct: true, explanation: "Direct string interpolation in SQL enables injection. Use parameterized queries or ORM." },
+      { id: "b", text: "Missing input validation", correct: false, explanation: "Validation is needed but doesn't prevent SQL injection by itself." },
+      { id: "c", text: "No error handling", correct: false, explanation: "Error handling is important but not the SQL injection issue." },
+      { id: "d", text: "Returning database errors to client", correct: false, explanation: "This is an info leak issue, not SQL injection." },
+    ],
+  },
+  {
+    id: "cert4",
+    code: `// CloudFormation template snippet
+Resources:
+  MyBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: my-application-bucket
+      AccessControl: PublicRead
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        IgnorePublicAcls: false
+        BlockPublicPolicy: false
+        RestrictPublicBuckets: false
+`,
+    error: "Security: CloudFormation misconfiguration",
+    question: "What makes this infrastructure insecure?",
+    options: [
+      { id: "a", text: "PublicRead ACL with all PublicAccessBlock disabled", correct: true, explanation: "All public access restrictions disabled + PublicRead ACL means bucket is fully public. Enable all PublicAccessBlock settings." },
+      { id: "b", text: "Missing BucketEncryption", correct: false, explanation: "Encryption is separate from public access configuration." },
+      { id: "c", text: "Hard-coded BucketName", correct: false, explanation: "Bucket names can be hardcoded in CloudFormation." },
+      { id: "d", text: "Missing Versioning configuration", correct: false, explanation: "Versioning is for data recovery, not access control." },
+    ],
+  },
+  {
+    id: "cert5",
+    code: `// Lambda function
+exports.handler = async (event) => {
+  const axios = require('axios');
+  const response = await axios.get(
+    \`https://api.example.com/data?token=\${process.env.TOKEN}\`,
+    { timeout: 30000 }
+  );
+  return response.data;
+};
+`,
+    error: "Security: Outbound request security",
+    question: "What security concern exists with this outbound call?",
+    options: [
+      { id: "a", text: "Token exposed in URL query string", correct: true, explanation: "Query string tokens may be logged in CloudWatch, browser history, proxy logs. Use headers or POST body instead." },
+      { id: "b", text: "Missing timeout configuration", correct: false, explanation: "Timeout is configured (30000ms)." },
+      { id: "c", text: "HTTP instead of HTTPS", correct: false, explanation: "URL uses HTTPS." },
+      { id: "d", text: "Missing retry logic", correct: false, explanation: "Retries are separate from security concerns." },
+    ],
+  },
+];
+
+export default function ProgrammerWorld({
+  difficulty,
+  onComplete,
+  isQuickRecall,
+  isCertification,
+  alwaysCorrect,
+  onExit,
+  onTutorialBack,
+  onAnswerResult,
+}: ProgrammerWorldProps) {
   const [stage, setStage] = useState<"intro" | "tutorial" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -542,6 +656,8 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
 
   // Timer for Quick Recall mode
   const [questionStartTime, setQuestionStartTime] = useState<number>(Date.now());
+  
+  const isCertMode = isCertification === true;
   
   useEffect(() => {
     if (!isQuickRecall || stage !== "challenge" || hearts <= 0) return;
@@ -581,9 +697,12 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
   };
 
   // Use quick recall questions if available, otherwise fall back to difficulty questions
+  // Also handle certification mode
   const currentQuestions = isQuickRecall 
     ? (quickRecallQuestions.length > 0 ? quickRecallQuestions : questions.easy)
-    : questions[difficulty];
+    : (isCertMode && certificationQuestions.length > 0
+        ? certificationQuestions
+        : questions[difficulty]);
   const currentQuestion = currentQuestions[currentQuestionIndex];
   const totalQuestions = currentQuestions.length;
 
@@ -668,12 +787,51 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
       setQuestionStartTime(Date.now());
     } else {
       // All questions completed
-      const passThreshold = Math.ceil(totalQuestions * 0.6); // Need 60% to pass
+      // Certification mode: need 80% to pass (stricter than challenge mode)
+      const passThreshold = isCertMode 
+        ? Math.ceil(totalQuestions * 0.8)  // 80% for certification
+        : Math.ceil(totalQuestions * 0.6); // 60% for regular challenge
       onComplete(newScore >= passThreshold, newScore, totalQuestions);
     }
   };
 
   if (stage === "intro") {
+    if (isCertMode) {
+      return (
+        <TutorialScreen
+          careerName="Software Programmer - AWS Certified Developer"
+          careerIcon="📜"
+          steps={[
+            {
+              title: "Certification Exam",
+              content: "This is a 5-question AWS certification knowledge test. You need 80% to pass and earn the AWS Certified Developer badge.",
+              icon: "📋",
+            },
+            {
+              title: "Focus on Security",
+              content: "Questions cover AWS security best practices, IAM roles, encryption, and secure architecture patterns.",
+              icon: "🔒",
+            },
+            {
+              title: "Review and Submit",
+              content: "Carefully review each question before submitting. You need 4 out of 5 correct to pass this certification exam.",
+              icon: "✅",
+            },
+          ]}
+          onStart={() => setStage("challenge")}
+          onBack={() => {
+            if (onTutorialBack) {
+              audioSystem.playClickSound();
+              onTutorialBack();
+            } else if (onExit) {
+              audioSystem.playClickSound();
+              onExit();
+            }
+          }}
+        />
+      );
+    }
+    
     return (
       <TutorialScreen
         careerName="Software Programmer"

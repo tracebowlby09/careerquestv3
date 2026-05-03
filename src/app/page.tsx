@@ -423,7 +423,13 @@ export default function Home() {
     audioSystem.playClickSound();
     audioSystem.playTitleMusic();
     setGameMode(mode);
-    setGameState("career-select");
+    
+    // Certification mode goes directly from career select to playing (no difficulty select)
+    if (mode === "certification") {
+      setGameState("career-select");
+    } else {
+      setGameState("career-select");
+    }
     
     // Set game start hour for Night Owl / Early Bird trophies
     const currentHour = new Date().getHours();
@@ -525,6 +531,10 @@ export default function Home() {
       // Start Quick Recall timer for Speed Demon trophy
       setQuickRecallStartTime(Date.now());
       setGameState("playing");
+    } else if (gameMode === "certification") {
+      // Certification mode goes directly to playing (with mock difficulty)
+      setSelectedDifficulty("easy");
+      setGameState("playing");
     } else {
       setGameState("difficulty-select");
     }
@@ -540,10 +550,12 @@ export default function Home() {
     setScore(finalScore);
     setTotalQuestions(total);
     
-    // Play success or failure sound (only for challenge mode)
+    // Determine game modes
     const isQuickRecallMode = gameMode === "quick-recall";
+    const isCertificationMode = gameMode === "certification";
     
-    if (!isQuickRecallMode) {
+    // Play success or failure sound (only for regular challenge mode)
+    if (!isQuickRecallMode && !isCertificationMode) {
       if (success) {
         audioSystem.playSuccessSound();
       } else {
@@ -564,7 +576,7 @@ export default function Home() {
       isQuickRecallMode,
       finalScore,
       total,
-      selectedDifficulty,
+      isCertificationMode ? "hard" : selectedDifficulty,
       consecutiveCorrect,
       quickRecallTimeMs,
       careersPlayed,
@@ -574,17 +586,26 @@ export default function Home() {
     );
     
     // Award trophy if successful
-    if (success && selectedCareer) {
-      // For challenge mode, use selected difficulty
-      // For quick recall, use "hard" as the difficulty (mastery level)
-      const difficulty = isQuickRecallMode ? "hard" : selectedDifficulty;
-      
-      if (difficulty) {
-        const newTrophy: Trophy = {
-          career: selectedCareer,
-          difficulty: difficulty,
-          earnedAt: new Date(),
-        };
+      if (success && selectedCareer) {
+        let difficulty: Difficulty | undefined;
+        
+        if (isCertificationMode) {
+          // Certification uses "hard" difficulty for the trophy (stricter standard)
+          difficulty = "hard";
+        } else if (isQuickRecallMode) {
+          // Quick Recall uses "hard" as the difficulty (mastery level)
+          difficulty = "hard";
+        } else {
+          // Regular challenge mode uses selected difficulty
+          difficulty = selectedDifficulty || undefined;
+        }
+        
+        if (difficulty) {
+          const newTrophy: Trophy = {
+            career: selectedCareer,
+            difficulty: difficulty,
+            earnedAt: new Date(),
+          };
         
         // Check for achievements after awarding the new trophy
         const allTrophies = [...trophies, newTrophy];
@@ -999,6 +1020,7 @@ export default function Home() {
 
   if (gameState === "playing" && selectedCareer) {
     const isQuickRecall = gameMode === "quick-recall";
+    const isCertification = gameMode === "certification";
     
     // Determine which handler to use for tutorial back button based on game mode
     const tutorialBackHandler = isQuickRecall ? handleExitToCareerSelect : handleExitToDifficultySelect;
@@ -1017,7 +1039,7 @@ export default function Home() {
     };
     const backgroundImage = selectedCareer ? careerBackgrounds[selectedCareer] : undefined;
     
-    console.log('[page.tsx] selectedCareer:', selectedCareer, 'backgroundImage:', backgroundImage);
+    console.log('[page.tsx] selectedCareer:', selectedCareer, 'backgroundImage:', backgroundImage, 'gameMode:', gameMode);
     
     return (
       <ScreenWrapper
@@ -1033,6 +1055,7 @@ export default function Home() {
             difficulty={selectedDifficulty ?? "easy"}
             onComplete={handleChallengeComplete}
             isQuickRecall={isQuickRecall}
+            isCertification={isCertification}
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
             onTutorialBack={tutorialBackHandler}
@@ -1160,6 +1183,9 @@ export default function Home() {
   }
 
   if (gameState === "outcome" && selectedCareer) {
+    const isQuickRecall = gameMode === "quick-recall";
+    const isCertification = gameMode === "certification";
+    
     return (
       <>
         <OutcomeScreen
@@ -1173,7 +1199,8 @@ export default function Home() {
           onChangeDifficulty={handleChangeDifficulty}
           onOpenSettings={() => setSettingsOpen(true)}
           onExit={handleExitToTitle}
-          isQuickRecall={gameMode === "quick-recall"}
+          isQuickRecall={isQuickRecall}
+          isCertification={isCertification}
           onBackToSelection={handleBackToSelection}
         />
         {settingsModal}
