@@ -535,7 +535,7 @@ const quickRecallQuestions: Question[] = [
   },
 ];
 
-export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, alwaysCorrect, onExit, onTutorialBack, onAnswerResult }: EngineerWorldProps) {
+export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, isCertification, alwaysCorrect, onExit, onTutorialBack, onAnswerResult }: EngineerWorldProps) {
   const [stage, setStage] = useState<"intro" | "tutorial" | "challenge">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedDesign, setSelectedDesign] = useState<string | null>(null);
