@@ -190,7 +190,7 @@ export default function OutcomeScreen({
            {success && (
              <div className="mb-4">
                <div className={`inline-block bg-gradient-to-r ${isQR ? "from-amber-400 via-orange-500 to-red-500" : isCert ? "from-purple-500 to-pink-600" : trophyColors[difficulty]} text-white px-6 py-3 rounded-full text-4xl font-bold shadow-lg`}>
-                 {isQR ? "🏆 Mastery Achieved!" : isCert ? "🏆 Certification Earned!" : `${trophyIcons[difficulty]} Trophy Earned!`}
+                 {isQR ? "🏆 Mastery Achieved!" : isCert ? "🏆 Certification Complete! ✓" : `${trophyIcons[difficulty]} Trophy Earned!`}
                </div>
              </div>
            )}

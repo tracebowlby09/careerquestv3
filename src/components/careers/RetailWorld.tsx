@@ -311,9 +311,9 @@ export default function RetailWorld({ difficulty, onComplete, isQuickRecall, isC
             icon: "👆",
           },
           {
-            title: "Pass the Challenge",
-            content: `You need ${Math.ceil(questions[difficulty].length * (isCertification ? 0.8 : 0.6))} out of ${questions[difficulty].length} correct to pass. Good luck!`,
-            icon: "🏆",
+            title: isCertification ? "Pass the Certification" : "Pass the Challenge",
+            content: `You need ${Math.ceil(questions[difficulty].length * (isCertification ? 0.8 : 0.6))} out of ${questions[difficulty].length} correct to pass. Good luck!",
+            icon: isCertification ? "📜" : "🏆",
           },
         ]}
         onStart={() => setStage("challenge")}
