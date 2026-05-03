@@ -2,14 +2,15 @@
 
 ## Project Purpose
 
-Career Quest is an educational game that allows players to explore different career paths through interactive challenges and quick recall trivia. Players can test their knowledge across 6 different careers.
+Career Quest is an educational game that allows players to explore different career paths through interactive challenges and quick recall trivia. Players can test their knowledge across 9 different careers.
 
 ## Key Features
 
-- **6 Career Paths**: Programmer, Nurse, Engineer, Teacher, Chef, and Architect
+- **9 Career Paths**: Programmer, Nurse, Engineer, Teacher, Chef, Architect, Lawyer, Retail Worker, and Electrician
 - **Two Game Modes**: Challenge Mode (with difficulty selection) and Quick Recall (fast-paced trivia)
-- **Trophy System**: Earn trophies for completing challenges across difficulties
+- **Trophy System**: Earn trophies for completing challenges across difficulties  
 - **Achievements**: Special achievements for completing all careers, perfect scores, and secret easter eggs
+- **Certification-Style Questions**: Realistic, professional questions designed to mimic actual certification exams
 
 ## Technology Stack
 
@@ -29,41 +30,32 @@ Career Quest is an educational game that allows players to explore different car
 ## Careers Available
 
 1. **Software Programmer**: Debug code and solve programming challenges
-2. **Registered Nurse**: Answer healthcare and medical questions
+2. **Registered Nurse**: Answer healthcare and medical questions with realistic triage scenarios
 3. **Civil Engineer**: Test engineering knowledge
 4. **Teacher**: Educational questions and classroom scenarios
 5. **Head Chef**: Culinary knowledge and cooking challenges
-6. **Architect**: Architecture and design questions
+6. **Architect**: Architecture and design questions with certification-style content
+7. **Lawyer**: Legal reasoning questions
+8. **Retail Worker**: Customer service scenarios
+9. **Electrician**: Electrical code and safety questions
 
-## File Structure
+## Question Counts by Career
 
-```
-src/
-├── app/
-│   ├── page.tsx              # Main game component
-│   ├── layout.tsx            # Root layout
-│   └── globals.css           # Tailwind styles
-├── components/
-│   ├── TitleScreen.tsx       # Game title and start
-│   ├── CareerSelection.tsx   # Choose career
-│   ├── DifficultySelection.tsx # Choose difficulty
-│   ├── OutcomeScreen.tsx     # Success/failure results
-│   ├── TrophyScreen.tsx      # View earned trophies
-│   ├── careers/
-│   │   ├── ProgrammerWorld.tsx
-│   │   ├── NurseWorld.tsx
-│   │   ├── EngineerWorld.tsx
-│   │   ├── TeacherWorld.tsx
-│   │   ├── ChefWorld.tsx
-│   │   └── ArchitectWorld.tsx
-│   └── ...
-├── lib/
-│   └── audio.ts              # Audio system
-└── types/
-    └── game.ts               # TypeScript types
-```
+| Career | Easy | Medium | Hard | Total |
+|--------|------|--------|------|-------|
+| Nurse | 4 | 5 | 6 | 15 + 30 QR |
+| Engineer | 40 | 45 | 45 | 130 + 30 QR |
+| Architect | 6 | 8 | 10 | 24 + 30 QR |
+| Chef | 6 | 8 | 10 | 24 + 30 QR |
+| Teacher | 4 | 5 | 6 | 15 + 30 QR |
+| Programmer | 3 | 3 | 3 | 9 + 30 QR |
+| others | ~3 each | ~3 each | ~3 each | ~9 + 30 QR each |
 
-## Secret Features
+## Certification-Style Content
 
-- **Konami Code**: Enter ↑↑↓↓←→←→BA on any screen to unlock a secret trophy
-- **Admin Panel**: Enter code 5839201746 to access debug features
+The game now features enhanced questions that are more accurate to real-world certification exams, including:
+- Professional scenarios that mirror actual job situations
+- Code compliance questions (building codes, electrical codes, food safety)
+- Ethics and professional responsibility questions
+- Realistic troubleshooting and problem-solving scenarios
+- Industry-standard protocols and procedures

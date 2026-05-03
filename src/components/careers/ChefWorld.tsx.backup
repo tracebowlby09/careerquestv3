@@ -54,46 +54,6 @@ const questions: Record<Difficulty, Question[]> = {
         { id: "c", text: "Tell them to order something else", correct: false, explanation: "Chefs should accommodate allergies safely when possible." },
       ],
     },
-    {
-      id: "e3",
-      scenario: "You need to thaw frozen chicken breasts quickly.",
-      question: "What's the safest method?",
-      options: [
-        { id: "a", text: "In refrigerator overnight or in cold running water", correct: true, explanation: "Refrigerator or cold water prevents bacterial growth." },
-        { id: "b", text: "On the counter at room temperature", correct: false, explanation: "Room temp thawing allows bacterial growth in danger zone." },
-        { id: "c", text: "Hot water to speed up process", correct: false, explanation: "Hot water creates uneven thawing and bacterial growth." },
-      ],
-    },
-    {
-      id: "e4",
-      scenario: "A guest says their food tastes bland.",
-      question: "What's the most common fix?",
-      options: [
-        { id: "a", text: "Add salt in small increments", correct: true, explanation: "Salt enhances and balances overall flavor." },
-        { id: "b", text: "Add more of all spices", correct: false, explanation: "Over-spicing makes it hot, not flavorful." },
-        { id: "c", text: "Add sugar to mask the blandness", correct: false, explanation: "Sugar doesn't fix under-seasoning." },
-      ],
-    },
-    {
-      id: "e5",
-      scenario: "You're cooking pasta in a restaurant kitchen.",
-      question: "What's essential for properly cooked pasta?",
-      options: [
-        { id: "a", text: "Large pot of rapidly boiling, salted water", correct: true, explanation: "Plenty of water and salt prevents sticking and adds flavor." },
-        { id: "b", text: "Small pot with little water", correct: false, explanation: "Too little water makes pasta gummy and unevenly cooked." },
-        { id: "c", text: "Cold water brought to boil with pasta", correct: false, explanation: "Starting cold affects texture and cooking time." },
-      ],
-    },
-    {
-      id: "e6",
-      scenario: "Oil is smoking heavily in your pan.",
-      question: "What should you do immediately?",
-      options: [
-        { id: "a", text: "Remove from heat and reduce temperature", correct: true, explanation: "Smoke point exceeded - oil is burning and can ignite." },
-        { id: "b", text: "Add more oil to cool it down", correct: false, explanation: "Cold oil mixing with hot can splatter dangerously." },
-        { id: "c", text: "Pour water to extinguish it", correct: false, explanation: "Water on hot oil causes dangerous fire explosion." },
-      ],
-    },
   ],
   medium: [
     {
@@ -124,56 +84,6 @@ const questions: Record<Difficulty, Question[]> = {
         { id: "a", text: "Apologize, recook properly, and check quality control", correct: true, explanation: "Take responsibility and ensure it doesn't happen again." },
         { id: "b", text: "Blame the server for not checking", correct: false, explanation: "The kitchen is responsible for food quality." },
         { id: "c", text: "Microwave it quickly and send it back", correct: false, explanation: "This compromises quality and doesn't address the issue." },
-      ],
-    },
-    {
-      id: "m4",
-      scenario: "You have 6 lbs of beef tenderloin for 20 guests.",
-      question: "What portion size can you serve?",
-      options: [
-        { id: "a", text: "6 oz portions (allows for trimming loss)", correct: true, explanation: "6 lbs = 96 oz ÷ 6 oz = 16 portions after trimming loss." },
-        { id: "b", text: "8 oz portions", correct: false, explanation: "Only 12 portions, won't serve 20 guests." },
-        { id: "c", text: "10 oz portions", correct: false, explanation: "Only 9-10 portions, seriously short." },
-      ],
-    },
-    {
-      id: "m5",
-      scenario: "Your Hollandaise sauce is starting to separate.",
-      question: "How do you save it?",
-      options: [
-        { id: "a", text: "Whisk in 1 tbsp cold water drop by drop", correct: true, explanation: "Cold water helps re-emulsify slowly without shocking." },
-        { id: "b", text: "Add lemon juice quickly", correct: false, explanation: "Adding liquid too fast can make it worse." },
-        { id: "c", text: "Start over with new egg yolks", correct: false, explanation: "Wasteful when it can be saved with patience." },
-      ],
-    },
-    {
-      id: "m6",
-      scenario: "A guest has celiac disease and wants grilled chicken.",
-      question: "What precautions are needed?",
-      options: [
-        { id: "a", text: "Clean grill surface, fresh tongs, and verify all marinade ingredients", correct: true, explanation: "Complete protocol prevents cross-contamination." },
-        { id: "b", text: "Just don't bread it", correct: false, explanation: "Cross-contamination from surfaces and marinades is still possible." },
-        { id: "c", text: "Tell them it's not safe to order", correct: false, explanation: "With proper protocols, you can safely accommodate." },
-      ],
-    },
-    {
-      id: "m7",
-      scenario: "Your roast is cooking too fast and may dry out.",
-      question: "What's the best action?",
-      options: [
-        { id: "a", text: "Cover with foil and lower temperature", correct: true, explanation: "Retains moisture while slowing cooking rate." },
-        { id: "b", text: "Add more liquid and turn up heat", correct: false, explanation: "More heat will cook it even faster." },
-        { id: "c", text: "Take it out and let it rest early", correct: false, explanation: "Undercooked roast won't be safe or tender." },
-      ],
-    },
-    {
-      id: "m8",
-      scenario: "Mise en place means having everything ready before cooking.",
-      question: "What does it NOT typically include?",
-      options: [
-        { id: "a", text: "Finishing plating garnishes during service", correct: true, explanation: "Garnishes are typically added during service, not prepped." },
-        { id: "b", text: "Pre-cutting all vegetables", correct: false, explanation: "Vegetables should be pre-cut and organized." },
-        { id: "c", text: "Measuring out all spices", correct: false, explanation: "Spices should be measured and ready." },
       ],
     },
   ],
@@ -216,66 +126,6 @@ const questions: Record<Difficulty, Question[]> = {
         { id: "a", text: "86 the special and offer an alternative with quality ingredients", correct: true, explanation: "Never compromise on ingredient quality; reputation is everything." },
         { id: "b", text: "Use them anyway, customers won't notice", correct: false, explanation: "Quality-conscious diners will notice, damaging your reputation." },
         { id: "c", text: "Charge less for the special", correct: false, explanation: "Lower price doesn't excuse lower quality." },
-      ],
-    },
-    {
-      id: "h5",
-      scenario: "You suspect cross-contamination in your kitchen from raw chicken.",
-      question: "What's the first action?",
-      options: [
-        { id: "a", text: "Discard potentially contaminated food and sanitize all surfaces", correct: true, explanation: "When in doubt, safety first - prevent foodborne illness." },
-        { id: "b", text: "Cook everything to 165°F to kill bacteria", correct: false, explanation: "Some toxins aren't destroyed by cooking; contamination must be prevented." },
-        { id: "c", text: "Serve as is and monitor customer reactions", correct: false, explanation: "This is dangerous and could cause serious illness." },
-      ],
-    },
-    {
-      id: "h6",
-      scenario: "A guest reports a food allergy after consuming a dish containing the allergen.",
-      question: "What's the immediate response?",
-      options: [
-        { id: "a", text: "Call emergency services immediately and notify management", correct: true, explanation: "Allergic reactions can be life-threatening and require immediate action." },
-        { id: "b", text: "Apologize and offer compensation", correct: false, explanation: "Medical emergency takes priority over apologies." },
-        { id: "c", text: "Remove the dish from their bill", correct: false, explanation: "Payment concerns are secondary to health and safety." },
-      ],
-    },
-    {
-      id: "h7",
-      scenario: "Your restaurant is being audited for food safety certification.",
-      question: "What's the most critical requirement?",
-      options: [
-        { id: "a", text: "Proper food temperature logs and HACCP compliance", correct: true, explanation: "HACCP is the gold standard for food safety management." },
-        { id: "b", text: "Expensive equipment in the kitchen", correct: false, explanation: "Equipment doesn't guarantee proper food safety practices." },
-        { id: "c", text: "Fancy plating and presentation", correct: false, explanation: "Aesthetics don't indicate food safety standards." },
-      ],
-    },
-    {
-      id: "h8",
-      scenario: "During inspection, you find evidence of pest activity.",
-      question: "What's your obligation?",
-      options: [
-        { id: "a", text: "Immediate pest control treatment and deep cleaning", correct: true, explanation: "Pests create health hazards and must be eliminated promptly." },
-        { id: "b", text: "Clean visible areas and hope it passes", correct: false, explanation: "Pest issues require professional treatment, not just cleaning." },
-        { id: "c", text: "Hide the evidence and deny any problems", correct: false, explanation: "Fraudulent practices can lead to license revocation." },
-      ],
-    },
-    {
-      id: "h9",
-      scenario: "You're developing a new fusion menu combining cuisines.",
-      question: "What's the key to successful fusion cuisine?",
-      options: [
-        { id: "a", text: "Respect and understand both culinary traditions deeply", correct: true, explanation: "Authentic fusion honors original techniques and flavors." },
-        { id: "b", text: "Mix random ingredients from different cultures", correct: false, explanation: "Random combinations often clash rather than complement." },
-        { id: "c", text: "Use fusion only for marketing purposes", correct: false, explanation: "Superficial fusion without understanding lacks integrity." },
-      ],
-    },
-    {
-      id: "h10",
-      scenario: "An employee reports feeling ill with vomiting and diarrhea.",
-      question: "What's the required action?",
-      options: [
-        { id: "a", text: "Exclude from work and notify health department if required", correct: true, explanation: "Ill employees can contaminate food and spread illness." },
-        { id: "b", text: "Let them work if they feel better", correct: false, explanation: "Foodborne illness transmission is serious and preventable." },
-        { id: "c", text: "Have them take medication and continue working", correct: false, explanation: "Medication doesn't eliminate the contamination risk." },
       ],
     },
   ],

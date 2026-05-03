@@ -54,6 +54,26 @@ const questions: Record<Difficulty, Question[]> = {
         { id: "c", text: "Move on to keep the schedule", correct: false, explanation: "Leaving students behind creates gaps in understanding." },
       ],
     },
+    {
+      id: "e3",
+      scenario: "A parent emails you about their child's progress after school hours.",
+      question: "What's the most appropriate response time?",
+      options: [
+        { id: "a", text: "Respond within 24-48 hours during the school week", correct: true, explanation: "Setting professional boundaries while maintaining timely communication is standard practice." },
+        { id: "b", text: "Respond immediately to show dedication", correct: false, explanation: "This blurs professional boundaries and can lead to burnout." },
+        { id: "c", text: "Wait several days to respond", correct: false, explanation: "Delayed responses may frustrate parents and seem unprofessional." },
+      ],
+    },
+    {
+      id: "e4",
+      scenario: "You need to incorporate technology into your lesson plan.",
+      question: "What's the primary consideration when choosing digital tools?",
+      options: [
+        { id: "a", text: "Alignment with learning objectives and student needs", correct: true, explanation: "Technology should enhance learning outcomes, not distract from them." },
+        { id: "b", text: "How new and trendy the tool is", correct: false, explanation: "Novelty doesn't guarantee educational effectiveness." },
+        { id: "c", text: "Whether it's free to use", correct: false, explanation: "Cost is secondary to pedagogical effectiveness." },
+      ],
+    },
   ],
   medium: [
     {
@@ -84,6 +104,26 @@ const questions: Record<Difficulty, Question[]> = {
         { id: "a", text: "Implement accommodations and differentiate instruction", correct: true, explanation: "Teachers must provide equitable access to learning for all students." },
         { id: "b", text: "Treat them exactly like everyone else", correct: false, explanation: "Equity means meeting individual needs, not treating everyone identically." },
         { id: "c", text: "Refer them to special education only", correct: false, explanation: "General education teachers share responsibility for all students." },
+      ],
+    },
+    {
+      id: "m4",
+      scenario: "You're asked to teach a subject outside your certification area.",
+      question: "What should you do according to professional standards?",
+      options: [
+        { id: "a", text: "Request professional development or refuse if unqualified", correct: true, explanation: "Teaching outside certification violates professional standards and state regulations." },
+        { id: "b", text: "Teach it anyway - you learned it in college", correct: false, explanation: "This violates certification requirements and could jeopardize your license." },
+        { id: "c", text: "Let students teach themselves", correct: false, explanation: "This is neglectful and doesn't meet educational standards." },
+      ],
+    },
+    {
+      id: "m5",
+      scenario: "You need to report suspected child abuse.",
+      question: "What's the correct procedure?",
+      options: [
+        { id: "a", text: "File a formal report with child protective services within 24 hours", correct: true, explanation: "Mandated reporters have specific legal obligations and timelines for reporting." },
+        { id: "b", text: "Confront the parents first", correct: false, explanation: "This could endanger the child and compromise any investigation." },
+        { id: "c", text: "Ask the student for proof", correct: false, explanation: "Teachers are not investigators; suspicion alone triggers reporting duty." },
       ],
     },
   ],
@@ -126,6 +166,26 @@ const questions: Record<Difficulty, Question[]> = {
         { id: "a", text: "Follow school policy, document, and address academic integrity", correct: true, explanation: "Consistent policy enforcement and teaching integrity are essential." },
         { id: "b", text: "Give them a zero and don't tell anyone", correct: false, explanation: "This doesn't address the behavior or follow proper procedures." },
         { id: "c", text: "Give them a warning this time", correct: false, explanation: "Inconsistent consequences undermine academic integrity." },
+      ],
+    },
+    {
+      id: "h5",
+      scenario: "A student with an IEP is failing despite accommodations.",
+      question: "What's your next required step?",
+      options: [
+        { id: "a", text: "Request an IEP team meeting to review and revise the plan", correct: true, explanation: "When accommodations aren't working, the IEP must be reviewed by the team." },
+        { id: "b", text: "Modify the IEP unilaterally to make it easier", correct: false, explanation: "Only the IEP team can modify the IEP document and plan." },
+        { id: "c", text: "Give the student passing grades to avoid conflict", correct: false, explanation: "Grade inflation violates educational standards and IEP requirements." },
+      ],
+    },
+    {
+      id: "h6",
+      scenario: "You want to use a copyrighted resource in your curriculum.",
+      question: "What determines fair use in education?",
+      options: [
+        { id: "a", text: "Purpose, nature, amount used, and market effect - all four factors", correct: true, explanation: "Fair use requires evaluating all four statutory factors, not just being educational." },
+        { id: "b", text: "If it's for education, it's always fair use", correct: false, explanation: "Educational use is just one factor; all four must be considered." },
+        { id: "c", text: "If you cite the source, it's fair use", correct: false, explanation: "Citation doesn't automatically grant fair use rights." },
       ],
     },
   ],

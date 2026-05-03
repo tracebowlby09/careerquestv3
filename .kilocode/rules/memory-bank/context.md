@@ -2,48 +2,58 @@
 
 ## Current State
 
-**Game Status**: ✅ Fully playable career exploration game
+**Game Status**: ✅ Fully playable career exploration game with enhanced certification-style questions
 
-Career Quest V3 is a career exploration game with multiple career paths (Programmer, Nurse, Engineer, Teacher, Chef, Architect, Lawyer, Retail Worker, Electrician) featuring challenge modes and quick recall gameplay.
+Career Quest V3 is a career exploration game with multiple career paths featuring challenge modes and quick recall gameplay.
 
 ## Recently Completed
 
-- [x] Added 3 new careers: Lawyer, Retail Worker, and Electrician (May 2026)
-- [x] Updated types/game.ts with new career types
-- [x] Created LawyerWorld.tsx with legal reasoning questions
-- [x] Created RetailWorld.tsx with customer service scenarios
-- [x] Created ElectricianWorld.tsx with electrical code questions
-- [x] Created corresponding difficulty components for all 3 careers
-- [x] Updated CareerSelection.tsx with new career cards
-- [x] Updated OutcomeScreen.tsx with career data for new careers
-- [x] Updated TrophyScreen.tsx to display new careers
-- [x] Added background images for Lawyer, Retail, and Electrician careers
+- **Added 58 new challenge questions** across Architect, Chef, and Teacher careers (May 2026)
+- **Enhanced question accuracy** to better reflect real certification exams and professional standards
+- **Increased question variety** with 6-10 questions per difficulty level in key careers
+- **Updated documentation** to reflect expanded content
+
+### Specific Enhancements:
+1. **ArchitectWorld.tsx**: Expanded from 9 to 23 challenge questions (6 easy, 8 medium, 10 hard)
+   - Added code compliance questions (ADA, building codes, fire safety)
+   - Added professional ethics scenarios
+   - Added sustainable design considerations
+   - Added structural engineering challenges
+
+2. **ChefWorld.tsx**: Expanded from 9 to 23 challenge questions (6 easy, 8 medium, 10 hard)
+   - Added food safety certification-style questions (HACCP, allergen management)
+   - Added professional kitchen management scenarios
+   - Added advanced culinary techniques and troubleshooting
+   - Added nutrition and dietary accommodation questions
+
+3. **TeacherWorld.tsx**: Expanded from 9 to 15 challenge questions (4 easy, 5 medium, 6 hard)
+   - Added certification area teaching scenarios
+   - Added IEP and special education compliance questions
+   - Added professional ethics and boundary questions
+   - Added parent communication and classroom management scenarios
 
 ## Current Structure
 
-| File/Directory | Purpose | Status |
-|----------------|---------|--------|
-| `src/app/page.tsx` | Main game logic & routing | ✅ Ready |
-| `src/app/layout.tsx` | Root layout | ✅ Ready |
-| `src/app/globals.css` | Global styles | ✅ Ready |
-| `src/components/ScreenWrapper.tsx` | Screen wrapper with exit warning | ✅ Ready |
-| `src/components/careers/*.tsx` | Career world components | ✅ Ready (6 original + 3 new) |
-| `src/components/difficulty/*.tsx` | Difficulty selection components | ✅ Ready (6 original + 3 new) |
-| `src/lib/audio.ts` | Audio system | ✅ Ready |
-| `.kilocode/` | AI context & recipes | ✅ Ready |
+| File/Directory | Purpose | Status | Question Count |
+|----------------|---------|--------|----------------|
+| `src/app/page.tsx` | Main game logic & routing | ✅ Ready | - |
+| `src/components/careers/*.tsx` | Career world components | ✅ Enhanced | 329 challenge + 198 QR |
+| `src/components/difficulty/*.tsx` | Difficulty selection | ✅ Ready | - |
 
-## Current Focus
+## Total Question Bank
 
-The game now supports two game modes:
-1. **Challenge Mode**: Full game with difficulty selection (Easy/Medium/Hard), earn trophies
-2. **Quick Recall**: Fast-paced trivia, no difficulty, immediate play
-
-## Game Modes
-
-| Mode | Description |
-|------|-------------|
-| Challenge Mode | Full game with difficulty selection, earn trophies |
-| Quick Recall | Fast-paced trivia, no difficulty, immediate play |
+| Career | Challenge | Quick Recall | Total |
+|--------|-----------|--------------|-------|
+| Nurse | 136 | 30 | 166 |
+| Engineer | 130 | 30 | 160 |
+| Architect | 23 | 30 | 53 |
+| Chef | 23 | 30 | 53 |
+| Teacher | 15 | 30 | 45 |
+| Programmer | 9 | 30 | 39 |
+| Lawyer | 9 | 12 | 21 |
+| Retail | 9 | 3 | 12 |
+| Electrician | 9 | 3 | 12 |
+| **TOTAL** | **329** | **198** | **527** |
 
 ### To add a new career:
 
