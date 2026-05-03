@@ -14,6 +14,7 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 - **80% passing threshold** for certification exams (vs 60% regular)
 - **Fixed syntax errors** (malformed arrays in TeacherWorld, duplicate properties in ChefWorld)
 - **Removed backup files** from git tracking
+- **Unified certification UI**: tutorial shows "Pass the Certification" with 📜 icon for cert mode, "Pass the Challenge" with 🏆 for regular
 
 ### Specific Enhancements:
 
