@@ -283,7 +283,8 @@ export default function RetailWorld({ difficulty, onComplete, isQuickRecall, alw
       setSelectedAnswer(null);
       setQuestionStartTime(Date.now());
     } else {
-      const passThreshold = Math.ceil(totalQuestions * 0.6);
+      const passRatio = isCertification ? 0.8 : 0.6;
+      const passThreshold = Math.ceil(totalQuestions * passRatio)
       onComplete(newScore >= passThreshold, newScore, totalQuestions);
     }
   };
@@ -311,7 +312,7 @@ export default function RetailWorld({ difficulty, onComplete, isQuickRecall, alw
           },
           {
             title: "Pass the Challenge",
-            content: `You need ${Math.ceil(questions[difficulty].length * 0.6)} out of ${questions[difficulty].length} correct to pass. Good luck!`,
+            content: `You need ${Math.ceil(questions[difficulty].length * (isCertification ? 0.8 : 0.6))} out of ${questions[difficulty].length} correct to pass. Good luck!`,
             icon: "🏆",
           },
         ]}

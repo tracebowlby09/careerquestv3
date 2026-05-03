@@ -669,7 +669,8 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
       setQuestionStartTime(Date.now());
     } else {
       // All questions completed
-      const passThreshold = Math.ceil(totalQuestions * 0.6); // Need 60% to pass
+      const passRatio = isCertification ? 0.8 : 0.6;
+      const passThreshold = Math.ceil(totalQuestions * passRatio) // Need 60% to pass
       onComplete(newScore >= passThreshold, newScore, totalQuestions);
     }
   };
@@ -697,7 +698,7 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
           },
           {
             title: "Pass the Challenge",
-            content: `You need ${Math.ceil(questions[difficulty].length * 0.6)} out of ${questions[difficulty].length} correct to pass. Good luck!`,
+            content: `You need ${Math.ceil(questions[difficulty].length * (isCertification ? 0.8 : 0.6))} out of ${questions[difficulty].length} correct to pass. Good luck!`,
             icon: "🏆",
           },
         ]}
