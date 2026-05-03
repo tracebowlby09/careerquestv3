@@ -54,16 +54,6 @@ const questions: Record<Difficulty, Question[]> = {
         { id: "c", text: "Wear rubber gloves and work quickly", correct: false, explanation: "PPE doesn't replace proper lockout/tagout." },
       ],
     },
-    {
-      id: "e3",
-      scenario: "A circuit breaker trips repeatedly when a hair dryer is used.",
-      question: "What's the most likely cause?",
-      options: [
-        { id: "a", text: "Overloaded circuit or faulty breaker", correct: true, explanation: "Repeated tripping indicates overload or a defective breaker; hair dryers draw 12-15 amps." },
-        { id: "b", text: "Loose neutral connection", correct: false, explanation: "Loose neutrals don't typically cause breakers to trip." },
-        { id: "c", text: "Ground fault in the bathroom", correct: false, explanation: "Ground faults trip GFCIs, not standard breakers." },
-      ],
-    },
   ],
   medium: [
     {
