@@ -99,8 +99,6 @@ const questions: Record<Difficulty, Question[]> = {
     },
   ],
   hard: [
-  ],
-  hard: [
     {
       id: "h1",
       scenario: "During dinner rush, your walk-in cooler breaks down.",
