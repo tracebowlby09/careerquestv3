@@ -402,7 +402,7 @@ export default function LawyerWorld({ difficulty, onComplete, isQuickRecall, isC
           },
           {
             title: isCertification ? "Pass the Certification" : "Pass the Challenge",
-            content: `You need ${Math.ceil(questions[difficulty].length * (isCertification ? 0.8 : 0.6))} out of ${questions[difficulty].length} correct to pass. Good luck!",
+            content: `You need ${Math.ceil(questions[difficulty].length * (isCertification ? 0.8 : 0.6))} out of ${questions[difficulty].length} correct to pass. Good luck!`,
             icon: isCertification ? "📜" : "🏆",
           },
         ]}
