@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import TitleScreen from "@/components/TitleScreen";
 import CareerSelection from "@/components/CareerSelection";
+import CertificationSelection from "@/components/CertificationSelection";
+import CertificationWorld from "@/components/CertificationWorld";
 import ProgrammerDifficulty from "@/components/difficulty/ProgrammerDifficulty";
 import NurseDifficulty from "@/components/difficulty/NurseDifficulty";
 import EngineerDifficulty from "@/components/difficulty/EngineerDifficulty";
@@ -25,7 +27,7 @@ import OutcomeScreen from "@/components/OutcomeScreen";
 import Settings from "@/components/Settings";
 import TrophyScreen from "@/components/TrophyScreen";
 import SecretTrophyPopup from "@/components/SecretTrophyPopup";
-import { Career, Difficulty, GameMode, Trophy, AchievementType } from "@/types/game";
+import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import ScreenWrapper from "@/components/ScreenWrapper";
 
@@ -236,6 +238,7 @@ export default function Home() {
   const [gameState, setGameState] = useState<GameState>("title");
   const [gameMode, setGameMode] = useState<GameMode>("challenge");
   const [selectedCareer, setSelectedCareer] = useState<Career | null>(null);
+  const [selectedCertification, setSelectedCertification] = useState<CertificationType | null>(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | null>(null);
   const [score, setScore] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
@@ -526,12 +529,16 @@ export default function Home() {
       setQuickRecallStartTime(Date.now());
       setGameState("playing");
     } else if (gameMode === "certification") {
-      // Certification mode goes directly to playing with hard difficulty
       setSelectedDifficulty("hard");
-      setGameState("playing");
+      setGameState("difficulty-select");
     } else {
       setGameState("difficulty-select");
     }
+  };
+
+  const handleCertificationSelect = (certType: CertificationType) => {
+    setSelectedCertification(certType);
+    setGameState("playing");
   };
 
   const handleDifficultySelect = (difficulty: Difficulty) => {
@@ -885,7 +892,33 @@ export default function Home() {
     );
   }
 
-  if (gameState === "difficulty-select" && selectedCareer) {
+  if (gameState === "difficulty-select") {
+    if (gameMode === "certification") {
+      return (
+        <>
+          <CertificationSelection 
+            onSelectCertification={handleCertificationSelect}
+            onOpenSettings={() => setSettingsOpen(true)}
+            onExit={handleExitToCareerSelect}
+          />
+          {settingsModal}
+          <SecretTrophyPopup 
+            show={showSecretTrophyPopup} 
+            achievementType={currentAchievementType}
+            onClose={() => {
+              setShowSecretTrophyPopup(false);
+              setCurrentAchievementType(null);
+            }}
+          />
+        </>
+      );
+    }
+
+    if (!selectedCareer) {
+      setGameState("career-select");
+      return null;
+    }
+
     const careerBackgrounds: Record<string, string> = {
       programmer: "/images/programmer-bg.jpg",
       nurse: "/images/nurse-bg.jpg",
@@ -1007,6 +1040,28 @@ export default function Home() {
             setShowSecretTrophyPopup(false);
             setCurrentAchievementType(null);
           }} 
+        />
+      </>
+    );
+  }
+
+  if (gameState === "playing" && selectedCertification) {
+    return (
+      <>
+        <CertificationWorld
+          certificationType={selectedCertification}
+          onComplete={handleChallengeComplete}
+          onExit={handleExitToTitle}
+          onTutorialBack={() => setGameState("career-select")}
+        />
+        {settingsModal}
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
+          achievementType={currentAchievementType}
+          onClose={() => {
+            setShowSecretTrophyPopup(false);
+            setCurrentAchievementType(null);
+          }}
         />
       </>
     );
