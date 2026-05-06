@@ -924,7 +924,7 @@ export default function Home() {
   if (gameState === "difficulty-select") {
     if (!selectedCareer) {
       setGameState("career-select");
-      return null;
+      return <></>;
     }
 
     const careerBackgrounds: Record<string, string> = {
@@ -1241,7 +1241,7 @@ export default function Home() {
           onClose={() => {
             setShowSecretTrophyPopup(false);
             setCurrentAchievementType(null);
-          }} 
+          }}
         />
       </>
     );
@@ -1251,30 +1251,34 @@ export default function Home() {
     return (
       <>
          <OutcomeScreen
-           career={selectedCareer}
-           difficulty={selectedDifficulty ?? "easy"}
-           success={challengeSuccess}
-           score={score}
-           total={totalQuestions}
-           onPlayAgain={handlePlayAgain}
-           onNewCareer={handleNewCareer}
-           onChangeDifficulty={handleChangeDifficulty}
-           onOpenSettings={() => setSettingsOpen(true)}
-           onExit={handleExitToTitle}
-           isQuickRecall={gameMode === "quick-recall"}
-           isCertification={gameMode === "certification"}
-           onBackToSelection={handleBackToSelection}
+            career={selectedCareer}
+            difficulty={selectedDifficulty ?? "easy"}
+            success={challengeSuccess}
+            score={score}
+            total={totalQuestions}
+            onPlayAgain={handlePlayAgain}
+            onNewCareer={handleNewCareer}
+            onChangeDifficulty={handleChangeDifficulty}
+            onOpenSettings={() => setSettingsOpen(true)}
+            onExit={handleExitToTitle}
+            isQuickRecall={gameMode === "quick-recall"}
+            isCertification={gameMode === "certification"}
+            onBackToSelection={handleBackToSelection}
+          />
+         {settingsModal}
+         <SecretTrophyPopup 
+           show={showSecretTrophyPopup} 
+           achievementType={currentAchievementType}
+           onClose={() => {
+             setShowSecretTrophyPopup(false);
+             setCurrentAchievementType(null);
+           }}
          />
-        {settingsModal}
-        <SecretTrophyPopup 
-          show={showSecretTrophyPopup} 
-          achievementType={currentAchievementType}
-          onClose={() => {
-            setShowSecretTrophyPopup(false);
-            setCurrentAchievementType(null);
-          }} 
-        />
       </>
     );
   }
+
+  return (
+    <></>
+  );
 }
