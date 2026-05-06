@@ -31,7 +31,7 @@ import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementTyp
 import { audioSystem } from "@/lib/audio";
 import ScreenWrapper from "@/components/ScreenWrapper";
 
-type GameState = "title" | "career-select" | "difficulty-select" | "playing" | "outcome" | "trophy";
+type GameState = "title" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "trophy";
 
 const careerNames: Record<Career, string> = {
   programmer: "Software Programmer",
@@ -426,7 +426,11 @@ export default function Home() {
     audioSystem.playClickSound();
     audioSystem.playTitleMusic();
     setGameMode(mode);
-    setGameState("career-select");
+    if (mode === "certification") {
+      setGameState("certification-select");
+    } else {
+      setGameState("career-select");
+    }
     
     // Set game start hour for Night Owl / Early Bird trophies
     const currentHour = new Date().getHours();
@@ -869,6 +873,31 @@ export default function Home() {
     );
   }
 
+  if (gameState === "certification-select") {
+    return (
+      <>
+        <CertificationSelection 
+          onSelectCertification={handleCertificationSelect}
+          onOpenSettings={() => setSettingsOpen(true)}
+          onExit={() => {
+            setGameMode("challenge");
+            setGameState("title");
+          }}
+        />
+        {settingsModal}
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
+          achievementType={currentAchievementType}
+          onClose={() => {
+            setShowSecretTrophyPopup(false);
+            setCurrentAchievementType(null);
+          }}
+        />
+        {adminMode && renderAdminPanel()}
+      </>
+    );
+  }
+
   if (gameState === "career-select") {
     return (
       <>
@@ -893,27 +922,6 @@ export default function Home() {
   }
 
   if (gameState === "difficulty-select") {
-    if (gameMode === "certification") {
-      return (
-        <>
-          <CertificationSelection 
-            onSelectCertification={handleCertificationSelect}
-            onOpenSettings={() => setSettingsOpen(true)}
-            onExit={handleExitToCareerSelect}
-          />
-          {settingsModal}
-          <SecretTrophyPopup 
-            show={showSecretTrophyPopup} 
-            achievementType={currentAchievementType}
-            onClose={() => {
-              setShowSecretTrophyPopup(false);
-              setCurrentAchievementType(null);
-            }}
-          />
-        </>
-      );
-    }
-
     if (!selectedCareer) {
       setGameState("career-select");
       return null;
