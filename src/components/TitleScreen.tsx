@@ -46,9 +46,9 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies }:
           <p className="text-xl text-gray-700 mb-4">
             Explore careers through interactive challenges
           </p>
-          <p className="text-gray-600">
-            Step into different career worlds, complete skill-based tasks, 
-            and discover what each profession requires.
+<p className="text-gray-600">
+            Master real-world skills across 9 exciting careers. From coding to cooking,
+            nursing to engineering - prove you have what it takes to succeed!
           </p>
         </div>
 

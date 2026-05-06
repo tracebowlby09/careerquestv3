@@ -27,11 +27,12 @@ import OutcomeScreen from "@/components/OutcomeScreen";
 import Settings from "@/components/Settings";
 import TrophyScreen from "@/components/TrophyScreen";
 import SecretTrophyPopup from "@/components/SecretTrophyPopup";
+import HomeTutorial from "@/components/HomeTutorial";
 import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import ScreenWrapper from "@/components/ScreenWrapper";
 
-type GameState = "title" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "trophy";
+type GameState = "title" | "tutorial" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "trophy";
 
 const careerNames: Record<Career, string> = {
   programmer: "Software Programmer",
@@ -236,6 +237,12 @@ const checkEasterEggAchievements = (
 
 export default function Home() {
   const [gameState, setGameState] = useState<GameState>("title");
+  const [showTutorial, setShowTutorial] = useState(() => {
+    if (typeof window !== "undefined") {
+      return !localStorage.getItem("homeTutorialSkipped");
+    }
+    return false;
+  });
   const [gameMode, setGameMode] = useState<GameMode>("challenge");
   const [selectedCareer, setSelectedCareer] = useState<Career | null>(null);
   const [selectedCertification, setSelectedCertification] = useState<CertificationType | null>(null);
@@ -851,6 +858,14 @@ export default function Home() {
   };
 
   // Render current game state
+  if (showTutorial) {
+    return (
+      <HomeTutorial 
+        onSkip={() => setShowTutorial(false)}
+      />
+    );
+  }
+
   if (gameState === "title") {
     return (
       <>
