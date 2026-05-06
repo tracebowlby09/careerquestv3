@@ -426,6 +426,8 @@ export default function Home() {
     audioSystem.playClickSound();
     audioSystem.playTitleMusic();
     setGameMode(mode);
+    setSelectedCareer(null);
+    setSelectedCertification(null);
     if (mode === "certification") {
       setGameState("certification-select");
     } else {
@@ -734,6 +736,46 @@ export default function Home() {
     audioSystem.playSuccessSound();
   };
 
+  const handleUnlockAllTrophies = () => {
+    const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician"];
+    const allDifficulties: Difficulty[] = ["easy", "medium", "hard"];
+    const newTrophies: Trophy[] = [];
+    
+    // Unlock all career trophies for all difficulties
+    allCareers.forEach(career => {
+      allDifficulties.forEach(difficulty => {
+        const existing = trophies.find(t => t.career === career && t.difficulty === difficulty && !t.achievementType);
+        if (!existing) {
+          newTrophies.push({
+            career,
+            difficulty,
+            earnedAt: new Date(),
+          });
+        }
+      });
+    });
+    
+    // Also add achievement trophies
+    const achievementTrophies = ["career-master", "all-careers-master", "quick-recall-champion", "all-quick-recalls-master"];
+    achievementTrophies.forEach(achievement => {
+      const existing = trophies.find(t => t.achievementType === achievement);
+      if (!existing) {
+        newTrophies.push({
+          career: "programmer",
+          difficulty: "hard",
+          earnedAt: new Date(),
+          isSecret: true,
+          achievementType: achievement as AchievementType,
+        });
+      }
+    });
+    
+    const updatedTrophies = [...trophies, ...newTrophies];
+    setTrophies(updatedTrophies);
+    saveTrophies(updatedTrophies);
+    audioSystem.playSuccessSound();
+  };
+
   const handleToggleAlwaysCorrect = () => {
     setAlwaysCorrect(!alwaysCorrect);
     audioSystem.playClickSound();
@@ -838,6 +880,13 @@ export default function Home() {
                 🗑️ Clear All Trophies
               </button>
               
+              <button
+                onClick={handleUnlockAllTrophies}
+                className="w-full py-3 px-4 bg-yellow-600 hover:bg-yellow-700 text-white font-bold rounded-xl transition-all transform hover:scale-105"
+              >
+                🏆 Unlock All Trophies
+              </button>
+
               <div className="pt-4 border-t border-purple-700">
                 <p className="text-purple-300 text-sm text-center">
                   Code: 5839201746
