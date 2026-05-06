@@ -564,3 +564,60 @@ export const certificationConfig = {
   "customer-service": { questionCount: 5, passPercentage: 70, timeLimitSeconds: null },
   "journeyman": { questionCount: 5, passPercentage: 70, timeLimitSeconds: null },
 } as const;
+
+export const certificationMetadata: Record<string, { title: string; icon: string; description: string; color: string }> = {
+  "aws-developer": {
+    title: "AWS Certified Developer Associate",
+    icon: "☁️",
+    description: "Amazon Web Services cloud development",
+    color: "orange",
+  },
+  "rn-license": {
+    title: "Registered Nurse (RN) License",
+    icon: "🏥",
+    description: "National nursing licensure exam",
+    color: "blue",
+  },
+  "pe-license": {
+    title: "Professional Engineer (PE) License",
+    icon: "🏗️",
+    description: "Engineering licensure and design authority",
+    color: "indigo",
+  },
+  "teaching-license": {
+    title: "State Teaching License",
+    icon: "🍎",
+    description: "K-12 educator certification",
+    color: "purple",
+  },
+  "servsafe": {
+    title: "ServSafe Food Handler Certification",
+    icon: "👨‍🍳",
+    description: "Food safety and sanitation",
+    color: "green",
+  },
+  "are-exam": {
+    title: "Architect Registration Examination (ARE)",
+    icon: "🏛️",
+    description: "Architecture licensure exam",
+    color: "blue",
+  },
+  "bar-exam": {
+    title: "State Bar Examination",
+    icon: "⚖️",
+    description: "Legal practice licensure",
+    color: "purple",
+  },
+  "customer-service": {
+    title: "Customer Service Excellence Certification",
+    icon: "🛍️",
+    description: "Professional service standards",
+    color: "teal",
+  },
+  "journeyman": {
+    title: "Journeyman Electrician License",
+    icon: "⚡",
+    description: "Electrical work licensure",
+    color: "yellow",
+  },
+} as const;
