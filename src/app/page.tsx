@@ -426,6 +426,10 @@ export default function Home() {
     audioSystem.playClickSound();
     audioSystem.playTitleMusic();
     setGameMode(mode);
+    // Reset all selections when starting a new game
+    setSelectedCareer(null);
+    setSelectedDifficulty(null);
+    setSelectedCertification(null);
     if (mode === "certification") {
       setGameState("certification-select");
     } else {
@@ -441,6 +445,8 @@ export default function Home() {
     setCareersPlayed(new Set());
     setHasWrongAnswer(false);
     setQuickRecallStartTime(null);
+    setTimeBasedTrophiesChecked(false);
+  };
     
     // Check time-based trophies immediately if not already checked
     if (!timeBasedTrophiesChecked) {
@@ -734,6 +740,48 @@ export default function Home() {
     audioSystem.playSuccessSound();
   };
 
+  const handleUnlockAllTrophies = () => {
+    const allTrophies: Trophy[] = [];
+    const careers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician"];
+    const difficulties: Difficulty[] = ["easy", "medium", "hard"];
+
+    // Add all regular career trophies
+    careers.forEach(career => {
+      difficulties.forEach(difficulty => {
+        allTrophies.push({
+          career,
+          difficulty,
+          earnedAt: new Date(),
+        });
+      });
+    });
+
+    // Add all secret achievement trophies
+    const secretAchievements: AchievementType[] = [
+      "konami-master", "career-master", "quick-recall-champion", "perfect-recall",
+      "all-careers-master", "all-quick-recalls-master", "lightning-reflex", "marathon-runner",
+      "speed-demon", "jack-of-all-trades", "lucky-star", "night-owl", "early-bird",
+      "pi-pioneer", "pi-explorer", "pi-master", "pi-genius", "pi-legend",
+      "state-week", "today-checkin", "phoenix", "keyboard-warrior", "explorer",
+      "patience", "streak-master", "return-customer", "committed", "tech-savvy",
+      "variety-pack", "second-chance"
+    ];
+
+    secretAchievements.forEach(achievement => {
+      allTrophies.push({
+        career: "programmer",
+        difficulty: "hard",
+        earnedAt: new Date(),
+        isSecret: true,
+        achievementType: achievement,
+      });
+    });
+
+    setTrophies(allTrophies);
+    saveTrophies(allTrophies);
+    audioSystem.playSuccessSound();
+  };
+
   const handleToggleAlwaysCorrect = () => {
     setAlwaysCorrect(!alwaysCorrect);
     audioSystem.playClickSound();
@@ -831,12 +879,19 @@ export default function Home() {
                 {alwaysCorrect ? "✅ Always Correct: ON" : "⬜ Always Correct: OFF"}
               </button>
               
-              <button
-                onClick={handleClearTrophies}
-                className="w-full py-3 px-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all transform hover:scale-105"
-              >
-                🗑️ Clear All Trophies
-              </button>
+               <button
+                 onClick={handleClearTrophies}
+                 className="w-full py-3 px-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all transform hover:scale-105"
+               >
+                 🗑️ Clear All Trophies
+               </button>
+
+               <button
+                 onClick={handleUnlockAllTrophies}
+                 className="w-full py-3 px-4 bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-600 hover:to-amber-700 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg"
+               >
+                 🏆 Unlock All Trophies
+               </button>
               
               <div className="pt-4 border-t border-purple-700">
                 <p className="text-purple-300 text-sm text-center">

@@ -3,6 +3,7 @@
 import { CertificationType } from "@/types/game";
 import { certificationMetadata } from "@/lib/certificationQuestions";
 import ScreenWrapper from "./ScreenWrapper";
+import MorseStarfield from "./MorseStarfield";
 
 const certificationOrder: CertificationType[] = [
   "aws-developer", "rn-license", "pe-license", "teaching-license", "servsafe",
@@ -23,14 +24,17 @@ export default function CertificationSelection({ onSelectCertification, onOpenSe
 
   return (
     <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit}>
-      <div className="text-center mb-12">
+      {/* Morse code "KILL ME" starfield background - epilepsy-safe */}
+      <MorseStarfield message="KILL ME" starCount={40} />
+
+      <div className="text-center mb-12 relative z-10">
         <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-2 rounded-full mb-4 shadow-lg">
           <span className="text-2xl">🏆</span><span className="text-white font-bold text-lg">CERTIFICATION EXAM</span><span className="text-2xl">🏆</span>
         </div>
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Choose Your Certification</h2>
         <p className="text-xl text-white/80">Select a certification to take the exam. Questions are randomized each attempt.</p>
       </div>
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-3 gap-6 relative z-10">
         {certificationOrder.map((certType) => {
           const meta = certificationMetadata[certType];
           return (
@@ -47,7 +51,7 @@ export default function CertificationSelection({ onSelectCertification, onOpenSe
           );
         })}
       </div>
-      <div className="mt-8 text-center">
+      <div className="mt-8 text-center relative z-10">
         <p className="text-white/60 text-sm mb-4">📝 Each exam has randomized questions. 70% or higher required to pass.</p>
         <button onClick={onExit} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:opacity-80 transition-colors" style={{ color: "white", borderColor: "black", backgroundColor: "rgba(0,0,0,0.3)" }}>
           ← Back to Title
