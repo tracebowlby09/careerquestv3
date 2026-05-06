@@ -311,7 +311,7 @@ export default function TrophyScreen({ trophies, onBack }: TrophyScreenProps) {
             </p>
           </div>
 
-          {/* Trophy Case Shelf Display */}
+          {/* Trophy Case Shelf Display - Horizontal Scroll */}
           <div className="mb-8">
             <div className="bg-gradient-to-b from-gray-100 to-gray-200 rounded-xl p-6 border-2 border-gray-300 shadow-inner">
               <div className="text-center mb-4">
@@ -321,74 +321,222 @@ export default function TrophyScreen({ trophies, onBack }: TrophyScreenProps) {
                   <span className="text-3xl">🖼️</span>
                 </h3>
                 <p className="text-gray-500 text-sm">
-                  Display your hard-earned career trophies on the shelf
+                  Scroll to view all your earned trophies
                 </p>
               </div>
               
-              {/* Three-tier shelf display */}
+              {/* Horizontal scrolling trophy shelves */}
               <div className="space-y-6">
-                {/* Top Shelf */}
+                {/* Top Shelf - Hard Difficulty */}
                 <div className="trophy-shelf">
                   <div className="bg-gradient-to-b from-orange-100 to-orange-200 rounded-lg p-4 border-2 border-orange-300">
-                    <div className="flex items-center justify-center gap-2 mb-2">
-                      <span className="text-sm font-bold text-orange-700">🏆 Top Shelf - Gold Trophies</span>
+                    <div className="flex items-center justify-center gap-2 mb-3">
+                      <span className="text-sm font-bold text-orange-700">🏆 Top Shelf - Gold Trophies (Hard)</span>
                     </div>
-                    <div className="flex flex-wrap justify-center gap-3">
-                      {regularTrophies.filter(t => t.difficulty === "hard").map((trophy, idx) => (
-                        <div key={idx} className="text-center">
-                          <div className="text-4xl mb-1">🥇</div>
-                          <div className="text-xs font-bold text-gray-700">
-                            {careerNames[trophy.career]}
+                    <div className="overflow-x-auto pb-2 scrollbar-hide">
+                      <div className="flex gap-4 min-w-max">
+                        {regularTrophies.filter(t => t.difficulty === "hard").map((trophy, idx) => (
+                          <div key={idx} className="flex-shrink-0 text-center">
+                            <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl shadow-lg flex items-center justify-center mb-2 border-2 border-yellow-300">
+                              <span className="text-3xl">🏆</span>
+                            </div>
+                            <div className="text-xs font-bold text-gray-700">
+                              {careerNames[trophy.career]}
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                      {regularTrophies.filter(t => t.difficulty === "hard").length === 0 && (
-                        <p className="text-sm text-gray-400 italic">No gold trophies yet</p>
-                      )}
+                        ))}
+                        {regularTrophies.filter(t => t.difficulty === "hard").length === 0 && (
+                          <p className="text-sm text-gray-400 italic whitespace-nowrap">No gold trophies yet - earn some!</p>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Middle Shelf */}
+                {/* Middle Shelf - Medium Difficulty */}
                 <div className="trophy-shelf">
                   <div className="bg-gradient-to-b from-blue-100 to-blue-200 rounded-lg p-4 border-2 border-blue-300">
-                    <div className="flex items-center justify-center gap-2 mb-2">
-                      <span className="text-sm font-bold text-blue-700">🥈 Middle Shelf - Silver Trophies</span>
+                    <div className="flex items-center justify-center gap-2 mb-3">
+                      <span className="text-sm font-bold text-blue-700">🥈 Middle Shelf - Silver Trophies (Medium)</span>
                     </div>
-                    <div className="flex flex-wrap justify-center gap-3">
-                      {regularTrophies.filter(t => t.difficulty === "medium").map((trophy, idx) => (
-                        <div key={idx} className="text-center">
-                          <div className="text-4xl mb-1">🥈</div>
-                          <div className="text-xs font-bold text-gray-700">
-                            {careerNames[trophy.career]}
+                    <div className="overflow-x-auto pb-2 scrollbar-hide">
+                      <div className="flex gap-4 min-w-max">
+                        {regularTrophies.filter(t => t.difficulty === "medium").map((trophy, idx) => (
+                          <div key={idx} className="flex-shrink-0 text-center">
+                            <div className="w-20 h-20 bg-gradient-to-br from-slate-300 to-slate-500 rounded-xl shadow-lg flex items-center justify-center mb-2 border-2 border-slate-400">
+                              <span className="text-3xl">🥈</span>
+                            </div>
+                            <div className="text-xs font-bold text-gray-700">
+                              {careerNames[trophy.career]}
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                      {regularTrophies.filter(t => t.difficulty === "medium").length === 0 && (
-                        <p className="text-sm text-gray-400 italic">No silver trophies yet</p>
-                      )}
+                        ))}
+                        {regularTrophies.filter(t => t.difficulty === "medium").length === 0 && (
+                          <p className="text-sm text-gray-400 italic whitespace-nowrap">No silver trophies yet - keep challenging yourself!</p>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Bottom Shelf */}
+                {/* Bottom Shelf - Easy Difficulty */}
                 <div className="trophy-shelf">
                   <div className="bg-gradient-to-b from-yellow-100 to-yellow-200 rounded-lg p-4 border-2 border-yellow-300">
-                    <div className="flex items-center justify-center gap-2 mb-2">
-                      <span className="text-sm font-bold text-yellow-700">🥉 Bottom Shelf - Bronze Trophies</span>
+                    <div className="flex items-center justify-center gap-2 mb-3">
+                      <span className="text-sm font-bold text-yellow-700">🥉 Bottom Shelf - Bronze Trophies (Easy)</span>
                     </div>
-                    <div className="flex flex-wrap justify-center gap-3">
-                      {regularTrophies.filter(t => t.difficulty === "easy").map((trophy, idx) => (
-                        <div key={idx} className="text-center">
-                          <div className="text-4xl mb-1">🥉</div>
-                          <div className="text-xs font-bold text-gray-700">
-                            {careerNames[trophy.career]}
+                    <div className="overflow-x-auto pb-2 scrollbar-hide">
+                      <div className="flex gap-4 min-w-max">
+                        {regularTrophies.filter(t => t.difficulty === "easy").map((trophy, idx) => (
+                          <div key={idx} className="flex-shrink-0 text-center">
+                            <div className="w-20 h-20 bg-gradient-to-br from-amber-300 to-amber-500 rounded-xl shadow-lg flex items-center justify-center mb-2 border-2 border-amber-400">
+                              <span className="text-3xl">🥉</span>
+                            </div>
+                            <div className="text-xs font-bold text-gray-700">
+                              {careerNames[trophy.career]}
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                      {regularTrophies.filter(t => t.difficulty === "easy").length === 0 && (
-                        <p className="text-sm text-gray-400 italic">No bronze trophies yet</p>
-                      )}
+                        ))}
+                        {regularTrophies.filter(t => t.difficulty === "easy").length === 0 && (
+                          <p className="text-sm text-gray-400 italic whitespace-nowrap">No bronze trophies yet - start earning!</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Trophy Case Shelf Display - Horizontal Scroll */}
+          <div className="mb-8">
+            <div className="bg-gradient-to-b from-gray-100 to-gray-200 rounded-xl p-6 border-2 border-gray-300 shadow-inner">
+              <div className="text-center mb-4">
+                <h3 className="text-xl font-bold text-gray-700 flex items-center justify-center gap-2">
+                  <span className="text-3xl">🖼️</span>
+                  Your Career Achievements
+                  <span className="text-3xl">🖼️</span>
+                </h3>
+                <p className="text-gray-500 text-sm">
+                  Scroll to view all your earned trophies
+                </p>
+              </div>
+              
+              {/* Horizontal scrolling trophy shelves */}
+              <div className="space-y-6">
+                {/* Top Shelf - Hard Difficulty */}
+                <div className="trophy-shelf">
+                  <div className="bg-gradient-to-b from-orange-100 to-orange-200 rounded-lg p-4 border-2 border-orange-300">
+                    <div className="flex items-center justify-center gap-2 mb-3">
+                      <span className="text-sm font-bold text-orange-700">🏆 Top Shelf - Gold Trophies (Hard)</span>
+                    </div>
+                    <div className="overflow-x-auto pb-2 scrollbar-hide">
+                      <div className="flex gap-4 min-w-max">
+                        {regularTrophies.filter(t => t.difficulty === "hard").map((trophy, idx) => (
+                          <div key={idx} className="flex-shrink-0 text-center">
+                            <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl shadow-lg flex items-center justify-center mb-2 border-2 border-yellow-300">
+                              <span className="text-3xl">🏆</span>
+                            </div>
+                            <div className="text-xs font-bold text-gray-700">
+                              {careerNames[trophy.career]}
+                            </div>
+                          </div>
+                        ))}
+                        {regularTrophies.filter(t => t.difficulty === "hard").length === 0 && (
+                          <p className="text-sm text-gray-400 italic whitespace-nowrap">No gold trophies yet - earn some!</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Middle Shelf - Medium Difficulty */}
+                <div className="trophy-shelf">
+                  <div className="bg-gradient-to-b from-blue-100 to-blue-200 rounded-lg p-4 border-2 border-blue-300">
+                    <div className="flex items-center justify-center gap-2 mb-3">
+                      <span className="text-sm font-bold text-blue-700">🥈 Middle Shelf - Silver Trophies (Medium)</span>
+                    </div>
+                    <div className="overflow-x-auto pb-2 scrollbar-hide">
+                      <div className="flex gap-4 min-w-max">
+                        {regularTrophies.filter(t => t.difficulty === "medium").map((trophy, idx) => (
+                          <div key={idx} className="flex-shrink-0 text-center">
+                            <div className="w-20 h-20 bg-gradient-to-br from-slate-300 to-slate-500 rounded-xl shadow-lg flex items-center justify-center mb-2 border-2 border-slate-400">
+                              <span className="text-3xl">🥈</span>
+                            </div>
+                            <div className="text-xs font-bold text-gray-700">
+                              {careerNames[trophy.career]}
+                            </div>
+                          </div>
+                        ))}
+                        {regularTrophies.filter(t => t.difficulty === "medium").length === 0 && (
+                          <p className="text-sm text-gray-400 italic whitespace-nowrap">No silver trophies yet - keep challenging yourself!</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom Shelf - Easy Difficulty */}
+                <div className="trophy-shelf">
+                  <div className="bg-gradient-to-b from-yellow-100 to-yellow-200 rounded-lg p-4 border-2 border-yellow-300">
+                    <div className="flex items-center justify-center gap-2 mb-3">
+                      <span className="text-sm font-bold text-yellow-700">🥉 Bottom Shelf - Bronze Trophies (Easy)</span>
+                    </div>
+                    <div className="overflow-x-auto pb-2 scrollbar-hide">
+                      <div className="flex gap-4 min-w-max">
+                        {regularTrophies.filter(t => t.difficulty === "easy").map((trophy, idx) => (
+                          <div key={idx} className="flex-shrink-0 text-center">
+                            <div className="w-20 h-20 bg-gradient-to-br from-amber-300 to-amber-500 rounded-xl shadow-lg flex items-center justify-center mb-2 border-2 border-amber-400">
+                              <span className="text-3xl">🥉</span>
+                            </div>
+                            <div className="text-xs font-bold text-gray-700">
+                              {careerNames[trophy.career]}
+                            </div>
+                          </div>
+                        ))}
+                        {regularTrophies.filter(t => t.difficulty === "easy").length === 0 && (
+                          <p className="text-sm text-gray-400 italic whitespace-nowrap">No bronze trophies yet - start earning!</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Secret Trophies Shelf */}
+                <div className="trophy-shelf">
+                  <div className="bg-gradient-to-b from-purple-100 to-purple-200 rounded-lg p-4 border-2 border-purple-300">
+                    <div className="flex items-center justify-center gap-2 mb-3">
+                      <span className="text-sm font-bold text-purple-700">🔮 Secret Trophies - Mystical & Rare</span>
+                    </div>
+                    <div className="overflow-x-auto pb-2 scrollbar-hide">
+                      <div className="flex gap-4 min-w-max">
+                        {secretTrophies.map((secretTrophy) => {
+                          const isUnlocked = secretTrophiesList.some(
+                            (t) => t.achievementType === secretTrophy.id
+                          );
+                          return (
+                            <div key={secretTrophy.id} className="flex-shrink-0 text-center">
+                              <div className={`w-20 h-20 rounded-xl shadow-lg flex items-center justify-center mb-2 border-2 ${
+                                isUnlocked 
+                                  ? "bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 border-yellow-400"
+                                  : "bg-gradient-to-br from-gray-300 to-gray-400 border-gray-500"
+                              }`}>
+                                <span className="text-3xl">
+                                  {isUnlocked ? secretTrophy.icon : "🔒"}
+                                </span>
+                              </div>
+                              <div className={`text-xs font-bold ${
+                                isUnlocked ? "text-gray-700" : "text-gray-400"
+                              }`}>
+                                {isUnlocked ? secretTrophy.name.split(" ")[0] : "???"}
+                              </div>
+                            </div>
+                          );
+                        })}
+                        {secretTrophiesList.length === 0 && (
+                          <p className="text-sm text-gray-400 italic whitespace-nowrap">No secret trophies yet - discover them!</p>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -406,52 +554,15 @@ export default function TrophyScreen({ trophies, onBack }: TrophyScreenProps) {
                 Complete career challenges to earn trophies.
               </p>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {allCareers.map((career) => {
-                const careerTrophies = trophiesByCareer[career] || [];
-                const hasTrophies = careerTrophies.length > 0;
-                
-                return (
-                  <div
-                    key={career}
-                    className={`border-2 rounded-xl p-4 ${
-                      hasTrophies
-                        ? "border-yellow-400 bg-yellow-50"
-                        : "border-gray-200 bg-gray-50"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="text-3xl">{careerIcons[career]}</span>
-                      <span className="text-xl font-bold text-gray-800">
-                        {careerNames[career]}
-                      </span>
-                    </div>
-                    
-                    {hasTrophies ? (
-                      <div className="space-y-2">
-                        {careerTrophies.map((trophy, idx) => (
-                          <div
-                            key={idx}
-                            className={`flex items-center justify-between bg-gradient-to-r ${difficultyColors[trophy.difficulty]} text-white px-4 py-2 rounded-lg`}
-                          >
-                            <span className="font-semibold">
-                              {difficultyLabels[trophy.difficulty]}
-                            </span>
-                            <span className="text-2xl">
-                              {difficultyIcons[trophy.difficulty]}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-gray-400 text-sm">
-                        No trophies earned yet
-                      </p>
-                    )}
-                  </div>
-                );
-              })}
+           ) : (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">🎮</div>
+              <p className="text-xl text-gray-600 mb-4">
+                All trophies will appear on the shelves above
+              </p>
+              <p className="text-gray-500">
+                Complete career challenges to earn trophies.
+              </p>
             </div>
           )}
 
@@ -485,14 +596,10 @@ export default function TrophyScreen({ trophies, onBack }: TrophyScreenProps) {
                         {isUnlocked ? secretTrophy.icon : "🔒"}
                       </span>
                       <div>
-                        <p className={`font-bold text-lg ${
-                          isUnlocked ? "text-yellow-300" : "text-gray-500"
-                        }`}>
+                        <p className={`font-bold text-lg ${isUnlocked ? "text-yellow-300" : "text-gray-500"}`}>
                           {isUnlocked ? secretTrophy.name : "???"}
                         </p>
-                        <p className={`text-sm ${
-                          isUnlocked ? "text-white" : "text-gray-400 italic"
-                        }`}>
+                        <p className={`text-sm ${isUnlocked ? "text-white" : "text-gray-400 italic"}`}>
                           {isUnlocked ? secretTrophy.description : secretTrophy.hint}
                         </p>
                       </div>
