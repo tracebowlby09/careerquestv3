@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { Difficulty } from "@/types/game";
+import { Difficulty, IncorrectAnswer } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import TutorialScreen from "@/components/TutorialScreen";
 
@@ -17,7 +17,7 @@ function shuffleArray<T>(array: T[]): T[] {
 
 interface TeacherWorldProps {
   difficulty: Difficulty;
-  onComplete: (success: boolean, score: number, total: number) => void;
+  onComplete: (success: boolean, score: number, total: number, incorrectAnswers?: IncorrectAnswer[]) => void;
   isQuickRecall?: boolean;
   isCertification?: boolean;
   alwaysCorrect?: boolean;
@@ -454,6 +454,7 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall, is
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
   const [streak, setStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
+  const [incorrectAnswers, setIncorrectAnswers] = useState<IncorrectAnswer[]>([]);
   
   // Quick Recall hearts system
   const [hearts, setHearts] = useState(3);
@@ -479,28 +480,42 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall, is
     return () => clearInterval(timer);
   }, [isQuickRecall, stage, currentQuestionIndex, hearts]);
 
-  const handleLoseHeart = (message: string) => {
-    const newHearts = hearts - 1;
-    setHearts(newHearts);
-    setShowHeartLost(true);
-    setHeartLostMessage(message);
-    
-    setTimeout(() => {
-      setShowHeartLost(false);
-      if (newHearts <= 0) {
-        // Game over - lost all hearts
-        onComplete(false, score, totalQuestions);
-      } else if (currentQuestionIndex < totalQuestions - 1) {
-        // Move to next question
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-        setSelectedAnswer(null);
-        setTimeLeft(20);
-      } else {
-        // Last question done
-        onComplete(true, score + 1, totalQuestions);
-      }
-    }, 1500);
-  };
+   const handleLoseHeart = (message: string) => {
+     const newHearts = hearts - 1;
+     setHearts(newHearts);
+     setShowHeartLost(true);
+     setHeartLostMessage(message);
+     
+     // Track incorrect answer when losing heart
+     const selected = currentQuestion.options.find((opt) => opt.id === selectedAnswer);
+     const correctOption = currentQuestion.options.find((opt) => opt.correct);
+     let updatedIncorrect = [...incorrectAnswers];
+     if (selected && correctOption) {
+       updatedIncorrect = [...updatedIncorrect, {
+         question: currentQuestion.question,
+         selectedAnswer: selected.text,
+         correctAnswer: correctOption.text,
+         explanation: correctOption.explanation,
+       }];
+       setIncorrectAnswers(updatedIncorrect);
+     }
+     
+     setTimeout(() => {
+       setShowHeartLost(false);
+       if (newHearts <= 0) {
+         // Game over - lost all hearts
+         onComplete(false, score, totalQuestions, updatedIncorrect);
+       } else if (currentQuestionIndex < totalQuestions - 1) {
+         // Move to next question
+         setCurrentQuestionIndex(currentQuestionIndex + 1);
+         setSelectedAnswer(null);
+         setTimeLeft(20);
+       } else {
+         // Last question done
+         onComplete(true, score + 1, totalQuestions, updatedIncorrect);
+       }
+     }, 1500);
+   };
 
   // Use quick recall questions if available, otherwise fall back to easy questions
   const currentQuestions = isQuickRecall 
@@ -558,29 +573,44 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall, is
       return;
     }
 
-    // Regular challenge mode
-    const newScore = isCorrect ? score + 1 : score;
-    setScore(newScore);
-    setAnsweredQuestions([...answeredQuestions, isCorrect]);
-    // Update streak
-    if (isCorrect) {
-      const newStreak = streak + 1;
-      setStreak(newStreak);
-      if (newStreak > bestStreak) {
-        setBestStreak(newStreak);
-      }
-    } else {
-      setStreak(0);
-    }
+     // Regular challenge mode
+     const newScore = isCorrect ? score + 1 : score;
+     setScore(newScore);
+     setAnsweredQuestions([...answeredQuestions, isCorrect]);
+     // Update streak
+     if (isCorrect) {
+       const newStreak = streak + 1;
+       setStreak(newStreak);
+       if (newStreak > bestStreak) {
+         setBestStreak(newStreak);
+       }
+     } else {
+       setStreak(0);
+     }
 
-    if (currentQuestionIndex < totalQuestions - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedAnswer(null);
-    } else {
-      const passRatio = isCertification ? 0.8 : 0.6;
-      const passThreshold = Math.ceil(totalQuestions * passRatio)
-      onComplete(newScore >= passThreshold, newScore, totalQuestions);
-    }
+     // Track incorrect answers
+     let updatedIncorrect = [...incorrectAnswers];
+     if (!isCorrect) {
+       const correctOption = currentQuestion.options.find((opt) => opt.correct);
+       if (correctOption) {
+         updatedIncorrect = [...updatedIncorrect, {
+           question: currentQuestion.question,
+           selectedAnswer: selected.text,
+           correctAnswer: correctOption.text,
+           explanation: correctOption.explanation,
+         }];
+         setIncorrectAnswers(updatedIncorrect);
+       }
+     }
+
+     if (currentQuestionIndex < totalQuestions - 1) {
+       setCurrentQuestionIndex(currentQuestionIndex + 1);
+       setSelectedAnswer(null);
+     } else {
+       const passRatio = isCertification ? 0.8 : 0.6;
+       const passThreshold = Math.ceil(totalQuestions * passRatio)
+       onComplete(newScore >= passThreshold, newScore, totalQuestions, updatedIncorrect);
+     }
   };
 
   if (stage === "intro") {

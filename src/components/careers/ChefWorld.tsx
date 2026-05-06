@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { Difficulty } from "@/types/game";
+import { Difficulty, IncorrectAnswer } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import TutorialScreen from "@/components/TutorialScreen";
 
@@ -17,7 +17,7 @@ function shuffleArray<T>(array: T[]): T[] {
 
 interface ChefWorldProps {
   difficulty: Difficulty;
-  onComplete: (success: boolean, score: number, total: number) => void;
+  onComplete: (success: boolean, score: number, total: number, incorrectAnswers?: IncorrectAnswer[]) => void;
   isQuickRecall?: boolean;
   isCertification?: boolean;
   alwaysCorrect?: boolean;
@@ -454,6 +454,7 @@ export default function ChefWorld({ difficulty, onComplete, isQuickRecall, isCer
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
   const [streak, setStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
+  const [incorrectAnswers, setIncorrectAnswers] = useState<IncorrectAnswer[]>([]);
   
   // Quick Recall hearts system
   const [hearts, setHearts] = useState(3);
@@ -489,6 +490,19 @@ export default function ChefWorld({ difficulty, onComplete, isQuickRecall, isCer
   const handleLoseHeart = () => {
     setHearts((h) => h - 1);
     setShowHeartLost(true);
+    
+    // Track incorrect answer when losing heart
+    const selected = currentQuestion.options.find(opt => opt.id === selectedAnswer);
+    const correctOption = currentQuestion.options.find(opt => opt.correct);
+    if (selected && correctOption) {
+      setIncorrectAnswers(prev => [...prev, {
+        question: currentQuestion.question,
+        selectedAnswer: selected.text,
+        correctAnswer: correctOption.text,
+        explanation: correctOption.explanation,
+      }]);
+    }
+    
     setTimeout(() => setShowHeartLost(false), 1000);
   };
 
@@ -518,6 +532,21 @@ export default function ChefWorld({ difficulty, onComplete, isQuickRecall, isCer
 
     const isCorrect = selected.correct;
     
+    // Track incorrect answers
+    let updatedIncorrect = [...incorrectAnswers];
+    if (!isCorrect) {
+      const correctOption = currentQuestion.options.find((opt) => opt.correct);
+      if (correctOption) {
+        updatedIncorrect = [...updatedIncorrect, {
+          question: currentQuestion.question,
+          selectedAnswer: selected.text,
+          correctAnswer: correctOption.text,
+          explanation: correctOption.explanation,
+        }];
+        setIncorrectAnswers(updatedIncorrect);
+      }
+    }
+    
     if (isCorrect) {
       const newScore = score + 1;
       setScore(newScore);
@@ -533,7 +562,7 @@ export default function ChefWorld({ difficulty, onComplete, isQuickRecall, isCer
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         setSelectedAnswer(null);
       } else {
-        onComplete(true, newScore, totalQuestions);
+        onComplete(true, newScore, totalQuestions, updatedIncorrect);
       }
     } else {
       // Wrong answer in Quick Recall - lose a heart
@@ -543,12 +572,12 @@ export default function ChefWorld({ difficulty, onComplete, isQuickRecall, isCer
         
         if (hearts <= 1) {
           // Game over - no hearts left
-          onComplete(false, score, totalQuestions);
+          onComplete(false, score, totalQuestions, updatedIncorrect);
         } else if (currentQuestionIndex < totalQuestions - 1) {
           setCurrentQuestionIndex(currentQuestionIndex + 1);
           setSelectedAnswer(null);
         } else {
-          onComplete(score >= Math.ceil(totalQuestions * 0.6), score, totalQuestions);
+          onComplete(score >= Math.ceil(totalQuestions * 0.6), score, totalQuestions, updatedIncorrect);
         }
       } else {
         // Regular challenge mode
@@ -561,7 +590,7 @@ export default function ChefWorld({ difficulty, onComplete, isQuickRecall, isCer
         } else {
           const passRatio = isCertification ? 0.8 : 0.6;
       const passThreshold = Math.ceil(totalQuestions * passRatio)
-          onComplete(newScore >= passThreshold, newScore, totalQuestions);
+          onComplete(newScore >= passThreshold, newScore, totalQuestions, updatedIncorrect);
         }
       }
     }

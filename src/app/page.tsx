@@ -28,7 +28,7 @@ import Settings from "@/components/Settings";
 import TrophyScreen from "@/components/TrophyScreen";
 import SecretTrophyPopup from "@/components/SecretTrophyPopup";
 import HomeTutorial from "@/components/HomeTutorial";
-import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType } from "@/types/game";
+import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import ScreenWrapper from "@/components/ScreenWrapper";
 
@@ -250,6 +250,7 @@ export default function Home() {
   const [score, setScore] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
   const [challengeSuccess, setChallengeSuccess] = useState(false);
+  const [incorrectAnswers, setIncorrectAnswers] = useState<IncorrectAnswer[]>([]);
   const [trophies, setTrophies] = useState<Trophy[]>(() => loadTrophies());
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [showSecretTrophyPopup, setShowSecretTrophyPopup] = useState(false);
@@ -557,10 +558,13 @@ export default function Home() {
     setGameState("playing");
   };
 
-  const handleChallengeComplete = (success: boolean, finalScore: number, total: number) => {
+  const handleChallengeComplete = (success: boolean, finalScore: number, total: number, incorrect?: IncorrectAnswer[]) => {
     setChallengeSuccess(success);
     setScore(finalScore);
     setTotalQuestions(total);
+    if (incorrect) {
+      setIncorrectAnswers(incorrect);
+    }
     
     // Determine game modes
     const isQuickRecallMode = gameMode === "quick-recall";
@@ -1265,21 +1269,22 @@ export default function Home() {
   if (gameState === "outcome" && selectedCareer) {
     return (
       <>
-         <OutcomeScreen
-           career={selectedCareer}
-           difficulty={selectedDifficulty ?? "easy"}
-           success={challengeSuccess}
-           score={score}
-           total={totalQuestions}
-           onPlayAgain={handlePlayAgain}
-           onNewCareer={handleNewCareer}
-           onChangeDifficulty={handleChangeDifficulty}
-           onOpenSettings={() => setSettingsOpen(true)}
-           onExit={handleExitToTitle}
-           isQuickRecall={gameMode === "quick-recall"}
-           isCertification={gameMode === "certification"}
-           onBackToSelection={handleBackToSelection}
-         />
+<OutcomeScreen
+            career={selectedCareer}
+            difficulty={selectedDifficulty ?? "easy"}
+            success={challengeSuccess}
+            score={score}
+            total={totalQuestions}
+            onPlayAgain={handlePlayAgain}
+            onNewCareer={handleNewCareer}
+            onChangeDifficulty={handleChangeDifficulty}
+            onOpenSettings={() => setSettingsOpen(true)}
+            onExit={handleExitToTitle}
+            isQuickRecall={gameMode === "quick-recall"}
+            isCertification={gameMode === "certification"}
+            onBackToSelection={handleBackToSelection}
+            incorrectAnswers={incorrectAnswers}
+          />
         {settingsModal}
         <SecretTrophyPopup 
           show={showSecretTrophyPopup} 

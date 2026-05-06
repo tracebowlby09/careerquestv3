@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { Difficulty } from "@/types/game";
+import { IncorrectAnswer } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import TutorialScreen from "@/components/TutorialScreen";
 
@@ -17,7 +18,7 @@ function shuffleArray<T>(array: T[]): T[] {
 //
 interface ProgrammerWorldProps {
   difficulty: Difficulty;
-  onComplete: (success: boolean, score: number, total: number) => void;
+  onComplete: (success: boolean, score: number, total: number, incorrectAnswers?: IncorrectAnswer[]) => void;
   isQuickRecall?: boolean;
   isCertification?: boolean;
   alwaysCorrect?: boolean;
@@ -534,6 +535,7 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
   const [streak, setStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
+  const [incorrectAnswers, setIncorrectAnswers] = useState<IncorrectAnswer[]>([]);
   
   // Quick Recall hearts system
   const [hearts, setHearts] = useState(3);
@@ -566,17 +568,31 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
     setShowHeartLost(true);
     setHeartLostMessage(message);
     
+    // Track incorrect answer when losing heart
+    const selected = currentQuestion.options.find((opt) => opt.id === selectedAnswer);
+    const correctOption = currentQuestion.options.find((opt) => opt.correct);
+    let updatedIncorrect = [...incorrectAnswers];
+    if (selected && correctOption) {
+      updatedIncorrect = [...updatedIncorrect, {
+        question: currentQuestion.question,
+        selectedAnswer: selected.text,
+        correctAnswer: correctOption.text,
+        explanation: correctOption.explanation,
+      }];
+      setIncorrectAnswers(updatedIncorrect);
+    }
+    
     setTimeout(() => {
       setShowHeartLost(false);
       if (newHearts <= 0) {
-        onComplete(false, score, totalQuestions);
+        onComplete(false, score, totalQuestions, updatedIncorrect);
       } else if (currentQuestionIndex < totalQuestions - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         setSelectedAnswer(null);
         setTimeLeft(20);
         setQuestionStartTime(Date.now());
       } else {
-        onComplete(true, score + 1, totalQuestions);
+        onComplete(true, score + 1, totalQuestions, updatedIncorrect);
       }
     }, 1500);
   };
@@ -615,6 +631,21 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
     const isCorrect = selected.correct;
     const timeMs = Date.now() - questionStartTime;
     
+    // Track incorrect answers
+    let updatedIncorrect = [...incorrectAnswers];
+    if (!isCorrect) {
+      const correctOption = currentQuestion.options.find((opt) => opt.correct);
+      if (correctOption) {
+        updatedIncorrect = [...updatedIncorrect, {
+          question: currentQuestion.question,
+          selectedAnswer: selected.text,
+          correctAnswer: correctOption.text,
+          explanation: correctOption.explanation,
+        }];
+        setIncorrectAnswers(updatedIncorrect);
+      }
+    }
+    
     // Call the answer result callback if provided
     if (onAnswerResult) {
       onAnswerResult(isCorrect, timeMs);
@@ -639,7 +670,7 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
           setTimeLeft(20);
           setQuestionStartTime(Date.now());
         } else {
-          onComplete(true, newScore, totalQuestions);
+          onComplete(true, newScore, totalQuestions, updatedIncorrect);
         }
       } else {
         handleLoseHeart("Wrong answer!");
@@ -671,7 +702,7 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
       // All questions completed
       const passRatio = isCertification ? 0.8 : 0.6;
       const passThreshold = Math.ceil(totalQuestions * passRatio) // Need 60% to pass
-      onComplete(newScore >= passThreshold, newScore, totalQuestions);
+      onComplete(newScore >= passThreshold, newScore, totalQuestions, updatedIncorrect);
     }
   };
 

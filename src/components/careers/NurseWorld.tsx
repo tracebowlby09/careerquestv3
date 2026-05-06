@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { Difficulty } from "@/types/game";
+import { Difficulty, IncorrectAnswer } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import TutorialScreen from "@/components/TutorialScreen";
 
@@ -17,7 +17,7 @@ function shuffleArray<T>(array: T[]): T[] {
 
 interface NurseWorldProps {
   difficulty: Difficulty;
-  onComplete: (success: boolean, score: number, total: number) => void;
+  onComplete: (success: boolean, score: number, total: number, incorrectAnswers?: IncorrectAnswer[]) => void;
   isQuickRecall?: boolean;
   isCertification?: boolean;
   alwaysCorrect?: boolean;
@@ -462,8 +462,7 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall, isCe
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
   const [streak, setStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
-  
-  // Quick Recall hearts system
+  const [incorrectAnswers, setIncorrectAnswers] = useState<IncorrectAnswer[]>([]);
   const [hearts, setHearts] = useState(3);
   const [timeLeft, setTimeLeft] = useState(20);
   const [showHeartLost, setShowHeartLost] = useState(false);
@@ -495,11 +494,30 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall, isCe
     }
   }, [currentQuestionIndex, isQuickRecall, stage]);
 
-  const handleLoseHeart = () => {
-    setHearts((h) => h - 1);
-    setShowHeartLost(true);
-    setTimeout(() => setShowHeartLost(false), 1000);
-  };
+   const handleLoseHeart = () => {
+     // Track incorrect answer when losing heart
+     const selectedPatientNames = selectedOrder.map(id => {
+       const patient = currentQuestion.patients.find(p => p.id === id);
+       return patient ? patient.name : id;
+     });
+     const correctPatientNames = currentQuestion.correctOrder.map(id => {
+       const patient = currentQuestion.patients.find(p => p.id === id);
+       return patient ? patient.name : id;
+     });
+     
+     let updatedIncorrect = [...incorrectAnswers];
+     updatedIncorrect = [...updatedIncorrect, {
+       question: currentQuestion.scenario,
+       selectedAnswer: selectedPatientNames.join(" → "),
+       correctAnswer: correctPatientNames.join(" → "),
+       explanation: "Incorrect patient prioritization based on vital signs and symptoms.",
+     }];
+     setIncorrectAnswers(updatedIncorrect);
+     
+     setHearts((h) => h - 1);
+     setShowHeartLost(true);
+     setTimeout(() => setShowHeartLost(false), 1000);
+   };
 
   // Use quick recall questions if available, otherwise fall back to easy questions
   const currentQuestions = isQuickRecall 
@@ -555,29 +573,48 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall, isCe
         handleLoseHeart();
         setStreak(0); // Reset streak on wrong answer
         
-        if (hearts <= 1) {
-          // Game over - no hearts left
-          onComplete(false, score, totalQuestions);
-        } else if (currentQuestionIndex < totalQuestions - 1) {
-          setCurrentQuestionIndex(currentQuestionIndex + 1);
-          setSelectedOrder([]);
-        } else {
-          onComplete(score >= Math.ceil(totalQuestions * 0.6), score, totalQuestions);
-        }
-      } else {
-        // Regular challenge mode
-        const newScore = score;
-        setAnsweredQuestions([...answeredQuestions, false]);
+         if (hearts <= 1) {
+           // Game over - no hearts left
+           onComplete(false, score, totalQuestions, incorrectAnswers);
+         } else if (currentQuestionIndex < totalQuestions - 1) {
+           setCurrentQuestionIndex(currentQuestionIndex + 1);
+           setSelectedOrder([]);
+         } else {
+           onComplete(score >= Math.ceil(totalQuestions * 0.6), score, totalQuestions, incorrectAnswers);
+         }
+       } else {
+         // Regular challenge mode
+         const newScore = score;
+         setAnsweredQuestions([...answeredQuestions, false]);
 
-        if (currentQuestionIndex < totalQuestions - 1) {
-          setCurrentQuestionIndex(currentQuestionIndex + 1);
-          setSelectedOrder([]);
-        } else {
-          const passRatio = isCertification ? 0.8 : 0.6;
-      const passThreshold = Math.ceil(totalQuestions * passRatio)
-          onComplete(newScore >= passThreshold, newScore, totalQuestions);
-        }
-      }
+         // Track incorrect answers
+         const selectedPatientNames = selectedOrder.map(id => {
+           const patient = currentQuestion.patients.find(p => p.id === id);
+           return patient ? patient.name : id;
+         });
+         const correctPatientNames = currentQuestion.correctOrder.map(id => {
+           const patient = currentQuestion.patients.find(p => p.id === id);
+           return patient ? patient.name : id;
+         });
+         
+         let updatedIncorrect = [...incorrectAnswers];
+         updatedIncorrect = [...updatedIncorrect, {
+           question: currentQuestion.scenario,
+           selectedAnswer: selectedPatientNames.join(" → "),
+           correctAnswer: correctPatientNames.join(" → "),
+           explanation: "Incorrect patient prioritization based on vital signs and symptoms.",
+         }];
+         setIncorrectAnswers(updatedIncorrect);
+
+         if (currentQuestionIndex < totalQuestions - 1) {
+           setCurrentQuestionIndex(currentQuestionIndex + 1);
+           setSelectedOrder([]);
+         } else {
+           const passRatio = isCertification ? 0.8 : 0.6;
+       const passThreshold = Math.ceil(totalQuestions * passRatio)
+           onComplete(newScore >= passThreshold, newScore, totalQuestions, updatedIncorrect);
+         }
+       }
     }
   };
 

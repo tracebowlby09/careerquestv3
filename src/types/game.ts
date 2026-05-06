@@ -16,4 +16,11 @@ export interface GameProgress {
   trophies: Trophy[];
   currentScore: number;
 }
+
+export interface IncorrectAnswer {
+  question: string;
+  selectedAnswer: string;
+  correctAnswer: string;
+  explanation: string;
+}
 //game.ts pmo

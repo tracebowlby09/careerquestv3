@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { Difficulty } from "@/types/game";
+import { Difficulty, IncorrectAnswer } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import TutorialScreen from "@/components/TutorialScreen";
 
@@ -17,7 +17,7 @@ function shuffleArray<T>(array: T[]): T[] {
 
 interface EngineerWorldProps {
   difficulty: Difficulty;
-  onComplete: (success: boolean, score: number, total: number) => void;
+  onComplete: (success: boolean, score: number, total: number, incorrectAnswers?: IncorrectAnswer[]) => void;
   isQuickRecall?: boolean;
   isCertification?: boolean;
   alwaysCorrect?: boolean;
@@ -543,6 +543,7 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, i
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
   const [streak, setStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
+  const [incorrectAnswers, setIncorrectAnswers] = useState<IncorrectAnswer[]>([]);
   
   // Quick Recall hearts system
   const [hearts, setHearts] = useState(3);
@@ -578,6 +579,19 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, i
   const handleLoseHeart = () => {
     setHearts((h) => h - 1);
     setShowHeartLost(true);
+    
+    // Track incorrect answer when losing heart
+    const selected = currentQuestion.designs.find(d => d.id === selectedDesign);
+    const correctDesign = currentQuestion.designs.find(d => d.id === currentQuestion.correctDesign);
+    if (selected && correctDesign) {
+      setIncorrectAnswers(prev => [...prev, {
+        question: currentQuestion.scenario,
+        selectedAnswer: selected.name,
+        correctAnswer: correctDesign.name,
+        explanation: `The ${correctDesign.name} design meets all constraints: cost ${correctDesign.cost} <= ${currentQuestion.constraints.maxCost}, strength ${correctDesign.strength} >= ${currentQuestion.constraints.minStrength}, time ${correctDesign.time} <= ${currentQuestion.constraints.maxTime}.`,
+      }]);
+    }
+    
     setTimeout(() => setShowHeartLost(false), 1000);
   };
 
@@ -611,6 +625,22 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, i
   const handleSubmit = () => {
     const isCorrect = selectedDesign === currentQuestion.correctDesign;
     
+    // Track incorrect answers
+    let updatedIncorrect = [...incorrectAnswers];
+    if (!isCorrect && selectedDesign) {
+      const selected = currentQuestion.designs.find(d => d.id === selectedDesign);
+      const correctDesign = currentQuestion.designs.find(d => d.id === currentQuestion.correctDesign);
+      if (selected && correctDesign) {
+        updatedIncorrect = [...updatedIncorrect, {
+          question: currentQuestion.scenario,
+          selectedAnswer: selected.name,
+          correctAnswer: correctDesign.name,
+          explanation: `The ${correctDesign.name} design meets all constraints: cost ${correctDesign.cost} <= ${currentQuestion.constraints.maxCost}, strength ${correctDesign.strength} >= ${currentQuestion.constraints.minStrength}, time ${correctDesign.time} <= ${currentQuestion.constraints.maxTime}.`,
+        }];
+        setIncorrectAnswers(updatedIncorrect);
+      }
+    }
+    
     if (isCorrect) {
       const newScore = score + 1;
       setScore(newScore);
@@ -626,7 +656,7 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, i
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         setSelectedDesign(null);
       } else {
-        onComplete(true, newScore, totalQuestions);
+        onComplete(true, newScore, totalQuestions, updatedIncorrect);
       }
     } else {
       // Wrong answer in Quick Recall - lose a heart
@@ -636,12 +666,12 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, i
         
         if (hearts <= 1) {
           // Game over - no hearts left
-          onComplete(false, score, totalQuestions);
+          onComplete(false, score, totalQuestions, updatedIncorrect);
         } else if (currentQuestionIndex < totalQuestions - 1) {
           setCurrentQuestionIndex(currentQuestionIndex + 1);
           setSelectedDesign(null);
         } else {
-          onComplete(score >= Math.ceil(totalQuestions * 0.6), score, totalQuestions);
+          onComplete(score >= Math.ceil(totalQuestions * 0.6), score, totalQuestions, updatedIncorrect);
         }
       } else {
         // Regular challenge mode
@@ -654,7 +684,7 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, i
         } else {
           const passRatio = isCertification ? 0.8 : 0.6;
       const passThreshold = Math.ceil(totalQuestions * passRatio)
-          onComplete(newScore >= passThreshold, newScore, totalQuestions);
+          onComplete(newScore >= passThreshold, newScore, totalQuestions, updatedIncorrect);
         }
       }
     }

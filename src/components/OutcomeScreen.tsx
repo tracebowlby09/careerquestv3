@@ -1,6 +1,6 @@
 "use client";
 
-import { Career, Difficulty } from "@/types/game";
+import { Career, Difficulty, IncorrectAnswer } from "@/types/game";
 import ScreenWrapper from "./ScreenWrapper";
 
 interface OutcomeScreenProps {
@@ -17,6 +17,7 @@ interface OutcomeScreenProps {
   isQuickRecall?: boolean;
   isCertification?: boolean;
   onBackToSelection?: () => void;
+  incorrectAnswers?: IncorrectAnswer[];
 }
 
 const careerData = {
@@ -174,6 +175,7 @@ export default function OutcomeScreen({
   isQuickRecall,
   isCertification,
   onBackToSelection,
+  incorrectAnswers = [],
 }: OutcomeScreenProps) {
   const data = careerData[career];
   const percentage = Math.round((score / total) * 100);
@@ -276,11 +278,35 @@ export default function OutcomeScreen({
                    <span className={isQR ? "text-purple-200" : "text-gray-700"}>{skill}</span>
                  </li>
                ))}
-             </ul>
-          </div>
-        </div>
+</ul>
+           </div>
+         </div>
 
-        <div className="space-y-3">
+         {incorrectAnswers.length > 0 && (
+           <div className="mb-6">
+             <div className={`rounded-lg p-6 ${isQR ? "bg-red-900/30 border border-red-500/30" : "bg-red-50 border border-red-200"}`}>
+               <h4 className={`font-bold mb-4 flex items-center gap-2 ${isQR ? "text-red-300" : "text-red-800"}`}>
+                 📚 Review: Questions to Improve
+               </h4>
+               <div className="space-y-4">
+                 {incorrectAnswers.map((item, idx) => (
+                   <div key={idx} className={`border-l-4 p-4 rounded-r-lg ${isQR ? "bg-red-800/50 border-red-400" : "bg-white border-red-500"}`}>
+                     <p className={`font-semibold mb-2 ${isQR ? "text-red-200" : "text-red-900"}`}>
+                       {item.question}
+                     </p>
+                     <div className={`text-sm space-y-1 ${isQR ? "text-purple-200" : "text-gray-600"}`}>
+                       <p><span className="font-medium">Your answer:</span> {item.selectedAnswer}</p>
+                       <p><span className="font-medium">Correct answer:</span> {item.correctAnswer}</p>
+                       <p className="mt-2"><span className="font-medium">Explanation:</span> {item.explanation}</p>
+                     </div>
+                   </div>
+                 ))}
+               </div>
+             </div>
+           </div>
+         )}
+
+         <div className="space-y-3">
           <button
             onClick={onPlayAgain}
             className={`w-full font-bold py-4 rounded-lg transition-colors ${
