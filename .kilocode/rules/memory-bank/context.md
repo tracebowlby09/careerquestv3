@@ -8,6 +8,7 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 
 ## Recently Completed
 
+- ✅ **Added feedback for incorrect answers** - Outcome screen now shows a review section with questions answered incorrectly, the correct answer, and explanations
 - ✅ **Added Home Screen Tutorial** - First-time users see a guided tutorial explaining each button on the home screen with option to skip
 - ✅ **Updated flavor text** on home screen to be more engaging ("Master real-world skills across 9 exciting careers...")
 - **Added Certification Mode** across all 9 careers (May 2026)
