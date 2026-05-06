@@ -1060,11 +1060,12 @@ export default function Home() {
           certificationType={selectedCertification}
           onComplete={handleChallengeComplete}
           onExit={handleExitToTitle}
-          onTutorialBack={() => setGameState("career-select")}
+          onTutorialBack={() => setGameState("certification-select")}
+          onOpenSettings={() => setSettingsOpen(true)}
         />
         {settingsModal}
-        <SecretTrophyPopup 
-          show={showSecretTrophyPopup} 
+        <SecretTrophyPopup
+          show={showSecretTrophyPopup}
           achievementType={currentAchievementType}
           onClose={() => {
             setShowSecretTrophyPopup(false);
