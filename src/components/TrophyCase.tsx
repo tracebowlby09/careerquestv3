@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Trophy, Career, AchievementType } from "@/types/game";
+import { Trophy, Career, Difficulty, AchievementType } from "@/types/game";
 import TrophyShelf from "./TrophyShelf";
 import TrophyDetailModal from "./TrophyDetailModal";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Trophy, Career, Difficulty } from "@/types/game";
+import { Trophy, Career, Difficulty, AchievementType } from "@/types/game";
 
 interface TrophyShelfProps {
   title: string;
@@ -110,7 +110,7 @@ export default function TrophyShelf({
                                     opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none
                                     z-20 shadow-xl border border-amber-600/50 whitespace-nowrap">
                       {isEarned
-                        ? `${careerNames[career]} • {difficultyLabels[slot.difficulty!]}`
+                        ? `${careerNames[career!]} • ${difficultyLabels[slot.difficulty!]}`
                         : "🔒 Click for hint"
                       }
                     </div>

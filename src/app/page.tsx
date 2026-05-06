@@ -25,7 +25,7 @@ import RetailWorld from "@/components/careers/RetailWorld";
 import ElectricianWorld from "@/components/careers/ElectricianWorld";
 import OutcomeScreen from "@/components/OutcomeScreen";
 import Settings from "@/components/Settings";
-import TrophyScreen from "@/components/TrophyScreen";
+import TrophyCase from "@/components/TrophyCase";
 import SecretTrophyPopup from "@/components/SecretTrophyPopup";
 import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
@@ -446,20 +446,19 @@ export default function Home() {
     setHasWrongAnswer(false);
     setQuickRecallStartTime(null);
     setTimeBasedTrophiesChecked(false);
-  };
-    
+
     // Check time-based trophies immediately if not already checked
     if (!timeBasedTrophiesChecked) {
       const hour = currentHour;
       const timeAchievements: AchievementType[] = [];
-      
+
       if (hour >= 22) {
         timeAchievements.push("night-owl");
       }
       if (hour < 6) {
         timeAchievements.push("early-bird");
       }
-      
+
       if (timeAchievements.length > 0) {
         const existingTrophies = loadTrophies();
         const newTimeTrophies = timeAchievements.map((achievement) => ({
@@ -469,7 +468,7 @@ export default function Home() {
           isSecret: true,
           achievementType: achievement,
         }));
-        
+
         setTrophies([...existingTrophies, ...newTimeTrophies]);
         saveTrophies([...existingTrophies, ...newTimeTrophies]);
         setShowSecretTrophyPopup(true);
@@ -477,36 +476,36 @@ export default function Home() {
         setTimeBasedTrophiesChecked(true);
       }
     }
-    
+
     // Check date-based trophies (State Week: April 27-29, 2026 and Today Check-in)
     const now = new Date();
     const currentYear = now.getFullYear();
     const currentMonth = now.getMonth() + 1; // 1-indexed
     const currentDay = now.getDate();
-    
+
     // State Week trophy: April 27-29, 2026
     const isStateWeek = currentMonth === 4 && currentDay >= 27 && currentDay <= 29 && currentYear === 2026;
-    
+
     // Today Check-in trophy: any day (today is April 17, 2026)
     const hasTodayCheckin = true;
-    
+
     const existingTrophies = loadTrophies();
     const dateAchievements: AchievementType[] = [];
-    
+
     if (isStateWeek) {
       const alreadyHasStateWeek = existingTrophies.some((t) => t.achievementType === "state-week");
       if (!alreadyHasStateWeek) {
         dateAchievements.push("state-week");
       }
     }
-    
+
     if (hasTodayCheckin) {
       const alreadyHasTodayCheckin = existingTrophies.some((t) => t.achievementType === "today-checkin");
       if (!alreadyHasTodayCheckin) {
         dateAchievements.push("today-checkin");
       }
     }
-    
+
     if (dateAchievements.length > 0) {
       const newDateTrophies = dateAchievements.map((achievement) => ({
         career: "programmer" as Career,
@@ -515,13 +514,14 @@ export default function Home() {
         isSecret: true,
         achievementType: achievement,
       }));
-      
+
       const allTrophies = [...existingTrophies, ...newDateTrophies];
       setTrophies(allTrophies);
       saveTrophies(allTrophies);
       setShowSecretTrophyPopup(true);
       setCurrentAchievementType(dateAchievements[0]);
     }
+  };
   };
 
   const handleCareerSelect = (career: Career) => {
@@ -1283,28 +1283,28 @@ export default function Home() {
     );
   }
 
-  if (gameState === "trophy") {
-    return (
-      <>
-        <TrophyScreen 
-          trophies={trophies} 
-          onBack={() => setGameState("title")} 
-        />
-        <SecretTrophyPopup 
-          show={showSecretTrophyPopup} 
-          achievementType={currentAchievementType}
-          onClose={() => {
-            setShowSecretTrophyPopup(false);
-            setCurrentAchievementType(null);
-          }} 
-        />
-      </>
-    );
-  }
+   if (gameState === "trophy") {
+     return (
+       <>
+         <TrophyCase
+           trophies={trophies}
+           onBack={() => setGameState("title")}
+         />
+         <SecretTrophyPopup
+           show={showSecretTrophyPopup}
+           achievementType={currentAchievementType}
+           onClose={() => {
+             setShowSecretTrophyPopup(false);
+             setCurrentAchievementType(null);
+           }}
+         />
+       </>
+     );
+   }
 
-  if (gameState === "outcome" && selectedCareer) {
-    return (
-      <>
+   if (gameState === "outcome" && selectedCareer) {
+     return (
+       <>
          <OutcomeScreen
            career={selectedCareer}
            difficulty={selectedDifficulty ?? "easy"}
@@ -1320,16 +1320,16 @@ export default function Home() {
            isCertification={gameMode === "certification"}
            onBackToSelection={handleBackToSelection}
          />
-        {settingsModal}
-        <SecretTrophyPopup 
-          show={showSecretTrophyPopup} 
-          achievementType={currentAchievementType}
-          onClose={() => {
-            setShowSecretTrophyPopup(false);
-            setCurrentAchievementType(null);
-          }} 
-        />
-      </>
-    );
-  }
+         {settingsModal}
+         <SecretTrophyPopup
+           show={showSecretTrophyPopup}
+           achievementType={currentAchievementType}
+           onClose={() => {
+             setShowSecretTrophyPopup(false);
+             setCurrentAchievementType(null);
+           }}
+         />
+       </>
+     );
+   }
 }
