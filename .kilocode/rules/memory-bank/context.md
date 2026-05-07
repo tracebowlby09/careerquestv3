@@ -8,6 +8,9 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 
 ## Recently Completed
 
+- ✅ **Fixed duplicate questions in ArchitectWorld** - Removed duplicate hard difficulty question entries (h1-h4 appeared twice in the questions array)
+- ✅ **Fixed text color issues** - Corrected text color in ArchitectDifficulty and ChefDifficulty from black to white for readability on dark backgrounds
+- ✅ **Removed debug console.log** - Cleaned up leftover debug statement in page.tsx
 - ✅ **Added feedback for incorrect answers** - Outcome screen now shows a review section with questions answered incorrectly, the correct answer, and explanations
 - ✅ **Added Home Screen Tutorial** - First-time users see a guided tutorial explaining each button on the home screen with option to skip
 - ✅ **Updated flavor text** on home screen to be more engaging ("Master real-world skills across 9 exciting careers...")

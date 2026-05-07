@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useCallback } from "react";
-import { CertificationType } from "@/types/game";
+import { CertificationType, IncorrectAnswer } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import { certificationQuestionBank, certificationConfig, getRandomQuestions, CertificationQuestion, certificationMetadata } from "@/lib/certificationQuestions";
 import TutorialScreen from "./TutorialScreen";
@@ -17,7 +17,7 @@ function shuffleArray<T>(array: T[]): T[] {
 
 interface CertificationWorldProps {
   certificationType: CertificationType;
-  onComplete: (success: boolean, score: number, total: number) => void;
+  onComplete: (success: boolean, score: number, total: number, incorrectAnswers?: IncorrectAnswer[]) => void;
   onExit?: () => void;
   onTutorialBack?: () => void;
   onOpenSettings?: () => void;
@@ -36,6 +36,7 @@ export default function CertificationWorld({
   const [score, setScore] = useState(0);
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const [incorrectAnswers, setIncorrectAnswers] = useState<IncorrectAnswer[]>([]);
 
   const config = certificationConfig[certificationType];
   const meta = certificationMetadata[certificationType];
@@ -53,6 +54,22 @@ export default function CertificationWorld({
     const selected = currentQuestion.options.find((opt) => opt.id === selectedAnswer);
     if (!selected) return;
     const isCorrect = selected.correct;
+    
+    // Track incorrect answers
+    let updatedIncorrect = [...incorrectAnswers];
+    if (!isCorrect) {
+      const correctOption = currentQuestion.options.find((opt) => opt.correct);
+      if (correctOption) {
+        updatedIncorrect = [...updatedIncorrect, {
+          question: currentQuestion.question,
+          selectedAnswer: selected.text,
+          correctAnswer: correctOption.text,
+          explanation: correctOption.explanation,
+        }];
+        setIncorrectAnswers(updatedIncorrect);
+      }
+    }
+    
     const newScore = isCorrect ? score + 1 : score;
     setScore(newScore);
     setAnsweredQuestions([...answeredQuestions, isCorrect]);
@@ -63,9 +80,9 @@ export default function CertificationWorld({
     } else {
       const passPercentage = (newScore / totalQuestions) * 100;
       const passed = passPercentage >= config.passPercentage;
-      onComplete(passed, newScore, totalQuestions);
+      onComplete(passed, newScore, totalQuestions, updatedIncorrect);
     }
-  }, [currentQuestion, selectedAnswer, score, answeredQuestions, currentQuestionIndex, totalQuestions, config.passPercentage, config.timeLimitSeconds, onComplete]);
+  }, [currentQuestion, selectedAnswer, score, answeredQuestions, currentQuestionIndex, totalQuestions, config.passPercentage, config.timeLimitSeconds, onComplete, incorrectAnswers]);
 
   useEffect(() => {
     if (timeLeft === null || timeLeft <= 0 || currentQuestionIndex >= totalQuestions) return;

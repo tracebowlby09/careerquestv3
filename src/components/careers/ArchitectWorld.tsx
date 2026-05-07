@@ -98,88 +98,48 @@ const questions: Record<Difficulty, Question[]> = {
       ],
     },
   ],
-  hard: [
-    {
-      id: "h1",
-      scenario: "You're designing a building in a seismic zone.",
-      question: "What structural system is most earthquake-resistant?",
-      options: [
-        { id: "a", text: "Base isolation with flexible connections", correct: true, explanation: "Base isolation allows the building to move independently of ground motion." },
-        { id: "b", text: "Rigid concrete structure", correct: false, explanation: "Rigid structures can crack and fail during earthquakes." },
-        { id: "c", text: "Standard wood frame", correct: false, explanation: "While wood is flexible, it's not optimal for large buildings in high seismic zones." },
-      ],
-    },
-    {
-      id: "h2",
-      scenario: "A historic building needs renovation while preserving its character.",
-      question: "What's the best approach to modernization?",
-      options: [
-        { id: "a", text: "Preserve exterior and historic elements, modernize interior systems", correct: true, explanation: "This balances preservation with functionality and code compliance." },
-        { id: "b", text: "Gut everything and rebuild to look old", correct: false, explanation: "This destroys historic fabric and authenticity." },
-        { id: "c", text: "Leave everything original, no updates", correct: false, explanation: "This may not meet modern codes or client needs." },
-      ],
-    },
-    {
-      id: "h3",
-      scenario: "You discover a design error after construction has started.",
-      question: "What's your professional and legal obligation?",
-      options: [
-        { id: "a", text: "Immediately notify all parties, propose solutions, document everything", correct: true, explanation: "Transparency and quick action minimize damage and liability." },
-        { id: "b", text: "Try to hide it and hope no one notices", correct: false, explanation: "This is unethical, illegal, and will make things worse." },
-        { id: "c", text: "Blame the contractor", correct: false, explanation: "Design errors are the architect's responsibility." },
-      ],
-    },
-    {
-      id: "h4",
-      scenario: "A client wants a design that violates building codes.",
-      question: "How do you handle this?",
-      options: [
-        { id: "a", text: "Explain code requirements and offer compliant alternatives", correct: true, explanation: "Architects must ensure code compliance while meeting client goals." },
-        { id: "b", text: "Do what they want, it's their building", correct: false, explanation: "Architects can lose their license for code violations." },
-        { id: "c", text: "Refuse to work with them", correct: false, explanation: "Education and alternatives are better than walking away immediately." },
-      ],
-    },
-    {
-      id: "h1",
-      scenario: "You're designing a building in a seismic zone.",
-      question: "What structural system is most earthquake-resistant?",
-      options: [
-        { id: "a", text: "Base isolation with flexible connections", correct: true, explanation: "Base isolation allows the building to move independently of ground motion." },
-        { id: "b", text: "Rigid concrete structure", correct: false, explanation: "Rigid structures can crack and fail during earthquakes." },
-        { id: "c", text: "Standard wood frame", correct: false, explanation: "While wood is flexible, it's not optimal for large buildings in high seismic zones." },
-      ],
-    },
-    {
-      id: "h2",
-      scenario: "A historic building needs renovation while preserving its character.",
-      question: "What's the best approach to modernization?",
-      options: [
-        { id: "a", text: "Preserve exterior and historic elements, modernize interior systems", correct: true, explanation: "This balances preservation with functionality and code compliance." },
-        { id: "b", text: "Gut everything and rebuild to look old", correct: false, explanation: "This destroys historic fabric and authenticity." },
-        { id: "c", text: "Leave everything original, no updates", correct: false, explanation: "This may not meet modern codes or client needs." },
-      ],
-    },
-    {
-      id: "h3",
-      scenario: "You discover a design error after construction has started.",
-      question: "What's your professional and legal obligation?",
-      options: [
-        { id: "a", text: "Immediately notify all parties, propose solutions, document everything", correct: true, explanation: "Transparency and quick action minimize damage and liability." },
-        { id: "b", text: "Try to hide it and hope no one notices", correct: false, explanation: "This is unethical, illegal, and will make things worse." },
-        { id: "c", text: "Blame the contractor", correct: false, explanation: "Design errors are the architect's responsibility." },
-      ],
-    },
-    {
-      id: "h4",
-      scenario: "A client wants a design that violates building codes.",
-      question: "How do you handle this?",
-      options: [
-        { id: "a", text: "Explain code requirements and offer compliant alternatives", correct: true, explanation: "Architects must ensure code compliance while meeting client goals." },
-        { id: "b", text: "Do what they want, it's their building", correct: false, explanation: "Architects can lose their license for code violations." },
-        { id: "c", text: "Refuse to work with them", correct: false, explanation: "Education and alternatives are better than walking away immediately." },
-      ],
-    },
-  ],
+   hard: [
+     {
+       id: "h1",
+       scenario: "You're designing a building in a seismic zone.",
+       question: "What structural system is most earthquake-resistant?",
+       options: [
+         { id: "a", text: "Base isolation with flexible connections", correct: true, explanation: "Base isolation allows the building to move independently of ground motion." },
+         { id: "b", text: "Rigid concrete structure", correct: false, explanation: "Rigid structures can crack and fail during earthquakes." },
+         { id: "c", text: "Standard wood frame", correct: false, explanation: "While wood is flexible, it's not optimal for large buildings in high seismic zones." },
+       ],
+     },
+     {
+       id: "h2",
+       scenario: "A historic building needs renovation while preserving its character.",
+       question: "What's the best approach to modernization?",
+       options: [
+         { id: "a", text: "Preserve exterior and historic elements, modernize interior systems", correct: true, explanation: "This balances preservation with functionality and code compliance." },
+         { id: "b", text: "Gut everything and rebuild to look old", correct: false, explanation: "This destroys historic fabric and authenticity." },
+         { id: "c", text: "Leave everything original, no updates", correct: false, explanation: "This may not meet modern codes or client needs." },
+       ],
+     },
+     {
+       id: "h3",
+       scenario: "You discover a design error after construction has started.",
+       question: "What's your professional and legal obligation?",
+       options: [
+         { id: "a", text: "Immediately notify all parties, propose solutions, document everything", correct: true, explanation: "Transparency and quick action minimize damage and liability." },
+         { id: "b", text: "Try to hide it and hope no one notices", correct: false, explanation: "This is unethical, illegal, and will make things worse." },
+         { id: "c", text: "Blame the contractor", correct: false, explanation: "Design errors are the architect's responsibility." },
+       ],
+     },
+     {
+       id: "h4",
+       scenario: "A client wants a design that violates building codes.",
+       question: "How do you handle this?",
+       options: [
+         { id: "a", text: "Explain code requirements and offer compliant alternatives", correct: true, explanation: "Architects must ensure code compliance while meeting client goals." },
+         { id: "b", text: "Do what they want, it's their building", correct: false, explanation: "Architects can lose their license for code violations." },
+         { id: "c", text: "Refuse to work with them", correct: false, explanation: "Education and alternatives are better than walking away immediately." },
+       ],
+     },
+   ],
 };
 
 // Quick Recall mode - 30 architectural design challenges
