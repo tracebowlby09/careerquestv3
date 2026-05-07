@@ -2,7 +2,7 @@
 
 ## Current State
 
-**Game Status**: ✅ Fully playable career exploration game with certification mode
+**Game Status**: ✅ Fully playable career exploration game with certification mode (fixed white screen after certification exams)
 
 Career Quest V3 is a career exploration game with multiple career paths featuring challenge modes, quick recall, and certification exams.
 

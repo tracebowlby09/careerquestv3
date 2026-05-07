@@ -550,6 +550,19 @@ export default function Home() {
 
   const handleCertificationSelect = (certType: CertificationType) => {
     setSelectedCertification(certType);
+    // Map certification type to career for outcome screen
+    const certToCareerMap: Record<CertificationType, Career> = {
+      "aws-developer": "programmer",
+      "rn-license": "nurse",
+      "pe-license": "engineer",
+      "teaching-license": "teacher",
+      "servsafe": "chef",
+      "are-exam": "architect",
+      "bar-exam": "lawyer",
+      "customer-service": "retail",
+      "journeyman": "electrician",
+    };
+    setSelectedCareer(certToCareerMap[certType]);
     setGameState("playing");
   };
 
