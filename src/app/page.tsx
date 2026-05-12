@@ -434,6 +434,7 @@ export default function Home() {
     audioSystem.playClickSound();
     audioSystem.playTitleMusic();
     setGameMode(mode);
+    setSelectedCertification(null);
     if (mode === "certification") {
       setGameState("certification-select");
     } else {
@@ -697,12 +698,13 @@ export default function Home() {
   const handleNewCareer = () => {
     setSelectedCareer(null);
     setSelectedDifficulty(null);
+    setSelectedCertification(null);
     setGameState("career-select");
   };
 
   const handleBackToSelection = () => {
-    // For Quick Recall mode, go back to career selection
     setSelectedCareer(null);
+    setSelectedCertification(null);
     setGameState("career-select");
   };
 
@@ -712,9 +714,9 @@ export default function Home() {
   };
 
   const handleExitToTitle = () => {
-    // Stop career music and restart title music
     audioSystem.stopBackgroundMusic();
     audioSystem.playTitleMusic();
+    setSelectedCertification(null);
     setGameState("title");
   };
 

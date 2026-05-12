@@ -38,6 +38,11 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
    - Programmer: added 1 challenge question (was 8)
    - Retail: added 7 challenge questions (was 2)
 
+### Bug Fixes
+
+- **Fixed certification mode state leak** - Added `setSelectedCertification(null)` to `handleStart`, `handleNewCareer`, `handleExitToTitle`, and `handleBackToSelection` to prevent certification mode from persisting across different game modes
+- **Updated Quick Recall button emoji** from ⚡ to 🚀 in CareerSelection.tsx
+
 ## Current Structure
 
 | File/Directory | Purpose | Status |
