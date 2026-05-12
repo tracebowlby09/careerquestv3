@@ -43,6 +43,13 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 - **Fixed certification mode state leak** - Added `setSelectedCertification(null)` to `handleStart`, `handleNewCareer`, `handleExitToTitle`, and `handleBackToSelection` to prevent certification mode from persisting across different game modes
 - **Updated Quick Recall button emoji** from ⚡ to 🚀 in CareerSelection.tsx
 
+### Certification Mode Trophies
+
+- **Added `certification-master` achievement** - Earned by passing any certification exam
+- **Added `all-certifications-master` achievement** - Earned by passing certifications for all 9 careers
+- Updated TrophyScreen.tsx with trophy display entries for both certification achievements
+- Updated AchievementType in types/game.ts with new achievement types
+
 ## Current Structure
 
 | File/Directory | Purpose | Status |

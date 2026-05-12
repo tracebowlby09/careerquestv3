@@ -189,6 +189,18 @@ const trophyContent: Record<string, { icon: string; title: string; message: stri
     message: "You retried a question twice and still got it right!",
     gradient: "from-lime-400 via-green-500 to-emerald-500",
   },
+  "certification-master": {
+    icon: "📜",
+    title: "CERTIFICATION MASTER!",
+    message: "You passed a certification exam!",
+    gradient: "from-blue-500 via-indigo-600 to-purple-700",
+  },
+  "all-certifications-master": {
+    icon: "🎓",
+    title: "CERTIFIED EXPERT!",
+    message: "You've passed all certifications across all careers!",
+    gradient: "from-teal-400 via-cyan-500 to-blue-600",
+  },
 };
 
 export default function SecretTrophyPopup({ show, achievementType, onClose }: SecretTrophyPopupProps) {

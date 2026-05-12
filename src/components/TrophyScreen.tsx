@@ -251,6 +251,20 @@ const secretTrophies: SecretTrophyDisplay[] = [
     icon: "🔄",
     hint: "Perseverance pays off",
   },
+  {
+    id: "certification-master",
+    name: "Certification Master",
+    description: "Passed a certification exam",
+    icon: "📜",
+    hint: "Prove your expertise with real certification",
+  },
+  {
+    id: "all-certifications-master",
+    name: "Certified Expert",
+    description: "Passed all certifications across all careers",
+    icon: "🎓",
+    hint: "Master of every professional certification",
+  },
 ];
 
 const getAchievementInfo = (achievementType?: AchievementType): SecretTrophyDisplay | undefined => {

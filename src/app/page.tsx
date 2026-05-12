@@ -75,6 +75,7 @@ const saveTrophies = (trophies: Trophy[]) => {
 const checkAchievements = (
   allTrophies: Trophy[],
   isQuickRecallMode: boolean,
+  isCertificationMode: boolean,
   score: number,
   total: number
 ): AchievementType[] => {
@@ -121,6 +122,16 @@ const checkAchievements = (
     }
   }
   
+  // Check for Certification Master - complete any certification
+  if (isCertificationMode) {
+    const alreadyHasCertMaster = allTrophies.some(
+      (t) => t.achievementType === "certification-master"
+    );
+    if (!alreadyHasCertMaster) {
+      achievements.push("certification-master");
+    }
+  }
+  
   // Check for All Careers Master - complete all 3 difficulties for ALL careers
   let hasAllCareersMaster = true;
   for (const career of allCareers) {
@@ -153,6 +164,20 @@ const checkAchievements = (
     );
     if (!alreadyHasAllQuickRecallsMaster) {
       achievements.push("all-quick-recalls-master");
+    }
+  }
+  
+  // Check for All Certifications Master - complete certifications for ALL careers
+  const certTrophies = allTrophies.filter(
+    (t) => t.achievementType === "certification-master"
+  );
+  const certCareers = new Set(certTrophies.map((t) => t.career));
+  if (certCareers.size === allCareers.length) {
+    const alreadyHasAllCertsMaster = allTrophies.some(
+      (t) => t.achievementType === "all-certifications-master"
+    );
+    if (!alreadyHasAllCertsMaster) {
+      achievements.push("all-certifications-master");
     }
   }
   
@@ -639,7 +664,7 @@ export default function Home() {
         
         // Check for achievements after awarding the new trophy
         const allTrophies = [...trophies, newTrophy];
-        const newAchievements = checkAchievements(allTrophies, isQuickRecallMode, finalScore, total);
+        const newAchievements = checkAchievements(allTrophies, isQuickRecallMode, isCertificationMode, finalScore, total);
         
         // Combine regular achievements with easter egg achievements
         const allNewAchievements = [...newAchievements, ...easterEggAchievements];
