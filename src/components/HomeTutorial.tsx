@@ -35,7 +35,7 @@ export default function HomeTutorial({ onSkip }: HomeTutorialProps) {
     }
   ];
 
-  return (
+return (
     <div className="min-h-screen bg-gradient-to-br from-slate-700 via-slate-800 to-gray-900 p-4 md:p-8 flex items-center justify-center">
       <div className="max-w-2xl w-full">
         <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 md:p-12">
@@ -44,9 +44,9 @@ export default function HomeTutorial({ onSkip }: HomeTutorialProps) {
             <h1 className="text-4xl font-bold text-gray-900 mb-2">
               Welcome to Career Quest!
             </h1>
-<p className="text-xl text-gray-600">
-               Here&apos;s a quick guide to get you started
-             </p>
+            <p className="text-xl text-gray-600">
+              Here&apos;s a quick guide to get you started
+            </p>
           </div>
 
           <div className="space-y-4 mb-8">
@@ -66,28 +66,16 @@ export default function HomeTutorial({ onSkip }: HomeTutorialProps) {
             ))}
           </div>
 
-          <div className="flex gap-4">
-            <button
-              onClick={() => {
-                audioSystem.playClickSound();
-                localStorage.setItem("homeTutorialSkipped", "true");
-                onSkip();
-              }}
-              className="flex-1 bg-gray-200 text-gray-800 font-bold py-3 rounded-lg hover:bg-gray-300 transition-colors"
-            >
-              Skip Tutorial
-            </button>
-            <button
-              onClick={() => {
-                audioSystem.playClickSound();
-                localStorage.setItem("homeTutorialSkipped", "true");
-                onSkip();
-              }}
-              className="flex-1 bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Got It!
-            </button>
-          </div>
+          <button
+            onClick={() => {
+              audioSystem.playClickSound();
+              localStorage.setItem("homeTutorialSkipped", "true");
+              onSkip();
+            }}
+            className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Got It!
+          </button>
         </div>
       </div>
     </div>
