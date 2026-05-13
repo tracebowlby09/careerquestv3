@@ -50,6 +50,16 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 - Updated TrophyScreen.tsx with trophy display entries for both certification achievements
 - Updated AchievementType in types/game.ts with new achievement types
 
+### Outcome Screen Updates
+
+- **Removed "Change Difficulty Level" button** for certification mode
+- **"Explore Another Career" button now redirects to certification selection** for certification mode
+- Added certification-specific button text ("Try Another Certification", "Choose Different Certification")
+
+### Home Tutorial Update
+
+- **Removed "Skip Tutorial" button** - Only "Got It!" button remains on the tutorial screen
+
 ## Current Structure
 
 | File/Directory | Purpose | Status |

@@ -303,48 +303,48 @@ export default function OutcomeScreen({
                  ))}
                </div>
              </div>
-           </div>
-         )}
-
-         <div className="space-y-3">
-          <button
-            onClick={onPlayAgain}
-            className={`w-full font-bold py-4 rounded-lg transition-colors ${
-              isQR 
-                ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600"
-                : "bg-blue-600 text-white hover:bg-blue-700"
-            }`}
-          >
-            {isQR ? "Try Again" : "Try Same Difficulty Again"}
-          </button>
-          
-          {isQR ? (
-            <button
-              onClick={onBackToSelection}
-              className="w-full bg-gradient-to-r from-purple-500 to-violet-500 text-white font-bold py-4 rounded-lg hover:from-purple-600 hover:to-violet-600 transition-colors"
-            >
-              ← Back to Selection
-            </button>
-          ) : (
-            <button
-              onClick={onChangeDifficulty}
-              className="w-full bg-purple-600 text-white font-bold py-4 rounded-lg hover:bg-purple-700 transition-colors"
-            >
-              Change Difficulty Level
-            </button>
+</div>
           )}
-          
-          <button
-            onClick={onNewCareer}
-            className={`w-full font-bold py-4 rounded-lg transition-colors ${
-              isQR
-                ? "bg-gray-700/50 text-purple-200 border border-purple-500 hover:bg-gray-600/50"
-                : "bg-gray-600 text-white hover:bg-gray-700"
-            }`}
-          >
-            Explore Another Career
-          </button>
-        </div>
+
+          <div className="space-y-3">
+           <button
+             onClick={onPlayAgain}
+             className={`w-full font-bold py-4 rounded-lg transition-colors ${
+               isQR 
+                 ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600"
+                 : "bg-blue-600 text-white hover:bg-blue-700"
+             }`}
+           >
+             {isQR ? "Try Again" : "Try Same Difficulty Again"}
+           </button>
+           
+           {isQR || isCert ? (
+             <button
+               onClick={onBackToSelection}
+               className="w-full bg-gradient-to-r from-purple-500 to-violet-500 text-white font-bold py-4 rounded-lg hover:from-purple-600 hover:to-violet-600 transition-colors"
+             >
+               {isCert ? "Choose Different Certification" : "← Back to Selection"}
+             </button>
+           ) : (
+             <button
+               onClick={onChangeDifficulty}
+               className="w-full bg-purple-600 text-white font-bold py-4 rounded-lg hover:bg-purple-700 transition-colors"
+             >
+               Change Difficulty Level
+             </button>
+           )}
+           
+           <button
+             onClick={onBackToSelection || onNewCareer}
+             className={`w-full font-bold py-4 rounded-lg transition-colors ${
+               isQR
+                 ? "bg-gray-700/50 text-purple-200 border border-purple-500 hover:bg-gray-600/50"
+                 : "bg-gray-600 text-white hover:bg-gray-700"
+             }`}
+           >
+             {isCert ? "Try Another Certification" : "Explore Another Career"}
+           </button>
+         </div>
 
         <div className={`mt-6 text-center text-sm ${isQR ? "text-purple-300" : "text-gray-600"}`}>
           {success

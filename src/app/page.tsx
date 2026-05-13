@@ -729,8 +729,13 @@ export default function Home() {
 
   const handleBackToSelection = () => {
     setSelectedCareer(null);
-    setSelectedCertification(null);
-    setGameState("career-select");
+    setSelectedDifficulty(null);
+    if (gameMode === "certification") {
+      setSelectedCertification(null);
+      setGameState("certification-select");
+    } else {
+      setGameState("career-select");
+    }
   };
 
   const handleBackToCareerSelect = () => {
