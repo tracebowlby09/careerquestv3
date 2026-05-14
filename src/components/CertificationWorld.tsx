@@ -99,6 +99,19 @@ export default function CertificationWorld({
     if (config.timeLimitSeconds) { setTimeLeft(config.timeLimitSeconds); }
   }, [config.timeLimitSeconds]);
 
+  // Handle Enter key to submit answer
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && selectedAnswer && stage === "playing") {
+        e.preventDefault();
+        handleSubmit();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedAnswer, stage, handleSubmit]);
+
   const shuffledOptions = useMemo(() => {
     return shuffleArray(currentQuestion.options);
   }, [currentQuestionIndex, currentQuestion.options]);

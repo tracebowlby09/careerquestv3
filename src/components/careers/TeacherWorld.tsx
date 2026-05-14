@@ -613,6 +613,19 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall, is
      }
   };
 
+  // Handle Enter key to submit answer
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && selectedAnswer && stage === "challenge") {
+        e.preventDefault();
+        handleSubmit();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedAnswer, stage, handleSubmit]);
+
   if (stage === "intro") {
     return (
       <TutorialScreen

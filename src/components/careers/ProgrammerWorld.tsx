@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { Difficulty } from "@/types/game";
 import { IncorrectAnswer } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
@@ -624,7 +624,7 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
     return shuffleArray(currentQuestion.options);
   }, [currentQuestionIndex]);
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     const selected = currentQuestion.options.find((opt) => opt.id === selectedAnswer);
     if (!selected) return;
 
@@ -704,7 +704,20 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
       const passThreshold = Math.ceil(totalQuestions * passRatio) // Need 60% to pass
       onComplete(newScore >= passThreshold, newScore, totalQuestions, updatedIncorrect);
     }
-  };
+  }, [currentQuestion, selectedAnswer, questionStartTime, score, incorrectAnswers, onAnswerResult, isQuickRecall, hearts, currentQuestionIndex, totalQuestions, isCertification, onComplete, handleLoseHeart, streak, bestStreak, setScore, setAnsweredQuestions, setIncorrectAnswers, setStreak, setBestStreak, setCurrentQuestionIndex, setSelectedAnswer, setQuestionStartTime]);
+
+  // Handle Enter key to submit answer
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && selectedAnswer && stage === "challenge") {
+        e.preventDefault();
+        handleSubmit();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedAnswer, stage, handleSubmit]);
 
   if (stage === "intro") {
     return (

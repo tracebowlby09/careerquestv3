@@ -618,6 +618,19 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall, isCe
     }
   };
 
+  // Handle Enter key to submit answer
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && selectedOrder.length > 0 && stage === "challenge") {
+        e.preventDefault();
+        handleSubmit();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedOrder, stage, handleSubmit]);
+
   if (stage === "intro") {
     return (
       <TutorialScreen
