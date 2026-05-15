@@ -162,17 +162,287 @@ const quickRecallQuestions: Question[] = [
       { id: "c", text: "Plastic box taped to the ceiling", correct: false, explanation: "This isn't secure at all." },
     ],
   },
-  {
-    id: "qr3",
-    scenario: "Customer wants to add outlets to a kitchen counter.",
-    question: "What's the GFCI requirement?",
-    options: [
-      { id: "a", text: "All kitchen counter outlets must be GFCI protected", correct: true, explanation: "NEC requires GFCI for kitchen small appliance circuits." },
-      { id: "b", text: "Only outlets near the sink need GFCI", correct: false, explanation: "All kitchen counter outlets need protection." },
-      { id: "c", text: "GFCI is optional in kitchens", correct: false, explanation: "This is required by code for safety." },
-    ],
-  },
-];
+{
+     id: "qr3",
+     scenario: "Customer wants to add outlets to a kitchen counter.",
+     question: "What's the GFCI requirement?",
+     options: [
+       { id: "a", text: "All kitchen counter outlets must be GFCI protected", correct: true, explanation: "NEC requires GFCI for kitchen small appliance circuits." },
+       { id: "b", text: "Only outlets near the sink need GFCI", correct: false, explanation: "All kitchen counter outlets need protection." },
+       { id: "c", text: "GFCI is optional in kitchens", correct: false, explanation: "This is required by code for safety." },
+     ],
+   },
+   {
+     id: "qr4",
+     scenario: "You need to run wiring through a damp basement.",
+     question: "What type of cable should you use?",
+     options: [
+       { id: "a", text: "NM-B (Romex) cable", correct: false, explanation: "NM cable is not suitable for damp locations." },
+       { id: "b", text: "UF-B (Underground Feeder) cable", correct: true, explanation: "UF-B cable is rated for damp and wet locations." },
+       { id: "c", text: "THHN wire in PVC conduit", correct: false, explanation: "While THHN is moisture-resistant, UF-B is specifically rated for direct burial and damp locations." },
+     ],
+   },
+   {
+     id: "qr5",
+     scenario: "A homeowner reports flickering lights in one room.",
+     question: "What's the most likely cause?",
+     options: [
+       { id: "a", text: "Loose connection at the switch or fixture", correct: true, explanation: "Loose connections cause intermittent contact and flickering." },
+       { id: "b", text: "The utility company has voltage fluctuations", correct: false, explanation: "If it were utility-related, it would affect the whole house." },
+       { id: "c", text: "The light bulb is the wrong wattage", correct: false, explanation: "Wrong wattage typically causes overheating, not flickering." },
+     ],
+   },
+   {
+     id: "qr6",
+     scenario: "Installing a 50-amp EV charging station in a garage.",
+     question: "What wire gauge and circuit breaker are required?",
+     options: [
+       { id: "a", text: "6 AWG copper wire with a 50-amp breaker", correct: true, explanation: "6 AWG copper is rated for 50 amps per NEC Table 310.16." },
+       { id: "b", text: "10 AWG copper wire with a 30-amp breaker", correct: false, explanation: "This would be undersized for a 50-amp circuit." },
+       { id: "c", text: "12 AWG aluminum wire with a 50-amp breaker", correct: false, explanation: "12 AWG aluminum is only rated for 20 amps." },
+     ],
+   },
+   {
+     id: "qr7",
+     scenario: "You smell something burning near an electrical panel.",
+     question: "What's your first action?",
+     options: [
+       { id: "a", text: "Turn off the main breaker and call an electrician", correct: true, explanation: "A burning smell from a panel indicates a serious hazard; shut off power immediately." },
+       { id: "b", text: "Open the panel to inspect the breakers", correct: false, explanation: "Opening an energized panel with a burning smell is extremely dangerous." },
+       { id: "c", text: "Spray the panel with water to cool it down", correct: false, explanation: "Water on electrical equipment creates shock and short circuit risk." },
+     ],
+   },
+   {
+     id: "qr8",
+     scenario: "A bathroom outlet isn't working but the breaker hasn't tripped.",
+     question: "What's the most likely cause?",
+     options: [
+       { id: "a", text: "A GFCI outlet upstream has tripped", correct: true, explanation: "GFCI outlets in bathrooms often protect other outlets on the same circuit." },
+       { id: "b", text: "The outlet is wired in series and one connection is broken", correct: false, explanation: "Outlets are typically wired in parallel, not series." },
+       { id: "c", text: "The neutral wire has corroded through", correct: false, explanation: "While possible, a tripped GFCI is far more common." },
+     ],
+   },
+   {
+     id: "qr9",
+     scenario: "Customer wants to install a 240V electric vehicle charger.",
+     question: "What's the minimum circuit requirement?",
+     options: [
+       { id: "a", text: "Dedicated 240V 40-amp circuit with 8 AWG wire minimum", correct: true, explanation: "Most Level 2 EV chargers require a dedicated 240V 30-40 amp circuit." },
+       { id: "b", text: "Shared 120V 15-amp circuit", correct: false, explanation: "EV chargers need a dedicated 240V circuit." },
+       { id: "c", text: "Any 240V circuit will work regardless of amperage", correct: false, explanation: "The circuit must match the charger's amperage requirements." },
+     ],
+   },
+   {
+     id: "qr10",
+     scenario: "You discover aluminum wiring in a 1970s home during a renovation.",
+     question: "What's the proper course of action?",
+     options: [
+       { id: "a", text: "Inspect all connections and use approved AL/CU rated devices", correct: true, explanation: "Aluminum wiring requires special connectors and CO/ALR-rated devices for safety." },
+       { id: "b", text: "Replace all aluminum wire with copper immediately", correct: false, explanation: "Complete replacement is costly; proper connectors are an accepted alternative." },
+       { id: "c", text: "Leave it alone, aluminum wiring is perfectly safe", correct: false, explanation: "Aluminum wiring needs special handling to prevent fire hazards." },
+     ],
+   },
+   {
+     id: "qr11",
+     scenario: "A light fixture has no ground wire but the box is metal.",
+     question: "What should you do?",
+     options: [
+       { id: "a", text: "Connect the ground pigtail to the metal box if it's grounded", correct: true, explanation: "A metal box can serve as an equipment grounding conductor if properly grounded." },
+       { id: "b", text: "Leave the fixture without a ground connection", correct: false, explanation: "Improper grounding creates shock hazard." },
+       { id: "c", text: "Just connect the ground wire to the neutral", correct: false, explanation: "Bonding ground to neutral at the fixture is dangerous and violates code." },
+     ],
+   },
+   {
+     id: "qr12",
+     scenario: "Circuit breaker keeps tripping when a space heater is plugged in.",
+     question: "What's the likely problem?",
+     options: [
+       { id: "a", text: "The circuit is overloaded - the heater exceeds the circuit's capacity", correct: true, explanation: "Space heaters draw 1500+ watts, often exceeding a 15-amp circuit's capacity." },
+       { id: "b", text: "The breaker is defective and needs replacement", correct: false, explanation: "While possible, overloading is the far more common cause." },
+       { id: "c", text: "The heater needs a 240V outlet instead of 120V", correct: false, explanation: "Most space heaters operate on standard 120V outlets." },
+     ],
+   },
+   {
+     id: "qr13",
+     scenario: "Installing outdoor lighting around a pool.",
+     question: "What special code requirements apply?",
+     options: [
+       { id: "a", text: "All fixtures must be low-voltage (12V) and GFCI protected", correct: true, explanation: "NEC requires GFCI protection and low-voltage lighting near swimming pools." },
+       { id: "b", text: "Standard 120V fixtures are fine if weatherproof", correct: false, explanation: "120V fixtures near pools must be GFCI protected per NEC 680." },
+       { id: "c", text: "No special requirements for outdoor lighting", correct: false, explanation: "Pool areas have strict electrical code requirements." },
+     ],
+   },
+   {
+     id: "qr14",
+     scenario: "You need to determine if a wall is load-bearing before cutting an opening.",
+     question: "What's the best approach?",
+     options: [
+       { id: "a", text: "Check the basement/crawlspace for support beams and consult a structural engineer", correct: true, explanation: "Visual inspection from below and professional assessment are safest." },
+       { id: "b", text: "Just cut a small hole to look inside", correct: false, explanation: "This can compromise structural integrity without proper knowledge." },
+       { id: "c", text: "Assume all interior walls are load-bearing", correct: false, explanation: "Not all interior walls are load-bearing; each must be assessed individually." },
+     ],
+   },
+   {
+     id: "qr15",
+     scenario: "A junction box is overcrowded with wires.",
+     question: "What code violation does this present?",
+     options: [
+       { id: "a", text: "It violates the NEC box fill capacity requirements", correct: true, explanation: "NEC Article 314.16 specifies maximum wire fill for each box size." },
+       { id: "b", text: "It's fine as long as the cover plate fits", correct: false, explanation: "Cover plate fit doesn't indicate safe box fill." },
+       { id: "c", text: "It only violates code if the wires are different gauges", correct: false, explanation: "Box fill limits apply regardless of wire gauge combinations." },
+     ],
+   },
+   {
+     id: "qr16",
+     scenario: "Customer's new microwave keeps tripping the breaker.",
+     question: "What's the recommended solution?",
+     options: [
+       { id: "a", text: "Install a dedicated 20-amp circuit for the microwave", correct: true, explanation: "Microwaves typically require a dedicated circuit per NEC." },
+       { id: "b", text: "Use a higher amp breaker", correct: false, explanation: "Upgrading the breaker without proper wiring creates a fire hazard." },
+       { id: "c", text: "Plug it into a different outlet on the same circuit", correct: false, explanation: "Sharing the circuit with other appliances won't solve the overloading issue." },
+     ],
+   },
+   {
+     id: "qr17",
+     scenario: "You're troubleshooting a 3-way switch that doesn't control the light from both locations.",
+     question: "What's most likely wrong?",
+     options: [
+       { id: "a", text: "The traveler wires are connected to the wrong terminals", correct: true, explanation: "3-way switches require travelers on the common terminals; wrong wiring breaks the circuit path." },
+       { id: "b", text: "The light fixture is burned out", correct: false, explanation: "A burned fixture wouldn't affect switch operation from both locations." },
+       { id: "c", text: "Both switches need to be replaced", correct: false, explanation: "Replacement isn't necessary if wiring connections are correct." },
+     ],
+   },
+   {
+     id: "qr18",
+     scenario: "An old building has knob-and-tube wiring.",
+     question: "What are the safety concerns?",
+     options: [
+       { id: "a", text: "No ground wire, insulation degrades over time, and it can overheat", correct: true, explanation: "Knob-and-tube lacks grounding and modern insulation, posing fire and shock risks." },
+       { id: "b", text: "It's perfectly safe if the fuses are working", correct: false, explanation: "Fuses don't address the lack of grounding and insulation degradation." },
+       { id: "c", text: "The only concern is it looks old", correct: false, explanation: "There are serious electrical safety concerns beyond aesthetics." },
+     ],
+   },
+   {
+     id: "qr19",
+     scenario: "You need to backfeed a portable generator during a power outage.",
+     question: "What's the critical safety requirement?",
+     options: [
+       { id: "a", text: "Use a transfer switch to prevent backfeeding the utility grid", correct: true, explanation: "Backfeeding the grid can electrocute utility workers and damage equipment." },
+       { id: "b", text: "Just plug it into a wall outlet with a heavy-duty cord", correct: false, explanation: "Directly plugging into an outlet backfeeds the grid and is extremely dangerous." },
+       { id: "c", text: "Run all your appliances directly from the generator", correct: false, explanation: "Appliances must be connected through proper transfer equipment." },
+     ],
+   },
+   {
+     id: "qr20",
+     scenario: "A commercial building needs new electrical service.",
+     question: "What determines the service amperage needed?",
+     options: [
+       { id: "a", text: "Total calculated electrical load per NEC Article 220", correct: true, explanation: "NEC Article 220 provides the calculation method for required service amperage." },
+       { id: "b", text: "The size of the building in square feet", correct: false, explanation: "Square footage is one factor but not the primary determinant." },
+       { id: "c", text: "Whatever the utility company provides by default", correct: false, explanation: "Service size must be calculated based on the building's actual load." },
+     ],
+   },
+   {
+     id: "qr21",
+     scenario: "You notice warm outlet covers in a bedroom.",
+     question: "What does this indicate?",
+     options: [
+       { id: "a", text: "Possible overloaded circuit or loose connection that needs immediate attention", correct: true, explanation: "Warm outlets indicate excessive current flow or poor connections, both fire hazards." },
+       { id: "b", text: "Normal operation if a space heater is plugged in", correct: false, explanation: "Even with a heater, the outlet shouldn't be noticeably warm to touch." },
+       { id: "c", text: "The outlet paint is reacting to humidity", correct: false, explanation: "Warmth is a sign of electrical issues, not environmental factors." },
+     ],
+   },
+   {
+     id: "qr22",
+     scenario: "Installing a new subpanel in a detached garage.",
+     question: "What grounding method is required?",
+     options: [
+       { id: "a", text: "A grounding electrode system per NEC 250.50, such as ground rods", correct: true, explanation: "Detached buildings need their own grounding electrode system." },
+       { id: "b", text: "Bond to the water pipe only", correct: false, explanation: "Water pipe alone is insufficient for a detached building." },
+       { id: "c", text: "No grounding needed since it's a subpanel", correct: false, explanation: "All subpanels require proper grounding." },
+     ],
+   },
+   {
+     id: "qr23",
+     scenario: "A GFCI outlet in the garage won't reset.",
+     question: "What's the likely cause?",
+     options: [
+       { id: "a", text: "A ground fault in a device plugged into the circuit or wiring damage", correct: true, explanation: "GFCI trips when it detects current leakage to ground." },
+       { id: "b", text: "The GFCI outlet is just old and worn out", correct: false, explanation: "While age can be a factor, a ground fault is the usual culprit." },
+       { id: "c", text: "The breaker feeding it is too small", correct: false, explanation: "Breaker size doesn't affect GFCI functionality." },
+     ],
+   },
+   {
+     id: "qr24",
+     scenario: "You're pulling wire through a long conduit run.",
+     question: "What's the maximum number of conductors allowed in a 1-inch EMT conduit?",
+     options: [
+       { id: "a", text: "Up to 35 conductors depending on wire gauge per NEC Chapter 9", correct: true, explanation: "NEC Chapter 9, Table 1 specifies fill limits based on conduit size and wire gauge." },
+       { id: "b", text: "No more than 3 conductors", correct: false, explanation: "3-conductor limit applies to much smaller conduit." },
+       { id: "c", text: "As many as will physically fit", correct: false, explanation: "NEC has strict fill requirements to prevent overheating." },
+     ],
+   },
+   {
+     id: "qr25",
+     scenario: "A solar panel system needs to be connected to the grid.",
+     question: "What's required for a grid-tied solar installation?",
+     options: [
+       { id: "a", text: "A bidirectional meter, inverter, and proper disconnect per NEC 705", correct: true, explanation: "Grid-tied systems require specific equipment and code compliance per NEC 705." },
+       { id: "b", text: "Just plug the panels into a regular outlet", correct: false, explanation: "Direct connection without an inverter is dangerous and violates code." },
+       { id: "c", text: "Only battery storage is needed", correct: false, explanation: "Grid-tied systems can work without batteries but require proper inverter and metering." },
+     ],
+   },
+   {
+     id: "qr26",
+     scenario: "You find cloth-wrapped wiring in an old home.",
+     question: "What should you do?",
+     options: [
+       { id: "a", text: "Have the wiring evaluated and likely replaced by a licensed electrician", correct: true, explanation: "Cloth-wrapped wiring is a fire hazard and typically needs replacement." },
+       { id: "b", text: "Tape over any frayed areas with electrical tape", correct: false, explanation: "Electrical tape is a temporary fix and doesn't address the underlying hazard." },
+       { id: "c", text: "It's safe as long as there are no exposed copper wires", correct: false, explanation: "Cloth insulation degrades and becomes a fire hazard regardless of visible copper." },
+     ],
+   },
+   {
+     id: "qr27",
+     scenario: "An arc fault breaker keeps tripping in a bedroom.",
+     question: "What's the most common cause?",
+     options: [
+       { id: "a", text: "Damaged or deteriorating wire insulation causing arcing", correct: true, explanation: "AFCIs detect dangerous arcing from damaged wiring, which is the most common cause of trips." },
+       { id: "b", text: "Too many devices plugged in", correct: false, explanation: "Overloading trips standard breakers, not AFCIs specifically." },
+       { id: "c", text: "The AFCI breaker is defective", correct: false, explanation: "While possible, nuisance tripping from actual arcing is far more common." },
+     ],
+   },
+   {
+     id: "qr28",
+     scenario: "You need to install a dedicated circuit for a home workshop.",
+     question: "What's the minimum requirement for heavy power tools?",
+     options: [
+       { id: "a", text: "A 20-amp 120V circuit with 12 AWG wire", correct: true, explanation: "Heavy power tools typically require a dedicated 20-amp circuit per NEC." },
+       { id: "b", text: "A 15-amp circuit is always sufficient", correct: false, explanation: "Many power tools exceed 15 amps and require 20-amp circuits." },
+       { id: "c", text: "Just use an extension cord from another room", correct: false, explanation: "Extension cords are not a substitute for dedicated circuits for heavy tools." },
+     ],
+   },
+   {
+     id: "qr29",
+     scenario: "A customer reports that their lights dim when the air conditioner turns on.",
+     question: "What's the likely issue?",
+     options: [
+       { id: "a", text: "Loose neutral connection at the panel or service entrance", correct: true, explanation: "A loose neutral causes voltage drop and dimming when large loads start." },
+       { id: "b", text: "The air conditioner is drawing too much power for the circuit", correct: false, explanation: "AC units on their own circuit shouldn't cause dimming elsewhere." },
+       { id: "c", text: "The light bulbs need to be replaced with higher wattage ones", correct: false, explanation: "Bulb wattage doesn't fix a voltage drop issue caused by loose connections." },
+     ],
+   },
+   {
+     id: "qr30",
+     scenario: "You're installing a new 200-amp main service panel.",
+     question: "What is the minimum wire size for the service entrance conductors?",
+     options: [
+       { id: "a", text: "2/0 AWG copper or 4/0 AWG aluminum per NEC Table 310.16", correct: true, explanation: "NEC Table 310.16 specifies conductor sizing for 200-amp service." },
+       { id: "b", text: "6 AWG copper will work for any panel", correct: false, explanation: "6 AWG is far too small for a 200-amp service." },
+       { id: "c", text: "Any wire rated for 100 amps will work since the panel is new", correct: false, explanation: "Wire must be rated for the full service amperage, not the panel rating alone." },
+     ],
+   },
+ ];
 
 export default function ElectricianWorld({ difficulty, onComplete, isQuickRecall, isCertification, alwaysCorrect, onExit, onTutorialBack, onAnswerResult }: ElectricianWorldProps) {
   const [stage, setStage] = useState<"intro" | "tutorial" | "challenge">("intro");

@@ -242,16 +242,196 @@ const quickRecallQuestions: Question[] = [
       { id: "c", text: "Buyer loses deposit if they complain about inspection results", correct: false, explanation: "This defeats the purpose of the contingency." },
     ],
   },
-  {
-    id: "qr12",
-    case: "Trademark infringement dispute.",
-    question: "What factors determine likelihood of confusion?",
-    options: [
-      { id: "a", text: "Similarity of marks, relatedness of goods, strength of mark", correct: true, explanation: "These are the core factors in trademark analysis." },
-      { id: "b", text: "How long the plaintiff has had the mark", correct: false, explanation: "Duration is just one factor among many." },
-      { id: "c", text: "Whether the defendant knew about the plaintiff's mark", correct: false, explanation: "Knowing infringement matters but confusion is the test." },
-    ],
-  },
+{
+     id: "qr12",
+     case: "Trademark infringement dispute.",
+     question: "What factors determine likelihood of confusion?",
+     options: [
+       { id: "a", text: "Similarity of marks, relatedness of goods, strength of mark", correct: true, explanation: "These are the core factors in trademark analysis." },
+       { id: "b", text: "How long the plaintiff has had the mark", correct: false, explanation: "Duration is just one factor among many." },
+       { id: "c", text: "Whether the defendant knew about the plaintiff's mark", correct: false, explanation: "Knowing infringement matters but confusion is the test." },
+     ],
+   },
+   {
+     id: "qr13",
+     case: "Client wants to file a patent for a new invention.",
+     question: "What must be established for patentability?",
+     options: [
+       { id: "a", text: "Novelty, non-obviousness, and utility", correct: true, explanation: "These are the three core requirements for patentability." },
+       { id: "b", text: "Prior art search and market demand", correct: false, explanation: "Market demand is not a legal requirement for patents." },
+       { id: "c", text: "Prototype and working model", correct: false, explanation: "A prototype is helpful but not legally required." },
+     ],
+   },
+   {
+     id: "qr14",
+     case: "Corporate board member accused of breaching fiduciary duty.",
+     question: "What is the business judgment rule defense?",
+     options: [
+       { id: "a", text: "Directors are protected if they acted in good faith and with reasonable care", correct: true, explanation: "The business judgment rule presumes directors acted in the company's best interest." },
+       { id: "b", text: "Directors must always maximize shareholder profits", correct: false, explanation: "This is a duty, not a defense against breach claims." },
+       { id: "c", text: "Board decisions cannot be challenged by shareholders", correct: false, explanation: "Shareholders can challenge decisions under certain circumstances." },
+     ],
+   },
+   {
+     id: "qr15",
+     case: "Criminal defendant claims an alibi for the night of the crime.",
+     question: "What is the strongest way to support an alibi defense?",
+     options: [
+       { id: "a", text: "Corroborating evidence such as receipts, surveillance footage, and witness testimony", correct: true, explanation: "Multiple corroborating sources make an alibi most credible." },
+       { id: "b", text: "Defendant's own sworn statement", correct: false, explanation: "Self-testimony alone is weak without corroboration." },
+       { id: "c", text: "Hiring a private investigator", correct: false, explanation: "PI work helps but isn't the strongest direct evidence." },
+     ],
+   },
+   {
+     id: "qr16",
+     case: "Divorce proceeding - one spouse claims the other dissipated marital assets.",
+     question: "What is the legal remedy for dissipation of marital assets?",
+     options: [
+       { id: "a", text: "The court may award the innocent spouse a larger share of remaining assets", correct: true, explanation: "Courts can adjust equitable distribution to compensate for wasteful spending." },
+       { id: "b", text: "Automatic 50-50 division regardless", correct: false, explanation: "Dissipation can shift the equitable split." },
+       { id: "c", text: "Criminal prosecution for theft", correct: false, explanation: "Dissipation is a civil matter handled in family court." },
+     ],
+   },
+   {
+     id: "qr17",
+     case: "Small business owner wants to minimize tax liability.",
+     question: "What is a legal and common tax strategy for small businesses?",
+     options: [
+       { id: "a", text: "Maximize qualified business deductions and use retirement plans", correct: true, explanation: "Legitimate deductions and retirement contributions reduce taxable income." },
+       { id: "b", text: "Underreport income to avoid higher brackets", correct: false, explanation: "This is tax evasion and a criminal offense." },
+       { id: "c", text: "Move all money offshore", correct: false, explanation: "Offshore schemes violate reporting requirements." },
+     ],
+   },
+   {
+     id: "qr18",
+     case: "Company discovers its factory is violating EPA emissions standards.",
+     question: "What should the company do first?",
+     options: [
+       { id: "a", text: "Voluntarily disclose the violation and cooperate with regulators", correct: true, explanation: "Voluntary disclosure often reduces penalties and demonstrates good faith." },
+       { id: "b", text: "Hide the evidence and fix the problem quietly", correct: false, explanation: "Concealment leads to much harsher penalties when discovered." },
+       { id: "c", text: "Sue the EPA for overreach", correct: false, explanation: "Challenging regulations doesn't address the current violation." },
+     ],
+   },
+   {
+     id: "qr19",
+     case: "Employee with a disability requests a workplace accommodation.",
+     question: "Under the ADA, what must the employer do?",
+     options: [
+       { id: "a", text: "Provide reasonable accommodation unless it causes undue hardship", correct: true, explanation: "The ADA requires reasonable accommodations that don't impose undue hardship." },
+       { id: "b", text: "Accommodate any request regardless of cost", correct: false, explanation: "Undue hardship is a valid defense." },
+       { id: "c", text: "Deny the request if it costs more than $500", correct: false, explanation: "There is no fixed dollar threshold for undue hardship." },
+     ],
+   },
+   {
+     id: "qr20",
+     case: "SEC investigation into potential insider trading by a corporate executive.",
+     question: "What constitutes insider trading?",
+     options: [
+       { id: "a", text: "Trading securities based on material, non-public information", correct: true, explanation: "Insider trading requires use of non-public material information." },
+       { id: "b", text: "Any stock trade by a company executive", correct: false, explanation: "Executives can legally trade if they follow disclosure rules." },
+       { id: "c", text: "Trading after reading a news article", correct: false, explanation: "Public information doesn't constitute insider trading." },
+     ],
+   },
+   {
+     id: "qr21",
+     case: "Patient sues doctor for complications after surgery.",
+     question: "What must the patient prove in a medical malpractice case?",
+     options: [
+       { id: "a", text: "Duty of care, breach of standard, causation, and damages", correct: true, explanation: "All four elements are required to establish malpractice." },
+       { id: "b", text: "That the doctor made any mistake at all", correct: false, explanation: "A mistake alone isn't enough; the standard of care must be breached." },
+       { id: "c", text: "That the outcome was bad regardless of the doctor's actions", correct: false, explanation: "Bad outcomes alone don't prove negligence." },
+     ],
+   },
+   {
+     id: "qr22",
+     case: "Foreign national fleeing persecution arrives at the border.",
+     question: "What legal right does this person have?",
+     options: [
+       { id: "a", text: "The right to apply for asylum and a credible fear screening", correct: true, explanation: "International and U.S. law protect the right to seek asylum." },
+       { id: "b", text: "Immediate entry and work authorization", correct: false, explanation: "Entry requires legal process and screening." },
+       { id: "c", text: "No rights - they can be turned away immediately", correct: false, explanation: "Asylum seekers have legal protections." },
+     ],
+   },
+   {
+     id: "qr23",
+     case: "Individual with $50,000 in credit card debt considering bankruptcy.",
+     question: "What is the key difference between Chapter 7 and Chapter 13 bankruptcy?",
+     options: [
+       { id: "a", text: "Chapter 7 liquidates assets; Chapter 13 creates a repayment plan", correct: true, explanation: "Chapter 7 is a liquidation, while Chapter 13 involves structured repayment." },
+       { id: "b", text: "Chapter 7 is for businesses; Chapter 13 is for individuals", correct: false, explanation: "Both can apply to individuals under certain conditions." },
+       { id: "c", text: "Chapter 7 eliminates all debt; Chapter 13 eliminates none", correct: false, explanation: "Chapter 13 can discharge remaining debt after plan completion." },
+     ],
+   },
+   {
+     id: "qr24",
+     case: "Public figure sues a newspaper for a false article.",
+     question: "What must the public figure prove in a defamation case?",
+     options: [
+       { id: "a", text: "The statement was false and made with actual malice", correct: true, explanation: "Public figures must prove actual malice under New York Times v. Sullivan." },
+       { id: "b", text: "That any reasonable person would believe the statement", correct: false, explanation: "Believability isn't the standard for public figures." },
+       { id: "c", text: "That the newspaper knew the person", correct: false, explanation: "Personal knowledge isn't the legal requirement." },
+     ],
+   },
+   {
+     id: "qr25",
+     case: "Homeowner wants to build an addition that violates local setback requirements.",
+     question: "What legal option does the homeowner have?",
+     options: [
+       { id: "a", text: "Apply for a zoning variance from the local board", correct: true, explanation: "A variance is the proper legal mechanism to deviate from zoning rules." },
+       { id: "b", text: "Build it anyway and pay a fine later", correct: false, explanation: "This risks demolition orders and larger penalties." },
+       { id: "c", text: "Sue the neighbors for blocking their view", correct: false, explanation: "Neighbor disputes don't override zoning codes." },
+     ],
+   },
+   {
+     id: "qr26",
+     case: "Two countries sign a trade agreement covering tariffs and quotas.",
+     question: "What type of international law governs this agreement?",
+     options: [
+       { id: "a", text: "Treaty law under the Vienna Convention on the Law of Treaties", correct: true, explanation: "Trade agreements are treaties governed by international treaty law." },
+       { id: "b", text: "Domestic commercial law of each country", correct: false, explanation: "International agreements transcend domestic law." },
+       { id: "c", text: "UN Security Council resolutions", correct: false, explanation: "Trade agreements are bilateral/multilateral treaties, not UNSC resolutions." },
+     ],
+   },
+   {
+     id: "qr27",
+     case: "Company data breach exposes millions of customer records.",
+     question: "What is the company's primary legal obligation?",
+     options: [
+       { id: "a", text: "Notify affected individuals and regulatory authorities as required by law", correct: true, explanation: "Data breach notification laws require timely disclosure." },
+       { id: "b", text: "Immediately delete all customer data", correct: false, explanation: "Deleting data could destroy evidence and violate retention laws." },
+       { id: "c", text: "Quietly fix the vulnerability without disclosure", correct: false, explanation: "Concealing breaches violates notification requirements and increases liability." },
+     ],
+   },
+   {
+     id: "qr28",
+     case: "Insurance company denies a valid claim without proper investigation.",
+     question: "What legal concept applies to this behavior?",
+     options: [
+       { id: "a", text: "Bad faith - the insurer must deal fairly with policyholders", correct: true, explanation: "Insurance bad faith occurs when an insurer unreasonably denies a claim." },
+       { id: "b", text: "Subrogation - the insurer takes over the claim", correct: false, explanation: "Subrogation is about recovering costs from third parties." },
+       { id: "c", text: "Arbitration - the dispute must go to binding arbitration", correct: false, explanation: "Arbitration is a process, not a concept for denial behavior." },
+     ],
+   },
+   {
+     id: "qr29",
+     case: "Several companies agree to fix prices for the same product.",
+     question: "What type of antitrust violation is this?",
+     options: [
+       { id: "a", text: "Price fixing - a per se violation of antitrust law", correct: true, explanation: "Price fixing is a per se violation under the Sherman Act." },
+       { id: "b", text: "Market allocation - dividing territories", correct: false, explanation: "Market allocation is different from price agreements." },
+       { id: "c", text: "Monopolization - controlling a single market", correct: false, explanation: "Monopolization requires dominance, not just price agreements." },
+     ],
+   },
+   {
+id: "qr30",
+      case: "Lawyer represents two clients with directly conflicting interests.",
+      question: "What is the lawyer's ethical obligation?",
+      options: [
+        { id: "a", text: "Withdraw from one or both representations to avoid the conflict", correct: true, explanation: "ABA Model Rules prohibit concurrent conflicts of interest." },
+        { id: "b", text: "Continue representing both with full disclosure", correct: false, explanation: "Disclosure alone doesn't cure a direct conflict." },
+        { id: "c", text: "Choose the more profitable client", correct: false, explanation: "Profit cannot override ethical duties." },
+      ],
+    },
 ];
 
 export default function LawyerWorld({ difficulty, onComplete, isQuickRecall, isCertification, alwaysCorrect, onExit, onTutorialBack, onAnswerResult }: LawyerWorldProps) {
