@@ -622,73 +622,86 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, i
     );
   };
 
-  const handleSubmit = () => {
-    const isCorrect = selectedDesign === currentQuestion.correctDesign;
-    
-    // Track incorrect answers
-    let updatedIncorrect = [...incorrectAnswers];
-    if (!isCorrect && selectedDesign) {
-      const selected = currentQuestion.designs.find(d => d.id === selectedDesign);
-      const correctDesign = currentQuestion.designs.find(d => d.id === currentQuestion.correctDesign);
-      if (selected && correctDesign) {
-        updatedIncorrect = [...updatedIncorrect, {
-          question: currentQuestion.scenario,
-          selectedAnswer: selected.name,
-          correctAnswer: correctDesign.name,
-          explanation: `The ${correctDesign.name} design meets all constraints: cost ${correctDesign.cost} <= ${currentQuestion.constraints.maxCost}, strength ${correctDesign.strength} >= ${currentQuestion.constraints.minStrength}, time ${correctDesign.time} <= ${currentQuestion.constraints.maxTime}.`,
-        }];
-        setIncorrectAnswers(updatedIncorrect);
-      }
-    }
-    
-    if (isCorrect) {
-      const newScore = score + 1;
-      setScore(newScore);
-      setAnsweredQuestions([...answeredQuestions, true]);
-      // Update streak
-      const newStreak = streak + 1;
-      setStreak(newStreak);
-      if (newStreak > bestStreak) {
-        setBestStreak(newStreak);
-      }
+const handleSubmit = () => {
+     const isCorrect = selectedDesign === currentQuestion.correctDesign;
 
-      if (currentQuestionIndex < totalQuestions - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-        setSelectedDesign(null);
-      } else {
-        onComplete(true, newScore, totalQuestions, updatedIncorrect);
-      }
-    } else {
-      // Wrong answer in Quick Recall - lose a heart
-      if (isQuickRecall) {
-        handleLoseHeart();
-        setStreak(0); // Reset streak on wrong answer
-        
-        if (hearts <= 1) {
-          // Game over - no hearts left
-          onComplete(false, score, totalQuestions, updatedIncorrect);
-        } else if (currentQuestionIndex < totalQuestions - 1) {
-          setCurrentQuestionIndex(currentQuestionIndex + 1);
-          setSelectedDesign(null);
-        } else {
-          onComplete(score >= Math.ceil(totalQuestions * 0.6), score, totalQuestions, updatedIncorrect);
-        }
-      } else {
-        // Regular challenge mode
-        const newScore = score;
-        setAnsweredQuestions([...answeredQuestions, false]);
+     // Track incorrect answers
+     let updatedIncorrect = [...incorrectAnswers];
+     if (!isCorrect && selectedDesign) {
+       const selected = currentQuestion.designs.find(d => d.id === selectedDesign);
+       const correctDesign = currentQuestion.designs.find(d => d.id === currentQuestion.correctDesign);
+       if (selected && correctDesign) {
+         updatedIncorrect = [...updatedIncorrect, {
+           question: currentQuestion.scenario,
+           selectedAnswer: selected.name,
+           correctAnswer: correctDesign.name,
+           explanation: `The ${correctDesign.name} design meets all constraints: cost ${correctDesign.cost} <= ${currentQuestion.constraints.maxCost}, strength ${correctDesign.strength} >= ${currentQuestion.constraints.minStrength}, time ${correctDesign.time} <= ${currentQuestion.constraints.maxTime}.`,
+         }];
+         setIncorrectAnswers(updatedIncorrect);
+       }
+     }
 
-        if (currentQuestionIndex < totalQuestions - 1) {
-          setCurrentQuestionIndex(currentQuestionIndex + 1);
-          setSelectedDesign(null);
-        } else {
-          const passRatio = isCertification ? 0.8 : 0.6;
-      const passThreshold = Math.ceil(totalQuestions * passRatio)
-          onComplete(newScore >= passThreshold, newScore, totalQuestions, updatedIncorrect);
-        }
-      }
-    }
-  };
+     if (isCorrect) {
+       const newScore = score + 1;
+       setScore(newScore);
+       setAnsweredQuestions([...answeredQuestions, true]);
+       // Update streak
+       const newStreak = streak + 1;
+       setStreak(newStreak);
+       if (newStreak > bestStreak) {
+         setBestStreak(newStreak);
+       }
+
+       if (currentQuestionIndex < totalQuestions - 1) {
+         setCurrentQuestionIndex(currentQuestionIndex + 1);
+         setSelectedDesign(null);
+       } else {
+         onComplete(true, newScore, totalQuestions, updatedIncorrect);
+       }
+     } else {
+       // Wrong answer in Quick Recall - lose a heart
+       if (isQuickRecall) {
+         handleLoseHeart();
+         setStreak(0); // Reset streak on wrong answer
+
+         if (hearts <= 1) {
+           // Game over - no hearts left
+           onComplete(false, score, totalQuestions, updatedIncorrect);
+         } else if (currentQuestionIndex < totalQuestions - 1) {
+           setCurrentQuestionIndex(currentQuestionIndex + 1);
+           setSelectedDesign(null);
+         } else {
+           onComplete(score >= Math.ceil(totalQuestions * 0.6), score, totalQuestions, updatedIncorrect);
+         }
+       } else {
+         // Regular challenge mode
+         const newScore = score;
+         setAnsweredQuestions([...answeredQuestions, false]);
+
+         if (currentQuestionIndex < totalQuestions - 1) {
+           setCurrentQuestionIndex(currentQuestionIndex + 1);
+           setSelectedDesign(null);
+         } else {
+           const passRatio = isCertification ? 0.8 : 0.6;
+       const passThreshold = Math.ceil(totalQuestions * passRatio)
+           onComplete(newScore >= passThreshold, newScore, totalQuestions, updatedIncorrect);
+         }
+       }
+     }
+   };
+
+   // Handle Enter key to submit answer
+   useEffect(() => {
+     const handleKeyDown = (e: KeyboardEvent) => {
+       if (e.key === 'Enter' && selectedDesign && stage === "challenge") {
+         e.preventDefault();
+         handleSubmit();
+       }
+     };
+
+     window.addEventListener('keydown', handleKeyDown);
+     return () => window.removeEventListener('keydown', handleKeyDown);
+   }, [selectedDesign, stage, handleSubmit]);
 
   if (stage === "intro") {
     return (
