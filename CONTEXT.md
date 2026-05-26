@@ -49,7 +49,9 @@ Career Quest is an educational game that allows players to explore different car
 | Chef | 6 | 8 | 10 | 24 + 30 QR |
 | Teacher | 4 | 5 | 6 | 15 + 30 QR |
 | Programmer | 3 | 3 | 3 | 9 + 30 QR |
-| others | ~3 each | ~3 each | ~3 each | ~9 + 30 QR each |
+| Lawyer | ~3 | ~3 | ~3 | ~9 + 30 QR |
+| Retail Worker | ~3 | ~3 | ~3 | ~9 + 30 QR |
+| Electrician | ~3 | ~3 | ~3 | ~9 + 30 QR |
 
 ## Certification-Style Content
 
