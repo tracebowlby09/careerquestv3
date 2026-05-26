@@ -60,6 +60,13 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 
 - **Removed "Skip Tutorial" button** - Only "Got It!" button remains on the tutorial screen
 
+### Architect Simulator Feature
+
+- **Added `ArchitectSimulator.tsx`** - Physics-driven building design game with canvas-based construction
+- **Integrated into ArchitectWorld.tsx** - Player can access simulator via "🏗️ Structure Simulator" button during challenge
+- **Features**: Material selection (Wood, Concrete, Steel, Composite), building piece placement, stress analysis, earthquake simulation
+- **Tutorial slide added** explaining the simulator feature
+
 ## Current Structure
 
 | File/Directory | Purpose | Status |

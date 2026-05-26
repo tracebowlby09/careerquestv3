@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import { Difficulty, IncorrectAnswer } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import TutorialScreen from "@/components/TutorialScreen";
+import ArchitectSimulator from "@/components/careers/ArchitectSimulator";
 
 // Fisher-Yates shuffle algorithm
 function shuffleArray<T>(array: T[]): T[] {
@@ -447,7 +448,7 @@ const quickRecallQuestions: Question[] = [
 ];
 
 export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, isCertification, alwaysCorrect, onExit, onTutorialBack, onAnswerResult }: ArchitectWorldProps) {
-  const [stage, setStage] = useState<"intro" | "tutorial" | "challenge">("intro");
+  const [stage, setStage] = useState<"intro" | "tutorial" | "challenge" | "simulator">("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [score, setScore] = useState(0);
@@ -631,6 +632,11 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
             icon: "👆",
           },
           {
+            title: "Try the Structure Simulator",
+            content: "Now try our physics-driven building simulator! Design structures and test them against earthquakes.",
+            icon: "🏗️",
+          },
+          {
             title: isCertification ? "Pass the Certification" : "Pass the Challenge",
             content: `You need ${Math.ceil(questions[difficulty].length * (isCertification ? 0.8 : 0.6))} out of ${questions[difficulty].length} correct to pass. Good luck!`,
             icon: isCertification ? "📜" : "🏆",
@@ -650,6 +656,20 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
     );
   }
 
+  if (stage === "simulator") {
+    return (
+      <ArchitectSimulator
+        difficulty={difficulty}
+        onComplete={(success) => {
+          setStage("challenge");
+        }}
+        onExit={() => {
+          setStage("challenge");
+        }}
+      />
+    );
+  }
+
   return (
     <div className="p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
@@ -658,7 +678,17 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
             <h3 className="text-2xl font-bold text-gray-900 font-mono tracking-wider">
               📐 Design Challenge {currentQuestionIndex + 1} of {totalQuestions}
             </h3>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  audioSystem.playClickSound();
+                  setStage("simulator");
+                }}
+                className="px-3 py-1 bg-purple-600 text-white text-sm rounded hover:bg-purple-700"
+              >
+                🏗️ Structure Simulator
+              </button>
+              <div className="flex items-center gap-4">
               {isQuickRecall && (
                 <div className="flex items-center gap-2">
                   <div className="text-lg font-semibold text-gray-700">Timer:</div>
