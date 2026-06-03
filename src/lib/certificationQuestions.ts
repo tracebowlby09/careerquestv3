@@ -554,15 +554,15 @@ export const certificationQuestionBank = {
 } as const;
 
 export const certificationConfig = {
-  "aws-developer": { questionCount: 5, passPercentage: 70, timeLimitSeconds: null },
-  "rn-license": { questionCount: 5, passPercentage: 70, timeLimitSeconds: null },
-  "pe-license": { questionCount: 5, passPercentage: 70, timeLimitSeconds: null },
-  "teaching-license": { questionCount: 5, passPercentage: 70, timeLimitSeconds: null },
-  "servsafe": { questionCount: 5, passPercentage: 70, timeLimitSeconds: null },
-  "are-exam": { questionCount: 5, passPercentage: 70, timeLimitSeconds: null },
-  "bar-exam": { questionCount: 5, passPercentage: 70, timeLimitSeconds: null },
-  "customer-service": { questionCount: 5, passPercentage: 70, timeLimitSeconds: null },
-  "journeyman": { questionCount: 5, passPercentage: 70, timeLimitSeconds: null },
+  "aws-developer": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
+  "rn-license": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
+  "pe-license": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
+  "teaching-license": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
+  "servsafe": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
+  "are-exam": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
+  "bar-exam": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
+  "customer-service": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
+  "journeyman": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
 } as const;
 
 export const certificationMetadata: Record<string, { title: string; icon: string; description: string; color: string }> = {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Difficulty } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 
@@ -84,11 +84,9 @@ export default function ArchitectSimulator({
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [earthquake, setEarthquake] = useState<EarthquakeEvent | null>(null);
   const [simulationTime, setSimulationTime] = useState(0);
-  const [stressMap, setStressMap] = useState<Map<string, number>>(new Map());
-  const [buildingHealth, setBuildingHealth] = useState(100);
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState(1);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const requirements: ClientRequirements = {
@@ -102,6 +100,30 @@ export default function ArchitectSimulator({
   };
 
   const getMaterial = useCallback((id: string) => MATERIALS.find(m => m.id === id) || MATERIALS[0], []);
+  const { stressMap, buildingHealth } = useMemo(() => {
+    const newStressMap = new Map<string, number>();
+    let totalHealth = 100;
+    
+    pieces.forEach(piece => {
+      const material = getMaterial(piece.material);
+      let stress = 0;
+      
+      if (piece.type === "foundation") {
+        const columnLoad = pieces.filter(p => p.type === "column").length * material.weight;
+        stress = Math.min(100, columnLoad * 2);
+      } else if (piece.type === "column") {
+        const floorLoad = pieces.filter(p => p.type === "floor" && p.y < piece.y).length * material.weight;
+        stress = Math.min(100, floorLoad * 1.5);
+      }
+      
+      newStressMap.set(piece.id, stress);
+      if (stress > 80) totalHealth -= 5;
+      else if (stress > 60) totalHealth -= 2;
+    });
+    
+    return { stressMap: newStressMap, buildingHealth: Math.max(0, totalHealth) };
+  }, [pieces, getMaterial]);
+
 
   const calculatePieceCost = useCallback((type: keyof typeof BUILDING_TYPES, materialId: string): number => {
     const material = getMaterial(materialId);
@@ -134,34 +156,7 @@ export default function ArchitectSimulator({
     audioSystem.playClickSound();
   }, [selectedTool, selectedMaterial, budget, spent, calculatePieceCost, getMaterial]);
 
-  const runStressAnalysis = useCallback(() => {
-    const newStressMap = new Map<string, number>();
-    let totalHealth = 100;
-    
-    pieces.forEach(piece => {
-      const material = getMaterial(piece.material);
-      let stress = 0;
-      
-      if (piece.type === "foundation") {
-        const columnLoad = pieces.filter(p => p.type === "column").length * material.weight;
-        stress = Math.min(100, columnLoad * 2);
-      } else if (piece.type === "column") {
-        const floorLoad = pieces.filter(p => p.type === "floor" && p.y < piece.y).length * material.weight;
-        stress = Math.min(100, floorLoad * 1.5);
-      }
-      
-      newStressMap.set(piece.id, stress);
-      if (stress > 80) totalHealth -= 5;
-      else if (stress > 60) totalHealth -= 2;
-    });
-    
-    setStressMap(newStressMap);
-    setBuildingHealth(Math.max(0, totalHealth));
-  }, [pieces, getMaterial]);
 
-  useEffect(() => {
-    runStressAnalysis();
-  }, [pieces, runStressAnalysis]);
 
   const startEarthquake = useCallback(() => {
     const magnitude = difficulty === "easy" ? 5 : difficulty === "medium" ? 7 : 9;
@@ -183,6 +178,9 @@ export default function ArchitectSimulator({
         const newTime = t + 0.1;
         if (newTime >= earthquake.duration) {
           setEarthquake(null);
+          const finalScore = calculateScore();
+          setScore(finalScore);
+          setLevel(l => l + 1);
           setStage("results");
           return 0;
         }
@@ -204,7 +202,7 @@ export default function ArchitectSimulator({
     }, 100);
     
     return () => clearInterval(timer);
-  }, [earthquake, getMaterial]);
+  }, [earthquake, getMaterial, calculateScore]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -301,11 +299,7 @@ export default function ArchitectSimulator({
     setLevel(l => l + 1);
   }, [calculateScore]);
 
-  useEffect(() => {
-    if (stage === "results") {
-      handleTestComplete();
-    }
-  }, [stage, handleTestComplete]);
+
 
   const unlockedMaterials = level >= 3 ? MATERIALS.slice(0, 4) : level >= 2 ? MATERIALS.slice(0, 3) : MATERIALS.slice(0, 2);
 
@@ -396,7 +390,6 @@ export default function ArchitectSimulator({
                 onClick={() => {
                   setPieces([]);
                   setSpent(0);
-                  setBuildingHealth(100);
                   setStage("planning");
                 }}
                 className="px-6 bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700"

@@ -460,28 +460,47 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
   // Quick Recall hearts system
   const [hearts, setHearts] = useState(3);
   const [timeLeft, setTimeLeft] = useState(20);
-  const [showHeartLost, setShowHeartLost] = useState(false);
+     // Quick Recall timer countdown
+     useEffect(() => {
+       if (!isQuickRecall || stage !== "challenge" || hearts <= 0) return;
 
-  // Quick Recall timer countdown
-  useEffect(() => {
-    if (!isQuickRecall || stage !== "challenge" || hearts <= 0) return;
+       setTimeLeft(20);
 
-    setTimeLeft(20);
+       const timer = setInterval(() => {
+         setTimeLeft((prev) => {
+           if (prev <= 1) {
+             setHearts((h) => h - 1);
+             setShowHeartLost(true);
+             setTimeout(() => setShowHeartLost(false), 1000);
+             return 20;
+           }
+           return prev - 1;
+         });
+       }, 1000);
 
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          setHearts((h) => h - 1);
-          setShowHeartLost(true);
-          setTimeout(() => setShowHeartLost(false), 1000);
-          return 20;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+       return () => clearInterval(timer);
+     }, [isQuickRecall, stage, hearts, currentQuestionIndex]);
+    // Quick Recall timer countdown
 
-    return () => clearInterval(timer);
-  }, [isQuickRecall, stage, hearts, currentQuestionIndex]);
+  const handleLoseHeart = () => {
+    setHearts((h) => h - 1);
+    setShowHeartLost(true);
+    
+    // Track incorrect answer when losing heart
+    const selected = currentQuestion.options.find(opt => opt.id === selectedAnswer);
+    const correctOption = currentQuestion.options.find(opt => opt.correct);
+    if (selected && correctOption) {
+      setIncorrectAnswers(prev => [...prev, {
+        question: currentQuestion.question,
+        selectedAnswer: selected.text,
+        correctAnswer: correctOption.text,
+        explanation: correctOption.explanation,
+      }]);
+    }
+    
+    setTimeout(() => setShowHeartLost(false), 1000);
+  };
+
   // Use quick recall questions if available, otherwise fall back to easy questions
   const currentQuestions = isQuickRecall 
     ? (quickRecallQuestions.length > 0 ? quickRecallQuestions : questions.easy)
@@ -591,21 +610,21 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
         careerName="Architect"
         careerIcon="🏛️"
         steps={[
-          {
-            title: "Understand the Design Brief",
-            content: "Each question describes a building project. Read what the client needs and what constraints exist.",
-            icon: "📖",
-          },
-          {
-            title: "Balance Multiple Needs",
-            content: "Great architecture balances: aesthetics (looks), function (use), safety (codes), and budget.",
-            icon: "⚖️",
-          },
-          {
-            title: "Choose the Best Solution",
-            content: "Pick the design that best meets ALL requirements while being practical and safe.",
-            icon: "👆",
-          },
+           {
+             title: "Understand the Design Brief",
+             content: "Each question describes a building project. Read what the client needs and what constraints exist.",
+             icon: "📖",
+           },
+           {
+             title: "Balance Multiple Needs",
+             content: "Great architecture balances: aesthetics (looks), function (use), safety (codes), and budget.",
+             icon: "⚖️",
+           },
+           {
+             title: "Choose the Best Solution",
+             content: "Pick the design that best meets ALL requirements while being practical and safe.",
+             icon: "👆",
+           },
           {
             title: "Try the Structure Simulator",
             content: "Now try our physics-driven building simulator! Design structures and test them against earthquakes.",
@@ -653,17 +672,7 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
             <h3 className="text-2xl font-bold text-gray-900 font-mono tracking-wider">
               📐 Design Challenge {currentQuestionIndex + 1} of {totalQuestions}
             </h3>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => {
-                  audioSystem.playClickSound();
-                  setStage("simulator");
-                }}
-                className="px-3 py-1 bg-purple-600 text-white text-sm rounded hover:bg-purple-700"
-              >
-                🏗️ Structure Simulator
-              </button>
-              <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4">
               {isQuickRecall && (
                 <div className="flex items-center gap-2">
                   <div className="text-lg font-semibold text-gray-700">Timer:</div>
@@ -705,23 +714,25 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
 
           <div className="mb-6">
             <div className="flex gap-2">
-                <div
-                  key={idx}
-                  className={`h-2 flex-1 rounded-full ${
-                    idx < currentQuestionIndex
-                      ? answeredQuestions[idx]
-                        ? "bg-green-500"
-                        : "bg-red-500"
-                      : idx === currentQuestionIndex
-                      ? "bg-slate-500"
-                      : "bg-gray-300"
-                  }">
-                </div>
+              {currentQuestions.map((_, idx) => (
+                 <div
+                   key={idx}
+                   className={`h-2 flex-1 rounded-full ${
+                     idx < currentQuestionIndex
+                       ? answeredQuestions[idx]
+                         ? "bg-green-500"
+                         : "bg-red-500"
+                       : idx === currentQuestionIndex
+                       ? "bg-slate-500"
+                       : "bg-gray-300"
+                   }`}
+                 ></div>
               ))}
             </div>
           </div>
 
           <div className="bg-slate-50 border-l-4 border-slate-500 p-4 mb-6">
+            <p className="font-semibold text-slate-900 mb-2">Design Scenario:</p>
             <p className="text-slate-800">{currentQuestion.scenario}</p>
           </div>
 

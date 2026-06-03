@@ -47,12 +47,12 @@ export default function CertificationSelection({ onSelectCertification, onOpenSe
           );
         })}
       </div>
-      <div className="mt-8 text-center">
-        <p className="text-white/60 text-sm mb-4">📝 Each exam has randomized questions. 70% or higher required to pass.</p>
-        <button onClick={onExit} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:opacity-80 transition-colors" style={{ color: "white", borderColor: "black", backgroundColor: "rgba(0,0,0,0.3)" }}>
-          ← Back to Title
-        </button>
-      </div>
+       <div className="mt-8 text-center">
+         <p className="text-white/60 text-sm mb-4">📝 Each exam has randomized questions. 80% or higher required to pass.</p>
+         <button onClick={onExit} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:opacity-80 transition-colors" style={{ color: "white", borderColor: "black", backgroundColor: "rgba(0,0,0,0.3)" }}>
+           ← Back to Title
+         </button>
+       </div>
     </ScreenWrapper>
   );
 }
