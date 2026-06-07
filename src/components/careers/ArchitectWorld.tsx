@@ -705,19 +705,17 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
 
           <div className="mb-6">
             <div className="flex gap-2">
-                <div
-                  key={idx}
-                  className={`h-2 flex-1 rounded-full ${
-                    idx < currentQuestionIndex
-                      ? answeredQuestions[idx]
-                        ? "bg-green-500"
-                        : "bg-red-500"
-                      : idx === currentQuestionIndex
-                      ? "bg-slate-500"
-                      : "bg-gray-300"
-                  }">
-                </div>
-              ))}
+              {[...Array(totalQuestions)].map((_, idx) => {
+                const barClass =
+                  idx < currentQuestionIndex
+                    ? answeredQuestions[idx]
+                      ? "h-2 flex-1 rounded-full bg-green-500"
+                      : "h-2 flex-1 rounded-full bg-red-500"
+                    : idx === currentQuestionIndex
+                    ? "h-2 flex-1 rounded-full bg-slate-500"
+                    : "h-2 flex-1 rounded-full bg-gray-300";
+                return <div key={idx} className={barClass} />;
+              })}
             </div>
           </div>
 
