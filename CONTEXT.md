@@ -17,7 +17,7 @@ Career Quest is an educational game that allows players to explore different car
 - **Framework**: Next.js 16 with App Router
 - **Language**: TypeScript (strict mode)
 - **Styling**: Tailwind CSS v4
-- **State Management**: React hooks (useState) for game state
+- **State Management**: React hooks (useState) for game states
 - **Package Manager**: Bun
 
 ## Game Modes
