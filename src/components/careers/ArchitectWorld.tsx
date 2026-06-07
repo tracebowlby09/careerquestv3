@@ -565,7 +565,7 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
           setSelectedAnswer(null);
         } else {
           const passRatio = isCertification ? 0.8 : 0.6;
-      const passThreshold = Math.ceil(totalQuestions * passRatio)
+          const passThreshold = Math.ceil(totalQuestions * passRatio);
           onComplete(newScore >= passThreshold, newScore, totalQuestions, updatedIncorrect);
         }
       }
