@@ -731,12 +731,12 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
 
           <div className="space-y-3 mb-6">
             {shuffledOptions.map((option) => {
-              const optionClass =
+              const fullClassName =
                 selectedAnswer === option.id
-                  ? "border-slate-600 bg-slate-50"
-                  : "border-gray-300 hover:border-slate-400";
+                  ? "block p-4 border-2 rounded-lg cursor-pointer transition-all border-slate-600 bg-slate-50"
+                  : "block p-4 border-2 rounded-lg cursor-pointer transition-all border-gray-300 hover:border-slate-400";
               return (
-                <label key={option.id} className={`block p-4 border-2 rounded-lg cursor-pointer transition-all ${optionClass}`}>
+                <label key={option.id} className={fullClassName}>
                   <input
                     type="radio"
                     name="answer"
