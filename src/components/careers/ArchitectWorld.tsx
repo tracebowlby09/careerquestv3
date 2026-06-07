@@ -667,7 +667,7 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
               {isQuickRecall && (
                 <div className="flex items-center gap-2">
                   <div className="text-lg font-semibold text-gray-700">Timer:</div>
-                  <div className={`text-2xl font-bold ${timeLeft <= 5 ? "text-red-600" : "text-slate-600"}`}>
+                  <div className={timeLeft <= 5 ? "text-2xl font-bold text-red-600" : "text-2xl font-bold text-slate-600"}>
                     {timeLeft}s
                   </div>
                 </div>
@@ -675,7 +675,9 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
               {isQuickRecall && (
                 <div className="flex items-center gap-1">
                   {[...Array(3)].map((_, i) => (
-                    <span key={i} className={`text-2xl ${i < hearts ? "💖" : "🖤"}`} />
+                    <span key={i} className="text-2xl">
+                      {i < hearts ? "💖" : "🖤"}
+                    </span>
                   ))}
                 </div>
               )}
@@ -686,7 +688,7 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
               {/* Streak Display */}
               <div className="text-right">
                 <div className="text-sm text-gray-600">🔥 Streak</div>
-                <div className={`text-2xl font-bold ${streak >= 3 ? 'text-orange-500' : streak >= 2 ? 'text-yellow-500' : 'text-gray-600'}`}>
+                <div className={streak >= 3 ? "text-2xl font-bold text-orange-500" : streak >= 2 ? "text-2xl font-bold text-yellow-500" : "text-2xl font-bold text-gray-600"}>
                   {streak}
                 </div>
                 {bestStreak > 0 && (
