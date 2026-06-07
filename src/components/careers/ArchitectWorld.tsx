@@ -730,29 +730,28 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
           </p>
 
           <div className="space-y-3 mb-6">
-            {shuffledOptions.map((option) => (
-              <label
-                key={option.id}
-                className={`block p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                  selectedAnswer === option.id
-                    ? "border-slate-600 bg-slate-50"
-                    : "border-gray-300 hover:border-slate-400"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="answer"
-                  value={option.id}
-                  checked={selectedAnswer === option.id}
-                  onChange={(e) => {
-                          audioSystem.playClickSound();
-                          setSelectedAnswer(e.target.value);
-                        }}
-                  className="mr-3"
-                />
-                <span className="text-gray-800">{option.text}</span>
-              </label>
-            ))}
+            {shuffledOptions.map((option) => {
+              const optionClass =
+                selectedAnswer === option.id
+                  ? "border-slate-600 bg-slate-50"
+                  : "border-gray-300 hover:border-slate-400";
+              return (
+                <label key={option.id} className={`block p-4 border-2 rounded-lg cursor-pointer transition-all ${optionClass}`}>
+                  <input
+                    type="radio"
+                    name="answer"
+                    value={option.id}
+                    checked={selectedAnswer === option.id}
+                    onChange={(e) => {
+                            audioSystem.playClickSound();
+                            setSelectedAnswer(e.target.value);
+                          }}
+                    className="mr-3"
+                  />
+                  <span className="text-gray-800">{option.text}</span>
+                </label>
+              );
+            })}
           </div>
 
           <button
