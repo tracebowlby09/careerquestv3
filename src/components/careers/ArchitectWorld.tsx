@@ -99,7 +99,7 @@ const questions: Record<Difficulty, Question[]> = {
       ],
     },
   ],
-  hard: [
+   hard: [
      {
        id: "h1",
        scenario: "You're designing a building in a seismic zone.",
@@ -766,4 +766,3 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
     </div>
   );
 }
-
