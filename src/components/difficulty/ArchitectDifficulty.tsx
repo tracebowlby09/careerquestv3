@@ -68,16 +68,16 @@ export default function ArchitectDifficultySelection({
       <button
         onClick={onBack}
         className="mb-6 hover:opacity-80 transition-colors flex items-center gap-2 px-4 py-2 rounded-lg border-2"
-        style={{ color: 'white', borderColor: 'black' }}
+        style={{ color: 'black', borderColor: 'black' }}
       >
         ← Back to Career Selection
       </button>
 
       <div className="text-center mb-12">
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+        <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">
           Choose Your Difficulty
         </h2>
-        <p className="text-xl text-white/90 font-medium">
+        <p className="text-xl text-black/90 font-medium">
           Architect - Select how challenging you want the experience
         </p>
       </div>
