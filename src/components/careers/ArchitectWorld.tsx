@@ -764,5 +764,6 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
         </div>
       </div>
     </div>
+  </div>
   );
 }
