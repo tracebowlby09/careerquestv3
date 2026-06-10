@@ -158,6 +158,25 @@ export default function ArchitectSimulator({
 
 
 
+  const calculateScore = useCallback(() => {
+    let totalScore = 0;
+    const height = Math.max(...pieces.map(p => p.y + p.height), 0) / GRID_SIZE;
+    const rooms = Math.floor(pieces.filter(p => p.type === "floor").length / 2);
+    const efficiency = (INITIAL_BUDGET - spent) / INITIAL_BUDGET;
+    
+    totalScore += height * 10;
+    totalScore += rooms * 20;
+    totalScore += efficiency * 50;
+    totalScore += buildingHealth;
+    
+    const expectedMagnitude = difficulty === "easy" ? 5 : difficulty === "medium" ? 7 : 9;
+    if (buildingHealth > 50 && height >= requirements.minHeight) {
+      totalScore += 100;
+    }
+    
+    return Math.round(totalScore);
+  }, [pieces, spent, buildingHealth, difficulty, requirements.minHeight]);
+
   const startEarthquake = useCallback(() => {
     const magnitude = difficulty === "easy" ? 5 : difficulty === "medium" ? 7 : 9;
     setEarthquake({
@@ -273,25 +292,6 @@ export default function ArchitectSimulator({
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
   }, [pieces, stressMap, stage, earthquake, simulationTime, getMaterial]);
-
-  const calculateScore = useCallback(() => {
-    let totalScore = 0;
-    const height = Math.max(...pieces.map(p => p.y + p.height), 0) / GRID_SIZE;
-    const rooms = Math.floor(pieces.filter(p => p.type === "floor").length / 2);
-    const efficiency = (INITIAL_BUDGET - spent) / INITIAL_BUDGET;
-    
-    totalScore += height * 10;
-    totalScore += rooms * 20;
-    totalScore += efficiency * 50;
-    totalScore += buildingHealth;
-    
-    const expectedMagnitude = difficulty === "easy" ? 5 : difficulty === "medium" ? 7 : 9;
-    if (buildingHealth > 50 && height >= requirements.minHeight) {
-      totalScore += 100;
-    }
-    
-    return Math.round(totalScore);
-  }, [pieces, spent, buildingHealth, difficulty, requirements.minHeight]);
 
   const handleTestComplete = useCallback(() => {
     const finalScore = calculateScore();

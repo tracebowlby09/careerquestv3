@@ -462,6 +462,12 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
   const [timeLeft, setTimeLeft] = useState(20);
   const [showHeartLost, setShowHeartLost] = useState(false);
 
+  const handleLoseHeart = () => {
+    setHearts((h) => h - 1);
+    setShowHeartLost(true);
+    setTimeout(() => setShowHeartLost(false), 1000);
+  };
+
   // Quick Recall timer countdown
   useEffect(() => {
     if (!isQuickRecall || stage !== "challenge" || hearts <= 0) return;
