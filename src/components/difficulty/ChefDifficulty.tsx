@@ -74,7 +74,7 @@ export default function ChefDifficultySelection({
       </button>
 
       <div className="text-center mb-12">
-        <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">
+        <h2 className="text-4xl md:text-5xl font-bold text-blue mb-4">
           Choose Your Difficulty
         </h2>
         <p className="text-xl text-black/90 font-medium">
