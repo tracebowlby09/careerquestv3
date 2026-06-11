@@ -321,7 +321,7 @@ export default function TrophyScreen({ trophies, onBack }: TrophyScreenProps) {
               Trophy Case
             </h2>
             <p className="text-gray-600">
-              You have earned {trophies.length} trophy{trophies.length !== 1 ? "s" : ""}!
+              You have earned {trophies.length} {trophies.length !== 1 ? "throphies" : "throphy"}!
             </p>
           </div>
 
