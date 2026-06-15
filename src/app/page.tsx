@@ -28,11 +28,13 @@ import Settings from "@/components/Settings";
 import TrophyScreen from "@/components/TrophyScreen";
 import SecretTrophyPopup from "@/components/SecretTrophyPopup";
 import HomeTutorial from "@/components/HomeTutorial";
+import CareerInfoPage from "@/components/CareerInfoPage";
 import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer } from "@/types/game";
+import { careerInfoByCareer } from "@/lib/careerInfo";
 import { audioSystem } from "@/lib/audio";
 import ScreenWrapper from "@/components/ScreenWrapper";
 
-type GameState = "title" | "tutorial" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "trophy";
+type GameState = "title" | "tutorial" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "trophy" | "career-info";
 
 const careerNames: Record<Career, string> = {
   programmer: "Software Programmer",
@@ -574,6 +576,13 @@ export default function Home() {
     }
   };
 
+  const handleLearnMore = (career: Career) => {
+    setSelectedCareer(career);
+    setSelectedDifficulty(null);
+    setSelectedCertification(null);
+    setGameState("career-info");
+  };
+
   const handleCertificationSelect = (certType: CertificationType) => {
     setSelectedCertification(certType);
     // Map certification type to career for outcome screen
@@ -1029,15 +1038,16 @@ export default function Home() {
           onViewTrophies={() => setGameState("trophy")}
         />
         {settingsModal}
-        <SecretTrophyPopup 
-          show={showSecretTrophyPopup} 
+        <SecretTrophyPopup
+          show={showSecretTrophyPopup}
           achievementType={currentAchievementType}
           onClose={() => {
             setShowSecretTrophyPopup(false);
             setCurrentAchievementType(null);
-          }} 
+          }}
         />
-        {renderAdminPanel()}
+        {adminMode && renderAdminPanel()}
+
       </>
     );
   }
@@ -1045,7 +1055,7 @@ export default function Home() {
   if (gameState === "certification-select") {
     return (
       <>
-        <CertificationSelection 
+        <CertificationSelection
           onSelectCertification={handleCertificationSelect}
           onOpenSettings={() => setSettingsOpen(true)}
           onExit={() => {
@@ -1054,8 +1064,8 @@ export default function Home() {
           }}
         />
         {settingsModal}
-        <SecretTrophyPopup 
-          show={showSecretTrophyPopup} 
+        <SecretTrophyPopup
+          show={showSecretTrophyPopup}
           achievementType={currentAchievementType}
           onClose={() => {
             setShowSecretTrophyPopup(false);
@@ -1070,20 +1080,45 @@ export default function Home() {
   if (gameState === "career-select") {
     return (
       <>
-        <CareerSelection 
-          onSelectCareer={handleCareerSelect} 
-          onOpenSettings={() => setSettingsOpen(true)} 
+        <CareerSelection
+          onSelectCareer={handleCareerSelect}
+          onLearnMore={handleLearnMore}
+          onOpenSettings={() => setSettingsOpen(true)}
           onExit={handleExitToTitle}
           gameMode={gameMode}
         />
         {settingsModal}
-        <SecretTrophyPopup 
-          show={showSecretTrophyPopup} 
+        <SecretTrophyPopup
+          show={showSecretTrophyPopup}
           achievementType={currentAchievementType}
           onClose={() => {
             setShowSecretTrophyPopup(false);
             setCurrentAchievementType(null);
-          }} 
+          }}
+        />
+        {adminMode && renderAdminPanel()}
+      </>
+    );
+  }
+
+  if (gameState === "career-info" && selectedCareer && careerInfoByCareer[selectedCareer]) {
+    return (
+      <>
+        <CareerInfoPage
+          career={selectedCareer}
+          onBack={handleBackToCareerSelect}
+          onStartCareer={handleCareerSelect}
+          onOpenSettings={() => setSettingsOpen(true)}
+          onExit={handleExitToTitle}
+        />
+        {settingsModal}
+        <SecretTrophyPopup
+          show={showSecretTrophyPopup}
+          achievementType={currentAchievementType}
+          onClose={() => {
+            setShowSecretTrophyPopup(false);
+            setCurrentAchievementType(null);
+          }}
         />
         {adminMode && renderAdminPanel()}
       </>

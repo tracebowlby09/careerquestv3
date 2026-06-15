@@ -42,6 +42,10 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 
 - **Fixed certification mode state leak** - Added `setSelectedCertification(null)` to `handleStart`, `handleNewCareer`, `handleExitToTitle`, and `handleBackToSelection` to prevent certification mode from persisting across different game modes
 - **Updated Quick Recall button emoji** from ⚡ to 🚀 in CareerSelection.tsx
+- ✅ **Added Career Information Pages** - Added reusable career data plus in-app and standalone career info pages with salary ranges, median salary, skills, day-in-life snapshots, tools, training/certifications, and start buttons.
+- ✅ **Added CareerSelection Learn More entry points** - Career cards now expose a Learn More action that opens the selected career information page and a Start action that keeps the existing game flow.
+- ✅ **Added standalone career routes** - Added `/careers/[career]` static routes for each career with generated metadata and a not-found page.
+- ✅ **Validated build and type checking** - `bun typecheck` and `bun run build` pass. Changed-file ESLint passes with pre-existing warnings in `src/app/page.tsx`; full `bun lint` still reports unrelated pre-existing issues in generated `.kilo` worktree files and older components.
 
 ### Certification Mode Trophies
 
@@ -73,6 +77,10 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 | File/Directory | Purpose | Status |
 |----------------|---------|--------|
 | `src/app/page.tsx` | Main game logic & routing | ✅ Ready |
+| `src/app/careers/[career]/page.tsx` | Standalone career information route | ✅ Ready |
+| `src/components/CareerInfoPage.tsx` | Reusable career information UI | ✅ Ready |
+| `src/components/CareerSelection.tsx` | Career card selection with Learn More entry points | ✅ Enhanced |
+| `src/lib/careerInfo.ts` | Shared career content, salary, skills, and day-in-life data | ✅ Ready |
 | `src/components/careers/*.tsx` | Career world components | ✅ Enhanced |
 | `src/components/difficulty/*.tsx` | Difficulty selection | ✅ Ready |
 
