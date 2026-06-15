@@ -1,9 +1,9 @@
 "use client";
 
-import DifficultySelection from "../DifficultySelection";
+import DifficultySelection, { Difficulty } from "../DifficultySelection";
 
 interface LawyerDifficultyProps {
-  onSelectDifficulty: (difficulty: string) => void;
+  onSelectDifficulty: (difficulty: Difficulty) => void;
   onBack: () => void;
   onOpenSettings?: () => void;
   onExit?: () => void;

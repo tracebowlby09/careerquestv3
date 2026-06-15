@@ -4,7 +4,7 @@ import ScreenWrapper from "../ScreenWrapper";
 import DifficultySelection from "../DifficultySelection";
 
 interface ProgrammerDifficultyProps {
-  onSelectDifficulty: (difficulty: string) => void;
+  onSelectDifficulty: (difficulty: Difficulty) => void;
   onBack: () => void;
   onOpenSettings?: () => void;
   onExit?: () => void;

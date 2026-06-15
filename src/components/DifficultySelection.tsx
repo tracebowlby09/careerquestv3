@@ -1,6 +1,6 @@
 "use client";
 
-import ScreenWrapper from "../ScreenWrapper";
+import ScreenWrapper from "./ScreenWrapper";
 import { GameButton, AnimatedIcon, AnimatedContainer, GradientCard } from "./ui/UIComponents";
 
 export type Difficulty = "easy" | "medium" | "hard";
