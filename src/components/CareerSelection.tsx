@@ -2,6 +2,7 @@
 
 import { Career, GameMode } from "@/types/game";
 import ScreenWrapper from "./ScreenWrapper";
+import { GradientCard, AnimatedIcon, AnimatedContainer, Badge } from "./ui/UIComponents";
 
 interface CareerOption {
   id: Career;
@@ -84,6 +85,18 @@ const careers: CareerOption[] = [
   },
 ];
 
+const careerGradients: Record<Career, string> = {
+  programmer: "from-blue-500 to-indigo-600",
+  nurse: "from-red-500 to-rose-600",
+  engineer: "from-cyan-500 to-blue-600",
+  teacher: "from-indigo-400 to-blue-500",
+  chef: "from-amber-500 to-orange-600",
+  architect: "from-violet-500 to-purple-600",
+  lawyer: "from-blue-600 to-indigo-700",
+  retail: "from-pink-500 to-rose-600",
+  electrician: "from-yellow-500 to-amber-600",
+};
+
 export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit, gameMode }: CareerSelectionProps) {
   const isQuickRecall = gameMode === "quick-recall";
 
@@ -95,153 +108,103 @@ export default function CareerSelection({ onSelectCareer, onOpenSettings, onExit
     onSelectCareer(career);
   };
 
-  if (!isQuickRecall) {
-    return (
-      <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit}>
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Choose Your Career Path
-          </h2>
-          <p className="text-xl text-white/90">
-            Select a career to explore and complete a real-world challenge
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6">
-          {careers.map((career) => (
-            <button
-              key={career.id}
-              onClick={() => handleSelect(career.id)}
-              className="bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200 text-left"
-            >
-              <div className="text-6xl mb-4 text-center">{career.icon}</div>
-              
-              <h3 className="text-2xl font-bold text-gray-900 mb-3 text-center">
-                {career.title}
-              </h3>
-              
-              <p className="text-gray-600 mb-4 text-center">
-                {career.description}
-              </p>
-              
-              <div className="border-t pt-4">
-                <p className="text-sm font-semibold text-gray-700 mb-2">
-                  Skills You'll Learn:
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {career.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="bg-purple-100 text-purple-700 text-xs px-3 py-1 rounded-full"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="mt-4 text-center">
-                <span className="text-purple-600 font-semibold">
-                  Start Challenge →
-                </span>
-              </div>
-            </button>
-          ))}
-        </div>
-
-        <div className="mt-8 text-center">
-          <button
-            onClick={onExit}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:opacity-80 transition-colors"
-            style={{ color: 'white', borderColor: 'black' }}
-          >
-            ← Back to Title
-          </button>
-        </div>
-      </ScreenWrapper>
-    );
-  }
-
   return (
     <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit}>
-      <div className="text-center mb-8">
-        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 px-6 py-2 rounded-full mb-4 shadow-lg">
-          <span className="text-2xl">🚀</span>
-          <span className="text-white font-bold text-lg">QUICK RECALL</span>
-          <span className="text-2xl">🚀</span>
-        </div>
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-          Test Your Knowledge
-        </h2>
-        <p className="text-xl text-white/80">
-          Select a career to answer rapid-fire questions
-        </p>
+      <div className="text-center mb-12">
+        {isQuickRecall ? (
+          <>
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-amber-400 to-orange-500 px-8 py-3 rounded-full mb-6 shadow-xl">
+              <AnimatedIcon animate="none" className="text-3xl">🚀</AnimatedIcon>
+              <span className="text-white font-bold text-2xl tracking-wide">QUICK RECALL</span>
+              <AnimatedIcon animate="none" className="text-3xl">🚀</AnimatedIcon>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
+              Test Your Knowledge
+            </h2>
+            <p className="text-xl text-white/80 max-w-2xl mx-auto">
+              Select a career to answer rapid-fire questions under time pressure
+            </p>
+          </>
+        ) : (
+          <>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
+              Choose Your Career Path
+            </h2>
+            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+              Select a career to explore and complete a real-world challenge
+            </p>
+          </>
+        )}
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid md:grid-cols-3 gap-8">
         {careers.map((career, index) => (
-          <button
-            key={career.id}
-            onClick={() => handleSelect(career.id)}
-            className="relative group overflow-hidden rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 hover:-translate-y-1"
-            style={{
-              background: `linear-gradient(135deg, ${getCareerGradient(index).start} 0%, ${getCareerGradient(index).end} 100%)`,
-            }}
-          >
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300">
-              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=')] animate-pulse" />
-            </div>
-            
-            <div className="relative z-10 text-center">
-              <div className="text-5xl mb-3 transform group-hover:scale-110 transition-transform duration-300">
-                {career.icon}
+          <AnimatedContainer key={career.id} delay={index * 50}>
+            <button
+              onClick={() => handleSelect(career.id)}
+              className={`
+                relative group overflow-hidden rounded-2xl p-8 shadow-xl 
+                hover:shadow-2xl hover:scale-105 hover:-translate-y-2 
+                transition-all duration-300 text-left
+                bg-gradient-to-br ${careerGradients[career.id]}
+                border-2 border-white/30
+              `}
+            >
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300">
+                <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/30 rounded-full blur-xl"></div>
+                <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-white/20 rounded-full blur-xl"></div>
               </div>
               
-              <h3 
-                className="text-xl font-bold mb-2 drop-shadow-md text-white"
-              >
-                {career.title}
-              </h3>
-              
-              <div className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
-                <span className="text-sm font-medium text-white">Start →</span>
+              <div className="relative z-10">
+                <div className="text-7xl mb-5 text-center transform group-hover:scale-110 transition-transform duration-300">
+                  <AnimatedIcon animate="none">{career.icon}</AnimatedIcon>
+                </div>
+                
+                <h3 className="text-2xl font-extrabold text-white mb-3 text-center drop-shadow-md">
+                  {career.title}
+                </h3>
+                
+                <p className="text-white/90 mb-5 text-center text-sm font-medium">
+                  {career.description}
+                </p>
+                
+                <div className="space-y-3">
+                  <p className="text-xs font-bold text-white/80 uppercase tracking-wider">Skills You'll Master:</p>
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {career.skills.map((skill) => (
+                      <Badge key={skill} variant="trophy" className="text-xs">
+                        {skill}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="mt-5 pt-4 border-t border-white/30 text-center">
+                  <span className="inline-flex items-center gap-2 text-white font-bold">
+                    <span>Start</span>
+                    <span className="text-xl group-hover:translate-x-1 transition-transform">→</span>
+                  </span>
+                </div>
               </div>
-            </div>
-            
-            <div className="absolute top-0 right-0 w-16 h-16 overflow-hidden">
-              <div className="absolute top-2 right-2 w-8 h-8 bg-white/20 rotate-45 transform" />
-            </div>
-          </button>
+            </button>
+          </AnimatedContainer>
         ))}
       </div>
 
-      <div className="mt-8 text-center">
-        <p className="text-white/60 text-sm mb-4">
-          ⏱️ Answer as many questions as you can before time runs out!
-        </p>
+      <div className="mt-12 text-center">
+        {isQuickRecall && (
+          <p className="text-white/60 text-sm mb-4 flex items-center justify-center gap-2">
+            <AnimatedIcon animate="pulse" className="text-lg">⏱️</AnimatedIcon>
+            Answer as many questions as possible before time runs out!
+          </p>
+        )}
         <button
           onClick={onExit}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:opacity-80 transition-colors"
-          style={{ color: 'white', borderColor: 'black' }}
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border-2 border-white/50 text-white hover:bg-white/10 transition-all duration-300"
         >
           ← Back to Title
         </button>
       </div>
     </ScreenWrapper>
   );
-}
-
-function getCareerGradient(index: number): { start: string; end: string } {
-  const gradients = [
-    { start: '#6366f1', end: '#8b5cf6' },
-    { start: '#f97316', end: '#ea580c' },
-    { start: '#0ea5e9', end: '#0284c7' },
-    { start: '#93c5fd', end: '#60a5fa' },
-    { start: '#fbbf24', end: '#f59e0b' },
-    { start: '#a78bfa', end: '#8b5cf6' },
-    { start: '#3b82f6', end: '#1d4ed8' },
-    { start: '#ec4899', end: '#db2777' },
-    { start: '#facc15', end: '#eab308' },
-  ];
-  return gradients[index % gradients.length];
 }
