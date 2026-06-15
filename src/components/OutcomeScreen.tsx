@@ -2,6 +2,7 @@
 
 import { Career, Difficulty, IncorrectAnswer } from "@/types/game";
 import ScreenWrapper from "./ScreenWrapper";
+import { GameButton, AnimatedIcon, GradientCard, AnimatedContainer } from "./ui/UIComponents";
 
 interface OutcomeScreenProps {
   career: Career;
@@ -149,9 +150,9 @@ const careerData = {
   },
 };
 
-const trophyColors = {
+const trophyGradients = {
   easy: "from-green-400 to-emerald-500",
-  medium: "from-yellow-400 to-orange-500",
+  medium: "from-amber-400 to-orange-500",
   hard: "from-red-500 to-pink-600",
 };
 
@@ -179,179 +180,179 @@ export default function OutcomeScreen({
 }: OutcomeScreenProps) {
   const data = careerData[career];
   const percentage = Math.round((score / total) * 100);
-  const isQR = isQuickRecall;
-  const isCert = isCertification || false;
-  const passingScore = isCert ? 80 : 60;
+  const passingScore = isCertification ? 80 : 60;
+  const isSuccess = percentage >= passingScore;
+
+  const cardGradient = isQuickRecall 
+    ? "from-indigo-900/90 via-purple-900/90 to-violet-900/90" 
+    : isCertification 
+      ? "from-purple-900/90 via-pink-900/90 to-fuchsia-900/90" 
+      : "from-white/10 to-white/5 backdrop-blur-xl";
 
   return (
     <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit} dark>
-      <div className={`max-w-3xl w-full rounded-2xl shadow-2xl p-8 mx-auto ${isQR ? "bg-gradient-to-br from-indigo-900 via-purple-900 to-violet-900" : "bg-white"}`}>
-        <div className="text-center mb-6">
-          <div className="text-6xl mb-4">{data.icon}</div>
-          
-           {success && (
-             <div className="mb-4">
-               <div className={`inline-block bg-gradient-to-r ${isQR ? "from-amber-400 via-orange-500 to-red-500" : isCert ? "from-purple-500 to-pink-600" : trophyColors[difficulty]} text-white px-6 py-3 rounded-full text-4xl font-bold shadow-lg`}>
-                 {isQR ? "🏆 Mastery Achieved!" : isCert ? "🏆 Certification Complete! ✓" : `${trophyIcons[difficulty]} Trophy Earned!`}
-               </div>
-             </div>
-           )}
-          
-          <div className={`text-5xl font-bold mb-4 ${
-             success 
-               ? (isQR ? "text-amber-300" : isCert ? "text-purple-300" : "text-green-600") 
-               : (isQR ? "text-purple-300" : isCert ? "text-pink-400" : "text-orange-600")
-           }`}>
-             {success 
-               ? (isQR ? "Mastery Complete! ✓" : isCert ? "Certification Complete! ✓" : "Success! ✓") 
-               : (isQR ? "Keep Practicing!" : isCert ? "Not Certified Yet" : "Keep Trying!")}
-           </div>
-          
-           <h3 className={`text-2xl font-bold mb-2 ${isQR ? "text-white" : isCert ? "text-purple-300" : "text-gray-900"}`}>
-             {data.title}
-           </h3>
-           
-           {isCert && (
-             <div className="text-center mb-4">
-               <div className="inline-block bg-gradient-to-r from-purple-900/50 to-pink-900/50 border border-purple-500/30 rounded-lg px-4 py-2">
-                 <span className="flex items-center justify-center gap-1 text-purple-300 text-sm">
-                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                   </svg>
-                   Certification Exam (80% passing threshold)
-                 </span>
-               </div>
-             </div>
-           )}
-           
-           <div className={`text-lg ${isQR ? "text-purple-200" : isCert ? "text-purple-300" : "text-gray-700"}`}>
-             {isQR ? "Quick Recall Mode" : isCert ? "Certification Mode" : `Difficulty: ${difficulty}`}
-           </div>
-        </div>
-
-        <div className={`rounded-lg p-6 mb-6 ${isQR ? "bg-indigo-800/50" : "bg-gray-100"}`}>
-           <div className="text-center mb-4">
-             <div className={`text-5xl font-bold mb-2 ${isQR ? "text-white" : isCert ? "text-purple-300" : "text-gray-900"}`}>
-               {score} / {total}
-             </div>
-             <div className={`text-xl ${isQR ? "text-purple-200" : isCert ? "text-purple-300" : "text-gray-700"}`}>
-               {percentage}% Correct
-             </div>
-           </div>
-
-           <div className="bg-gray-700 rounded-full h-4 overflow-hidden">
-             <div
-               className={`h-full transition-all duration-500 ${
-                 percentage >= passingScore ? "bg-green-500" : "bg-red-500"
-               }`}
-               style={{ width: `${percentage}%` }}
-             />
-           </div>
+      <div className="max-w-3xl w-full mx-auto">
+        <GradientCard className="p-8 md:p-12" gradient={cardGradient}>
+          <div className="text-center mb-8">
+            <AnimatedIcon animate="bounce" className="text-7xl mb-4 inline-block">
+              {data.icon}
+            </AnimatedIcon>
             
-           <div className="text-center mt-2 text-sm text-gray-400">
-             {isQR 
-               ? (percentage >= 60 ? "Great job! You passed!" : "Keep practicing to improve!")
-               : isCert
-               ? (percentage >= 80 ? "Certification Earned! ✓" : `Need ${passingScore}% to certify`)
-               : (percentage >= 60 ? "Passed! (60% required)" : "Need 60% to pass")}
-          </div>
-        </div>
+            {success && (
+              <div className="mb-6">
+                <div className={`inline-block bg-gradient-to-r ${trophyGradients[difficulty]} text-white px-8 py-3 rounded-full text-3xl font-bold shadow-xl`}>
+                  {isQuickRecall ? "🏆 Mastery Achieved!" : isCertification ? "🏆 Certification Complete! ✓" : `${trophyIcons[difficulty]} Trophy Earned!`}
+                </div>
+              </div>
+            )}
 
-        <div className="mb-6">
-          <div className={`border-l-4 p-4 mb-4 ${isQR ? "bg-amber-900/50 border-amber-400" : "bg-blue-50 border-blue-500"}`}>
-            <p className={`font-bold mb-2 ${isQR ? "text-amber-200" : "text-blue-900"}`}>
-              Key Skill: {success ? data.successSkill : data.failureSkill}
+            <h2 className={`text-4xl font-extrabold mb-2 ${
+              success 
+                ? (isQuickRecall ? "text-amber-300" : isCertification ? "text-purple-300" : "text-green-600") 
+                : (isQuickRecall ? "text-purple-300" : isCertification ? "text-pink-400" : "text-orange-600")
+            }`}>
+              {success 
+                ? (isQuickRecall ? "Mastery Complete! ✓" : isCertification ? "Certification Complete! ✓" : "Success! ✓") 
+                : (isQuickRecall ? "Keep Practicing!" : isCertification ? "Not Certified Yet" : "Keep Trying!")}
+            </h2>
+            
+            <h3 className={`text-2xl font-bold mb-2 ${isQuickRecall ? "text-white" : isCertification ? "text-purple-300" : "text-white"}`}>
+              {data.title}
+            </h3>
+            
+            {isCertification && (
+              <div className="text-center mb-4">
+                <div className="inline-block bg-gradient-to-r from-purple-900/50 to-pink-900/50 border border-purple-500/30 rounded-lg px-4 py-2">
+                  <span className="flex items-center justify-center gap-1 text-purple-300 text-sm">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    Certification Exam (80% passing threshold)
+                  </span>
+                </div>
+              </div>
+            )}
+            
+            <p className={`text-lg ${isQuickRecall ? "text-purple-200" : isCertification ? "text-purple-300" : "text-white/80"}`}>
+              {isQuickRecall ? "Quick Recall Mode" : isCertification ? "Certification Mode" : `Difficulty: ${difficulty}`}
             </p>
-            <p className={isQR ? "text-amber-100" : "text-blue-800"}>
-              {success ? data.successMessage : data.failureMessage}
-            </p>
           </div>
 
-          <div className={`rounded-lg p-6 ${isQR ? "bg-indigo-900/50" : "bg-gray-50"}`}>
-            <h4 className={`font-bold mb-3 ${isQR ? "text-white" : "text-gray-900"}`}>
-              What {data.title}s Need:
-            </h4>
-<ul className="space-y-2">
-               {data.keySkills.map((skill: string, index: number) => (
-                 <li key={index} className="flex items-start">
-                   <span className={isQR ? "text-amber-400 mr-2" : "text-green-600 mr-2"}>✓</span>
-                   <span className={isQR ? "text-purple-200" : "text-gray-700"}>{skill}</span>
-                 </li>
-               ))}
-</ul>
-           </div>
-         </div>
+          <div className={`rounded-xl p-6 mb-8 ${isQuickRecall ? "bg-indigo-800/50" : "bg-white/10 backdrop-blur-sm"}`}>
+            <div className="text-center mb-4">
+              <div className={`text-5xl font-extrabold mb-2 ${isQuickRecall ? "text-white" : isCertification ? "text-purple-300" : "text-white"}`}>
+                {score} / {total}
+              </div>
+              <div className={`text-xl ${isQuickRecall ? "text-purple-200" : isCertification ? "text-purple-300" : "text-white/80"}`}>
+                {percentage}% Correct
+              </div>
+            </div>
 
-         {incorrectAnswers.length > 0 && (
-           <div className="mb-6">
-             <div className={`rounded-lg p-6 ${isQR ? "bg-red-900/30 border border-red-500/30" : "bg-red-50 border border-red-200"}`}>
-               <h4 className={`font-bold mb-4 flex items-center gap-2 ${isQR ? "text-red-300" : "text-red-800"}`}>
-                 📚 Review: Questions to Improve
-               </h4>
-               <div className="space-y-4">
-                 {incorrectAnswers.map((item, idx) => (
-                   <div key={idx} className={`border-l-4 p-4 rounded-r-lg ${isQR ? "bg-red-800/50 border-red-400" : "bg-white border-red-500"}`}>
-                     <p className={`font-semibold mb-2 ${isQR ? "text-red-200" : "text-red-900"}`}>
-                       {item.question}
-                     </p>
-                     <div className={`text-sm space-y-1 ${isQR ? "text-purple-200" : "text-gray-600"}`}>
-                       <p><span className="font-medium">Your answer:</span> {item.selectedAnswer}</p>
-                       <p><span className="font-medium">Correct answer:</span> {item.correctAnswer}</p>
-                       <p className="mt-2"><span className="font-medium">Explanation:</span> {item.explanation}</p>
-                     </div>
-                   </div>
-                 ))}
-               </div>
-             </div>
-</div>
+            <div className="bg-gray-700/50 rounded-full h-4 overflow-hidden">
+              <div
+                className={`h-full transition-all duration-700 rounded-full ${
+                  percentage >= passingScore ? "bg-green-500" : "bg-red-500"
+                }`}
+                style={{ width: `${percentage}%` }}
+              />
+            </div>
+
+            <div className="text-center mt-3 text-sm text-white/60">
+              {isQuickRecall 
+                ? (percentage >= 60 ? "Great job! You passed!" : "Keep practicing to improve!")
+                : isCertification
+                ? (percentage >= 80 ? "Certification Earned! ✓" : `Need ${passingScore}% to certify`)
+                : (percentage >= 60 ? "Passed! (60% required)" : "Need 60% to pass")}
+            </div>
+          </div>
+
+          <div className="mb-8">
+            <div className={`border-l-4 p-5 mb-5 rounded-r-lg ${isQuickRecall ? "bg-amber-900/50 border-amber-400" : "bg-blue-50/20 border-blue-400"}`}>
+              <p className={`font-bold mb-2 text-lg ${isQuickRecall ? "text-amber-200" : "text-blue-300"}`}>
+                Key Skill: {success ? data.successSkill : data.failureSkill}
+              </p>
+              <p className={isQuickRecall ? "text-amber-100" : "text-white/80"}>
+                {success ? data.successMessage : data.failureMessage}
+              </p>
+            </div>
+
+            <div className={`rounded-xl p-6 ${isQuickRecall ? "bg-indigo-900/50" : "bg-white/10 backdrop-blur-sm"}`}>
+              <h4 className={`font-bold mb-4 text-lg ${isQuickRecall ? "text-white" : "text-white"}`}>
+                What {data.title}s Need:
+              </h4>
+              <ul className="space-y-2">
+                {data.keySkills.map((skill, index) => (
+                  <li key={index} className="flex items-start">
+                    <span className="text-amber-400 mr-2 text-lg">✓</span>
+                    <span className={isQuickRecall ? "text-purple-200" : "text-white/90"}>{skill}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {incorrectAnswers.length > 0 && (
+            <div className="mb-8">
+              <div className={`rounded-xl p-6 border ${isQuickRecall ? "bg-red-900/30 border-red-500/30" : "bg-red-50/20 border-red-500/30"}`}>
+                <h4 className={`font-bold mb-4 flex items-center gap-2 text-lg ${isQuickRecall ? "text-red-300" : "text-red-300"}`}>
+                  📚 Review: Questions to Improve
+                </h4>
+                <div className="space-y-4 max-h-64 overflow-y-auto pr-2">
+                  {incorrectAnswers.map((item, idx) => (
+                    <AnimatedContainer key={idx} delay={idx * 50}>
+                      <div className={`border-l-4 p-4 rounded-r-lg ${isQuickRecall ? "bg-red-800/50 border-red-400" : "bg-white/10 border-red-400"}`}>
+                        <p className={`font-semibold mb-2 ${isQuickRecall ? "text-red-200" : "text-red-300"}`}>
+                          {item.question}
+                        </p>
+                        <div className={`text-sm space-y-1 ${isQuickRecall ? "text-purple-200" : "text-white/70"}`}>
+                          <p><span className="font-medium">Your answer:</span> {item.selectedAnswer}</p>
+                          <p><span className="font-medium">Correct answer:</span> {item.correctAnswer}</p>
+                          <p className="mt-2"><span className="font-medium">Explanation:</span> {item.explanation}</p>
+                        </div>
+                      </div>
+                    </AnimatedContainer>
+                  ))}
+                </div>
+              </div>
+            </div>
           )}
 
-          <div className="space-y-3">
-           <button
-             onClick={onPlayAgain}
-             className={`w-full font-bold py-4 rounded-lg transition-colors ${
-               isQR 
-                 ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600"
-                 : "bg-blue-600 text-white hover:bg-blue-700"
-             }`}
-           >
-             {isQR ? "Try Again" : "Try Same Difficulty Again"}
-           </button>
-           
-           {isQR || isCert ? (
-             <button
-               onClick={onBackToSelection}
-               className="w-full bg-gradient-to-r from-purple-500 to-violet-500 text-white font-bold py-4 rounded-lg hover:from-purple-600 hover:to-violet-600 transition-colors"
-             >
-               {isCert ? "Choose Different Certification" : "← Back to Selection"}
-             </button>
-           ) : (
-             <button
-               onClick={onChangeDifficulty}
-               className="w-full bg-purple-600 text-white font-bold py-4 rounded-lg hover:bg-purple-700 transition-colors"
-             >
-               Change Difficulty Level
-             </button>
-           )}
-           
-           <button
-             onClick={onBackToSelection || onNewCareer}
-             className={`w-full font-bold py-4 rounded-lg transition-colors ${
-               isQR
-                 ? "bg-gray-700/50 text-purple-200 border border-purple-500 hover:bg-gray-600/50"
-                 : "bg-gray-600 text-white hover:bg-gray-700"
-             }`}
-           >
-             {isCert ? "Try Another Certification" : "Explore Another Career"}
-           </button>
-         </div>
+          <div className="space-y-4">
+            <GameButton onClick={onPlayAgain} className="w-full text-lg">
+              {isQuickRecall ? "Try Again" : "Try Same Difficulty Again"}
+            </GameButton>
+            
+            {isQuickRecall || isCertification ? (
+              <GameButton 
+                onClick={onBackToSelection} 
+                className="w-full text-lg bg-gradient-to-r from-purple-500 to-violet-500"
+              >
+                {isCertification ? "Choose Different Certification" : "← Back to Selection"}
+              </GameButton>
+            ) : (
+              <GameButton 
+                onClick={onChangeDifficulty} 
+                className="w-full text-lg bg-gradient-to-r from-purple-600 to-indigo-600"
+              >
+                Change Difficulty Level
+              </GameButton>
+            )}
+            
+            <GameButton 
+              onClick={onBackToSelection || onNewCareer} 
+              className="w-full text-lg bg-gradient-to-r from-gray-700 to-gray-800"
+            >
+              {isCertification ? "Try Another Certification" : "Explore Another Career"}
+            </GameButton>
+          </div>
 
-        <div className={`mt-6 text-center text-sm ${isQR ? "text-purple-300" : "text-gray-600"}`}>
-          {success
-            ? (isQR ? `Great job! You showed mastery in ${data.title}!` : `Great job! You earned the ${difficulty} trophy for ${data.title}!`)
-            : (isQR ? "Practice makes perfect! Keep trying!" : "Learning from mistakes is part of every career. Keep practicing!")}
-        </div>
-        </div>
+          <div className={`mt-6 text-center text-sm ${isQuickRecall ? "text-purple-300" : "text-white/60"}`}>
+            {success
+              ? (isQuickRecall ? `Great job! You showed mastery in ${data.title}!` : `Great job! You earned the ${difficulty} trophy for ${data.title}!`)
+              : (isQuickRecall ? "Practice makes perfect! Keep trying!" : "Learning from mistakes is part of every career. Keep practicing!")}
+          </div>
+        </GradientCard>
+      </div>
     </ScreenWrapper>
   );
 }

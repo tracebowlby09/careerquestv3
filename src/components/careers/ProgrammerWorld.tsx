@@ -5,6 +5,7 @@ import { Difficulty } from "@/types/game";
 import { IncorrectAnswer } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import TutorialScreen from "@/components/TutorialScreen";
+import { GameButton, AnimatedIcon, GradientCard, AnimatedContainer } from "@/components/ui/UIComponents";
 
 // Fisher-Yates shuffle algorithm
 function shuffleArray<T>(array: T[]): T[] {
@@ -15,7 +16,7 @@ function shuffleArray<T>(array: T[]): T[] {
   }
   return shuffled;
 }
-//
+
 interface ProgrammerWorldProps {
   difficulty: Difficulty;
   onComplete: (success: boolean, score: number, total: number, incorrectAnswers?: IncorrectAnswer[]) => void;
@@ -760,103 +761,103 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
     );
   }
 
-  return (
+return (
     <div className="p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
         {/* Heart Lost Overlay */}
         {showHeartLost && (
-          <div className="fixed inset-0 bg-red-500/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-2xl p-8 text-center animate-pulse">
-              <div className="text-6xl mb-4">💔</div>
-              <p className="text-2xl font-bold text-red-600">{heartLostMessage}</p>
-              <p className="text-lg text-gray-600 mt-2">Hearts remaining: {hearts}</p>
-            </div>
+          <div className="fixed inset-0 bg-red-500/60 flex items-center justify-center z-50 backdrop-blur-sm">
+            <GradientCard gradient="from-red-600/90 to-rose-600/90" className="p-10 text-center animate-scaleIn shadow-2xl">
+              <AnimatedIcon animate="pulse" className="text-7xl mb-4 inline-block">💔</AnimatedIcon>
+              <p className="text-3xl font-bold text-red-300">{heartLostMessage}</p>
+              <p className="text-xl text-white/80 mt-2">Hearts remaining: {hearts}</p>
+            </GradientCard>
           </div>
         )}
         
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-2xl font-bold text-gray-900 font-mono">
+        <GradientCard className="p-8" gradient="from-white/10 to-white/5 backdrop-blur-xl border border-white/20">
+          <div className="flex justify-between items-center mb-8">
+            <h3 className="text-2xl font-bold text-white font-mono">
               🐛 Question {currentQuestionIndex + 1} of {totalQuestions}
             </h3>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-5">
               {/* Quick Recall: Hearts Display */}
               {isQuickRecall && (
                 <div className="flex items-center gap-2">
                   <span className="text-lg">❤️</span>
-                  <span className={`text-2xl font-bold ${hearts === 1 ? 'text-red-600' : hearts === 2 ? 'text-yellow-600' : 'text-green-600'}`}>
+                  <span className={`text-2xl font-bold ${hearts === 1 ? 'text-red-400 animate-pulse' : hearts === 2 ? 'text-yellow-400' : 'text-green-400'}`}>
                     {hearts}
                   </span>
                 </div>
               )}
               {/* Quick Recall: Timer Display */}
               {isQuickRecall && (
-                <div className={`flex items-center gap-2 px-3 py-1 rounded-full ${timeLeft <= 5 ? 'bg-red-100 animate-pulse' : 'bg-blue-100'}`}>
+                <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${timeLeft <= 5 ? 'bg-red-500/50 animate-pulse' : 'bg-blue-500/50'}`}>
                   <span className="text-lg">⏱️</span>
-                  <span className={`text-xl font-bold ${timeLeft <= 5 ? 'text-red-600' : 'text-blue-600'}`}>
+                  <span className={`text-xl font-bold ${timeLeft <= 5 ? 'text-red-300' : 'text-blue-300'}`}>
                     {timeLeft}s
                   </span>
                 </div>
               )}
               <div className="text-right">
-                <div className="text-sm text-gray-600">Score</div>
-                <div className="text-2xl font-bold text-blue-600">{score}/{currentQuestionIndex}</div>
+                <div className="text-sm text-white/70">Score</div>
+                <div className="text-2xl font-bold text-amber-400">{score}/{currentQuestionIndex}</div>
               </div>
               {/* Streak Display */}
               <div className="text-right">
-                <div className="text-sm text-gray-600">🔥 Streak</div>
-                <div className={`text-2xl font-bold ${streak >= 3 ? 'text-orange-500' : streak >= 2 ? 'text-yellow-500' : 'text-gray-600'}`}>
+                <div className="text-sm text-white/70">🔥 Streak</div>
+                <div className={`text-2xl font-bold ${streak >= 3 ? 'text-orange-400' : streak >= 2 ? 'text-yellow-400' : 'text-white/70'}`}>
                   {streak}
                 </div>
                 {bestStreak > 0 && (
-                  <div className="text-xs text-gray-500">Best: {bestStreak}</div>
+                  <div className="text-xs text-white/50">Best: {bestStreak}</div>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Progress bar */}
-          <div className="mb-6">
-            <div className="flex gap-2">
+          {/* Progress bar with animation */}
+          <div className="mb-8">
+            <div className="flex gap-1">
               {currentQuestions.map((_, idx) => (
                 <div
                   key={idx}
-                  className={`h-2 flex-1 rounded-full ${
+                  className={`h-2 flex-1 rounded-full transition-all duration-300 ${
                     idx < currentQuestionIndex
                       ? answeredQuestions[idx]
-                        ? "bg-green-500"
-                        : "bg-red-500"
+                        ? "bg-green-400"
+                        : "bg-red-400"
                       : idx === currentQuestionIndex
-                      ? "bg-blue-500"
-                      : "bg-gray-300"
+                        ? "bg-amber-400 w-8"
+                        : "bg-gray-600/50"
                   }`}
                 />
               ))}
             </div>
           </div>
 
-          <div className="mb-6">
-            <p className="text-gray-700 mb-2">
-              <strong>Error:</strong> <code className="text-red-600">{currentQuestion.error}</code>
+          <div className="mb-8">
+            <p className="text-white/90 mb-3">
+              <strong className="text-red-400">Error:</strong> <code className="text-red-400">{currentQuestion.error}</code>
             </p>
             
-            <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto mb-4">
-              <pre>{currentQuestion.code}</pre>
-            </div>
+            <GradientCard gradient="from-gray-900/80 to-black/80" className="p-5 font-mono text-sm overflow-x-auto mb-5 border border-gray-700/50">
+              <pre className="text-green-400">{currentQuestion.code}</pre>
+            </GradientCard>
 
-            <p className="text-lg font-semibold text-gray-900 mb-4">
+            <p className="text-xl font-semibold text-white mb-5">
               {currentQuestion.question}
             </p>
           </div>
 
-          <div className="space-y-3 mb-6">
+          <div className="space-y-3 mb-8">
             {shuffledOptions.map((option) => (
               <label
                 key={option.id}
-                className={`block p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                className={`block p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 hover:bg-white/10 ${
                   selectedAnswer === option.id
-                    ? "border-blue-600 bg-blue-50"
-                    : "border-gray-300 hover:border-blue-400"
+                    ? "border-amber-400 bg-amber-500/20"
+                    : "border-gray-600/50"
                 }`}
               >
                 <input
@@ -865,24 +866,24 @@ export default function ProgrammerWorld({ difficulty, onComplete, isQuickRecall,
                   value={option.id}
                   checked={selectedAnswer === option.id}
                   onChange={(e) => {
-                          setSelectedAnswer(e.target.value);
-                          audioSystem.playClickSound();
-                        }}
-                  className="mr-3"
+                    setSelectedAnswer(e.target.value);
+                    audioSystem.playClickSound();
+                  }}
+                  className="mr-3 w-5 h-5"
                 />
-                <span className="text-gray-800">{option.text}</span>
+                <span className="text-white">{option.text}</span>
               </label>
             ))}
           </div>
 
-          <button
+          <GameButton 
             onClick={handleSubmit}
             disabled={!selectedAnswer}
-            className="w-full bg-green-600 text-white font-bold py-4 rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+            className="w-full text-lg"
           >
             {currentQuestionIndex < totalQuestions - 1 ? "Next Question →" : "Submit Final Answer"}
-          </button>
-        </div>
+          </GameButton>
+        </GradientCard>
       </div>
     </div>
   );

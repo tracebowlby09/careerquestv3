@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { audioSystem } from "@/lib/audio";
+import { GradientCard, GameButton, AnimatedIcon } from "./ui/UIComponents";
 
 interface SettingsProps {
   isOpen: boolean;
@@ -12,7 +13,7 @@ interface SettingsProps {
 export default function Settings({ isOpen, onClose, onSettingsChange }: SettingsProps) {
   const [musicVolume, setMusicVolume] = useState(30);
   const [sfxVolume, setSfxVolume] = useState(50);
-  // Sync with audio system when settings opens
+
   useEffect(() => {
     if (isOpen) {
       setMusicVolume(audioSystem.getMusicVolume() * 100);
@@ -29,7 +30,6 @@ export default function Settings({ isOpen, onClose, onSettingsChange }: Settings
   const handleSfxVolumeChange = (value: number) => {
     setSfxVolume(value);
     audioSystem.setSfxVolume(value / 100);
-    // Play click sound to test volume
     audioSystem.playClickSound();
     onSettingsChange?.();
   };
@@ -37,69 +37,81 @@ export default function Settings({ isOpen, onClose, onSettingsChange }: Settings
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Settings</h2>
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+      <GradientCard 
+        gradient="from-white/20 to-white/10 backdrop-blur-xl" 
+        className="p-8 max-w-md w-full border border-white/20"
+      >
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-3xl font-extrabold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+            Settings
+          </h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 text-2xl"
+            className="text-white/60 hover:text-white text-3xl transition-colors"
           >
             ×
           </button>
         </div>
 
-        <div className="space-y-6">
-          {/* Music Volume */}
+        <div className="space-y-8">
           <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-gray-700 font-semibold">
+            <div className="flex justify-between items-center mb-3">
+              <label className="text-white font-bold text-lg flex items-center gap-2">
                 🎵 Background Music
               </label>
-              <span className="text-gray-600">{musicVolume}%</span>
+              <span className="text-amber-400 font-bold text-xl">{musicVolume}%</span>
             </div>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={musicVolume}
-              onChange={(e) => handleMusicVolumeChange(Number(e.target.value))}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
-            />
+            <div className="relative">
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={musicVolume}
+                onChange={(e) => handleMusicVolumeChange(Number(e.target.value))}
+                className="w-full h-3 bg-white/20 rounded-full appearance-none cursor-pointer accent-amber-400"
+              />
+              <div 
+                className="absolute top-0 left-0 h-3 bg-gradient-to-r from-amber-400 to-yellow-500 rounded-full pointer-events-none"
+                style={{ width: `${musicVolume}%` }}
+              ></div>
+            </div>
           </div>
 
-          {/* SFX Volume */}
           <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-gray-700 font-semibold">
+            <div className="flex justify-between items-center mb-3">
+              <label className="text-white font-bold text-lg flex items-center gap-2">
                 🔊 Sound Effects
               </label>
-              <span className="text-gray-600">{sfxVolume}%</span>
+              <span className="text-amber-400 font-bold text-xl">{sfxVolume}%</span>
             </div>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={sfxVolume}
-              onChange={(e) => handleSfxVolumeChange(Number(e.target.value))}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
-            />
+            <div className="relative">
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={sfxVolume}
+                onChange={(e) => handleSfxVolumeChange(Number(e.target.value))}
+                className="w-full h-3 bg-white/20 rounded-full appearance-none cursor-pointer accent-amber-400"
+              />
+              <div 
+                className="absolute top-0 left-0 h-3 bg-gradient-to-r from-amber-400 to-yellow-500 rounded-full pointer-events-none"
+                style={{ width: `${sfxVolume}%` }}
+              ></div>
+            </div>
           </div>
 
-          <div className="pt-4 border-t">
-            <p className="text-sm text-gray-600 text-center">
+          <div className="pt-4 border-t border-white/20">
+            <p className="text-white/70 text-sm text-center">
               Adjust volumes to your preference. Changes are saved automatically.
             </p>
           </div>
         </div>
 
-        <button
-          onClick={onClose}
-          className="w-full mt-6 bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors"
-        >
+        <GameButton onClick={onClose} className="w-full mt-8 text-lg">
           Close
-        </button>
-      </div>
+        </GameButton>
+      </GradientCard>
     </div>
   );
 }

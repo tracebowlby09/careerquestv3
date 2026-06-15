@@ -1,6 +1,8 @@
 "use client";
 
 import { audioSystem } from "@/lib/audio";
+import { GameMode } from "@/types/game";
+import { GameButton, AnimatedIcon, GradientCard } from "./ui/UIComponents";
 
 interface TutorialStep {
   title: string;
@@ -24,62 +26,60 @@ export default function TutorialScreen({
   onBack,
 }: TutorialScreenProps) {
   return (
-    <div className="min-h-screen p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <div className="text-6xl mb-4">{careerIcon}</div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+    <div className="min-h-screen bg-gradient-to-br from-slate-800 via-indigo-800 to-purple-900 p-4 md:p-8 flex items-center justify-center">
+      <div className="max-w-3xl w-full">
+        <GradientCard className="p-10 md:p-12" gradient="from-white/10 to-white/5 backdrop-blur-xl border border-white/20">
+          <div className="text-center mb-10">
+            <AnimatedIcon animate="bounce" className="text-7xl mb-4 inline-block">
+              {careerIcon}
+            </AnimatedIcon>
+            <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent mb-2">
               {careerName}
             </h1>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-white/80">
               How to Play
             </p>
           </div>
 
-          {/* Tutorial Steps */}
-          <div className="space-y-6 mb-8">
+          <div className="space-y-5 mb-10">
             {steps.map((step, index) => (
-              <div
+              <GradientCard
                 key={index}
-                className="flex gap-4 bg-gray-50 rounded-xl p-4 border-l-4 border-blue-500"
+                gradient="from-white/10 to-white/5 backdrop-blur-sm"
+                className="p-6 flex gap-4 border-l-4 border-blue-400"
               >
-                <div className="text-3xl flex-shrink-0">{step.icon}</div>
+                <div className="text-4xl flex-shrink-0">{step.icon}</div>
                 <div>
-                  <h3 className="font-bold text-gray-900 mb-1">
+                  <h3 className="font-bold text-white mb-1 text-lg">
                     {index + 1}. {step.title}
                   </h3>
-                  <p className="text-gray-700">{step.content}</p>
+                  <p className="text-white/80">{step.content}</p>
                 </div>
-              </div>
+              </GradientCard>
             ))}
           </div>
 
-          {/* Action Buttons */}
           <div className="flex gap-4">
             {onBack && (
-              <button
-                onClick={() => {
-                  audioSystem.playClickSound();
-                  onBack();
-                }}
-                className="flex-1 bg-gray-200 text-gray-800 font-bold py-4 rounded-lg hover:bg-gray-300 transition-colors"
-              >
+              <GameButton onClick={() => {
+                audioSystem.playClickSound();
+                onBack();
+              }} variant="ghost" className="flex-1">
                 ← Back
-              </button>
+              </GameButton>
             )}
-            <button
+            <GameButton 
               onClick={() => {
                 audioSystem.playClickSound();
                 onStart();
-              }}
-              className="flex-1 bg-blue-600 text-white font-bold py-4 rounded-lg hover:bg-blue-700 transition-colors"
+              }} 
+              variant="primary"
+              className="flex-1 text-lg"
             >
               Start Challenge →
-            </button>
+            </GameButton>
           </div>
-        </div>
+        </GradientCard>
       </div>
     </div>
   );
