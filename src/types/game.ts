@@ -23,4 +23,15 @@ export interface IncorrectAnswer {
   correctAnswer: string;
   explanation: string;
 }
+
+export interface GameSession {
+  id: string;
+  career: Career;
+  difficulty: Difficulty;
+  gameMode: GameMode;
+  score: number;
+  total: number;
+  success: boolean;
+  timestamp: Date;
+}
 //game.ts pmo

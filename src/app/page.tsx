@@ -26,15 +26,16 @@ import ElectricianWorld from "@/components/careers/ElectricianWorld";
 import OutcomeScreen from "@/components/OutcomeScreen";
 import Settings from "@/components/Settings";
 import TrophyScreen from "@/components/TrophyScreen";
+import StatsScreen from "@/components/StatsScreen";
 import SecretTrophyPopup from "@/components/SecretTrophyPopup";
 import HomeTutorial from "@/components/HomeTutorial";
 import CareerInfoPage from "@/components/CareerInfoPage";
-import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer } from "@/types/game";
+import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer, GameSession } from "@/types/game";
 import { careerInfoByCareer } from "@/lib/careerInfo";
 import { audioSystem } from "@/lib/audio";
 import ScreenWrapper from "@/components/ScreenWrapper";
 
-type GameState = "title" | "tutorial" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "trophy" | "career-info";
+type GameState = "title" | "tutorial" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "trophy" | "stats" | "career-info";
 
 const careerNames: Record<Career, string> = {
   programmer: "Software Programmer",
@@ -71,6 +72,30 @@ const loadTrophies = (): Trophy[] => {
 const saveTrophies = (trophies: Trophy[]) => {
   if (typeof window === "undefined") return;
   localStorage.setItem("careerQuestTrophies", JSON.stringify(trophies));
+};
+
+// Load game sessions from localStorage
+const loadGameSessions = (): GameSession[] => {
+  if (typeof window === "undefined") return [];
+  const saved = localStorage.getItem("careerQuestSessions");
+  if (saved) {
+    try {
+      const sessions = JSON.parse(saved);
+      return sessions.map((s: any) => ({
+        ...s,
+        timestamp: new Date(s.timestamp),
+      }));
+    } catch {
+      return [];
+    }
+  }
+  return [];
+};
+
+// Save game sessions to localStorage
+const saveGameSessions = (sessions: GameSession[]) => {
+  if (typeof window === "undefined") return;
+  localStorage.setItem("careerQuestSessions", JSON.stringify(sessions));
 };
 
 // Check for achievements
@@ -279,6 +304,7 @@ export default function Home() {
   const [challengeSuccess, setChallengeSuccess] = useState(false);
   const [incorrectAnswers, setIncorrectAnswers] = useState<IncorrectAnswer[]>([]);
   const [trophies, setTrophies] = useState<Trophy[]>(() => loadTrophies());
+  const [sessions, setSessions] = useState<GameSession[]>(() => loadGameSessions());
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [showSecretTrophyPopup, setShowSecretTrophyPopup] = useState(false);
   const [currentAchievementType, setCurrentAchievementType] = useState<string | null>(null);
@@ -607,6 +633,10 @@ export default function Home() {
   };
 
   const handleChallengeComplete = (success: boolean, finalScore: number, total: number, incorrect?: IncorrectAnswer[]) => {
+    // Determine game modes first
+    const isQuickRecallMode = gameMode === "quick-recall";
+    const isCertificationMode = gameMode === "certification";
+    
     setChallengeSuccess(success);
     setScore(finalScore);
     setTotalQuestions(total);
@@ -614,9 +644,22 @@ export default function Home() {
       setIncorrectAnswers(incorrect);
     }
     
-    // Determine game modes
-    const isQuickRecallMode = gameMode === "quick-recall";
-    const isCertificationMode = gameMode === "certification";
+    // Save game session for stats tracking
+    if (selectedCareer && selectedDifficulty) {
+      const newSession: GameSession = {
+        id: Date.now().toString(),
+        career: selectedCareer,
+        difficulty: selectedDifficulty,
+        gameMode: isQuickRecallMode ? "quick-recall" : isCertificationMode ? "certification" : "challenge",
+        score: finalScore,
+        total,
+        success,
+        timestamp: new Date(),
+      };
+      const updatedSessions = [...sessions, newSession];
+      setSessions(updatedSessions);
+      saveGameSessions(updatedSessions);
+    }
     
     // Play success or failure sound (only for challenge mode)
     if (!isQuickRecallMode && !isCertificationMode) {
@@ -795,7 +838,9 @@ export default function Home() {
   // Admin panel functions
   const handleClearTrophies = () => {
     setTrophies([]);
+    setSessions([]);
     saveTrophies([]);
+    saveGameSessions([]);
     audioSystem.playSuccessSound();
   };
 
@@ -1036,6 +1081,7 @@ export default function Home() {
           onStart={handleStart} 
           onOpenSettings={() => setSettingsOpen(true)} 
           onViewTrophies={() => setGameState("trophy")}
+          onViewStats={() => setGameState("stats")}
         />
         {settingsModal}
         <SecretTrophyPopup
@@ -1444,6 +1490,18 @@ export default function Home() {
             setShowSecretTrophyPopup(false);
             setCurrentAchievementType(null);
           }} 
+        />
+      </>
+    );
+  }
+
+  if (gameState === "stats") {
+    return (
+      <>
+        <StatsScreen 
+          trophies={trophies}
+          sessions={sessions}
+          onBack={() => setGameState("title")} 
         />
       </>
     );

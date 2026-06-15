@@ -8,9 +8,10 @@ interface TitleScreenProps {
   onStart: (mode: GameMode) => void;
   onOpenSettings: () => void;
   onViewTrophies: () => void;
+  onViewStats: () => void;
 }
 
-export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies }: TitleScreenProps) {
+export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, onViewStats }: TitleScreenProps) {
   const handleStart = (mode: GameMode) => {
     audioSystem.playClickSound();
     onStart(mode);
@@ -72,6 +73,18 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies }:
               className="inline-flex items-center gap-3 px-8 py-4 rounded-full border-2 border-amber-400/50 bg-gradient-to-r from-amber-400/20 to-yellow-500/20 text-amber-300 font-bold text-lg hover:from-amber-400/30 hover:to-yellow-500/30 transition-all duration-300 hover:scale-105 shadow-lg"
             >
               🏆 View Trophy Case
+            </button>
+          </div>
+          
+          <div className="mt-4 text-center">
+            <button
+              onClick={() => {
+                audioSystem.playClickSound();
+                onViewStats();
+              }}
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-full border-2 border-blue-400/50 bg-gradient-to-r from-blue-400/20 to-indigo-500/20 text-blue-300 font-bold text-lg hover:from-blue-400/30 hover:to-indigo-500/30 transition-all duration-300 hover:scale-105 shadow-lg"
+            >
+              📊 Stats & Analytics
             </button>
           </div>
           

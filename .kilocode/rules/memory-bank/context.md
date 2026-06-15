@@ -14,6 +14,7 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 - ✅ **Added feedback for incorrect answers** - Outcome screen now shows a review section with questions answered incorrectly, the correct answer, and explanations
 - ✅ **Added Home Screen Tutorial** - First-time users see a guided tutorial explaining each button on the home screen with option to skip
 - ✅ **Updated flavor text** on home screen to be more engaging ("Master real-world skills across 9 exciting careers...")
+- ✅ **Added Stats & Analytics Dashboard** - Players can track overall progress, win rates, and performance trends across careers and difficulties
 - **Added Certification Mode** across all 9 careers (May 2026)
 - **Standardized question counts**: 10 challenge, 30 quick recall, 30 certification per career
 - **Enhanced 227 questions** with certification-accurate content (real code/standard references)
@@ -80,6 +81,7 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 | `src/app/careers/[career]/page.tsx` | Standalone career information route | ✅ Ready |
 | `src/components/CareerInfoPage.tsx` | Reusable career information UI | ✅ Ready |
 | `src/components/CareerSelection.tsx` | Career card selection with Learn More entry points | ✅ Enhanced |
+| `src/components/StatsScreen.tsx` | Stats & Analytics dashboard | ✅ New |
 | `src/lib/careerInfo.ts` | Shared career content, salary, skills, and day-in-life data | ✅ Ready |
 | `src/components/careers/*.tsx` | Career world components | ✅ Enhanced |
 | `src/components/difficulty/*.tsx` | Difficulty selection | ✅ Ready |
