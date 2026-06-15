@@ -27,10 +27,11 @@ import OutcomeScreen from "@/components/OutcomeScreen";
 import Settings from "@/components/Settings";
 import TrophyScreen from "@/components/TrophyScreen";
 import StatsScreen from "@/components/StatsScreen";
+import LevelUpPopup from "@/components/LevelUpPopup";
 import SecretTrophyPopup from "@/components/SecretTrophyPopup";
 import HomeTutorial from "@/components/HomeTutorial";
 import CareerInfoPage from "@/components/CareerInfoPage";
-import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer, GameSession } from "@/types/game";
+import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer, GameSession, PlayerProgress, calculateLevel, calculateXPForNextLevel } from "@/types/game";
 import { careerInfoByCareer } from "@/lib/careerInfo";
 import { audioSystem } from "@/lib/audio";
 import ScreenWrapper from "@/components/ScreenWrapper";
@@ -96,6 +97,26 @@ const loadGameSessions = (): GameSession[] => {
 const saveGameSessions = (sessions: GameSession[]) => {
   if (typeof window === "undefined") return;
   localStorage.setItem("careerQuestSessions", JSON.stringify(sessions));
+};
+
+// Load player progress from localStorage
+const loadPlayerProgress = (): PlayerProgress => {
+  if (typeof window === "undefined") return { xp: 0, level: 1 };
+  const saved = localStorage.getItem("careerQuestProgress");
+  if (saved) {
+    try {
+      return JSON.parse(saved);
+    } catch {
+      return { xp: 0, level: 1 };
+    }
+  }
+  return { xp: 0, level: 1 };
+};
+
+// Save player progress to localStorage
+const savePlayerProgress = (progress: PlayerProgress) => {
+  if (typeof window === "undefined") return;
+  localStorage.setItem("careerQuestProgress", JSON.stringify(progress));
 };
 
 // Check for achievements
@@ -305,6 +326,9 @@ export default function Home() {
   const [incorrectAnswers, setIncorrectAnswers] = useState<IncorrectAnswer[]>([]);
   const [trophies, setTrophies] = useState<Trophy[]>(() => loadTrophies());
   const [sessions, setSessions] = useState<GameSession[]>(() => loadGameSessions());
+  const [playerProgress, setPlayerProgress] = useState<PlayerProgress>(() => loadPlayerProgress());
+  const [showLevelUp, setShowLevelUp] = useState(false);
+  const [oldLevel, setOldLevel] = useState(1);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [showSecretTrophyPopup, setShowSecretTrophyPopup] = useState(false);
   const [currentAchievementType, setCurrentAchievementType] = useState<string | null>(null);
@@ -659,6 +683,36 @@ export default function Home() {
       const updatedSessions = [...sessions, newSession];
       setSessions(updatedSessions);
       saveGameSessions(updatedSessions);
+      
+      // Calculate and award XP
+      const baseXP = { easy: 10, medium: 20, hard: 30 };
+      const xpFromDifficulty = success ? baseXP[selectedDifficulty] : Math.floor(baseXP[selectedDifficulty] / 2);
+      
+      let xpFromMode = 0;
+      if (isQuickRecallMode) {
+        const percentage = (finalScore / total) * 100;
+        xpFromMode = percentage >= 80 ? 50 : percentage >= 60 ? 30 : 15;
+      } else if (isCertificationMode) {
+        const percentage = (finalScore / total) * 100;
+        xpFromMode = percentage >= 80 ? 60 : percentage >= 60 ? 40 : 20;
+      }
+      
+      const totalXP = xpFromDifficulty + xpFromMode;
+      
+      if (totalXP > 0) {
+        const oldXPData = playerProgress;
+        const newXP = oldXPData.xp + totalXP;
+        const oldLevel = calculateLevel(oldXPData.xp);
+        const newLevel = calculateLevel(newXP);
+        
+        setPlayerProgress({ xp: newXP, level: newLevel });
+        savePlayerProgress({ xp: newXP, level: newLevel });
+        
+        if (newLevel > oldLevel) {
+          setOldLevel(oldLevel);
+          setShowLevelUp(true);
+        }
+      }
     }
     
     // Play success or failure sound (only for challenge mode)
@@ -1082,6 +1136,8 @@ export default function Home() {
           onOpenSettings={() => setSettingsOpen(true)} 
           onViewTrophies={() => setGameState("trophy")}
           onViewStats={() => setGameState("stats")}
+          level={playerProgress.level}
+          xp={playerProgress.xp}
         />
         {settingsModal}
         <SecretTrophyPopup
@@ -1501,31 +1557,39 @@ export default function Home() {
         <StatsScreen 
           trophies={trophies}
           sessions={sessions}
+          level={playerProgress.level}
+          xp={playerProgress.xp}
           onBack={() => setGameState("title")} 
+        />
+        <LevelUpPopup
+          show={showLevelUp}
+          oldLevel={oldLevel}
+          newLevel={playerProgress.level}
+          onClose={() => setShowLevelUp(false)}
         />
       </>
     );
   }
 
-  if (gameState === "outcome" && selectedCareer) {
+if (gameState === "outcome" && selectedCareer) {
     return (
       <>
-<OutcomeScreen
-            career={selectedCareer}
-            difficulty={selectedDifficulty ?? "easy"}
-            success={challengeSuccess}
-            score={score}
-            total={totalQuestions}
-            onPlayAgain={handlePlayAgain}
-            onNewCareer={handleNewCareer}
-            onChangeDifficulty={handleChangeDifficulty}
-            onOpenSettings={() => setSettingsOpen(true)}
-            onExit={handleExitToTitle}
-            isQuickRecall={gameMode === "quick-recall"}
-            isCertification={gameMode === "certification"}
-            onBackToSelection={handleBackToSelection}
-            incorrectAnswers={incorrectAnswers}
-          />
+        <OutcomeScreen
+          career={selectedCareer}
+          difficulty={selectedDifficulty ?? "easy"}
+          success={challengeSuccess}
+          score={score}
+          total={totalQuestions}
+          onPlayAgain={handlePlayAgain}
+          onNewCareer={handleNewCareer}
+          onChangeDifficulty={handleChangeDifficulty}
+          onOpenSettings={() => setSettingsOpen(true)}
+          onExit={handleExitToTitle}
+          isQuickRecall={gameMode === "quick-recall"}
+          isCertification={gameMode === "certification"}
+          onBackToSelection={handleBackToSelection}
+          incorrectAnswers={incorrectAnswers}
+        />
         {settingsModal}
         <SecretTrophyPopup 
           show={showSecretTrophyPopup} 
@@ -1534,6 +1598,12 @@ export default function Home() {
             setShowSecretTrophyPopup(false);
             setCurrentAchievementType(null);
           }} 
+        />
+        <LevelUpPopup
+          show={showLevelUp}
+          oldLevel={oldLevel}
+          newLevel={playerProgress.level}
+          onClose={() => setShowLevelUp(false)}
         />
       </>
     );

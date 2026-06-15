@@ -15,63 +15,7 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 - ✅ **Added Home Screen Tutorial** - First-time users see a guided tutorial explaining each button on the home screen with option to skip
 - ✅ **Updated flavor text** on home screen to be more engaging ("Master real-world skills across 9 exciting careers...")
 - ✅ **Added Stats & Analytics Dashboard** - Players can track overall progress, win rates, and performance trends across careers and difficulties
-- **Added Certification Mode** across all 9 careers (May 2026)
-- **Standardized question counts**: 10 challenge, 30 quick recall, 30 certification per career
-- **Enhanced 227 questions** with certification-accurate content (real code/standard references)
-- **80% passing threshold** for certification exams (vs 60% regular)
-- **Fixed syntax errors** (malformed arrays in TeacherWorld, duplicate properties in ChefWorld)
-- **Removed backup files** from git tracking
-- **Unified certification UI**: tutorial shows "Pass the Certification" with 📜 icon for cert mode, "Pass the Challenge" with 🏆 for regular
-
-### Specific Enhancements:
-
-1. **Certification Mode Button** added to TitleScreen
-2. **GameMode extended** with "certification" variant
-3. **page.tsx updated** with certification routing (direct to playing with hard difficulty)
-4. **OutcomeScreen** shows 80% threshold for certification
-5. **All 9 career worlds** updated with `isCertification` prop and dynamic pass thresholds
-6. **Question counts standardized**:
-   - Architect: trimmed to 10 challenge (was 23)
-   - Chef: trimmed to 10 challenge (was 23)
-   - Teacher: trimmed to 10 challenge (was 15)
-   - Electrician: added 7 challenge questions (was 2)
-   - Lawyer: added 1 challenge question (was 8)
-   - Programmer: added 1 challenge question (was 8)
-   - Retail: added 7 challenge questions (was 2)
-
-### Bug Fixes
-
-- **Fixed certification mode state leak** - Added `setSelectedCertification(null)` to `handleStart`, `handleNewCareer`, `handleExitToTitle`, and `handleBackToSelection` to prevent certification mode from persisting across different game modes
-- **Updated Quick Recall button emoji** from ⚡ to 🚀 in CareerSelection.tsx
-- ✅ **Added Career Information Pages** - Added reusable career data plus in-app and standalone career info pages with salary ranges, median salary, skills, day-in-life snapshots, tools, training/certifications, and start buttons.
-- ✅ **Added CareerSelection Learn More entry points** - Career cards now expose a Learn More action that opens the selected career information page and a Start action that keeps the existing game flow.
-- ✅ **Added standalone career routes** - Added `/careers/[career]` static routes for each career with generated metadata and a not-found page.
-- ✅ **Validated build and type checking** - `bun typecheck` and `bun run build` pass. Changed-file ESLint passes with pre-existing warnings in `src/app/page.tsx`; full `bun lint` still reports unrelated pre-existing issues in generated `.kilo` worktree files and older components.
-
-### Certification Mode Trophies
-
-- **Added `certification-master` achievement** - Earned by passing any certification exam
-- **Added `all-certifications-master` achievement** - Earned by passing certifications for all 9 careers
-- Updated TrophyScreen.tsx with trophy display entries for both certification achievements
-- Updated AchievementType in types/game.ts with new achievement types
-
-### Outcome Screen Updates
-
-- **Removed "Change Difficulty Level" button** for certification mode
-- **"Explore Another Career" button now redirects to certification selection** for certification mode
-- Added certification-specific button text ("Try Another Certification", "Choose Different Certification")
-
-### Home Tutorial Update
-
-- **Removed "Skip Tutorial" button** - Only "Got It!" button remains on the tutorial screen
-
-### Architect Simulator Feature
-
-- **Added `ArchitectSimulator.tsx`** - Physics-driven building design game with canvas-based construction
-- **Integrated into ArchitectWorld.tsx** - Player can access simulator via "🏗️ Structure Simulator" button during challenge
-- **Features**: Material selection (Wood, Concrete, Steel, Composite), building piece placement, stress analysis, earthquake simulation
-- **Tutorial slide added** explaining the simulator feature
-- **Fixed bug**: `unlockedMaterials` array mutation in ArchitectSimulator.tsx (changed from `.push()` to conditional slice)
+- ✅ **Added XP & Leveling System** - Players earn XP for completing challenges (more for higher difficulty and better scores), level up with rewards and the LevelUpPopup shows unlockable rewards
 
 ## Current Structure
 
@@ -81,7 +25,8 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 | `src/app/careers/[career]/page.tsx` | Standalone career information route | ✅ Ready |
 | `src/components/CareerInfoPage.tsx` | Reusable career information UI | ✅ Ready |
 | `src/components/CareerSelection.tsx` | Career card selection with Learn More entry points | ✅ Enhanced |
-| `src/components/StatsScreen.tsx` | Stats & Analytics dashboard | ✅ New |
+| `src/components/StatsScreen.tsx` | Stats & Analytics dashboard with XP tracking | ✅ New |
+| `src/components/LevelUpPopup.tsx` | Level up celebration with rewards | ✅ New |
 | `src/lib/careerInfo.ts` | Shared career content, salary, skills, and day-in-life data | ✅ Ready |
 | `src/components/careers/*.tsx` | Career world components | ✅ Enhanced |
 | `src/components/difficulty/*.tsx` | Difficulty selection | ✅ Ready |

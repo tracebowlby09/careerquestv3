@@ -1,11 +1,13 @@
 "use client";
 
-import { Trophy, Career, Difficulty, GameMode, GameSession } from "@/types/game";
+import { Trophy, Career, Difficulty, GameMode, GameSession, XP_PER_LEVEL, calculateLevel, calculateXPForNextLevel } from "@/types/game";
 import { GameButton, GradientCard, AnimatedIcon, AnimatedContainer, Badge } from "./ui/UIComponents";
 
 interface StatsScreenProps {
   trophies: Trophy[];
   sessions: GameSession[];
+  level: number;
+  xp: number;
   onBack: () => void;
 }
 
@@ -53,7 +55,8 @@ const gameModeLabels: Record<GameMode, string> = {
 
 const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician"];
 
-export default function StatsScreen({ trophies, sessions, onBack }: StatsScreenProps) {
+export default function StatsScreen({ trophies, sessions, level, xp, onBack }: StatsScreenProps) {
+  const xpProgress = calculateXPForNextLevel(xp);
   const totalSessions = sessions.length;
   const totalWins = sessions.filter(s => s.success).length;
   const overallWinRate = totalSessions > 0 ? Math.round((totalWins / totalSessions) * 100) : 0;
@@ -106,9 +109,28 @@ export default function StatsScreen({ trophies, sessions, onBack }: StatsScreenP
             <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-2">
               Stats & Analytics
             </h2>
-            <p className="text-white/70 text-lg">
+            <p className="text-white/70 text-lg mb-4">
               Track your progress across all career paths
             </p>
+            
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/30 to-indigo-500/30 backdrop-blur-sm px-6 py-3 rounded-full mb-6">
+              <span className="text-yellow-400 font-bold text-xl">⚡ Level {level}</span>
+              <span className="text-white/80 text-lg">| {xp} XP</span>
+            </div>
+            
+            <div className="max-w-md mx-auto mb-6">
+              <div className="bg-white/10 rounded-full h-3 overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full transition-all duration-500"
+                  style={{ width: `${xpProgress.needed > 0 ? (xpProgress.current / xpProgress.needed) * 100 : 100}%` }}
+                />
+              </div>
+              {xpProgress.needed > 0 && (
+                <p className="text-white/60 text-sm mt-1">
+                  {xpProgress.current} / {xpProgress.needed} XP to next level
+                </p>
+              )}
+            </div>
           </div>
 
           {totalSessions === 0 ? (

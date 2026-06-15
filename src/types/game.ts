@@ -34,4 +34,46 @@ export interface GameSession {
   success: boolean;
   timestamp: Date;
 }
-//game.ts pmo
+
+export interface PlayerProgress {
+  xp: number;
+  level: number;
+}
+
+// XP required for each level (exponential growth)
+export const XP_PER_LEVEL = [0, 100, 250, 450, 700, 1000, 1400, 1900, 2500, 3200, 4000];
+export const MAX_LEVEL = XP_PER_LEVEL.length - 1;
+
+export const getXPForDifficulty = (difficulty: Difficulty, success: boolean): number => {
+  const baseXP = { easy: 10, medium: 20, hard: 30 };
+  return success ? baseXP[difficulty] : Math.floor(baseXP[difficulty] / 2);
+};
+
+export const getXPForGameMode = (gameMode: GameMode, score: number, total: number): number => {
+  if (gameMode === "quick-recall") {
+    const percentage = (score / total) * 100;
+    return percentage >= 80 ? 50 : percentage >= 60 ? 30 : 15;
+  }
+  if (gameMode === "certification") {
+    const percentage = (score / total) * 100;
+    return percentage >= 80 ? 60 : percentage >= 60 ? 40 : 20;
+  }
+  return 0; // Regular challenge uses difficulty-based XP
+};
+
+export const calculateLevel = (xp: number): number => {
+  let level = 1;
+  for (let i = 1; i < XP_PER_LEVEL.length; i++) {
+    if (xp >= XP_PER_LEVEL[i]) level = i;
+  }
+  return Math.min(level, MAX_LEVEL);
+};
+
+export const calculateXPForNextLevel = (xp: number): { current: number; needed: number } => {
+  const level = calculateLevel(xp);
+  const nextLevelXP = XP_PER_LEVEL[level + 1] || XP_PER_LEVEL[MAX_LEVEL];
+  return {
+    current: xp - XP_PER_LEVEL[level],
+    needed: nextLevelXP - XP_PER_LEVEL[level],
+  };
+};

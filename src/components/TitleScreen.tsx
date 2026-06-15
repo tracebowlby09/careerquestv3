@@ -1,7 +1,7 @@
 "use client";
 
 import { audioSystem } from "@/lib/audio";
-import { GameMode } from "@/types/game";
+import { GameMode, calculateXPForNextLevel } from "@/types/game";
 import { GameButton, GradientCard, AnimatedIcon } from "./ui/UIComponents";
 
 interface TitleScreenProps {
@@ -9,13 +9,17 @@ interface TitleScreenProps {
   onOpenSettings: () => void;
   onViewTrophies: () => void;
   onViewStats: () => void;
+  level: number;
+  xp: number;
 }
 
-export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, onViewStats }: TitleScreenProps) {
+export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, onViewStats, level, xp }: TitleScreenProps) {
   const handleStart = (mode: GameMode) => {
     audioSystem.playClickSound();
     onStart(mode);
   };
+
+  const xpProgress = calculateXPForNextLevel(xp);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-purple-900 p-4 md:p-8 flex items-center justify-center">
@@ -26,6 +30,21 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, o
             <h1 className="text-5xl md:text-7xl font-extrabold bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent mb-4 tracking-tight">
               Career Quest
             </h1>
+            
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/30 to-indigo-500/30 backdrop-blur-sm px-6 py-3 rounded-full mb-4">
+              <span className="text-yellow-400 font-bold">⚡ Level {level}</span>
+              <span className="text-white/80 font-medium">| {xp} XP</span>
+            </div>
+            
+            <div className="max-w-md mx-auto mb-6">
+              <div className="bg-white/10 rounded-full h-3 overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full transition-all duration-500"
+                  style={{ width: `${xpProgress.needed > 0 ? (xpProgress.current / xpProgress.needed) * 100 : 100}%` }}
+                />
+              </div>
+            </div>
+            
             <p className="text-xl md:text-2xl text-white/90 mb-6 max-w-2xl mx-auto">
               Explore careers through interactive challenges. Master real-world skills across 9 exciting career paths.
             </p>
