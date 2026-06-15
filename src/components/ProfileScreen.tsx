@@ -23,6 +23,15 @@ const careerIcons: Record<Career, string> = {
   lawyer: "⚖️",
   retail: "🛍️",
   electrician: "⚡",
+  firefighter: "🚒",
+  police: "👮",
+  pilot: "✈️",
+  veterinarian: "🐕",
+  journalist: "📰",
+  "social-worker": "🤝",
+  accountant: "📊",
+  dentist: "🦷",
+  construction: "🏗️",
 };
 
 const careerNames: Record<Career, string> = {
@@ -35,6 +44,15 @@ const careerNames: Record<Career, string> = {
   lawyer: "Lawyer",
   retail: "Retail Worker",
   electrician: "Electrician",
+  firefighter: "Firefighter",
+  police: "Police Officer",
+  pilot: "Commercial Pilot",
+  veterinarian: "Veterinarian",
+  journalist: "Journalist",
+  "social-worker": "Social Worker",
+  accountant: "Accountant",
+  dentist: "Dentist",
+  construction: "Construction Manager",
 };
 
 const difficultyLabels: Record<Difficulty, string> = {

@@ -1402,22 +1402,22 @@ const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "che
               backgroundImage={backgroundImage}
             />
           );
-        case 'retail':
-          return (
-            <RetailDifficulty
-              onSelectDifficulty={handleDifficultySelect}
-              onBack={handleBackToCareerSelect}
-              onOpenSettings={() => setSettingsOpen(true)}
-              onExit={handleExitToTitle}
-              backgroundImage={backgroundImage}
-            />
-          );
+case 'retail':
+           return (
+             <RetailDifficulty
+               onSelectDifficulty={handleDifficultySelect}
+               onBack={handleBackToCareerSelect}
+               onOpenSettings={() => setSettingsOpen(true)}
+               onExit={handleExitToTitle}
+               backgroundImage={backgroundImage}
+             />
+           );
 case 'electrician':
            return (
              <ElectricianDifficulty
                onSelectDifficulty={handleDifficultySelect}
                onBack={handleBackToCareerSelect}
-               onOpenSettings={() => setSettingsOpen(true)}
+onOpenSettings={() => setSettingsOpen(true)}
                onExit={handleExitToTitle}
                backgroundImage={backgroundImage}
              />
@@ -1452,6 +1452,69 @@ case 'electrician':
                backgroundImage={backgroundImage}
              />
            );
+         case 'veterinarian':
+           return (
+             <VeterinarianDifficulty
+               onSelectDifficulty={handleDifficultySelect}
+               onBack={handleBackToCareerSelect}
+               onOpenSettings={() => setSettingsOpen(true)}
+               onExit={handleExitToTitle}
+               backgroundImage={backgroundImage}
+             />
+           );
+         case 'journalist':
+           return (
+             <JournalistDifficulty
+               onSelectDifficulty={handleDifficultySelect}
+               onBack={handleBackToCareerSelect}
+               onOpenSettings={() => setSettingsOpen(true)}
+               onExit={handleExitToTitle}
+               backgroundImage={backgroundImage}
+             />
+           );
+         case 'social-worker':
+           return (
+             <SocialWorkerDifficulty
+               onSelectDifficulty={handleDifficultySelect}
+               onBack={handleBackToCareerSelect}
+               onOpenSettings={() => setSettingsOpen(true)}
+               onExit={handleExitToTitle}
+               backgroundImage={backgroundImage}
+             />
+           );
+         case 'accountant':
+           return (
+             <AccountantDifficulty
+               onSelectDifficulty={handleDifficultySelect}
+               onBack={handleBackToCareerSelect}
+               onOpenSettings={() => setSettingsOpen(true)}
+               onExit={handleExitToTitle}
+               backgroundImage={backgroundImage}
+             />
+           );
+         case 'dentist':
+           return (
+             <DentistDifficulty
+               onSelectDifficulty={handleDifficultySelect}
+               onBack={handleBackToCareerSelect}
+               onOpenSettings={() => setSettingsOpen(true)}
+               onExit={handleExitToTitle}
+               backgroundImage={backgroundImage}
+             />
+           );
+         case 'construction':
+           return (
+             <ConstructionDifficulty
+               onSelectDifficulty={handleDifficultySelect}
+               onBack={handleBackToCareerSelect}
+               onOpenSettings={() => setSettingsOpen(true)}
+               onExit={handleExitToTitle}
+               backgroundImage={backgroundImage}
+             />
+           );
+         default:
+           return null;
+       }
          case 'veterinarian':
            return (
              <VeterinarianDifficulty
@@ -1690,7 +1753,7 @@ case 'electrician':
             onAnswerResult={handleAnswerResult}
           />
         )}
-{selectedCareer === "electrician" && (
+        {selectedCareer === "electrician" && (
            <ElectricianWorld
              difficulty={selectedDifficulty ?? "easy"}
              onComplete={handleChallengeComplete}

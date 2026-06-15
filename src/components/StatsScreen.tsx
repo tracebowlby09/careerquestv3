@@ -22,6 +22,15 @@ const careerNames: Record<Career, string> = {
   lawyer: "Lawyer",
   retail: "Retail Worker",
   electrician: "Electrician",
+  firefighter: "Firefighter",
+  police: "Police Officer",
+  pilot: "Commercial Pilot",
+  veterinarian: "Veterinarian",
+  journalist: "Journalist",
+  "social-worker": "Social Worker",
+  accountant: "Accountant",
+  dentist: "Dentist",
+  construction: "Construction Manager",
 };
 
 const careerColors: Record<Career, string> = {
@@ -34,6 +43,15 @@ const careerColors: Record<Career, string> = {
   lawyer: "from-blue-600 to-indigo-700",
   retail: "from-pink-500 to-rose-600",
   electrician: "from-yellow-500 to-amber-600",
+  firefighter: "from-red-500 to-orange-600",
+  police: "from-blue-600 to-indigo-700",
+  pilot: "from-sky-500 to-blue-600",
+  veterinarian: "from-green-500 to-emerald-600",
+  journalist: "from-slate-700 to-gray-800",
+  "social-worker": "from-teal-500 to-cyan-600",
+  accountant: "from-emerald-600 to-green-700",
+  dentist: "from-blue-400 to-sky-500",
+  construction: "from-orange-600 to-red-700",
 };
 
 const careerIcons: Record<Career, string> = {
@@ -46,6 +64,15 @@ const careerIcons: Record<Career, string> = {
   lawyer: "⚖️",
   retail: "🛍️",
   electrician: "⚡",
+  firefighter: "🚒",
+  police: "👮",
+  pilot: "✈️",
+  veterinarian: "🐕",
+  journalist: "📰",
+  "social-worker": "🤝",
+  accountant: "📊",
+  dentist: "🦷",
+  construction: "🏗️",
 };
 
 const gameModeLabels: Record<GameMode, string> = {
@@ -60,7 +87,7 @@ const difficultyLabels: Record<Difficulty, string> = {
   hard: "🥇 Gold",
 };
 
-const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician"];
+const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician", "firefighter", "police", "pilot", "veterinarian", "journalist", "social-worker", "accountant", "dentist", "construction"];
 
 export default function StatsScreen({ trophies, sessions, level, xp, streak, onBack }: StatsScreenProps) {
   const xpProgress = calculateXPForNextLevel(xp);

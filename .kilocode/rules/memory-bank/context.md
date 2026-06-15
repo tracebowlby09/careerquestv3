@@ -14,6 +14,9 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 - ✅ **Updated lib/certificationQuestions.ts**: Added 5 certification questions per new career (45 total) + quick recall questions
 - ✅ **Updated components/CertificationSelection.tsx**: Added new certifications to the order list
 - ✅ **Updated page.tsx**: Added imports, careerNames mappings, switch cases for difficulty and world components, and certToCareerMap
+- ✅ **Updated components/OutcomeScreen.tsx**: Added career data for all 9 new careers
+- ✅ **Updated components/StatsScreen.tsx**: Added mappings for all 9 new careers
+- ✅ **Updated components/ProfileScreen.tsx**: Added mappings for all 9 new careers
 - ✅ **Created World components**: FirefighterWorld, PoliceWorld, PilotWorld, VeterinarianWorld, JournalistWorld, SocialWorkerWorld, AccountantWorld, DentistWorld, ConstructionWorld
 - ✅ **Created Difficulty components**: All corresponding difficulty wrappers
 - ✅ **Fixed dayInLife typo**: Changed dayInTheLife to dayInLife in electrician entry
