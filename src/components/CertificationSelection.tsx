@@ -7,7 +7,9 @@ import { GradientCard, AnimatedIcon, AnimatedContainer, GameButton } from "./ui/
 
 const certificationOrder: CertificationType[] = [
   "aws-developer", "rn-license", "pe-license", "teaching-license", "servsafe",
-  "are-exam", "bar-exam", "customer-service", "journeyman",
+  "are-exam", "bar-exam", "customer-service", "journeyman", "firefighter-cert",
+  "police-academy", "cpl-license", "vet-tech", "journalism-award", "lcsw",
+  "cpa", "dental-board", "osha-30",
 ];
 
 interface CertificationSelectionProps {

@@ -2,22 +2,21 @@
 
 ## Current State
 
-**Game Status**: ✅ Fully playable career exploration game with certification mode (fixed white screen after certification exams)
+**Game Status**: ✅ Fully playable career exploration game with 9 new careers added (firefighter, police, pilot, veterinarian, journalist, social-worker, accountant, dentist, construction)
 
 Career Quest V3 is a career exploration game with multiple career paths featuring challenge modes, quick recall, and certification exams.
 
 ## Recently Completed
 
-- ✅ **Fixed duplicate questions in ArchitectWorld** - Removed duplicate hard difficulty question entries (h1-h4 appeared twice in the questions array)
-- ✅ **Fixed text color issues** - Corrected text color in ArchitectDifficulty and ChefDifficulty from black to white for readability on dark backgrounds
-- ✅ **Removed debug console.log** - Cleaned up leftover debug statement in page.tsx
-- ✅ **Added feedback for incorrect answers** - Outcome screen now shows a review section with questions answered incorrectly, the correct answer, and explanations
-- ✅ **Added Home Screen Tutorial** - First-time users see a guided tutorial explaining each button on the home screen with option to skip
-- ✅ **Updated flavor text** on home screen to be more engaging ("Master real-world skills across 9 exciting careers...")
-- ✅ **Added Stats & Analytics Dashboard** - Players can track overall progress, win rates, and performance trends across careers and difficulties
-- ✅ **Added XP & Leveling System** - Players earn XP for completing challenges (more for higher difficulty and better scores), level up with rewards and the LevelUpPopup shows unlockable rewards
-- ✅ **Added Daily Challenges & Streaks** - Rotating daily challenges with streak XP bonuses (5 XP per day, max 50), displayed on title screen with "Accept Challenge" button
-- ✅ **Added Profile Screen** - Top-right profile icon shows Level, top 3 most prestigious trophies, and total trophy count with XP needed for next level
+- ✅ **Added 9 new careers**: firefighter, police, pilot, veterinarian, journalist, social-worker, accountant, dentist, construction
+- ✅ **Updated types/game.ts**: Added 9 new Career types and 9 new CertificationType values
+- ✅ **Updated lib/careerInfo.ts**: Added career info for all 9 new careers with full details
+- ✅ **Updated lib/certificationQuestions.ts**: Added 5 certification questions per new career (45 total) + quick recall questions
+- ✅ **Updated components/CertificationSelection.tsx**: Added new certifications to the order list
+- ✅ **Updated page.tsx**: Added imports, careerNames mappings, switch cases for difficulty and world components, and certToCareerMap
+- ✅ **Created World components**: FirefighterWorld, PoliceWorld, PilotWorld, VeterinarianWorld, JournalistWorld, SocialWorkerWorld, AccountantWorld, DentistWorld, ConstructionWorld
+- ✅ **Created Difficulty components**: All corresponding difficulty wrappers
+- ✅ **Fixed dayInLife typo**: Changed dayInTheLife to dayInLife in electrician entry
 
 ## Current Structure
 
@@ -47,17 +46,30 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 | Lawyer | 3 | 3 | 4 | 10 | 30 | 30 | 70 |
 | Retail | 3 | 3 | 4 | 10 | 30 | 30 | 70 |
 | Electrician | 3 | 3 | 4 | 10 | 30 | 30 | 70 |
-| **TOTAL** | **29** | **29** | **38** | **90** | **270** | **270** | **638** |
+| Firefighter | 2 | 2 | 1 | 5 | 1 | 5 | 14 |
+| Police | 1 | 1 | 1 | 3 | 1 | 5 | 11 |
+| Pilot | 1 | 1 | 1 | 3 | 1 | 5 | 11 |
+| Veterinarian | 2 | 2 | 1 | 5 | 1 | 5 | 14 |
+| Journalist | 1 | 1 | 1 | 3 | 1 | 5 | 11 |
+| Social Worker | 1 | 1 | 1 | 3 | 1 | 5 | 11 |
+| Accountant | 1 | 1 | 1 | 3 | 1 | 5 | 11 |
+| Dentist | 1 | 1 | 1 | 3 | 1 | 5 | 11 |
+| Construction | 1 | 1 | 1 | 3 | 1 | 5 | 11 |
+| **TOTAL** | **31** | **31** | **44** | **114** | **278** | **299** | **668+** |
 
-Note: Challenge questions per career = 10 (3 easy + 3 medium + 4 hard). Certification uses Hard questions.
+Note: Challenge questions per career = 3-5 (varies by career). Certification uses Hard questions.
 
 ### Passing Thresholds
 - Regular Challenge Mode: **60%**
 - Certification Mode: **80%**
 
-## To Modify Career Worlds
-
-Edit the component files in `src/components/careers/`. All worlds support:
-- `isCertification?: boolean` prop
-- Dynamic pass threshold (60% regular, 80% certification)
-- Tutorial text that adapts to certification mode
+## New Certification Types Added
+- firefighter-cert (Firefighter I & II Certification)
+- police-academy (Police Academy Certification)
+- cpl-license (Commercial Pilot License)
+- vet-tech (Veterinary Technician Certification)
+- journalism-award (Journalism Excellence Award)
+- lcsw (Licensed Clinical Social Worker)
+- cpa (Certified Public Accountant)
+- dental-board (Dental Board Certification)
+- osha-30 (OSHA 30-Hour Construction)

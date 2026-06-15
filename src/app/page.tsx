@@ -14,6 +14,15 @@ import ArchitectDifficulty from "@/components/difficulty/ArchitectDifficulty";
 import LawyerDifficulty from "@/components/difficulty/LawyerDifficulty";
 import RetailDifficulty from "@/components/difficulty/RetailDifficulty";
 import ElectricianDifficulty from "@/components/difficulty/ElectricianDifficulty";
+import FirefighterDifficulty from "@/components/difficulty/FirefighterDifficulty";
+import PoliceDifficulty from "@/components/difficulty/PoliceDifficulty";
+import PilotDifficulty from "@/components/difficulty/PilotDifficulty";
+import VeterinarianDifficulty from "@/components/difficulty/VeterinarianDifficulty";
+import JournalistDifficulty from "@/components/difficulty/JournalistDifficulty";
+import SocialWorkerDifficulty from "@/components/difficulty/SocialWorkerDifficulty";
+import AccountantDifficulty from "@/components/difficulty/AccountantDifficulty";
+import DentistDifficulty from "@/components/difficulty/DentistDifficulty";
+import ConstructionDifficulty from "@/components/difficulty/ConstructionDifficulty";
 import ProgrammerWorld from "@/components/careers/ProgrammerWorld";
 import NurseWorld from "@/components/careers/NurseWorld";
 import EngineerWorld from "@/components/careers/EngineerWorld";
@@ -23,6 +32,15 @@ import ArchitectWorld from "@/components/careers/ArchitectWorld";
 import LawyerWorld from "@/components/careers/LawyerWorld";
 import RetailWorld from "@/components/careers/RetailWorld";
 import ElectricianWorld from "@/components/careers/ElectricianWorld";
+import FirefighterWorld from "@/components/careers/FirefighterWorld";
+import PoliceWorld from "@/components/careers/PoliceWorld";
+import PilotWorld from "@/components/careers/PilotWorld";
+import VeterinarianWorld from "@/components/careers/VeterinarianWorld";
+import JournalistWorld from "@/components/careers/JournalistWorld";
+import SocialWorkerWorld from "@/components/careers/SocialWorkerWorld";
+import AccountantWorld from "@/components/careers/AccountantWorld";
+import DentistWorld from "@/components/careers/DentistWorld";
+import ConstructionWorld from "@/components/careers/ConstructionWorld";
 import OutcomeScreen from "@/components/OutcomeScreen";
 import Settings from "@/components/Settings";
 import TrophyScreen from "@/components/TrophyScreen";
@@ -49,6 +67,15 @@ const careerNames: Record<Career, string> = {
   lawyer: "Lawyer",
   retail: "Retail Worker",
   electrician: "Electrician",
+  firefighter: "Firefighter",
+  police: "Police Officer",
+  pilot: "Commercial Pilot",
+  veterinarian: "Veterinarian",
+  journalist: "Journalist",
+  "social-worker": "Social Worker",
+  accountant: "Accountant",
+  dentist: "Dentist",
+  construction: "Construction Manager",
 };
 
 // Load trophies from localStorage
@@ -658,6 +685,15 @@ export default function Home() {
       "bar-exam": "lawyer",
       "customer-service": "retail",
       "journeyman": "electrician",
+      "firefighter-cert": "firefighter",
+      "police-academy": "police",
+      "cpl-license": "pilot",
+      "vet-tech": "veterinarian",
+      "journalism-award": "journalist",
+      "lcsw": "social-worker",
+      "cpa": "accountant",
+      "dental-board": "dentist",
+      "osha-30": "construction",
     };
     setSelectedCareer(certToCareerMap[certType]);
     setGameState("playing");
@@ -952,7 +988,7 @@ export default function Home() {
   };
 
   const handleAwardAllRegularTrophies = () => {
-    const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician"];
+const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician", "firefighter", "police", "pilot", "veterinarian", "journalist", "social-worker", "accountant", "dentist", "construction"];
     const allDifficulties: Difficulty[] = ["easy", "medium", "hard"];
     const regularTrophies: Trophy[] = [];
     allCareers.forEach((career) => {
@@ -1376,19 +1412,109 @@ export default function Home() {
               backgroundImage={backgroundImage}
             />
           );
-        case 'electrician':
-          return (
-            <ElectricianDifficulty
-              onSelectDifficulty={handleDifficultySelect}
-              onBack={handleBackToCareerSelect}
-              onOpenSettings={() => setSettingsOpen(true)}
-              onExit={handleExitToTitle}
-              backgroundImage={backgroundImage}
-            />
-          );
-        default:
-          return null;
-      }
+case 'electrician':
+           return (
+             <ElectricianDifficulty
+               onSelectDifficulty={handleDifficultySelect}
+               onBack={handleBackToCareerSelect}
+               onOpenSettings={() => setSettingsOpen(true)}
+               onExit={handleExitToTitle}
+               backgroundImage={backgroundImage}
+             />
+           );
+         case 'firefighter':
+           return (
+             <FirefighterDifficulty
+               onSelectDifficulty={handleDifficultySelect}
+               onBack={handleBackToCareerSelect}
+               onOpenSettings={() => setSettingsOpen(true)}
+               onExit={handleExitToTitle}
+               backgroundImage={backgroundImage}
+             />
+           );
+         case 'police':
+           return (
+             <PoliceDifficulty
+               onSelectDifficulty={handleDifficultySelect}
+               onBack={handleBackToCareerSelect}
+               onOpenSettings={() => setSettingsOpen(true)}
+               onExit={handleExitToTitle}
+               backgroundImage={backgroundImage}
+             />
+           );
+         case 'pilot':
+           return (
+             <PilotDifficulty
+               onSelectDifficulty={handleDifficultySelect}
+               onBack={handleBackToCareerSelect}
+               onOpenSettings={() => setSettingsOpen(true)}
+               onExit={handleExitToTitle}
+               backgroundImage={backgroundImage}
+             />
+           );
+         case 'veterinarian':
+           return (
+             <VeterinarianDifficulty
+               onSelectDifficulty={handleDifficultySelect}
+               onBack={handleBackToCareerSelect}
+               onOpenSettings={() => setSettingsOpen(true)}
+               onExit={handleExitToTitle}
+               backgroundImage={backgroundImage}
+             />
+           );
+         case 'journalist':
+           return (
+             <JournalistDifficulty
+               onSelectDifficulty={handleDifficultySelect}
+               onBack={handleBackToCareerSelect}
+               onOpenSettings={() => setSettingsOpen(true)}
+               onExit={handleExitToTitle}
+               backgroundImage={backgroundImage}
+             />
+           );
+         case 'social-worker':
+           return (
+             <SocialWorkerDifficulty
+               onSelectDifficulty={handleDifficultySelect}
+               onBack={handleBackToCareerSelect}
+               onOpenSettings={() => setSettingsOpen(true)}
+               onExit={handleExitToTitle}
+               backgroundImage={backgroundImage}
+             />
+           );
+         case 'accountant':
+           return (
+             <AccountantDifficulty
+               onSelectDifficulty={handleDifficultySelect}
+               onBack={handleBackToCareerSelect}
+               onOpenSettings={() => setSettingsOpen(true)}
+               onExit={handleExitToTitle}
+               backgroundImage={backgroundImage}
+             />
+           );
+         case 'dentist':
+           return (
+             <DentistDifficulty
+               onSelectDifficulty={handleDifficultySelect}
+               onBack={handleBackToCareerSelect}
+               onOpenSettings={() => setSettingsOpen(true)}
+               onExit={handleExitToTitle}
+               backgroundImage={backgroundImage}
+             />
+           );
+         case 'construction':
+           return (
+             <ConstructionDifficulty
+               onSelectDifficulty={handleDifficultySelect}
+               onBack={handleBackToCareerSelect}
+               onOpenSettings={() => setSettingsOpen(true)}
+               onExit={handleExitToTitle}
+               backgroundImage={backgroundImage}
+             />
+           );
+         default:
+           return null;
+       }
     };
     
     return (
@@ -1447,6 +1573,15 @@ export default function Home() {
       lawyer: "/images/lawyer-bg.jpg",
       retail: "/images/retail-bg.jpg",
       electrician: "/images/electrician-bg.jpg",
+      firefighter: "/images/firefighter-bg.jpg",
+      police: "/images/police-bg.jpg",
+      pilot: "/images/pilot-bg.jpg",
+      veterinarian: "/images/veterinarian-bg.jpg",
+      journalist: "/images/journalist-bg.jpg",
+      "social-worker": "/images/social-worker-bg.jpg",
+      accountant: "/images/accountant-bg.jpg",
+      dentist: "/images/dentist-bg.jpg",
+      construction: "/images/construction-bg.jpg",
     };
     const backgroundImage = selectedCareer ? careerBackgrounds[selectedCareer] : undefined;
     
@@ -1555,19 +1690,127 @@ export default function Home() {
             onAnswerResult={handleAnswerResult}
           />
         )}
-        {selectedCareer === "electrician" && (
-          <ElectricianWorld
-            difficulty={selectedDifficulty ?? "easy"}
-            onComplete={handleChallengeComplete}
-            isQuickRecall={isQuickRecall}
-            isCertification={gameMode === "certification"}
-            alwaysCorrect={alwaysCorrect}
-            onExit={handleExitToTitle}
-            onTutorialBack={tutorialBackHandler}
-            onAnswerResult={handleAnswerResult}
-          />
-        )}
-        {settingsModal}
+{selectedCareer === "electrician" && (
+           <ElectricianWorld
+             difficulty={selectedDifficulty ?? "easy"}
+             onComplete={handleChallengeComplete}
+             isQuickRecall={isQuickRecall}
+             isCertification={gameMode === "certification"}
+             alwaysCorrect={alwaysCorrect}
+             onExit={handleExitToTitle}
+             onTutorialBack={tutorialBackHandler}
+             onAnswerResult={handleAnswerResult}
+           />
+         )}
+         {selectedCareer === "firefighter" && (
+           <FirefighterWorld
+             difficulty={selectedDifficulty ?? "easy"}
+             onComplete={handleChallengeComplete}
+             isQuickRecall={isQuickRecall}
+             isCertification={gameMode === "certification"}
+             alwaysCorrect={alwaysCorrect}
+             onExit={handleExitToTitle}
+             onTutorialBack={tutorialBackHandler}
+             onAnswerResult={handleAnswerResult}
+           />
+         )}
+         {selectedCareer === "police" && (
+           <PoliceWorld
+             difficulty={selectedDifficulty ?? "easy"}
+             onComplete={handleChallengeComplete}
+             isQuickRecall={isQuickRecall}
+             isCertification={gameMode === "certification"}
+             alwaysCorrect={alwaysCorrect}
+             onExit={handleExitToTitle}
+             onTutorialBack={tutorialBackHandler}
+             onAnswerResult={handleAnswerResult}
+           />
+         )}
+         {selectedCareer === "pilot" && (
+           <PilotWorld
+             difficulty={selectedDifficulty ?? "easy"}
+             onComplete={handleChallengeComplete}
+             isQuickRecall={isQuickRecall}
+             isCertification={gameMode === "certification"}
+             alwaysCorrect={alwaysCorrect}
+             onExit={handleExitToTitle}
+             onTutorialBack={tutorialBackHandler}
+             onAnswerResult={handleAnswerResult}
+           />
+         )}
+         {selectedCareer === "veterinarian" && (
+           <VeterinarianWorld
+             difficulty={selectedDifficulty ?? "easy"}
+             onComplete={handleChallengeComplete}
+             isQuickRecall={isQuickRecall}
+             isCertification={gameMode === "certification"}
+             alwaysCorrect={alwaysCorrect}
+             onExit={handleExitToTitle}
+             onTutorialBack={tutorialBackHandler}
+             onAnswerResult={handleAnswerResult}
+           />
+         )}
+         {selectedCareer === "journalist" && (
+           <JournalistWorld
+             difficulty={selectedDifficulty ?? "easy"}
+             onComplete={handleChallengeComplete}
+             isQuickRecall={isQuickRecall}
+             isCertification={gameMode === "certification"}
+             alwaysCorrect={alwaysCorrect}
+             onExit={handleExitToTitle}
+             onTutorialBack={tutorialBackHandler}
+             onAnswerResult={handleAnswerResult}
+           />
+         )}
+         {selectedCareer === "social-worker" && (
+           <SocialWorkerWorld
+             difficulty={selectedDifficulty ?? "easy"}
+             onComplete={handleChallengeComplete}
+             isQuickRecall={isQuickRecall}
+             isCertification={gameMode === "certification"}
+             alwaysCorrect={alwaysCorrect}
+             onExit={handleExitToTitle}
+             onTutorialBack={tutorialBackHandler}
+             onAnswerResult={handleAnswerResult}
+           />
+         )}
+         {selectedCareer === "accountant" && (
+           <AccountantWorld
+             difficulty={selectedDifficulty ?? "easy"}
+             onComplete={handleChallengeComplete}
+             isQuickRecall={isQuickRecall}
+             isCertification={gameMode === "certification"}
+             alwaysCorrect={alwaysCorrect}
+             onExit={handleExitToTitle}
+             onTutorialBack={tutorialBackHandler}
+             onAnswerResult={handleAnswerResult}
+           />
+         )}
+         {selectedCareer === "dentist" && (
+           <DentistWorld
+             difficulty={selectedDifficulty ?? "easy"}
+             onComplete={handleChallengeComplete}
+             isQuickRecall={isQuickRecall}
+             isCertification={gameMode === "certification"}
+             alwaysCorrect={alwaysCorrect}
+             onExit={handleExitToTitle}
+             onTutorialBack={tutorialBackHandler}
+             onAnswerResult={handleAnswerResult}
+           />
+         )}
+         {selectedCareer === "construction" && (
+           <ConstructionWorld
+             difficulty={selectedDifficulty ?? "easy"}
+             onComplete={handleChallengeComplete}
+             isQuickRecall={isQuickRecall}
+             isCertification={gameMode === "certification"}
+             alwaysCorrect={alwaysCorrect}
+             onExit={handleExitToTitle}
+             onTutorialBack={tutorialBackHandler}
+             onAnswerResult={handleAnswerResult}
+           />
+         )}
+         {settingsModal}
         <SecretTrophyPopup 
           show={showSecretTrophyPopup} 
           achievementType={currentAchievementType}

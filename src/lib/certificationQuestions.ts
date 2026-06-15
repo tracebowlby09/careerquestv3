@@ -541,6 +541,528 @@ const journeymanQuestions: CertificationQuestion[] = [
   },
 ];
 
+const firefighterCertQuestions: CertificationQuestion[] = [
+  {
+    id: "fc1",
+    domain: "Fire Behavior",
+    question: "What is the temperature at which a fire enters the fully developed stage?",
+    options: [
+      { id: "a", text: "500°F", correct: false, explanation: "This is too low for flashover conditions." },
+      { id: "b", text: "1000°F", correct: false, explanation: "This is not the critical threshold." },
+      { id: "c", text: "1500°F", correct: false, explanation: "This is high but not the standard measure." },
+      { id: "d", text: "Flashover occurs around 1000°F", correct: true, explanation: "Flashover typically occurs around 1000°F when all combustibles ignite simultaneously." },
+    ],
+  },
+  {
+    id: "fc2",
+    domain: "PPE",
+    question: "What does SCBA stand for in firefighting?",
+    options: [
+      { id: "a", text: "Safety Control Breathing Apparatus", correct: false, explanation: "This is not the correct acronym." },
+      { id: "b", text: "Self-Contained Breathing Apparatus", correct: true, explanation: "SCBA provides breathable air in hazardous atmospheres." },
+      { id: "c", text: "Standard Combined Breathing Air", correct: false, explanation: "Not the correct expansion." },
+      { id: "d", text: "Secure Chemical Breathing Apparatus", correct: false, explanation: "Incorrect." },
+    ],
+  },
+  {
+    id: "fc3",
+    domain: "Emergency Medical",
+    question: "What is the most common call type for fire departments?",
+    options: [
+      { id: "a", text: "Structure fires", correct: false, explanation: "Fires are less common than medical calls." },
+      { id: "b", text: "Vehicle accidents", correct: false, explanation: "While common, not the most frequent." },
+      { id: "c", text: "Medical emergencies", correct: true, explanation: "Most fire department calls are for EMS, not fires." },
+      { id: "d", text: "Hazardous material incidents", correct: false, explanation: "These are less frequent." },
+    ],
+  },
+  {
+    id: "fc4",
+    domain: "Ladders",
+    question: "What is the proper angle for ground ladders when placed against a wall?",
+    options: [
+      { id: "a", text: "45 degrees", correct: false, explanation: "This is not the standard placement angle." },
+      { id: "b", text: "75 degrees", correct: false, explanation: "This is too steep." },
+      { id: "c", text: "Should reach 4 feet above landing", correct: false, explanation: "This is a height requirement, not angle." },
+      { id: "d", text: "1:4 ratio (75° from horizontal)", correct: false, explanation: "This is too steep." },
+    ],
+  },
+  {
+    id: "fc5",
+    domain: "Fire Suppression",
+    question: "What is the primary purpose of a fire hose?",
+    options: [
+      { id: "a", text: "To transport water over long distances", correct: false, explanation: "Primary purpose is not transport." },
+      { id: "b", text: "To deliver water or foam to extinguish fires", correct: true, explanation: "Hoses deliver extinguishing agents directly to the fire." },
+      { id: "c", text: "To create a barrier between fire and building", correct: false, explanation: "This is not the primary purpose." },
+      { id: "d", text: "To cool down the surrounding area", correct: false, explanation: "While it cools, primary purpose is suppression." },
+    ],
+  },
+];
+
+const policeAcademyQuestions: CertificationQuestion[] = [
+  {
+    id: "pa1",
+    domain: "Law",
+    question: "What does Miranda warning protect?",
+    options: [
+      { id: "a", text: "Right to remain silent and right to an attorney", correct: true, explanation: "Miranda protects Fifth Amendment rights during custodial interrogation." },
+      { id: "b", text: "Right to bail", correct: false, explanation: "This is not covered in Miranda warnings." },
+      { id: "c", text: "Right to a speedy trial", correct: false, explanation: "This is a separate constitutional right." },
+      { id: "d", text: "Right to confront witnesses", correct: false, explanation: "This is Sixth Amendment, not Miranda." },
+    ],
+  },
+  {
+    id: "pa2",
+    domain: "Use of Force",
+    question: "When is deadly force justified in law enforcement?",
+    options: [
+      { id: "a", text: "Any time an officer feels threatened", correct: false, explanation: "Standard is higher than feeling threatened." },
+      { id: "b", text: "When fleeing felon is suspected", correct: false, explanation: "Deadly force requires imminent danger." },
+      { id: "c", text: "When facing imminent threat of death or serious injury", correct: true, explanation: "Deadly force is only justified when objectively reasonable." },
+      { id: "d", text: "During all high-risk traffic stops", correct: false, explanation: "Not all high-risk stops justify deadly force." },
+    ],
+  },
+  {
+    id: "pa3",
+    domain: "Investigation",
+    question: "What should officers do first at a crime scene?",
+    options: [
+      { id: "a", text: "Interrogate witnesses", correct: false, explanation: "Evidence preservation comes first." },
+      { id: "b", text: "Secure the scene and preserve evidence", correct: true, explanation: "First priority is safety and evidence preservation." },
+      { id: "c", text: "Take photographs", correct: false, explanation: "Important but comes after securing scene." },
+      { id: "d", text: "Start canvassing the neighborhood", correct: false, explanation: "Scene security is priority." },
+    ],
+  },
+  {
+    id: "pa4",
+    domain: "Ethics",
+    question: "What is the most important ethical duty of a police officer?",
+    options: [
+      { id: "a", text: "Follow orders from supervisors", correct: false, explanation: "Duty to law supersedes orders." },
+      { id: "b", text: "Protect constitutional rights and serve community", correct: true, explanation: "Officers serve the public and protect rights." },
+      { id: "c", text: "Support fellow officers unconditionally", correct: false, explanation: "Blue wall of silence violates ethics." },
+      { id: "d", text: "Maintain personal safety above all", correct: false, explanation: "Public safety is priority in context." },
+    ],
+  },
+  {
+    id: "pa5",
+    domain: "Patrol",
+    question: "What is the primary purpose of routine patrol?",
+    options: [
+      { id: "a", text: "To write traffic tickets", correct: false, explanation: "Enforcement is one aspect, not primary." },
+      { id: "b", text: "To deter crime and maintain visibility", correct: true, explanation: "Visible patrol presence deters criminal activity." },
+      { id: "c", text: "To enforce speed limits only", correct: false, explanation: "Much broader scope." },
+      { id: "d", text: "To respond to calls for service", correct: false, explanation: "Response is reactive; patrol is proactive." },
+    ],
+  },
+];
+
+const cplLicenseQuestions: CertificationQuestion[] = [
+  {
+    id: "cpl1",
+    domain: "Weather",
+    question: "What is the dew point?",
+    options: [
+      { id: "a", text: "Temperature at which air becomes saturated", correct: true, explanation: "Dew point is when air can't hold more moisture." },
+      { id: "b", text: "Difference between temperature and humidity", correct: false, explanation: "This is not the definition." },
+      { id: "c", text: "Temperature at which fog forms", correct: false, explanation: "Related but not precise definition." },
+      { id: "d", text: "Wind speed measurement", correct: false, explanation: "Unrelated to weather theory." },
+    ],
+  },
+  {
+    id: "cpl2",
+    domain: "Regulations",
+    question: "What does VFR stand for in aviation?",
+    options: [
+      { id: "a", text: "Visual Flight Rules", correct: true, explanation: "VFR allows flight by visual reference." },
+      { id: "b", text: "Velocity Flight Rating", correct: false, explanation: "Not the correct acronym." },
+      { id: "c", text: "Vertical Flight Regulations", correct: false, explanation: "Incorrect." },
+      { id: "d", text: "Verified Flight Requirements", correct: false, explanation: "Not correct." },
+    ],
+  },
+  {
+    id: "cpl3",
+    domain: "Navigation",
+    question: "What is the primary method of navigation for VFR pilots?",
+    options: [
+      { id: "a", text: "GPS systems only", correct: false, explanation: "Pilotage and dead reckoning are primary." },
+      { id: "b", text: "Visual reference to ground landmarks", correct: true, explanation: "VFR pilots navigate by visual reference." },
+      { id: "c", text: "Radio navigation aids only", correct: false, explanation: "Supplemental, not primary." },
+      { id: "d", text: "Celestial navigation", correct: false, explanation: "Not used in modern aviation." },
+    ],
+  },
+  {
+    id: "cpl4",
+    domain: "Aircraft Systems",
+    question: "What provides lift to an aircraft in flight?",
+    options: [
+      { id: "a", text: "Engine thrust", correct: false, explanation: "Thrust provides forward motion, not lift." },
+      { id: "b", text: "Wing shape (airfoil) creating pressure differential", correct: true, explanation: "Airfoil design creates lift through Bernoulli's principle." },
+      { id: "c", text: "Rudder control", correct: false, explanation: "Rudder controls yaw, not lift." },
+      { id: "d", text: "Landing gear", correct: false, explanation: "Landing gear provides ground support." },
+    ],
+  },
+  {
+    id: "cpl5",
+    domain: "Safety",
+    question: "What is the best way to handle wake turbulence?",
+    options: [
+      { id: "a", text: "Fly faster to escape it", correct: false, explanation: "Speeding up worsens the situation." },
+      { id: "b", text: "Maintain positive control and altitude", correct: true, explanation: "Stay alert and maintain control until turbulence passes." },
+      { id: "c", text: "Turn away immediately", correct: false, explanation: "Turning may put you in worse conditions." },
+      { id: "d", text: "Reduce throttle to idle", correct: false, explanation: "Maintaining airspeed is critical." },
+    ],
+  },
+];
+
+const vetTechQuestions: CertificationQuestion[] = [
+  {
+    id: "vt1",
+    domain: "Animal Care",
+    question: "What is the normal body temperature for a dog?",
+    options: [
+      { id: "a", text: "98-100°F", correct: false, explanation: "This is too low for canine temperature." },
+      { id: "b", text: "100-102°F", correct: false, explanation: "This is still below normal range." },
+      { id: "c", text: "101-102.5°F", correct: true, explanation: "Normal canine temperature is 101-102.5°F." },
+      { id: "d", text: "103-104°F", correct: false, explanation: "This indicates fever in dogs." },
+    ],
+  },
+  {
+    id: "vt2",
+    domain: "Anatomy",
+    question: "How many lobes make up a dog's lung?",
+    options: [
+      { id: "a", text: "Two", correct: false, explanation: "Dogs have more than two lobes." },
+      { id: "b", text: "Three", correct: false, explanation: "Dogs typically have four or more." },
+      { id: "c", text: "Four", correct: true, explanation: "Dogs have four lung lobes (cranial and caudal on each side)." },
+      { id: "d", text: "Five", correct: false, explanation: "Not the correct number." },
+    ],
+  },
+  {
+    id: "vt3",
+    domain: "Pharmacology",
+    question: "Which medication is commonly used for heartworm prevention?",
+    options: [
+      { id: "a", text: "Antibiotics", correct: false, explanation: "Not used for heartworm prevention." },
+      { id: "b", text: "Macrocyclic lactones (e.g., Heartgard)", correct: true, explanation: "Monthly preventive medications target heartworms." },
+      { id: "c", text: "Pain relievers", correct: false, explanation: "Not for parasite prevention." },
+      { id: "d", text: "Vitamins", correct: false, explanation: "Supplemental, not preventive." },
+    ],
+  },
+  {
+    id: "vt4",
+    domain: "Surgery",
+    question: "What position is used for abdominal surgery in animals?",
+    options: [
+      { id: "a", text: "Lateral recumbency", correct: false, explanation: "Side-lying position for other procedures." },
+      { id: "b", text: "Dorsal recumbency", correct: true, explanation: "On the back with legs extended is standard for abdominal access." },
+      { id: "c", text: "Trendelenburg", correct: false, explanation: "Not standard for surgery." },
+      { id: "d", text: "Jackknife", correct: false, explanation: "Specific positioning for other uses." },
+    ],
+  },
+  {
+    id: "vt5",
+    domain: "Dentistry",
+    question: "What is the best way to assess oral health in pets?",
+    options: [
+      { id: "a", text: "Visual inspection while awake only", correct: false, explanation: "Needs more thorough examination." },
+      { id: "b", text: "Physical exam under sedation", correct: true, explanation: "Safe, thorough assessment requires calm patient." },
+      { id: "c", text: "Blood tests", correct: false, explanation: "Indirect indicator." },
+      { id: "d", text: "X-ray from distance", correct: false, explanation: "Dental radiographs require close positioning." },
+    ],
+  },
+];
+
+const journalismAwardQuestions: CertificationQuestion[] = [
+  {
+    id: "ja1",
+    domain: "Ethics",
+    question: "What is the primary principle of journalistic ethics?",
+    options: [
+      { id: "a", text: "Get the story first regardless of facts", correct: false, explanation: "Speed must not compromise accuracy." },
+      { id: "b", text: "Seek truth and report it accurately", correct: true, explanation: "Accuracy and truth are fundamental." },
+      { id: "c", text: "Entertain the audience above all", correct: false, explanation: "Entertainment is secondary to informing." },
+      { id: "d", text: "Support political candidates", correct: false, explanation: "Journalism should be impartial." },
+    ],
+  },
+  {
+    id: "ja2",
+    domain: "Legal",
+    question: "What is defamation in journalism?",
+    options: [
+      { id: "a", text: "Reporting on public figures", correct: false, explanation: "Not defamation." },
+      { id: "b", text: "False statement damaging to reputation", correct: true, explanation: "Defamation requires false factual statements that harm reputation." },
+      { id: "c", text: "Criticizing public policy", correct: false, explanation: "Protected opinion." },
+      { id: "d", text: "Interviewing sources", correct: false, explanation: "Standard practice." },
+    ],
+  },
+  {
+    id: "ja3",
+    domain: "Sources",
+    question: "What is the responsibility regarding anonymous sources?",
+    options: [
+      { id: "a", text: "Never use anonymous sources", correct: false, explanation: "Sometimes necessary but must be verified." },
+      { id: "b", text: "Use only when information cannot be obtained otherwise", correct: true, explanation: "Anonymous sources require strong justification." },
+      { id: "c", text: "Always reveal anonymous sources to subjects", correct: false, explanation: "Would defeat purpose of anonymity." },
+      { id: "d", text: "Publish all anonymous tips immediately", correct: false, explanation: "Must verify before publishing." },
+    ],
+  },
+  {
+    id: "ja4",
+    domain: "Writing",
+    question: "What is the inverted pyramid style?",
+    options: [
+      { id: "a", text: "Story told like a pyramid shape", correct: false, explanation: "Not about visual layout." },
+      { id: "b", text: "Most important information first", correct: true, explanation: "Key facts come first, details follow." },
+      { id: "c", text: "All questions answered at the end", correct: false, explanation: "Not the structure for news." },
+      { id: "d", text: "Personal opinion at the top", correct: false, explanation: "Should be factual." },
+    ],
+  },
+  {
+    id: "ja5",
+    domain: "Verification",
+    question: "What is verification in journalism?",
+    options: [
+      { id: "a", text: "Making up quotes that sound real", correct: false, explanation: "Unethical and potentially illegal." },
+      { id: "b", text: "Confirming information through multiple independent sources", correct: true, explanation: "Verification ensures accuracy before publication." },
+      { id: "c", text: "Trusting first source only", correct: false, explanation: "Requires confirmation." },
+      { id: "d", text: "Waiting for someone else to report it first", correct: false, explanation: "This is following, not verifying." },
+    ],
+  },
+];
+
+const lcswQuestions: CertificationQuestion[] = [
+  {
+    id: "lcsw1",
+    domain: "Theory",
+    question: "What does CBT stand for in clinical social work?",
+    options: [
+      { id: "a", text: "Cognitive Behavioral Therapy", correct: true, explanation: "CBT focuses on thoughts and behaviors." },
+      { id: "b", text: "Community-Based Therapy", correct: false, explanation: "Not the standard abbreviation." },
+      { id: "c", text: "Clinical Brief Therapy", correct: false, explanation: "Incorrect." },
+      { id: "d", text: "Cost-Benefit Treatment", correct: false, explanation: "Not relevant." },
+    ],
+  },
+  {
+    id: "lcsw2",
+    domain: "HIPAA",
+    question: "What is required for HIPAA compliance?",
+    options: [
+      { id: "a", text: "Share all client information casually", correct: false, explanation: "Confidentiality is essential." },
+      { id: "b", text: "Protect client health information and limit disclosure", correct: true, explanation: "HIPAA requires safeguarding health information." },
+      { id: "c", text: "Only discuss clients in private spaces", correct: false, explanation: "Incomplete - covers more." },
+      { id: "d", text: "Forget after case closes", correct: false, explanation: "Records must be maintained." },
+    ],
+  },
+  {
+    id: "lcsw3",
+    domain: "Assessment",
+    question: "What is the biopsychosocial model?",
+    options: [
+      { id: "a", text: "Only biological factors matter in treatment", correct: false, explanation: "Too narrow - needs more factors." },
+      { id: "b", text: "Biological, psychological, and social factors interact", correct: true, explanation: "Holistic approach to client assessment." },
+      { id: "c", text: "Group therapy only approach", correct: false, explanation: "Not about group work." },
+      { id: "d", text: "Family systems only", correct: false, explanation: "Too narrow." },
+    ],
+  },
+  {
+    id: "lcsw4",
+    domain: "Intervention",
+    question: "What is the primary goal of crisis intervention?",
+    options: [
+      { id: "a", text: "Immediate symptom reduction and safety", correct: true, explanation: "Focus on stabilizing immediate crisis." },
+      { id: "b", text: "Long-term therapy planning", correct: false, explanation: "This comes after stabilization." },
+      { id: "c", text: "Medication prescription", correct: false, explanation: "Social workers don't prescribe medication." },
+      { id: "d", text: "Case transfer to another agency", correct: false, explanation: "Intervention comes before transfer decisions." },
+    ],
+  },
+  {
+    id: "lcsw5",
+    domain: "Ethics",
+    question: "When must a social worker report suspected abuse?",
+    options: [
+      { id: "a", text: "Only if certain proof exists", correct: false, explanation: "Must report suspicions, not confirmations." },
+      { id: "b", text: "If there is reasonable suspicion", correct: true, explanation: "Mandated reporters must report suspicions immediately." },
+      { id: "c", text: "Only with parental permission", correct: false, explanation: "Reporting is mandatory regardless of permission." },
+      { id: "d", text: "After consulting with supervisor", correct: false, explanation: "Delay can harm children." },
+    ],
+  },
+];
+
+const cpaQuestions: CertificationQuestion[] = [
+  {
+    id: "cpa1",
+    domain: "Ethics",
+    question: "What is the auditor's responsibility regarding fraud?",
+    options: [
+      { id: "a", text: "Detect all fraud in financial statements", correct: false, explanation: "Auditors plan for reasonable detection, not all fraud." },
+      { id: "b", text: "Plan audit to detect material fraud", correct: true, explanation: "Auditors must design procedures to detect material misstatement." },
+      { id: "c", text: "Ignore fraud unless obvious", correct: false, explanation: "This violates professional standards." },
+      { id: "d", text: "Report fraud to law enforcement directly", correct: false, explanation: "Report to audit committee first." },
+    ],
+  },
+  {
+    id: "cpa2",
+    domain: "Auditing",
+    question: "What does GAAP stand for?",
+    options: [
+      { id: "a", text: "Generally Accepted Accounting Principles", correct: true, explanation: "GAAP is the standard for financial reporting." },
+      { id: "b", text: "Government Accounting Audit Process", correct: false, explanation: "Not the correct expansion." },
+      { id: "c", text: "Global Accounting Accuracy Protocol", correct: false, explanation: "Incorrect." },
+      { id: "d", text: "Grouped Asset Analysis Process", correct: false, explanation: "Not correct." },
+    ],
+  },
+  {
+    id: "cpa3",
+    domain: "Tax",
+    question: "What is the standard mileage rate for business use in 2024?",
+    options: [
+      { id: "a", text: "58.5 cents per mile", correct: false, explanation: "This is not the 2024 rate." },
+      { id: "b", text: "65.5 cents per mile", correct: false, explanation: "Check current IRS guidelines." },
+      { id: "c", text: "67 cents per mile", correct: true, explanation: "IRS standard mileage rate for 2024 business miles." },
+      { id: "d", text: "70 cents per mile", correct: false, explanation: "Too high for standard rate." },
+    ],
+  },
+  {
+    id: "cpa4",
+    domain: "Financial",
+    question: "What is working capital?",
+    options: [
+      { id: "a", text: "Total assets minus total liabilities", correct: false, explanation: "This is equity, not working capital." },
+      { id: "b", text: "Current assets minus current liabilities", correct: true, explanation: "Working capital measures short-term liquidity." },
+      { id: "c", text: "Cash on hand only", correct: false, explanation: "More comprehensive measure." },
+      { id: "d", text: "Yearly revenue", correct: false, explanation: "Not a balance sheet measure." },
+    ],
+  },
+  {
+    id: "cpa5",
+    domain: "Reporting",
+    question: "What is the purpose of a trial balance?",
+    options: [
+      { id: "a", text: "Ensure total debits equal credits before financial statements", correct: true, explanation: "Trial balance confirms mathematical accuracy of ledger." },
+      { id: "b", text: "Record all transactions", correct: false, explanation: "Done before trial balance." },
+      { id: "c", text: "Calculate tax obligations", correct: false, explanation: "Separate process." },
+      { id: "d", text: "Determine profit margin", correct: false, explanation: "Calculated during reporting." },
+    ],
+  },
+];
+
+const dentalBoardQuestions: CertificationQuestion[] = [
+  {
+    id: "db1",
+    domain: "Anatomy",
+    question: "How many teeth does an adult human typically have?",
+    options: [
+      { id: "a", text: "28", correct: false, explanation: "Missing the third molars." },
+      { id: "b", text: "30", correct: false, explanation: "Correct number is 32." },
+      { id: "c", text: "32", correct: true, explanation: "32 teeth including 4 wisdom teeth per quadrant." },
+      { id: "d", text: "36", correct: false, explanation: "Too high for typical adult dentition." },
+    ],
+  },
+  {
+    id: "db2",
+    domain: "Procedures",
+    question: "What is the purpose of local anesthesia in dentistry?",
+    options: [
+      { id: "a", text: "Render patient unconscious", correct: false, explanation: "That's general anesthesia." },
+      { id: "b", text: "Block pain sensation in specific area", correct: true, explanation: "Local anesthesia numbs the injection site." },
+      { id: "c", text: "Reduce anxiety only", correct: false, explanation: "That's nitrous oxide or sedation." },
+      { id: "d", text: "Speed up the procedure", correct: false, explanation: "Not the purpose." },
+    ],
+  },
+  {
+    id: "db3",
+    domain: "Materials",
+    question: "What is composite resin commonly used for?",
+    options: [
+      { id: "a", text: "Root canals", correct: false, explanation: "Gutta percha is used for root canals." },
+      { id: "b", text: "Fillings and bonding", correct: true, explanation: "Composite resin is for tooth-colored restorations." },
+      { id: "c", text: "Crowns only", correct: false, explanation: "Different material." },
+      { id: "d", text: "Implants only", correct: false, explanation: "Different material." },
+    ],
+  },
+  {
+    id: "db4",
+    domain: "Safety",
+    question: "What infection control measure is essential in dentistry?",
+    options: [
+      { id: "a", text: "Rub hands quickly", correct: false, explanation: "Specific protocol required." },
+      { id: "b", text: "Wear gloves only when visibly dirty", correct: false, explanation: "Universal precautions always." },
+      { id: "c", text: "Universal precautions for all patients", correct: true, explanation: "Treat all as potentially infectious." },
+      { id: "d", text: "Clean instruments weekly", correct: false, explanation: "Sterilization is after each use." },
+    ],
+  },
+  {
+    id: "db5",
+    domain: "Radiology",
+    question: "What is the ALARA principle in dental X-rays?",
+    options: [
+      { id: "a", text: "Take as many X-rays as possible", correct: false, explanation: "Opposite of ALARA." },
+      { id: "b", text: "As Low As Reasonably Achievable radiation exposure", correct: true, explanation: "ALARA minimizes patient radiation." },
+      { id: "c", text: "Always use the largest film", correct: false, explanation: "Size depends on area being imaged." },
+      { id: "d", text: "Avoid all X-rays for children", correct: false, explanation: "Needed when indicated with precautions." },
+    ],
+  },
+];
+
+const osha30Questions: CertificationQuestion[] = [
+  {
+    id: "osha1",
+    domain: "Hazards",
+    question: "What are the three main categories of construction hazards?",
+    options: [
+      { id: "a", text: "Falls, electrocution, struck-by, caught-in/between", correct: false, explanation: "Missing one category." },
+      { id: "b", text: "Falls, struck-by, caught-in/between, hazardous substances", correct: false, explanation: "Out of order and incomplete." },
+      { id: "c", text: "Falls, electrocution, struck-by, caught-in/between", correct: true, explanation: "These are the four fatal OSHA categories." },
+      { id: "d", text: "Weather, schedule, budget, quality", correct: false, explanation: "These are project management issues." },
+    ],
+  },
+  {
+    id: "osha2",
+    domain: "Protection",
+    question: "What does PPE stand for?",
+    options: [
+      { id: "a", text: "Personal Protective Equipment", correct: true, explanation: "PPE includes hard hats, safety glasses, etc." },
+      { id: "b", text: "Professional Project Evaluation", correct: false, explanation: "Not related to safety." },
+      { id: "c", text: "Proper Performance Essentials", correct: false, explanation: "Not correct." },
+      { id: "d", text: "Preventive Property Engineering", correct: false, explanation: "Incorrect." },
+    ],
+  },
+  {
+    id: "osha3",
+    domain: "Fall Protection",
+    question: "At what height is fall protection required on construction sites?",
+    options: [
+      { id: "a", text: "6 feet", correct: false, explanation: "Standard is higher." },
+      { id: "b", text: "8 feet", correct: false, explanation: "Not the OSHA requirement." },
+      { id: "c", text: "10 feet", correct: false, explanation: "Not the construction standard." },
+      { id: "d", text: "6 feet for general industry, 10+ feet for construction", correct: true, explanation: "OSHA requires fall protection at 6 feet in general industry, higher thresholds in construction." },
+    ],
+  },
+  {
+    id: "osha4",
+    domain: "Scaffolding",
+    question: "What is the maximum load for most scaffold platforms?",
+    options: [
+      { id: "a", text: "20 pounds per square foot", correct: false, explanation: "Too low for typical loads." },
+      { id: "b", text: "35 pounds per square foot", correct: false, explanation: "Below standard." },
+      { id: "c", text: "50 pounds per square foot", correct: true, explanation: "Plus 4 times the intended load for impact." },
+      { id: "d", text: "100 pounds per square foot", correct: false, explanation: "Too high for typical scaffolding." },
+    ],
+  },
+  {
+    id: "osha5",
+    domain: "Excavation",
+    question: "What is the minimum depth requiring a trench box or sloping?",
+    options: [
+      { id: "a", text: "2 feet", correct: false, explanation: "Below requirement." },
+      { id: "b", text: "3 feet", correct: false, explanation: "Still below standard." },
+      { id: "c", text: "5 feet", correct: true, explanation: "OSHA requires protective systems at 5 feet depth." },
+      { id: "d", text: "10 feet", correct: false, explanation: "Too deep without protection." },
+    ],
+  },
+];
+
 export const certificationQuestionBank = {
   "aws-developer": awsDeveloperQuestions,
   "rn-license": rnLicenseQuestions,
@@ -551,6 +1073,15 @@ export const certificationQuestionBank = {
   "bar-exam": barExamQuestions,
   "customer-service": customerServiceQuestions,
   "journeyman": journeymanQuestions,
+  "firefighter-cert": firefighterCertQuestions,
+  "police-academy": policeAcademyQuestions,
+  "cpl-license": cplLicenseQuestions,
+  "vet-tech": vetTechQuestions,
+  "journalism-award": journalismAwardQuestions,
+  "lcsw": lcswQuestions,
+  "cpa": cpaQuestions,
+  "dental-board": dentalBoardQuestions,
+  "osha-30": osha30Questions,
 } as const;
 
 export const certificationConfig = {
@@ -563,6 +1094,15 @@ export const certificationConfig = {
   "bar-exam": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
   "customer-service": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
   "journeyman": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
+  "firefighter-cert": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
+  "police-academy": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
+  "cpl-license": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
+  "vet-tech": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
+  "journalism-award": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
+  "lcsw": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
+  "cpa": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
+  "dental-board": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
+  "osha-30": { questionCount: 5, passPercentage: 80, timeLimitSeconds: null },
 } as const;
 
 export const certificationMetadata: Record<string, { title: string; icon: string; description: string; color: string }> = {
@@ -619,5 +1159,59 @@ export const certificationMetadata: Record<string, { title: string; icon: string
     icon: "⚡",
     description: "Electrical work licensure",
     color: "yellow",
+  },
+  "firefighter-cert": {
+    title: "Firefighter I & II Certification",
+    icon: "🚒",
+    description: "Fire service professional certification",
+    color: "red",
+  },
+  "police-academy": {
+    title: "Police Academy Certification",
+    icon: "👮",
+    description: "Law enforcement training completion",
+    color: "blue",
+  },
+  "cpl-license": {
+    title: "Commercial Pilot License",
+    icon: "✈️",
+    description: "Aviation pilot certification",
+    color: "sky",
+  },
+  "vet-tech": {
+    title: "Veterinary Technician Certification",
+    icon: "🐕",
+    description: "Animal healthcare certification",
+    color: "green",
+  },
+  "journalism-award": {
+    title: "Journalism Excellence Award",
+    icon: "📰",
+    description: "Reporting and ethics certification",
+    color: "slate",
+  },
+  "lcsw": {
+    title: "Licensed Clinical Social Worker",
+    icon: "🤝",
+    description: "Clinical social work certification",
+    color: "teal",
+  },
+  "cpa": {
+    title: "Certified Public Accountant",
+    icon: "📊",
+    description: "Accounting and tax professional certification",
+    color: "emerald",
+  },
+  "dental-board": {
+    title: "Dental Board Certification",
+    icon: "🦷",
+    description: "Dental practice certification",
+    color: "blue",
+  },
+  "osha-30": {
+    title: "OSHA 30-Hour Construction",
+    icon: "🏗️",
+    description: "Construction safety certification",
+    color: "orange",
   },
 } as const;
