@@ -9,6 +9,7 @@ interface TitleScreenProps {
   onOpenSettings: () => void;
   onViewTrophies: () => void;
   onViewStats: () => void;
+  onOpenProfile: () => void;
   level: number;
   xp: number;
   streak: number;
@@ -46,7 +47,7 @@ const difficultyLabels: Record<Difficulty, string> = {
   hard: "🥇 Gold",
 };
 
-export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, onViewStats, level, xp, streak, completedToday, onAcceptDailyChallenge }: TitleScreenProps) {
+export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, onViewStats, onOpenProfile, level, xp, streak, completedToday, onAcceptDailyChallenge }: TitleScreenProps) {
   const handleStart = (mode: GameMode) => {
     audioSystem.playClickSound();
     onStart(mode);
@@ -59,6 +60,16 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, o
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-purple-900 p-4 md:p-8 flex items-center justify-center">
       <div className="max-w-3xl w-full relative z-10">
+        {/* Profile Button - Top Right */}
+        <button
+          onClick={onOpenProfile}
+          className="absolute top-4 right-4 z-20 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/30 to-indigo-500/30 backdrop-blur-sm text-white font-bold hover:scale-110 transition-transform"
+          title="View Profile"
+        >
+          <span className="text-2xl">👤</span>
+          <span className="hidden md:inline">Level {level}</span>
+        </button>
+        
         <GradientCard className="p-10 md:p-16 text-center" gradient="from-white/10 to-white/5 backdrop-blur-xl border border-white/20">
           <div className="mb-8">
             <AnimatedIcon animate="bounce" className="text-7xl mb-6 inline-block">🎯</AnimatedIcon>

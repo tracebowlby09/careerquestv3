@@ -28,7 +28,7 @@ import Settings from "@/components/Settings";
 import TrophyScreen from "@/components/TrophyScreen";
 import StatsScreen from "@/components/StatsScreen";
 import LevelUpPopup from "@/components/LevelUpPopup";
-import DailyChallenge from "@/components/DailyChallenge";
+import ProfileScreen from "@/components/ProfileScreen";
 import SecretTrophyPopup from "@/components/SecretTrophyPopup";
 import HomeTutorial from "@/components/HomeTutorial";
 import CareerInfoPage from "@/components/CareerInfoPage";
@@ -37,7 +37,7 @@ import { careerInfoByCareer } from "@/lib/careerInfo";
 import { audioSystem } from "@/lib/audio";
 import ScreenWrapper from "@/components/ScreenWrapper";
 
-type GameState = "title" | "tutorial" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "trophy" | "stats" | "career-info";
+type GameState = "title" | "tutorial" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "trophy" | "stats" | "career-info" | "profile";
 
 const careerNames: Record<Career, string> = {
   programmer: "Software Programmer",
@@ -1171,6 +1171,7 @@ export default function Home() {
           onOpenSettings={() => setSettingsOpen(true)} 
           onViewTrophies={() => setGameState("trophy")}
           onViewStats={() => setGameState("stats")}
+          onOpenProfile={() => setGameState("profile")}
           level={playerProgress.level}
           xp={playerProgress.xp}
           streak={playerProgress.streak || 0}
@@ -1611,6 +1612,17 @@ export default function Home() {
           onClose={() => setShowLevelUp(false)}
         />
       </>
+    );
+  }
+
+  if (gameState === "profile") {
+    return (
+      <ProfileScreen
+        trophies={trophies}
+        level={playerProgress.level}
+        xp={playerProgress.xp}
+        onBack={() => setGameState("title")}
+      />
     );
   }
 
