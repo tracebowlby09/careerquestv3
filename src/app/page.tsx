@@ -47,11 +47,10 @@ import TrophyScreen from "@/components/TrophyScreen";
 import StatsScreen from "@/components/StatsScreen";
 import LevelUpPopup from "@/components/LevelUpPopup";
 import ProfileScreen from "@/components/ProfileScreen";
-import SecretTrophyPopup from "@/components/SecretTrophyPopup";
-import HomeTutorial from "@/components/HomeTutorial";
-import CareerInfoPage from "@/components/CareerInfoPage";
-import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer, GameSession, PlayerProgress, calculateLevel, calculateXPForNextLevel, getTodayDate, getDailyChallenge, getStreakXPBonus } from "@/types/game";
+import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer } from "@/types/game";
 import { careerInfoByCareer } from "@/lib/careerInfo";
+import { getTodayDate, calculateLevel, calculateXPForNextLevel, getStreakXPBonus, getDailyChallenge } from "@/types/game";
+import { GameSession, PlayerProgress } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import ScreenWrapper from "@/components/ScreenWrapper";
 
@@ -156,7 +155,7 @@ const checkAchievements = (
   total: number
 ): AchievementType[] => {
   const achievements: AchievementType[] = [];
-  const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician"];
+  const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician", "firefighter", "police", "pilot", "veterinarian", "journalist", "social-worker", "accountant", "dentist", "construction"];
   const allDifficulties: Difficulty[] = ["easy", "medium", "hard"];
   
   // Check for Career Master - all 3 difficulties for any career
@@ -275,7 +274,7 @@ const checkEasterEggAchievements = (
   gameStartHourValue: number | null
 ): AchievementType[] => {
   const achievements: AchievementType[] = [];
-  const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician"];
+  const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician", "firefighter", "police", "pilot", "veterinarian", "journalist", "social-worker", "accountant", "dentist", "construction"];
 
   // Lightning Reflex - 5 correct answers in a row
   if (currentConsecutiveCorrect >= 5) {
@@ -359,6 +358,7 @@ export default function Home() {
   const [oldLevel, setOldLevel] = useState(1);
   const [xpGainedLastChallenge, setXpGainedLastChallenge] = useState(0);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [showSecretTrophyPopup, setShowSecretTrophyPopup] = useState(false);
   const [showSecretTrophyPopup, setShowSecretTrophyPopup] = useState(false);
   const [currentAchievementType, setCurrentAchievementType] = useState<string | null>(null);
 
@@ -587,7 +587,7 @@ export default function Home() {
       }
     }
     
-    // Check date-based trophies (State Week: April 27-29, 2026; Nationals: June 29 - July 2, 2026 and Today Check-in)
+    // Check date-based trophies (State Week: April 27-29, 2026 and Today Check-in)
     const now = new Date();
     const currentYear = now.getFullYear();
     const currentMonth = now.getMonth() + 1; // 1-indexed
@@ -595,9 +595,6 @@ export default function Home() {
     
     // State Week trophy: April 27-29, 2026
     const isStateWeek = currentMonth === 4 && currentDay >= 27 && currentDay <= 29 && currentYear === 2026;
-    
-    // Nationals trophy: June 29 - July 2, 2026
-    const isNationals = (currentMonth === 6 && currentDay >= 29) || (currentMonth === 7 && currentDay <= 2) && currentYear === 2026;
     
     // Today Check-in trophy: any day (today is April 17, 2026)
     const hasTodayCheckin = true;
@@ -609,13 +606,6 @@ export default function Home() {
       const alreadyHasStateWeek = existingTrophies.some((t) => t.achievementType === "state-week");
       if (!alreadyHasStateWeek) {
         dateAchievements.push("state-week");
-      }
-    }
-    
-    if (isNationals) {
-      const alreadyHasNationals = existingTrophies.some((t) => t.achievementType === "nationals");
-      if (!alreadyHasNationals) {
-        dateAchievements.push("nationals");
       }
     }
     
@@ -665,13 +655,6 @@ export default function Home() {
     }
   };
 
-  const handleLearnMore = (career: Career) => {
-    setSelectedCareer(career);
-    setSelectedDifficulty(null);
-    setSelectedCertification(null);
-    setGameState("career-info");
-  };
-
   const handleCertificationSelect = (certType: CertificationType) => {
     setSelectedCertification(certType);
     // Map certification type to career for outcome screen
@@ -708,14 +691,14 @@ export default function Home() {
     // Determine game modes first
     const isQuickRecallMode = gameMode === "quick-recall";
     const isCertificationMode = gameMode === "certification";
-    
+
     setChallengeSuccess(success);
     setScore(finalScore);
     setTotalQuestions(total);
     if (incorrect) {
       setIncorrectAnswers(incorrect);
     }
-    
+
     // Save game session for stats tracking
     if (selectedCareer && selectedDifficulty) {
       const newSession: GameSession = {
@@ -731,11 +714,11 @@ export default function Home() {
       const updatedSessions = [...sessions, newSession];
       setSessions(updatedSessions);
       saveGameSessions(updatedSessions);
-      
+
       // Calculate and award XP
       const baseXP = { easy: 10, medium: 20, hard: 30 };
       const xpFromDifficulty = success ? baseXP[selectedDifficulty] : Math.floor(baseXP[selectedDifficulty] / 2);
-      
+
       let xpFromMode = 0;
       if (isQuickRecallMode) {
         const percentage = (finalScore / total) * 100;
@@ -744,21 +727,21 @@ export default function Home() {
         const percentage = (finalScore / total) * 100;
         xpFromMode = percentage >= 80 ? 60 : percentage >= 60 ? 40 : 20;
       }
-      
+
       const totalXP = xpFromDifficulty + xpFromMode;
-      
+
       // Update streak and award XP bonus
       const today = getTodayDate();
       const { streak: oldStreak = 0, lastPlayedDate: oldDate, xp: oldXP, level: oldPlayerLevel } = playerProgress;
       let updatedStreak = oldStreak;
-      
+
       // Check if this is a new day (different from last played)
       const isNewDay = oldDate !== today;
       if (isNewDay) {
         const lastDate = oldDate ? new Date(oldDate) : new Date(today);
         const currentDate = new Date(today);
         const dayDiff = Math.floor((currentDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
-        
+
         if (dayDiff === 1) {
           // Consecutive day - increment streak
           updatedStreak = oldStreak + 1;
@@ -767,38 +750,38 @@ export default function Home() {
           updatedStreak = 1;
         }
       }
-      
+
       // Streak XP bonus (5 XP per day, max 50)
       const streakXP = isNewDay ? Math.min(updatedStreak * 5, 50) : 0;
       const xpGain = totalXP + streakXP;
-      
+
       if (xpGain > 0) {
         const newXP = oldXP + totalXP + streakXP;
         const levelBefore = calculateLevel(oldXP);
         const levelAfter = calculateLevel(newXP);
-        
-        setPlayerProgress({ 
-          xp: newXP, 
-          level: Math.max(oldPlayerLevel, levelAfter), 
-          streak: updatedStreak, 
-          lastPlayedDate: today 
+
+        setPlayerProgress({
+          xp: newXP,
+          level: Math.max(oldPlayerLevel, levelAfter),
+          streak: updatedStreak,
+          lastPlayedDate: today
         });
-        savePlayerProgress({ 
-          xp: newXP, 
-          level: Math.max(oldPlayerLevel, levelAfter), 
-          streak: updatedStreak, 
-          lastPlayedDate: today 
+        savePlayerProgress({
+          xp: newXP,
+          level: Math.max(oldPlayerLevel, levelAfter),
+          streak: updatedStreak,
+          lastPlayedDate: today
         });
-        
+
         setXpGainedLastChallenge(xpGain);
-        
+
         if (levelAfter > levelBefore) {
           setOldLevel(levelBefore);
           setShowLevelUp(true);
         }
       }
     }
-    
+
     // Play success or failure sound (only for challenge mode)
     if (!isQuickRecallMode && !isCertificationMode) {
       if (success) {
@@ -807,13 +790,13 @@ export default function Home() {
         audioSystem.playFailureSound();
       }
     }
-    
+
     // Calculate quick recall time
     let quickRecallTimeMs: number | null = null;
     if (isQuickRecallMode && quickRecallStartTime !== null) {
       quickRecallTimeMs = Date.now() - quickRecallStartTime;
     }
-    
+
     // Check for easter egg achievements
     const passedWithWrong = success && hasWrongAnswer;
     const easterEggAchievements = checkEasterEggAchievements(
@@ -829,11 +812,11 @@ export default function Home() {
       passedWithWrong,
       gameStartHour
     );
-    
+
     // Award trophy if successful
     if (success && selectedCareer) {
       let difficulty: Difficulty | undefined;
-      
+
       if (isCertificationMode) {
         // Certification uses "hard" difficulty for the trophy
         difficulty = "hard";
@@ -844,21 +827,21 @@ export default function Home() {
         // Regular challenge mode uses selected difficulty
         difficulty = selectedDifficulty || undefined;
       }
-      
+
       if (difficulty) {
         const newTrophy: Trophy = {
           career: selectedCareer,
           difficulty: difficulty,
           earnedAt: new Date(),
         };
-        
+
         // Check for achievements after awarding the new trophy
         const allTrophies = [...trophies, newTrophy];
         const newAchievements = checkAchievements(allTrophies, isQuickRecallMode, isCertificationMode, finalScore, total);
-        
+
         // Combine regular achievements with easter egg achievements
         const allNewAchievements = [...newAchievements, ...easterEggAchievements];
-        
+
         if (allNewAchievements.length > 0) {
           // Add achievement trophies
           const achievementTrophies = allNewAchievements.map((achievement) => ({
@@ -868,10 +851,10 @@ export default function Home() {
             isSecret: true,
             achievementType: achievement,
           }));
-          
+
           setTrophies([...allTrophies, ...achievementTrophies]);
           saveTrophies([...allTrophies, ...achievementTrophies]);
-          
+
           // Show popup for achievements
           setShowSecretTrophyPopup(true);
           setCurrentAchievementType(allNewAchievements[0]);
@@ -889,15 +872,15 @@ export default function Home() {
         isSecret: true,
         achievementType: achievement,
       }));
-      
+
       setTrophies([...trophies, ...achievementTrophies]);
       saveTrophies([...trophies, ...achievementTrophies]);
-      
+
       // Show popup for achievements
       setShowSecretTrophyPopup(true);
       setCurrentAchievementType(easterEggAchievements[0]);
     }
-    
+
     setGameState("outcome");
   };
 
@@ -976,100 +959,13 @@ export default function Home() {
   // Admin panel functions
   const handleClearTrophies = () => {
     setTrophies([]);
-    setSessions([]);
     saveTrophies([]);
-    saveGameSessions([]);
     audioSystem.playSuccessSound();
   };
 
   const handleToggleAlwaysCorrect = () => {
     setAlwaysCorrect(!alwaysCorrect);
     audioSystem.playClickSound();
-  };
-
-  const handleAwardAllRegularTrophies = () => {
-const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician", "firefighter", "police", "pilot", "veterinarian", "journalist", "social-worker", "accountant", "dentist", "construction"];
-    const allDifficulties: Difficulty[] = ["easy", "medium", "hard"];
-    const regularTrophies: Trophy[] = [];
-    allCareers.forEach((career) => {
-      allDifficulties.forEach((difficulty) => {
-        regularTrophies.push({
-          career,
-          difficulty,
-          earnedAt: new Date(),
-        });
-      });
-    });
-    const existingKeys = new Set(
-      trophies.filter((t) => !t.isSecret).map((t) => `${t.career}-${t.difficulty}`)
-    );
-    const newRegularTrophies = regularTrophies.filter(
-      (t) => !existingKeys.has(`${t.career}-${t.difficulty}`)
-    );
-    if (newRegularTrophies.length > 0) {
-      const updatedTrophies = [...trophies, ...newRegularTrophies];
-      setTrophies(updatedTrophies);
-      saveTrophies(updatedTrophies);
-      audioSystem.playSuccessSound();
-    }
-  };
-
-  const handleAwardAllSecretTrophies = () => {
-    const allAchievements: AchievementType[] = [
-      "career-master",
-      "quick-recall-champion",
-      "perfect-recall",
-      "konami-master",
-      "all-careers-master",
-      "all-quick-recalls-master",
-      "lightning-reflex",
-      "marathon-runner",
-      "speed-demon",
-      "jack-of-all-trades",
-      "lucky-star",
-      "night-owl",
-      "early-bird",
-      "pi-pioneer",
-      "pi-explorer",
-      "pi-master",
-      "pi-genius",
-      "pi-legend",
-      "state-week",
-      "today-checkin",
-      "nationals",
-      "phoenix",
-      "keyboard-warrior",
-      "explorer",
-      "patience",
-      "streak-master",
-      "return-customer",
-      "committed",
-      "tech-savvy",
-      "variety-pack",
-      "second-chance",
-      "certification-master",
-      "all-certifications-master",
-    ];
-    const existingTypes = new Set(
-      trophies
-        .filter((t) => t.isSecret && t.achievementType)
-        .map((t) => t.achievementType!)
-    );
-    const newAchievementTrophies = allAchievements
-      .filter((a) => !existingTypes.has(a))
-      .map((achievement) => ({
-        career: "programmer" as Career,
-        difficulty: "hard" as Difficulty,
-        earnedAt: new Date(),
-        isSecret: true,
-        achievementType: achievement,
-      }));
-    if (newAchievementTrophies.length > 0) {
-      const updatedTrophies = [...trophies, ...newAchievementTrophies];
-      setTrophies(updatedTrophies);
-      saveTrophies(updatedTrophies);
-      audioSystem.playSuccessSound();
-    }
   };
 
   const handleCloseAdmin = () => {
@@ -1171,27 +1067,6 @@ const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "che
                 🗑️ Clear All Trophies
               </button>
               
-              <button
-                onClick={handleAwardAllRegularTrophies}
-                className="w-full py-3 px-4 bg-yellow-600 hover:bg-yellow-700 text-white font-bold rounded-xl transition-all transform hover:scale-105"
-              >
-                🏆 Award All Regular Trophies
-              </button>
-              
-              <button
-                onClick={handleAwardAllSecretTrophies}
-                className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl transition-all transform hover:scale-105"
-              >
-                🔮 Award All Secret Trophies
-              </button>
-              
-              <button
-                onClick={handleClearTrophies}
-                className="w-full py-3 px-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all transform hover:scale-105"
-              >
-                🗑️ Clear All Trophies
-              </button>
-              
               <div className="pt-4 border-t border-purple-700">
                 <p className="text-purple-300 text-sm text-center">
                   Code: 5839201746
@@ -1220,20 +1095,17 @@ const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "che
           onStart={handleStart} 
           onOpenSettings={() => setSettingsOpen(true)} 
           onViewTrophies={() => setGameState("trophy")}
-          onViewStats={() => setGameState("stats")}
-          onOpenProfile={() => setGameState("profile")}
         />
         {settingsModal}
-        <SecretTrophyPopup
-          show={showSecretTrophyPopup}
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
           achievementType={currentAchievementType}
           onClose={() => {
             setShowSecretTrophyPopup(false);
             setCurrentAchievementType(null);
-          }}
+          }} 
         />
-        {adminMode && renderAdminPanel()}
-
+        {renderAdminPanel()}
       </>
     );
   }
@@ -1241,7 +1113,7 @@ const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "che
   if (gameState === "certification-select") {
     return (
       <>
-        <CertificationSelection
+        <CertificationSelection 
           onSelectCertification={handleCertificationSelect}
           onOpenSettings={() => setSettingsOpen(true)}
           onExit={() => {
@@ -1250,8 +1122,8 @@ const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "che
           }}
         />
         {settingsModal}
-        <SecretTrophyPopup
-          show={showSecretTrophyPopup}
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
           achievementType={currentAchievementType}
           onClose={() => {
             setShowSecretTrophyPopup(false);
@@ -1266,52 +1138,27 @@ const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "che
   if (gameState === "career-select") {
     return (
       <>
-        <CareerSelection
-          onSelectCareer={handleCareerSelect}
-          onLearnMore={handleLearnMore}
-          onOpenSettings={() => setSettingsOpen(true)}
+        <CareerSelection 
+          onSelectCareer={handleCareerSelect} 
+          onOpenSettings={() => setSettingsOpen(true)} 
           onExit={handleExitToTitle}
           gameMode={gameMode}
         />
         {settingsModal}
-        <SecretTrophyPopup
-          show={showSecretTrophyPopup}
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
           achievementType={currentAchievementType}
           onClose={() => {
             setShowSecretTrophyPopup(false);
             setCurrentAchievementType(null);
-          }}
+          }} 
         />
         {adminMode && renderAdminPanel()}
       </>
     );
   }
 
-  if (gameState === "career-info" && selectedCareer && careerInfoByCareer[selectedCareer]) {
-    return (
-      <>
-        <CareerInfoPage
-          career={selectedCareer}
-          onBack={handleBackToCareerSelect}
-          onStartCareer={handleCareerSelect}
-          onOpenSettings={() => setSettingsOpen(true)}
-          onExit={handleExitToTitle}
-        />
-        {settingsModal}
-        <SecretTrophyPopup
-          show={showSecretTrophyPopup}
-          achievementType={currentAchievementType}
-          onClose={() => {
-            setShowSecretTrophyPopup(false);
-            setCurrentAchievementType(null);
-          }}
-        />
-        {adminMode && renderAdminPanel()}
-      </>
-    );
-  }
-
-  if (gameState === "difficulty-select") {
+if (gameState === "difficulty-select") {
     if (!selectedCareer) {
       setGameState("career-select");
       return null;
@@ -1327,9 +1174,18 @@ const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "che
       lawyer: "/images/lawyer-bg.jpg",
       retail: "/images/retail-bg.jpg",
       electrician: "/images/electrician-bg.jpg",
+      firefighter: "/images/firefighter-bg.jpg",
+      police: "/images/police-bg.jpg",
+      pilot: "/images/pilot-bg.jpg",
+      veterinarian: "/images/veterinarian-bg.jpg",
+      journalist: "/images/journalist-bg.jpg",
+      "social-worker": "/images/social-worker-bg.jpg",
+      accountant: "/images/accountant-bg.jpg",
+      dentist: "/images/dentist-bg.jpg",
+      construction: "/images/construction-bg.jpg",
     };
     const backgroundImage = selectedCareer ? careerBackgrounds[selectedCareer] : undefined;
-    
+
     const renderDifficultySelection = () => {
       switch (selectedCareer) {
         case 'programmer':
@@ -1402,182 +1258,119 @@ const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "che
               backgroundImage={backgroundImage}
             />
           );
-case 'retail':
-           return (
-             <RetailDifficulty
-               onSelectDifficulty={handleDifficultySelect}
-               onBack={handleBackToCareerSelect}
-               onOpenSettings={() => setSettingsOpen(true)}
-               onExit={handleExitToTitle}
-               backgroundImage={backgroundImage}
-             />
-           );
-case 'electrician':
-           return (
-             <ElectricianDifficulty
-               onSelectDifficulty={handleDifficultySelect}
-               onBack={handleBackToCareerSelect}
-onOpenSettings={() => setSettingsOpen(true)}
-               onExit={handleExitToTitle}
-               backgroundImage={backgroundImage}
-             />
-           );
-         case 'firefighter':
-           return (
-             <FirefighterDifficulty
-               onSelectDifficulty={handleDifficultySelect}
-               onBack={handleBackToCareerSelect}
-               onOpenSettings={() => setSettingsOpen(true)}
-               onExit={handleExitToTitle}
-               backgroundImage={backgroundImage}
-             />
-           );
-         case 'police':
-           return (
-             <PoliceDifficulty
-               onSelectDifficulty={handleDifficultySelect}
-               onBack={handleBackToCareerSelect}
-               onOpenSettings={() => setSettingsOpen(true)}
-               onExit={handleExitToTitle}
-               backgroundImage={backgroundImage}
-             />
-           );
-         case 'pilot':
-           return (
-             <PilotDifficulty
-               onSelectDifficulty={handleDifficultySelect}
-               onBack={handleBackToCareerSelect}
-               onOpenSettings={() => setSettingsOpen(true)}
-               onExit={handleExitToTitle}
-               backgroundImage={backgroundImage}
-             />
-           );
-         case 'veterinarian':
-           return (
-             <VeterinarianDifficulty
-               onSelectDifficulty={handleDifficultySelect}
-               onBack={handleBackToCareerSelect}
-               onOpenSettings={() => setSettingsOpen(true)}
-               onExit={handleExitToTitle}
-               backgroundImage={backgroundImage}
-             />
-           );
-         case 'journalist':
-           return (
-             <JournalistDifficulty
-               onSelectDifficulty={handleDifficultySelect}
-               onBack={handleBackToCareerSelect}
-               onOpenSettings={() => setSettingsOpen(true)}
-               onExit={handleExitToTitle}
-               backgroundImage={backgroundImage}
-             />
-           );
-         case 'social-worker':
-           return (
-             <SocialWorkerDifficulty
-               onSelectDifficulty={handleDifficultySelect}
-               onBack={handleBackToCareerSelect}
-               onOpenSettings={() => setSettingsOpen(true)}
-               onExit={handleExitToTitle}
-               backgroundImage={backgroundImage}
-             />
-           );
-         case 'accountant':
-           return (
-             <AccountantDifficulty
-               onSelectDifficulty={handleDifficultySelect}
-               onBack={handleBackToCareerSelect}
-               onOpenSettings={() => setSettingsOpen(true)}
-               onExit={handleExitToTitle}
-               backgroundImage={backgroundImage}
-             />
-           );
-         case 'dentist':
-           return (
-             <DentistDifficulty
-               onSelectDifficulty={handleDifficultySelect}
-               onBack={handleBackToCareerSelect}
-               onOpenSettings={() => setSettingsOpen(true)}
-               onExit={handleExitToTitle}
-               backgroundImage={backgroundImage}
-             />
-           );
-         case 'construction':
-           return (
-             <ConstructionDifficulty
-               onSelectDifficulty={handleDifficultySelect}
-               onBack={handleBackToCareerSelect}
-               onOpenSettings={() => setSettingsOpen(true)}
-               onExit={handleExitToTitle}
-               backgroundImage={backgroundImage}
-             />
-           );
-         default:
-           return null;
-       }
-         case 'veterinarian':
-           return (
-             <VeterinarianDifficulty
-               onSelectDifficulty={handleDifficultySelect}
-               onBack={handleBackToCareerSelect}
-               onOpenSettings={() => setSettingsOpen(true)}
-               onExit={handleExitToTitle}
-               backgroundImage={backgroundImage}
-             />
-           );
-         case 'journalist':
-           return (
-             <JournalistDifficulty
-               onSelectDifficulty={handleDifficultySelect}
-               onBack={handleBackToCareerSelect}
-               onOpenSettings={() => setSettingsOpen(true)}
-               onExit={handleExitToTitle}
-               backgroundImage={backgroundImage}
-             />
-           );
-         case 'social-worker':
-           return (
-             <SocialWorkerDifficulty
-               onSelectDifficulty={handleDifficultySelect}
-               onBack={handleBackToCareerSelect}
-               onOpenSettings={() => setSettingsOpen(true)}
-               onExit={handleExitToTitle}
-               backgroundImage={backgroundImage}
-             />
-           );
-         case 'accountant':
-           return (
-             <AccountantDifficulty
-               onSelectDifficulty={handleDifficultySelect}
-               onBack={handleBackToCareerSelect}
-               onOpenSettings={() => setSettingsOpen(true)}
-               onExit={handleExitToTitle}
-               backgroundImage={backgroundImage}
-             />
-           );
-         case 'dentist':
-           return (
-             <DentistDifficulty
-               onSelectDifficulty={handleDifficultySelect}
-               onBack={handleBackToCareerSelect}
-               onOpenSettings={() => setSettingsOpen(true)}
-               onExit={handleExitToTitle}
-               backgroundImage={backgroundImage}
-             />
-           );
-         case 'construction':
-           return (
-             <ConstructionDifficulty
-               onSelectDifficulty={handleDifficultySelect}
-               onBack={handleBackToCareerSelect}
-               onOpenSettings={() => setSettingsOpen(true)}
-               onExit={handleExitToTitle}
-               backgroundImage={backgroundImage}
-             />
-           );
-         default:
-           return null;
-       }
+        case 'retail':
+          return (
+            <RetailDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        case 'electrician':
+          return (
+            <ElectricianDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        case 'firefighter':
+          return (
+            <FirefighterDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        case 'police':
+          return (
+            <PoliceDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        case 'pilot':
+          return (
+            <PilotDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        case 'veterinarian':
+          return (
+            <VeterinarianDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        case 'journalist':
+          return (
+            <JournalistDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        case 'social-worker':
+          return (
+            <SocialWorkerDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        case 'accountant':
+          return (
+            <AccountantDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        case 'dentist':
+          return (
+            <DentistDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        case 'construction':
+          return (
+            <ConstructionDifficulty
+              onSelectDifficulty={handleDifficultySelect}
+              onBack={handleBackToCareerSelect}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onExit={handleExitToTitle}
+              backgroundImage={backgroundImage}
+            />
+          );
+        default:
+          return null;
+      }
     };
     
     return (
@@ -1636,254 +1429,253 @@ onOpenSettings={() => setSettingsOpen(true)}
       lawyer: "/images/lawyer-bg.jpg",
       retail: "/images/retail-bg.jpg",
       electrician: "/images/electrician-bg.jpg",
-      firefighter: "/images/firefighter-bg.jpg",
-      police: "/images/police-bg.jpg",
-      pilot: "/images/pilot-bg.jpg",
-      veterinarian: "/images/veterinarian-bg.jpg",
-      journalist: "/images/journalist-bg.jpg",
-      "social-worker": "/images/social-worker-bg.jpg",
-      accountant: "/images/accountant-bg.jpg",
-      dentist: "/images/dentist-bg.jpg",
-      construction: "/images/construction-bg.jpg",
     };
     const backgroundImage = selectedCareer ? careerBackgrounds[selectedCareer] : undefined;
     
-    return (
-      <ScreenWrapper
-        onOpenSettings={() => setSettingsOpen(true)}
-        onExit={handleExitToTitle}
-        showExitWarning={true}
-        dark={true}
-        fullScreen={true}
-        backgroundImage={backgroundImage}
-      >
-        {selectedCareer === "programmer" && (
-          <ProgrammerWorld
-            difficulty={selectedDifficulty ?? "easy"}
-            onComplete={handleChallengeComplete}
-            isQuickRecall={isQuickRecall}
-            isCertification={gameMode === "certification"}
-            alwaysCorrect={alwaysCorrect}
-            onExit={handleExitToTitle}
-            onTutorialBack={tutorialBackHandler}
-            onAnswerResult={handleAnswerResult}
-          />
-        )}
-        {selectedCareer === "nurse" && (
-          <NurseWorld
-            difficulty={selectedDifficulty ?? "easy"}
-            onComplete={handleChallengeComplete}
-            isQuickRecall={isQuickRecall}
-            isCertification={gameMode === "certification"}
-            alwaysCorrect={alwaysCorrect}
-            onExit={handleExitToTitle}
-            onTutorialBack={tutorialBackHandler}
-            onAnswerResult={handleAnswerResult}
-          />
-        )}
-        {selectedCareer === "engineer" && (
-          <EngineerWorld
-            difficulty={selectedDifficulty ?? "easy"}
-            onComplete={handleChallengeComplete}
-            isQuickRecall={isQuickRecall}
-            isCertification={gameMode === "certification"}
-            alwaysCorrect={alwaysCorrect}
-            onExit={handleExitToTitle}
-            onTutorialBack={tutorialBackHandler}
-            onAnswerResult={handleAnswerResult}
-          />
-        )}
-        {selectedCareer === "teacher" && (
-          <TeacherWorld
-            difficulty={selectedDifficulty ?? "easy"}
-            onComplete={handleChallengeComplete}
-            isQuickRecall={isQuickRecall}
-            isCertification={gameMode === "certification"}
-            alwaysCorrect={alwaysCorrect}
-            onExit={handleExitToTitle}
-            onTutorialBack={tutorialBackHandler}
-            onAnswerResult={handleAnswerResult}
-          />
-        )}
-        {selectedCareer === "chef" && (
-          <ChefWorld
-            difficulty={selectedDifficulty ?? "easy"}
-            onComplete={handleChallengeComplete}
-            isQuickRecall={isQuickRecall}
-            isCertification={gameMode === "certification"}
-            alwaysCorrect={alwaysCorrect}
-            onExit={handleExitToTitle}
-            onTutorialBack={tutorialBackHandler}
-            onAnswerResult={handleAnswerResult}
-          />
-        )}
-        {selectedCareer === "architect" && (
-          <ArchitectWorld
-            difficulty={selectedDifficulty ?? "easy"}
-            onComplete={handleChallengeComplete}
-            isQuickRecall={isQuickRecall}
-            isCertification={gameMode === "certification"}
-            alwaysCorrect={alwaysCorrect}
-            onExit={handleExitToTitle}
-            onTutorialBack={tutorialBackHandler}
-            onAnswerResult={handleAnswerResult}
-          />
-        )}
-        {selectedCareer === "lawyer" && (
-          <LawyerWorld
-            difficulty={selectedDifficulty ?? "easy"}
-            onComplete={handleChallengeComplete}
-            isQuickRecall={isQuickRecall}
-            isCertification={gameMode === "certification"}
-            alwaysCorrect={alwaysCorrect}
-            onExit={handleExitToTitle}
-            onTutorialBack={tutorialBackHandler}
-            onAnswerResult={handleAnswerResult}
-          />
-        )}
-        {selectedCareer === "retail" && (
-          <RetailWorld
-            difficulty={selectedDifficulty ?? "easy"}
-            onComplete={handleChallengeComplete}
-            isQuickRecall={isQuickRecall}
-            isCertification={gameMode === "certification"}
-            alwaysCorrect={alwaysCorrect}
-            onExit={handleExitToTitle}
-            onTutorialBack={tutorialBackHandler}
-            onAnswerResult={handleAnswerResult}
-          />
-        )}
-        {selectedCareer === "electrician" && (
-           <ElectricianWorld
+     return (
+       <ScreenWrapper
+         onOpenSettings={() => setSettingsOpen(true)}
+         onExit={handleExitToTitle}
+         showExitWarning={true}
+         dark={true}
+         fullScreen={true}
+         backgroundImage={backgroundImage}
+       >
+         {selectedCareer === "programmer" && (
+           <ProgrammerWorld
              difficulty={selectedDifficulty ?? "easy"}
              onComplete={handleChallengeComplete}
              isQuickRecall={isQuickRecall}
              isCertification={gameMode === "certification"}
+             isSimulation={gameMode === "simulation"}
              alwaysCorrect={alwaysCorrect}
              onExit={handleExitToTitle}
              onTutorialBack={tutorialBackHandler}
              onAnswerResult={handleAnswerResult}
            />
          )}
-         {selectedCareer === "firefighter" && (
-           <FirefighterWorld
+         {selectedCareer === "nurse" && (
+           <NurseWorld
              difficulty={selectedDifficulty ?? "easy"}
              onComplete={handleChallengeComplete}
              isQuickRecall={isQuickRecall}
              isCertification={gameMode === "certification"}
+             isSimulation={gameMode === "simulation"}
              alwaysCorrect={alwaysCorrect}
              onExit={handleExitToTitle}
              onTutorialBack={tutorialBackHandler}
              onAnswerResult={handleAnswerResult}
            />
          )}
-         {selectedCareer === "police" && (
-           <PoliceWorld
+         {selectedCareer === "engineer" && (
+           <EngineerWorld
              difficulty={selectedDifficulty ?? "easy"}
              onComplete={handleChallengeComplete}
              isQuickRecall={isQuickRecall}
              isCertification={gameMode === "certification"}
+             isSimulation={gameMode === "simulation"}
              alwaysCorrect={alwaysCorrect}
              onExit={handleExitToTitle}
              onTutorialBack={tutorialBackHandler}
              onAnswerResult={handleAnswerResult}
            />
          )}
-         {selectedCareer === "pilot" && (
-           <PilotWorld
+         {selectedCareer === "teacher" && (
+           <TeacherWorld
              difficulty={selectedDifficulty ?? "easy"}
              onComplete={handleChallengeComplete}
              isQuickRecall={isQuickRecall}
              isCertification={gameMode === "certification"}
+             isSimulation={gameMode === "simulation"}
              alwaysCorrect={alwaysCorrect}
              onExit={handleExitToTitle}
              onTutorialBack={tutorialBackHandler}
              onAnswerResult={handleAnswerResult}
            />
          )}
-         {selectedCareer === "veterinarian" && (
-           <VeterinarianWorld
+         {selectedCareer === "chef" && (
+           <ChefWorld
              difficulty={selectedDifficulty ?? "easy"}
              onComplete={handleChallengeComplete}
              isQuickRecall={isQuickRecall}
              isCertification={gameMode === "certification"}
+             isSimulation={gameMode === "simulation"}
              alwaysCorrect={alwaysCorrect}
              onExit={handleExitToTitle}
              onTutorialBack={tutorialBackHandler}
              onAnswerResult={handleAnswerResult}
            />
          )}
-         {selectedCareer === "journalist" && (
-           <JournalistWorld
+         {selectedCareer === "architect" && (
+           <ArchitectWorld
              difficulty={selectedDifficulty ?? "easy"}
              onComplete={handleChallengeComplete}
              isQuickRecall={isQuickRecall}
              isCertification={gameMode === "certification"}
+             isSimulation={gameMode === "simulation"}
              alwaysCorrect={alwaysCorrect}
              onExit={handleExitToTitle}
              onTutorialBack={tutorialBackHandler}
              onAnswerResult={handleAnswerResult}
            />
          )}
-         {selectedCareer === "social-worker" && (
-           <SocialWorkerWorld
+         {selectedCareer === "lawyer" && (
+           <LawyerWorld
              difficulty={selectedDifficulty ?? "easy"}
              onComplete={handleChallengeComplete}
              isQuickRecall={isQuickRecall}
              isCertification={gameMode === "certification"}
+             isSimulation={gameMode === "simulation"}
              alwaysCorrect={alwaysCorrect}
              onExit={handleExitToTitle}
              onTutorialBack={tutorialBackHandler}
              onAnswerResult={handleAnswerResult}
            />
          )}
-         {selectedCareer === "accountant" && (
-           <AccountantWorld
+         {selectedCareer === "retail" && (
+           <RetailWorld
              difficulty={selectedDifficulty ?? "easy"}
              onComplete={handleChallengeComplete}
              isQuickRecall={isQuickRecall}
              isCertification={gameMode === "certification"}
+             isSimulation={gameMode === "simulation"}
              alwaysCorrect={alwaysCorrect}
              onExit={handleExitToTitle}
              onTutorialBack={tutorialBackHandler}
              onAnswerResult={handleAnswerResult}
            />
          )}
-         {selectedCareer === "dentist" && (
-           <DentistWorld
-             difficulty={selectedDifficulty ?? "easy"}
-             onComplete={handleChallengeComplete}
-             isQuickRecall={isQuickRecall}
-             isCertification={gameMode === "certification"}
-             alwaysCorrect={alwaysCorrect}
-             onExit={handleExitToTitle}
-             onTutorialBack={tutorialBackHandler}
-             onAnswerResult={handleAnswerResult}
-           />
-         )}
-         {selectedCareer === "construction" && (
-           <ConstructionWorld
-             difficulty={selectedDifficulty ?? "easy"}
-             onComplete={handleChallengeComplete}
-             isQuickRecall={isQuickRecall}
-             isCertification={gameMode === "certification"}
-             alwaysCorrect={alwaysCorrect}
-             onExit={handleExitToTitle}
-             onTutorialBack={tutorialBackHandler}
-             onAnswerResult={handleAnswerResult}
-           />
-         )}
-         {settingsModal}
-        <SecretTrophyPopup 
-          show={showSecretTrophyPopup} 
-          achievementType={currentAchievementType}
-          onClose={() => {
-            setShowSecretTrophyPopup(false);
-            setCurrentAchievementType(null);
-          }} 
-        />
-      </ScreenWrapper>
-    );
+{selectedCareer === "electrician" && (
+            <ElectricianWorld
+              difficulty={selectedDifficulty ?? "easy"}
+              onComplete={handleChallengeComplete}
+              isQuickRecall={isQuickRecall}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
+              onExit={handleExitToTitle}
+              onTutorialBack={tutorialBackHandler}
+              onAnswerResult={handleAnswerResult}
+            />
+          )}
+          {selectedCareer === "firefighter" && (
+            <FirefighterWorld
+              difficulty={selectedDifficulty ?? "easy"}
+              onComplete={handleChallengeComplete}
+              isQuickRecall={isQuickRecall}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
+              onExit={handleExitToTitle}
+              onTutorialBack={tutorialBackHandler}
+              onAnswerResult={handleAnswerResult}
+            />
+          )}
+          {selectedCareer === "police" && (
+            <PoliceWorld
+              difficulty={selectedDifficulty ?? "easy"}
+              onComplete={handleChallengeComplete}
+              isQuickRecall={isQuickRecall}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
+              onExit={handleExitToTitle}
+              onTutorialBack={tutorialBackHandler}
+              onAnswerResult={handleAnswerResult}
+            />
+          )}
+          {selectedCareer === "pilot" && (
+            <PilotWorld
+              difficulty={selectedDifficulty ?? "easy"}
+              onComplete={handleChallengeComplete}
+              isQuickRecall={isQuickRecall}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
+              onExit={handleExitToTitle}
+              onTutorialBack={tutorialBackHandler}
+              onAnswerResult={handleAnswerResult}
+            />
+          )}
+          {selectedCareer === "veterinarian" && (
+            <VeterinarianWorld
+              difficulty={selectedDifficulty ?? "easy"}
+              onComplete={handleChallengeComplete}
+              isQuickRecall={isQuickRecall}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
+              onExit={handleExitToTitle}
+              onTutorialBack={tutorialBackHandler}
+              onAnswerResult={handleAnswerResult}
+            />
+          )}
+          {selectedCareer === "journalist" && (
+            <JournalistWorld
+              difficulty={selectedDifficulty ?? "easy"}
+              onComplete={handleChallengeComplete}
+              isQuickRecall={isQuickRecall}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
+              onExit={handleExitToTitle}
+              onTutorialBack={tutorialBackHandler}
+              onAnswerResult={handleAnswerResult}
+            />
+          )}
+          {selectedCareer === "social-worker" && (
+            <SocialWorkerWorld
+              difficulty={selectedDifficulty ?? "easy"}
+              onComplete={handleChallengeComplete}
+              isQuickRecall={isQuickRecall}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
+              onExit={handleExitToTitle}
+              onTutorialBack={tutorialBackHandler}
+              onAnswerResult={handleAnswerResult}
+            />
+          )}
+          {selectedCareer === "accountant" && (
+            <AccountantWorld
+              difficulty={selectedDifficulty ?? "easy"}
+              onComplete={handleChallengeComplete}
+              isQuickRecall={isQuickRecall}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
+              onExit={handleExitToTitle}
+              onTutorialBack={tutorialBackHandler}
+              onAnswerResult={handleAnswerResult}
+            />
+          )}
+          {selectedCareer === "dentist" && (
+            <DentistWorld
+              difficulty={selectedDifficulty ?? "easy"}
+              onComplete={handleChallengeComplete}
+              isQuickRecall={isQuickRecall}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
+              onExit={handleExitToTitle}
+              onTutorialBack={tutorialBackHandler}
+              onAnswerResult={handleAnswerResult}
+            />
+          )}
+          {selectedCareer === "construction" && (
+            <ConstructionWorld
+              difficulty={selectedDifficulty ?? "easy"}
+              onComplete={handleChallengeComplete}
+              isQuickRecall={isQuickRecall}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
+              onExit={handleExitToTitle}
+              onTutorialBack={tutorialBackHandler}
+              onAnswerResult={handleAnswerResult}
+            />
+          )}
+          {settingsModal}
+         <SecretTrophyPopup 
+           show={showSecretTrophyPopup} 
+           achievementType={currentAchievementType}
+           onClose={() => {
+             setShowSecretTrophyPopup(false);
+             setCurrentAchievementType(null);
+           }}
+         />
+       </ScreenWrapper>
+     );
   }
 
   if (gameState === "trophy") {
@@ -1905,68 +1697,25 @@ onOpenSettings={() => setSettingsOpen(true)}
     );
   }
 
-  if (gameState === "stats") {
+  if (gameState === "outcome" && selectedCareer) {
     return (
       <>
-        <StatsScreen 
-          trophies={trophies}
-          sessions={sessions}
-          level={playerProgress.level}
-          xp={playerProgress.xp}
-          streak={playerProgress.streak || 0}
-          onBack={() => setGameState("title")} 
-        />
-        <LevelUpPopup
-          show={showLevelUp}
-          oldLevel={oldLevel}
-          newLevel={playerProgress.level}
-          onClose={() => setShowLevelUp(false)}
-        />
-      </>
-    );
-  }
-
-  if (gameState === "profile") {
-    return (
-      <ProfileScreen
-        trophies={trophies}
-        level={playerProgress.level}
-        xp={playerProgress.xp}
-        streak={playerProgress.streak || 0}
-        completedToday={playerProgress.lastPlayedDate === getTodayDate()}
-        onAcceptDailyChallenge={(career, difficulty) => {
-          setSelectedCareer(career);
-          setSelectedDifficulty(difficulty);
-          setGameState("playing");
-        }}
-        onBack={() => setGameState("title")}
-      />
-    );
-  }
-
-if (gameState === "outcome" && selectedCareer) {
-    return (
-      <>
-        <OutcomeScreen
-          career={selectedCareer}
-          difficulty={selectedDifficulty ?? "easy"}
-          success={challengeSuccess}
-          score={score}
-          total={totalQuestions}
-          xpGained={xpGainedLastChallenge}
-          newXP={playerProgress.xp}
-          oldLevel={oldLevel}
-          newLevel={playerProgress.level}
-          onPlayAgain={handlePlayAgain}
-          onNewCareer={handleNewCareer}
-          onChangeDifficulty={handleChangeDifficulty}
-          onOpenSettings={() => setSettingsOpen(true)}
-          onExit={handleExitToTitle}
-          isQuickRecall={gameMode === "quick-recall"}
-          isCertification={gameMode === "certification"}
-          onBackToSelection={handleBackToSelection}
-          incorrectAnswers={incorrectAnswers}
-        />
+<OutcomeScreen
+            career={selectedCareer}
+            difficulty={selectedDifficulty ?? "easy"}
+            success={challengeSuccess}
+            score={score}
+            total={totalQuestions}
+            onPlayAgain={handlePlayAgain}
+            onNewCareer={handleNewCareer}
+            onChangeDifficulty={handleChangeDifficulty}
+            onOpenSettings={() => setSettingsOpen(true)}
+            onExit={handleExitToTitle}
+            isQuickRecall={gameMode === "quick-recall"}
+            isCertification={gameMode === "certification"}
+            onBackToSelection={handleBackToSelection}
+            incorrectAnswers={incorrectAnswers}
+          />
         {settingsModal}
         <SecretTrophyPopup 
           show={showSecretTrophyPopup} 
@@ -1975,12 +1724,6 @@ if (gameState === "outcome" && selectedCareer) {
             setShowSecretTrophyPopup(false);
             setCurrentAchievementType(null);
           }} 
-        />
-        <LevelUpPopup
-          show={showLevelUp}
-          oldLevel={oldLevel}
-          newLevel={playerProgress.level}
-          onClose={() => setShowLevelUp(false)}
         />
       </>
     );
