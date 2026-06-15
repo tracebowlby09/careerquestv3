@@ -76,6 +76,7 @@ const achievementNames: Record<string, string> = {
   "tech-savvy": "Tech Savvy",
   "variety-pack": "Variety Pack",
   "second-chance": "Second Chance",
+  "nationals": "Nationals Champion",
 };
 
 export default function ProfileScreen({ trophies, xp, level, streak, onBack, onAcceptDailyChallenge, completedToday }: ProfileScreenProps) {

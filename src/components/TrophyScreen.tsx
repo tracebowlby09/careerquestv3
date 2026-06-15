@@ -196,6 +196,13 @@ const secretTrophies: SecretTrophyDisplay[] = [
     hint: "Thanks for playing Career Quest today!",
   },
   {
+    id: "nationals",
+    name: "Nationals Champion",
+    description: "Played during Nationals (June 29 - July 2, 2026)",
+    icon: "🇺🇸",
+    hint: "A special summer event for champions",
+  },
+  {
     id: "phoenix",
     name: "Phoenix",
     description: "Lose all hearts in Quick Recall but still complete the game",

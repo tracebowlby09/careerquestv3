@@ -129,6 +129,12 @@ const trophyContent: Record<string, { icon: string; title: string; message: stri
     message: "You checked in today - thanks for playing Career Quest!",
     gradient: "from-green-400 via-emerald-500 to-teal-500",
   },
+  "nationals": {
+    icon: "🇺🇸",
+    title: "NATIONALS CHAMPION!",
+    message: "You played during Nationals (June 29 - July 2, 2026)!",
+    gradient: "from-blue-600 via-red-600 to-white-600",
+  },
   "phoenix": {
     icon: "🔥",
     title: "PHOENIX!",

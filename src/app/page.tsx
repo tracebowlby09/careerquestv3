@@ -560,7 +560,7 @@ export default function Home() {
       }
     }
     
-    // Check date-based trophies (State Week: April 27-29, 2026 and Today Check-in)
+    // Check date-based trophies (State Week: April 27-29, 2026; Nationals: June 29 - July 2, 2026 and Today Check-in)
     const now = new Date();
     const currentYear = now.getFullYear();
     const currentMonth = now.getMonth() + 1; // 1-indexed
@@ -568,6 +568,9 @@ export default function Home() {
     
     // State Week trophy: April 27-29, 2026
     const isStateWeek = currentMonth === 4 && currentDay >= 27 && currentDay <= 29 && currentYear === 2026;
+    
+    // Nationals trophy: June 29 - July 2, 2026
+    const isNationals = (currentMonth === 6 && currentDay >= 29) || (currentMonth === 7 && currentDay <= 2) && currentYear === 2026;
     
     // Today Check-in trophy: any day (today is April 17, 2026)
     const hasTodayCheckin = true;
@@ -579,6 +582,13 @@ export default function Home() {
       const alreadyHasStateWeek = existingTrophies.some((t) => t.achievementType === "state-week");
       if (!alreadyHasStateWeek) {
         dateAchievements.push("state-week");
+      }
+    }
+    
+    if (isNationals) {
+      const alreadyHasNationals = existingTrophies.some((t) => t.achievementType === "nationals");
+      if (!alreadyHasNationals) {
+        dateAchievements.push("nationals");
       }
     }
     
@@ -990,6 +1000,7 @@ export default function Home() {
       "pi-legend",
       "state-week",
       "today-checkin",
+      "nationals",
       "phoenix",
       "keyboard-warrior",
       "explorer",
