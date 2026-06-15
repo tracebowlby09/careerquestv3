@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+
 import { Career } from "@/types/game";
 import { careerInfoByCareer } from "@/lib/careerInfo";
 import { audioSystem } from "@/lib/audio";
@@ -83,12 +83,12 @@ export default function CareerInfoPage({ career, onBack, onStartCareer, onOpenSe
                   >
                     Start This Career
                   </button>
-                  <Link
-                    href="/"
+                  <button
+                    onClick={() => onExit?.()}
                     className="rounded-full border border-white/40 px-7 py-4 font-extrabold text-white transition-all hover:bg-white/15"
                   >
                     Return Home
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>

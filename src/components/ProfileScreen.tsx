@@ -1,13 +1,16 @@
 "use client";
 
-import { Trophy, Career, calculateLevel, XP_PER_LEVEL } from "@/types/game";
+import { Trophy, Career, Difficulty, XP_PER_LEVEL, calculateXPForNextLevel, getDailyChallenge } from "@/types/game";
 import { GradientCard, AnimatedIcon } from "./ui/UIComponents";
 
 interface ProfileScreenProps {
   trophies: Trophy[];
   xp: number;
   level: number;
+  streak: number;
   onBack: () => void;
+  onAcceptDailyChallenge?: (career: Career, difficulty: Difficulty) => void;
+  completedToday?: boolean;
 }
 
 const careerIcons: Record<Career, string> = {
@@ -34,7 +37,7 @@ const careerNames: Record<Career, string> = {
   electrician: "Electrician",
 };
 
-const difficultyLabels: Record<string, string> = {
+const difficultyLabels: Record<Difficulty, string> = {
   easy: "🥉 Bronze",
   medium: "🥈 Silver",
   hard: "🥇 Gold",
@@ -46,30 +49,55 @@ const achievementNames: Record<string, string> = {
   "certification-master": "Certification Master",
   "all-careers-master": "All Careers Master",
   "all-certifications-master": "All Certifications Master",
+  "perfect-recall": "Perfect Recall",
+  "konami-master": "Konami Master",
+  "all-quick-recalls-master": "All Quick Recalls Master",
+  "lightning-reflex": "Lightning Reflex",
+  "marathon-runner": "Marathon Runner",
+  "speed-demon": "Speed Demon",
+  "jack-of-all-trades": "Jack of All Trades",
+  "lucky-star": "Lucky Star",
+  "night-owl": "Night Owl",
+  "early-bird": "Early Bird",
+  "pi-pioneer": "Pi Pioneer",
+  "pi-explorer": "Pi Explorer",
+  "pi-master": "Pi Master",
+  "pi-genius": "Pi Genius",
+  "pi-legend": "Pi Legend",
+  "state-week": "State Week",
+  "today-checkin": "Today Check-in",
+  "phoenix": "Phoenix",
+  "keyboard-warrior": "Keyboard Warrior",
+  "explorer": "Explorer",
+  "patience": "Patience",
+  "streak-master": "Streak Master",
+  "return-customer": "Return Customer",
+  "committed": "Committed",
+  "tech-savvy": "Tech Savvy",
+  "variety-pack": "Variety Pack",
+  "second-chance": "Second Chance",
 };
 
-export default function ProfileScreen({ trophies, xp, level, onBack }: ProfileScreenProps) {
-  // Get top 3 most prestigious trophies (sort by: achievement > hard difficulty > recent)
+export default function ProfileScreen({ trophies, xp, level, streak, onBack, onAcceptDailyChallenge, completedToday }: ProfileScreenProps) {
   const sortedTrophies = [...trophies].sort((a, b) => {
-    // Achievements are most prestigious
     const isAchA = a.isSecret && a.achievementType;
     const isAchB = b.isSecret && b.achievementType;
     if (isAchA && !isAchB) return -1;
     if (!isAchA && isAchB) return 1;
-    
-    // Among same type, prefer harder difficulty
     const diffOrder = { hard: 3, medium: 2, easy: 1 };
     const diffDiff = (diffOrder[b.difficulty] || 0) - (diffOrder[a.difficulty] || 0);
     if (diffDiff !== 0) return diffDiff;
-    
-    // Most recent first
     return new Date(b.earnedAt).getTime() - new Date(a.earnedAt).getTime();
   });
   
   const top3Trophies = sortedTrophies.slice(0, 3);
 
+  const xpProgress = calculateXPForNextLevel(xp);
+  const streakXP = Math.min((streak + 1) * 5, 50);
+  const todayChallenge = getDailyChallenge();
+
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-purple-900 p-4 md:p-8 flex items-center justify-center">
       <GradientCard 
         gradient="from-purple-600 via-blue-600 to-indigo-600" 
         className="p-8 max-w-md w-full"
@@ -83,7 +111,47 @@ export default function ProfileScreen({ trophies, xp, level, onBack }: ProfileSc
           <div className="rounded-xl p-4 bg-white/10 text-center">
             <p className="text-4xl font-extrabold text-yellow-400 mb-1">⚡ Level {level}</p>
             <p className="text-white/70">{xp} XP Total</p>
+            {xpProgress.needed > 0 && (
+              <div className="mt-3 max-w-xs mx-auto">
+                <div className="bg-white/10 rounded-full h-3 overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full transition-all duration-500"
+                    style={{ width: `${(xpProgress.current / xpProgress.needed) * 100}%` }}
+                  />
+                </div>
+                <p className="text-white/60 text-sm mt-1">
+                  {xpProgress.current} / {xpProgress.needed} XP to Level {level + 1}
+                </p>
+              </div>
+            )}
+            {streak > 0 && (
+              <p className="text-orange-300 text-sm mt-2">
+                🔥 {streak} day streak | +{streakXP} XP bonus available!
+              </p>
+            )}
           </div>
+
+          {onAcceptDailyChallenge && !completedToday && (
+            <div className="rounded-xl p-4 bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30">
+              <div className="inline-flex items-center gap-2 bg-orange-500/30 px-3 py-1 rounded-full mb-3">
+                <span className="text-orange-300 font-bold">🔥 Daily Challenge</span>
+              </div>
+              <div className="flex items-center gap-3 bg-white/10 px-4 py-2 rounded-lg mb-3">
+                <span className="text-3xl">{careerIcons[todayChallenge.career]}</span>
+                <div className="text-left">
+                  <p className="font-bold text-white">{careerNames[todayChallenge.career]}</p>
+                  <p className="text-white/70 text-sm">{difficultyLabels[todayChallenge.difficulty]} Challenge</p>
+                  <p className="text-orange-300 text-sm">+ {streakXP} XP Streak Bonus!</p>
+                </div>
+              </div>
+              <button
+                onClick={() => onAcceptDailyChallenge(todayChallenge.career, todayChallenge.difficulty)}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold text-lg hover:scale-105 transition-transform"
+              >
+                🎮 Accept Challenge
+              </button>
+            </div>
+          )}
 
           <div className="rounded-xl p-4 bg-white/10">
             <p className="text-white font-bold mb-3 flex items-center gap-2">

@@ -330,6 +330,7 @@ export default function Home() {
   const [playerProgress, setPlayerProgress] = useState<PlayerProgress>(() => loadPlayerProgress());
   const [showLevelUp, setShowLevelUp] = useState(false);
   const [oldLevel, setOldLevel] = useState(1);
+  const [xpGainedLastChallenge, setXpGainedLastChallenge] = useState(0);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [showSecretTrophyPopup, setShowSecretTrophyPopup] = useState(false);
   const [currentAchievementType, setCurrentAchievementType] = useState<string | null>(null);
@@ -742,6 +743,8 @@ export default function Home() {
           streak: updatedStreak, 
           lastPlayedDate: today 
         });
+        
+        setXpGainedLastChallenge(xpGain);
         
         if (levelAfter > levelBefore) {
           setOldLevel(levelBefore);
@@ -1172,15 +1175,6 @@ export default function Home() {
           onViewTrophies={() => setGameState("trophy")}
           onViewStats={() => setGameState("stats")}
           onOpenProfile={() => setGameState("profile")}
-          level={playerProgress.level}
-          xp={playerProgress.xp}
-          streak={playerProgress.streak || 0}
-          completedToday={playerProgress.lastPlayedDate === getTodayDate()}
-          onAcceptDailyChallenge={(career, difficulty) => {
-            setSelectedCareer(career);
-            setSelectedDifficulty(difficulty);
-            setGameState("playing");
-          }}
         />
         {settingsModal}
         <SecretTrophyPopup
@@ -1621,6 +1615,13 @@ export default function Home() {
         trophies={trophies}
         level={playerProgress.level}
         xp={playerProgress.xp}
+        streak={playerProgress.streak || 0}
+        completedToday={playerProgress.lastPlayedDate === getTodayDate()}
+        onAcceptDailyChallenge={(career, difficulty) => {
+          setSelectedCareer(career);
+          setSelectedDifficulty(difficulty);
+          setGameState("playing");
+        }}
         onBack={() => setGameState("title")}
       />
     );
@@ -1635,6 +1636,10 @@ if (gameState === "outcome" && selectedCareer) {
           success={challengeSuccess}
           score={score}
           total={totalQuestions}
+          xpGained={xpGainedLastChallenge}
+          newXP={playerProgress.xp}
+          oldLevel={oldLevel}
+          newLevel={playerProgress.level}
           onPlayAgain={handlePlayAgain}
           onNewCareer={handleNewCareer}
           onChangeDifficulty={handleChangeDifficulty}

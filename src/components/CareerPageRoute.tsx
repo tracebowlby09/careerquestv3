@@ -12,6 +12,7 @@ export default function CareerPageRoute({ career }: { career: Career }) {
       career={career}
       onBack={() => router.push("/")}
       onStartCareer={() => router.push("/")}
+      onExit={() => router.push("/")}
     />
   );
 }

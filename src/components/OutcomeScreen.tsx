@@ -1,6 +1,6 @@
 "use client";
 
-import { Career, Difficulty, IncorrectAnswer } from "@/types/game";
+import { Career, Difficulty, IncorrectAnswer, calculateXPForNextLevel } from "@/types/game";
 import ScreenWrapper from "./ScreenWrapper";
 import { GameButton, AnimatedIcon, GradientCard, AnimatedContainer } from "./ui/UIComponents";
 
@@ -10,6 +10,8 @@ interface OutcomeScreenProps {
   success: boolean;
   score: number;
   total: number;
+  xpGained?: number;
+  newXP?: number;
   onPlayAgain: () => void;
   onNewCareer: () => void;
   onChangeDifficulty: () => void;
@@ -19,6 +21,8 @@ interface OutcomeScreenProps {
   isCertification?: boolean;
   onBackToSelection?: () => void;
   incorrectAnswers?: IncorrectAnswer[];
+  oldLevel?: number;
+  newLevel?: number;
 }
 
 const careerData = {
@@ -168,6 +172,8 @@ export default function OutcomeScreen({
   success,
   score,
   total,
+  xpGained,
+  newXP,
   onPlayAgain,
   onNewCareer,
   onChangeDifficulty,
@@ -177,6 +183,8 @@ export default function OutcomeScreen({
   isCertification,
   onBackToSelection,
   incorrectAnswers = [],
+  oldLevel,
+  newLevel,
 }: OutcomeScreenProps) {
   const data = careerData[career];
   const percentage = Math.round((score / total) * 100);
@@ -188,6 +196,8 @@ export default function OutcomeScreen({
     : isCertification 
       ? "from-purple-900/90 via-pink-900/90 to-fuchsia-900/90" 
       : "from-white/10 to-white/5 backdrop-blur-xl";
+
+  const xpProgress = newXP !== undefined ? calculateXPForNextLevel(newXP) : undefined;
 
   return (
     <ScreenWrapper onOpenSettings={onOpenSettings} onExit={onExit} dark>
@@ -265,6 +275,37 @@ export default function OutcomeScreen({
                 : (percentage >= 60 ? "Passed! (60% required)" : "Need 60% to pass")}
             </div>
           </div>
+
+          {xpGained !== undefined && xpGained > 0 && (
+            <div className="rounded-xl p-6 mb-8 bg-gradient-to-r from-yellow-900/30 to-amber-900/30 border border-yellow-500/30">
+              <div className="text-center mb-4">
+                <p className="text-white font-bold mb-2 flex items-center justify-center gap-2">
+                  <span className="text-3xl">⚡</span>
+                  <span>XP Earned!</span>
+                </p>
+                <p className="text-5xl font-extrabold text-yellow-400 mb-2">+{xpGained} XP</p>
+                {xpProgress && xpProgress.needed > 0 && (
+                  <>
+                    <div className="bg-white/10 rounded-full h-3 overflow-hidden mt-4 max-w-xs mx-auto">
+                      <div 
+                        className="h-full bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full transition-all duration-500"
+                        style={{ width: `${(xpProgress.current / xpProgress.needed) * 100}%` }}
+                      />
+                    </div>
+                    <p className="text-white/70 text-sm mt-1">
+                      {xpProgress.current} / {xpProgress.needed} XP to Level {(newLevel ?? 0) + 1}
+                    </p>
+                  </>
+                )}
+                {newLevel !== undefined && oldLevel !== undefined && newLevel > oldLevel && (
+                  <div className="mt-3 inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-amber-500 px-6 py-2 rounded-full">
+                    <span className="text-white font-extrabold">🌟 LEVEL UP!</span>
+                    <span className="text-white/90">Level {oldLevel} → Level {newLevel}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           <div className="mb-8">
             <div className={`border-l-4 p-5 mb-5 rounded-r-lg ${isQuickRecall ? "bg-amber-900/50 border-amber-400" : "bg-blue-50/20 border-blue-400"}`}>
