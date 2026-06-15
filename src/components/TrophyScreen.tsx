@@ -1,6 +1,7 @@
 "use client";
 
 import { Trophy, Career, Difficulty, AchievementType } from "@/types/game";
+import { GameButton, GradientCard, AnimatedIcon, AnimatedContainer } from "./ui/UIComponents";
 
 interface TrophyScreenProps {
   trophies: Trophy[];
@@ -310,18 +311,17 @@ export default function TrophyScreen({ trophies, onBack }: TrophyScreenProps) {
   }, {} as Record<Career, Trophy[]>);
 
   const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician"];
-  const earnedCareers = new Set(regularTrophies.map((t) => t.career));
 
   const unlockedCount = secretTrophiesList.length;
   const totalCount = secretTrophies.length;
 
-return (
+  return (
     <div className="min-h-screen bg-gradient-to-br from-amber-600 via-yellow-500 to-orange-600 p-4 md:p-8">
       <div className="max-w-5xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12">
+        <GradientCard className="p-8 md:p-12" gradient="from-white/10 to-white/5 backdrop-blur-xl border border-white/20">
           <div className="text-center mb-10">
-            <div className="text-7xl mb-4">🏆</div>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
+            <AnimatedIcon animate="bounce" className="text-7xl mb-4 inline-block">🏆</AnimatedIcon>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-2">
               Trophy Case
             </h2>
             <p className="text-gray-700 text-lg">
@@ -330,117 +330,117 @@ return (
           </div>
 
           {trophies.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="text-6xl mb-4">🎮</div>
-              <p className="text-xl text-gray-600 mb-4">
-                No trophies yet!
-              </p>
-              <p className="text-gray-500">
-                Complete career challenges to earn trophies.
+            <div className="text-center py-16">
+              <AnimatedIcon animate="pulse" className="text-8xl mb-6 inline-block">🎮</AnimatedIcon>
+              <p className="text-2xl text-gray-700 mb-4 font-bold">No trophies yet!</p>
+              <p className="text-gray-500 text-lg">
+                Complete career challenges to earn trophies and unlock achievements.
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {allCareers.map((career) => {
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {allCareers.map((career, idx) => {
                 const careerTrophies = trophiesByCareer[career] || [];
                 const hasTrophies = careerTrophies.length > 0;
                 
                 return (
-                  <div
-                    key={career}
-                    className={`border-2 rounded-xl p-4 ${
-                      hasTrophies
-                        ? "border-yellow-400 bg-yellow-50"
-                        : "border-gray-200 bg-gray-50"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="text-3xl">{careerIcons[career]}</span>
-                      <span className="text-xl font-bold text-gray-800">
-                        {careerNames[career]}
-                      </span>
-                    </div>
-                    
-                    {hasTrophies ? (
-                      <div className="space-y-2">
-                        {careerTrophies.map((trophy, idx) => (
-                          <div
-                            key={idx}
-                            className={`flex items-center justify-between bg-gradient-to-r ${difficultyColors[trophy.difficulty]} text-white px-4 py-2 rounded-lg`}
-                          >
-                            <span className="font-semibold">
-                              {difficultyLabels[trophy.difficulty]}
-                            </span>
-                            <span className="text-2xl">
-                              {difficultyIcons[trophy.difficulty]}
-                            </span>
-                          </div>
-                        ))}
+                  <AnimatedContainer key={career} delay={idx * 50}>
+                    <GradientCard 
+                      className="p-6 text-center" 
+                      gradient={hasTrophies ? `${careerColors[career]}/90` : "from-gray-600/50 to-gray-700/50"}
+                    >
+                      <div className="flex items-center justify-center gap-3 mb-4">
+                        <AnimatedIcon animate={hasTrophies ? "none" : "pulse"} className="text-4xl">
+                          {careerIcons[career]}
+                        </AnimatedIcon>
+                        <span className={`text-xl font-bold ${hasTrophies ? "text-white" : "text-gray-300"}`}>
+                          {careerNames[career]}
+                        </span>
                       </div>
-                    ) : (
-                      <p className="text-gray-400 text-sm">
-                        No trophies earned yet
-                      </p>
-                    )}
-                  </div>
+                      
+                      {hasTrophies ? (
+                        <div className="space-y-2">
+                          {careerTrophies.map((trophy, trophyIdx) => (
+                            <div
+                              key={trophyIdx}
+                              className={`flex items-center justify-between bg-white/20 backdrop-blur-sm text-white px-4 py-3 rounded-lg`}
+                            >
+                              <span className="font-semibold text-sm">
+                                {difficultyLabels[trophy.difficulty]} Challenge
+                              </span>
+                              <span className="text-2xl">
+                                {difficultyIcons[trophy.difficulty]}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="py-4">
+                          <p className="text-gray-300 text-sm mb-2">Locked</p>
+                          <div className="w-16 h-16 mx-auto rounded-full bg-gray-700/50 flex items-center justify-center">
+                            <span className="text-3xl opacity-30">🔒</span>
+                          </div>
+                        </div>
+                      )}
+                    </GradientCard>
+                  </AnimatedContainer>
                 );
               })}
             </div>
           )}
 
-          <div className="mt-8 pt-8 border-t-2 border-purple-300">
-            <div className="text-center mb-6">
-              <div className="text-4xl mb-2">🔮</div>
-              <h3 className="text-2xl font-bold text-purple-700">
-                Secret Trophies
+          <div className="mt-12 pt-8 border-t-2 border-amber-400/30">
+            <div className="text-center mb-8">
+              <h3 className="text-3xl font-bold text-amber-800 mb-2 flex items-center justify-center gap-3">
+                <span>🔮</span> Secret Trophies
               </h3>
-              <p className="text-gray-500 text-sm mt-1">
-                {secretTrophiesList.length} of {secretTrophies.length} discovered
+              <p className="text-amber-900/70">
+                {unlockedCount} of {totalCount} discovered
               </p>
             </div>
-            <div className="grid grid-cols-1 gap-4">
-              {secretTrophies.map((secretTrophy) => {
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {secretTrophies.map((secretTrophy, idx) => {
                 const isUnlocked = secretTrophiesList.some(
                   (t) => t.achievementType === secretTrophy.id
                 );
                 return (
-                  <div
-                    key={secretTrophy.id}
-                    className={`flex items-center justify-between px-6 py-4 rounded-xl border-2 shadow-lg transition-all duration-300 ${
-                      isUnlocked
-                        ? "bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white border-yellow-400"
-                        : "bg-gray-100 text-gray-400 border-gray-300"
-                    }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <span className={`text-4xl ${!isUnlocked ? "opacity-50" : ""}`}>
-                        {isUnlocked ? secretTrophy.icon : "🔒"}
-                      </span>
-                      <div>
-                        <p className={`font-bold text-lg ${isUnlocked ? "text-yellow-300" : "text-gray-500"}`}>
-                          {isUnlocked ? secretTrophy.name : "???"}
-                        </p>
-                        <p className={`text-sm ${isUnlocked ? "text-white" : "text-gray-400 italic"}`}>
-                          {isUnlocked ? secretTrophy.description : secretTrophy.hint}
-                        </p>
+                  <AnimatedContainer key={secretTrophy.id} delay={idx * 30}>
+                    <div className={`
+                      flex items-center justify-between p-5 rounded-xl border-2 transition-all duration-300
+                      ${isUnlocked 
+                        ? "bg-gradient-to-r from-purple-500/90 via-pink-500/90 to-red-500/90 text-white border-yellow-400/50 shadow-lg" 
+                        : "bg-gray-100/80 text-gray-500 border-gray-300"}
+                    `}>
+                      <div className="flex items-center gap-4">
+                        <span className={`text-4xl ${!isUnlocked ? "opacity-40" : ""}`}>
+                          {isUnlocked ? secretTrophy.icon : "🔒"}
+                        </span>
+                        <div className="text-left">
+                          <p className={`font-bold text-lg ${isUnlocked ? "text-yellow-300" : "text-gray-500"}`}>
+                            {isUnlocked ? secretTrophy.name : "???"}
+                          </p>
+                          <p className={`text-sm ${isUnlocked ? "text-white/90" : "text-gray-500"}`}>
+                            {isUnlocked ? secretTrophy.description : secretTrophy.hint}
+                          </p>
+                        </div>
                       </div>
+                      <span className="text-2xl">
+                        {isUnlocked ? "⭐" : "❓"}
+                      </span>
                     </div>
-                    <span className="text-3xl">
-                      {isUnlocked ? "⭐" : "❓"}
-                    </span>
-                  </div>
+                  </AnimatedContainer>
                 );
               })}
             </div>
           </div>
 
-          <button
-            onClick={onBack}
-            className="w-full mt-8 bg-gray-800 text-white font-bold py-4 rounded-lg hover:bg-gray-900 transition-colors"
-          >
-            ← Back to Menu
-          </button>
-        </div>
+          <div className="mt-10 text-center">
+            <GameButton onClick={onBack} className="text-lg px-10 py-4 bg-gradient-to-r from-gray-700 to-gray-800">
+              ← Back to Menu
+            </GameButton>
+          </div>
+        </GradientCard>
       </div>
     </div>
   );

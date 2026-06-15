@@ -2,7 +2,6 @@
 
 import { Difficulty } from "@/types/game";
 import ScreenWrapper from "./ScreenWrapper";
-import { GameButton, AnimatedIcon, AnimatedContainer, GradientCard } from "./ui/UIComponents";
 
 interface DifficultyOption {
   id: Difficulty;
