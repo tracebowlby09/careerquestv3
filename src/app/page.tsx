@@ -28,10 +28,11 @@ import Settings from "@/components/Settings";
 import TrophyScreen from "@/components/TrophyScreen";
 import StatsScreen from "@/components/StatsScreen";
 import LevelUpPopup from "@/components/LevelUpPopup";
+import DailyChallenge from "@/components/DailyChallenge";
 import SecretTrophyPopup from "@/components/SecretTrophyPopup";
 import HomeTutorial from "@/components/HomeTutorial";
 import CareerInfoPage from "@/components/CareerInfoPage";
-import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer, GameSession, PlayerProgress, calculateLevel, calculateXPForNextLevel } from "@/types/game";
+import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer, GameSession, PlayerProgress, calculateLevel, calculateXPForNextLevel, getTodayDate, getDailyChallenge, getStreakXPBonus } from "@/types/game";
 import { careerInfoByCareer } from "@/lib/careerInfo";
 import { audioSystem } from "@/lib/audio";
 import ScreenWrapper from "@/components/ScreenWrapper";
@@ -101,16 +102,16 @@ const saveGameSessions = (sessions: GameSession[]) => {
 
 // Load player progress from localStorage
 const loadPlayerProgress = (): PlayerProgress => {
-  if (typeof window === "undefined") return { xp: 0, level: 1 };
+  if (typeof window === "undefined") return { xp: 0, level: 1, streak: 0 };
   const saved = localStorage.getItem("careerQuestProgress");
   if (saved) {
     try {
       return JSON.parse(saved);
     } catch {
-      return { xp: 0, level: 1 };
+      return { xp: 0, level: 1, streak: 0 };
     }
   }
-  return { xp: 0, level: 1 };
+  return { xp: 0, level: 1, streak: 0 };
 };
 
 // Save player progress to localStorage
@@ -699,17 +700,51 @@ export default function Home() {
       
       const totalXP = xpFromDifficulty + xpFromMode;
       
-      if (totalXP > 0) {
-        const oldXPData = playerProgress;
-        const newXP = oldXPData.xp + totalXP;
-        const oldLevel = calculateLevel(oldXPData.xp);
-        const newLevel = calculateLevel(newXP);
+      // Update streak and award XP bonus
+      const today = getTodayDate();
+      const { streak: oldStreak = 0, lastPlayedDate: oldDate, xp: oldXP, level: oldPlayerLevel } = playerProgress;
+      let updatedStreak = oldStreak;
+      
+      // Check if this is a new day (different from last played)
+      const isNewDay = oldDate !== today;
+      if (isNewDay) {
+        const lastDate = oldDate ? new Date(oldDate) : new Date(today);
+        const currentDate = new Date(today);
+        const dayDiff = Math.floor((currentDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
         
-        setPlayerProgress({ xp: newXP, level: newLevel });
-        savePlayerProgress({ xp: newXP, level: newLevel });
+        if (dayDiff === 1) {
+          // Consecutive day - increment streak
+          updatedStreak = oldStreak + 1;
+        } else if (dayDiff > 1) {
+          // Gap in days - reset streak to 1
+          updatedStreak = 1;
+        }
+      }
+      
+      // Streak XP bonus (5 XP per day, max 50)
+      const streakXP = isNewDay ? Math.min(updatedStreak * 5, 50) : 0;
+      const xpGain = totalXP + streakXP;
+      
+      if (xpGain > 0) {
+        const newXP = oldXP + totalXP + streakXP;
+        const levelBefore = calculateLevel(oldXP);
+        const levelAfter = calculateLevel(newXP);
         
-        if (newLevel > oldLevel) {
-          setOldLevel(oldLevel);
+        setPlayerProgress({ 
+          xp: newXP, 
+          level: Math.max(oldPlayerLevel, levelAfter), 
+          streak: updatedStreak, 
+          lastPlayedDate: today 
+        });
+        savePlayerProgress({ 
+          xp: newXP, 
+          level: Math.max(oldPlayerLevel, levelAfter), 
+          streak: updatedStreak, 
+          lastPlayedDate: today 
+        });
+        
+        if (levelAfter > levelBefore) {
+          setOldLevel(levelBefore);
           setShowLevelUp(true);
         }
       }
@@ -1138,6 +1173,13 @@ export default function Home() {
           onViewStats={() => setGameState("stats")}
           level={playerProgress.level}
           xp={playerProgress.xp}
+          streak={playerProgress.streak || 0}
+          completedToday={playerProgress.lastPlayedDate === getTodayDate()}
+          onAcceptDailyChallenge={(career, difficulty) => {
+            setSelectedCareer(career);
+            setSelectedDifficulty(difficulty);
+            setGameState("playing");
+          }}
         />
         {settingsModal}
         <SecretTrophyPopup
@@ -1559,6 +1601,7 @@ export default function Home() {
           sessions={sessions}
           level={playerProgress.level}
           xp={playerProgress.xp}
+          streak={playerProgress.streak || 0}
           onBack={() => setGameState("title")} 
         />
         <LevelUpPopup

@@ -38,6 +38,15 @@ export interface GameSession {
 export interface PlayerProgress {
   xp: number;
   level: number;
+  streak: number;
+  lastPlayedDate?: string; // YYYY-MM-DD format
+}
+
+export interface DailyChallenge {
+  career: Career;
+  difficulty: Difficulty;
+  completed: boolean;
+  date: string; // YYYY-MM-DD format
 }
 
 // XP required for each level (exponential growth)
@@ -75,5 +84,31 @@ export const calculateXPForNextLevel = (xp: number): { current: number; needed: 
   return {
     current: xp - XP_PER_LEVEL[level],
     needed: nextLevelXP - XP_PER_LEVEL[level],
+  };
+};
+
+// Get today's date in YYYY-MM-DD format
+export const getTodayDate = (): string => {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+};
+
+// Get XP bonus for daily streak
+export const getStreakXPBonus = (streak: number): number => {
+  return Math.min(streak * 5, 50); // 5 XP per day, max 50
+};
+
+// Generate a daily challenge (rotates through careers based on date)
+export const getDailyChallenge = (): { career: Career; difficulty: Difficulty } => {
+  const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician"];
+  const difficulties: Difficulty[] = ["easy", "medium", "hard"];
+  const today = new Date();
+  // Calculate days since epoch for deterministic daily rotation
+  const daysSinceEpoch = Math.floor(today.getTime() / (1000 * 60 * 60 * 24));
+  const careerIndex = daysSinceEpoch % allCareers.length;
+  const difficultyIndex = Math.floor(daysSinceEpoch / 3) % difficulties.length;
+  return {
+    career: allCareers[careerIndex],
+    difficulty: difficulties[difficultyIndex],
   };
 };

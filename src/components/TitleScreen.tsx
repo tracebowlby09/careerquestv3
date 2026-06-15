@@ -1,7 +1,7 @@
 "use client";
 
 import { audioSystem } from "@/lib/audio";
-import { GameMode, calculateXPForNextLevel } from "@/types/game";
+import { GameMode, calculateXPForNextLevel, Career, Difficulty, getDailyChallenge } from "@/types/game";
 import { GameButton, GradientCard, AnimatedIcon } from "./ui/UIComponents";
 
 interface TitleScreenProps {
@@ -11,15 +11,50 @@ interface TitleScreenProps {
   onViewStats: () => void;
   level: number;
   xp: number;
+  streak: number;
+  completedToday: boolean;
+  onAcceptDailyChallenge: (career: Career, difficulty: Difficulty) => void;
 }
 
-export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, onViewStats, level, xp }: TitleScreenProps) {
+const careerIcons: Record<Career, string> = {
+  programmer: "💻",
+  nurse: "🏥",
+  engineer: "🏗️",
+  teacher: "📚",
+  chef: "👨‍🍳",
+  architect: "🏛️",
+  lawyer: "⚖️",
+  retail: "🛍️",
+  electrician: "⚡",
+};
+
+const careerNames: Record<Career, string> = {
+  programmer: "Programmer",
+  nurse: "Nurse",
+  engineer: "Engineer",
+  teacher: "Teacher",
+  chef: "Chef",
+  architect: "Architect",
+  lawyer: "Lawyer",
+  retail: "Retail Worker",
+  electrician: "Electrician",
+};
+
+const difficultyLabels: Record<Difficulty, string> = {
+  easy: "🥉 Bronze",
+  medium: "🥈 Silver",
+  hard: "🥇 Gold",
+};
+
+export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, onViewStats, level, xp, streak, completedToday, onAcceptDailyChallenge }: TitleScreenProps) {
   const handleStart = (mode: GameMode) => {
     audioSystem.playClickSound();
     onStart(mode);
   };
 
   const xpProgress = calculateXPForNextLevel(xp);
+  const todayChallenge = getDailyChallenge();
+  const streakXP = Math.min((streak + 1) * 5, 50);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-purple-900 p-4 md:p-8 flex items-center justify-center">
@@ -43,6 +78,11 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, o
                   style={{ width: `${xpProgress.needed > 0 ? (xpProgress.current / xpProgress.needed) * 100 : 100}%` }}
                 />
               </div>
+              {streak > 0 && (
+                <p className="text-white/60 text-sm mt-1">
+                  🔥 {streak} day streak | +{streakXP} XP bonus
+                </p>
+              )}
             </div>
             
             <p className="text-xl md:text-2xl text-white/90 mb-6 max-w-2xl mx-auto">
@@ -82,6 +122,30 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, o
               <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </GameButton>
           </div>
+
+          {!completedToday && (
+            <div className="mt-8">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500/30 to-red-500/30 backdrop-blur-sm px-6 py-3 rounded-full mb-4">
+                <span className="text-orange-300 font-bold">🔥 Daily Challenge</span>
+              </div>
+              <div className="flex flex-col items-center gap-3">
+                <div className="flex items-center gap-3 bg-white/10 px-4 py-2 rounded-lg">
+                  <span className="text-3xl">{careerIcons[todayChallenge.career]}</span>
+                  <div className="text-left">
+                    <p className="font-bold text-white">{careerNames[todayChallenge.career]}</p>
+                    <p className="text-white/70 text-sm">{difficultyLabels[todayChallenge.difficulty]} Challenge</p>
+                    <p className="text-orange-300 text-sm">+ {streakXP} XP Streak Bonus!</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => onAcceptDailyChallenge(todayChallenge.career, todayChallenge.difficulty)}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold text-lg hover:scale-105 transition-transform"
+                >
+                  🎮 Accept Challenge
+                </button>
+              </div>
+            </div>
+          )}
 
           <div className="mt-8">
             <button

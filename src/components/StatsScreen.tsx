@@ -1,6 +1,6 @@
 "use client";
 
-import { Trophy, Career, Difficulty, GameMode, GameSession, XP_PER_LEVEL, calculateLevel, calculateXPForNextLevel } from "@/types/game";
+import { Trophy, Career, Difficulty, GameMode, GameSession, XP_PER_LEVEL, calculateLevel, calculateXPForNextLevel, getTodayDate, getDailyChallenge, getStreakXPBonus } from "@/types/game";
 import { GameButton, GradientCard, AnimatedIcon, AnimatedContainer, Badge } from "./ui/UIComponents";
 
 interface StatsScreenProps {
@@ -8,6 +8,7 @@ interface StatsScreenProps {
   sessions: GameSession[];
   level: number;
   xp: number;
+  streak: number;
   onBack: () => void;
 }
 
@@ -53,10 +54,18 @@ const gameModeLabels: Record<GameMode, string> = {
   certification: "Certification",
 };
 
+const difficultyLabels: Record<Difficulty, string> = {
+  easy: "🥉 Bronze",
+  medium: "🥈 Silver",
+  hard: "🥇 Gold",
+};
+
 const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician"];
 
-export default function StatsScreen({ trophies, sessions, level, xp, onBack }: StatsScreenProps) {
+export default function StatsScreen({ trophies, sessions, level, xp, streak, onBack }: StatsScreenProps) {
   const xpProgress = calculateXPForNextLevel(xp);
+  const todayChallenge = getDailyChallenge();
+  const streakXP = getStreakXPBonus(streak + 1);
   const totalSessions = sessions.length;
   const totalWins = sessions.filter(s => s.success).length;
   const overallWinRate = totalSessions > 0 ? Math.round((totalWins / totalSessions) * 100) : 0;
@@ -384,6 +393,35 @@ export default function StatsScreen({ trophies, sessions, level, xp, onBack }: S
                       {trophies.filter(t => t.isSecret && t.achievementType).length}
                     </p>
                     <p className="text-white/70 text-sm">Secret Achievements</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-10 pt-8 border-t-2 border-orange-400/30">
+                <div className="text-center mb-6">
+                  <h3 className="text-2xl font-bold text-white mb-2 flex items-center justify-center gap-3">
+                    <span>🔥</span> Daily Challenge & Streak
+                  </h3>
+                </div>
+                
+                <div className="grid grid-cols-2 md:grid-cols-2 gap-4 text-center">
+                  <div className="p-4 rounded-lg bg-white/10">
+                    <p className="text-3xl font-extrabold text-orange-400">{streak}</p>
+                    <p className="text-white/70 text-sm">Current Streak (days)</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-white/10">
+                    <p className="text-3xl font-extrabold text-yellow-400">+{streakXP} XP</p>
+                    <p className="text-white/70 text-sm">Next Streak Bonus</p>
+                  </div>
+                </div>
+                
+                <div className="mt-4 text-center">
+                  <div className="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg">
+                    <span className="text-2xl">{careerIcons[todayChallenge.career]}</span>
+                    <div className="text-left">
+                      <p className="font-bold text-white">{careerNames[todayChallenge.career]} - {difficultyLabels[todayChallenge.difficulty]}</p>
+                      <p className="text-white/60 text-sm">Today's Challenge</p>
+                    </div>
                   </div>
                 </div>
               </div>

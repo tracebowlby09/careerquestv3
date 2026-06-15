@@ -16,6 +16,7 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 - ✅ **Updated flavor text** on home screen to be more engaging ("Master real-world skills across 9 exciting careers...")
 - ✅ **Added Stats & Analytics Dashboard** - Players can track overall progress, win rates, and performance trends across careers and difficulties
 - ✅ **Added XP & Leveling System** - Players earn XP for completing challenges (more for higher difficulty and better scores), level up with rewards and the LevelUpPopup shows unlockable rewards
+- ✅ **Added Daily Challenges & Streaks** - Rotating daily challenges with streak XP bonuses (5 XP per day, max 50), displayed on title screen with "Accept Challenge" button
 
 ## Current Structure
 
@@ -25,8 +26,8 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 | `src/app/careers/[career]/page.tsx` | Standalone career information route | ✅ Ready |
 | `src/components/CareerInfoPage.tsx` | Reusable career information UI | ✅ Ready |
 | `src/components/CareerSelection.tsx` | Career card selection with Learn More entry points | ✅ Enhanced |
-| `src/components/StatsScreen.tsx` | Stats & Analytics dashboard with XP tracking | ✅ New |
-| `src/components/LevelUpPopup.tsx` | Level up celebration with rewards | ✅ New |
+| `src/components/StatsScreen.tsx` | Stats & Analytics dashboard with XP tracking | ✅ Ready |
+| `src/components/LevelUpPopup.tsx` | Level up celebration with rewards | ✅ Ready |
 | `src/lib/careerInfo.ts` | Shared career content, salary, skills, and day-in-life data | ✅ Ready |
 | `src/components/careers/*.tsx` | Career world components | ✅ Enhanced |
 | `src/components/difficulty/*.tsx` | Difficulty selection | ✅ Ready |
