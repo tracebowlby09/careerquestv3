@@ -1,6 +1,7 @@
 "use client";
 
-import DifficultySelection, { Difficulty } from "../DifficultySelection";
+import { Difficulty } from "@/types/game";
+import DifficultySelection from "../DifficultySelection";
 
 interface RetailDifficultyProps {
   onSelectDifficulty: (difficulty: Difficulty) => void;

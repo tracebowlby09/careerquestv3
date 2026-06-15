@@ -1,9 +1,8 @@
 "use client";
 
+import { Difficulty } from "@/types/game";
 import ScreenWrapper from "./ScreenWrapper";
 import { GameButton, AnimatedIcon, AnimatedContainer, GradientCard } from "./ui/UIComponents";
-
-export type Difficulty = "easy" | "medium" | "hard";
 
 interface DifficultyOption {
   id: Difficulty;

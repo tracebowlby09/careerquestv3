@@ -1,6 +1,6 @@
 "use client";
 
-import ScreenWrapper from "../ScreenWrapper";
+import { Difficulty } from "@/types/game";
 import DifficultySelection from "../DifficultySelection";
 
 interface ProgrammerDifficultyProps {

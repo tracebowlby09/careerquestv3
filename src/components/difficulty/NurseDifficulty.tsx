@@ -1,7 +1,7 @@
 "use client";
 
-import ScreenWrapper from "../ScreenWrapper";
-import DifficultySelection, { Difficulty } from "../DifficultySelection";
+import { Difficulty } from "@/types/game";
+import DifficultySelection from "../DifficultySelection";
 
 interface NurseDifficultyProps {
   onSelectDifficulty: (difficulty: Difficulty) => void;
