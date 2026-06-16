@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useRef } from "react";
-import { CustomTest, CustomQuestion } from "@/types/game";
+import { CustomTest } from "@/types/game";
 import { GradientCard, GameButton } from "./ui/UIComponents";
 
 interface CustomTestWorldProps {
@@ -24,7 +24,6 @@ function shuffleArray<T>(array: T[]): T[] {
 
 export default function CustomTestWorld({ test, onComplete, isQuickRecall, alwaysCorrect, onExit, onAnswerResult }: CustomTestWorldProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [score, setScore] = useState(0);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -38,8 +37,8 @@ export default function CustomTestWorld({ test, onComplete, isQuickRecall, alway
   }, [currentQuestionIndex]);
 
   useEffect(() => {
-    scoreRef.current = score;
-  }, [score]);
+    scoreRef.current = 0;
+  }, []);
 
   const handleAnswer = (index: number) => {
     const correct = index === currentQuestion.correctIndex || !!alwaysCorrect;
@@ -47,7 +46,7 @@ export default function CustomTestWorld({ test, onComplete, isQuickRecall, alway
     setIsCorrect(correct);
 
     if (correct) {
-      setScore(prev => prev + 1);
+      scoreRef.current += 1;
     }
 
     const timeMs = startTime ? Date.now() - startTime : 0;
@@ -65,12 +64,17 @@ export default function CustomTestWorld({ test, onComplete, isQuickRecall, alway
     setSelectedAnswer(null);
     setStartTime(Date.now());
 
-    const currentScore = wasCorrectForQuickRecall !== undefined ? (wasCorrectForQuickRecall ? scoreRef.current + 1 : scoreRef.current) : score;
+    if (wasCorrectForQuickRecall !== undefined) {
+      if (wasCorrectForQuickRecall) {
+        scoreRef.current += 1;
+      }
+    }
 
     if (currentQuestionIndex < shuffledQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       // Quiz complete
+      const currentScore = scoreRef.current;
       onComplete(currentScore === shuffledQuestions.length, currentScore, shuffledQuestions.length);
     }
   };
@@ -94,12 +98,8 @@ export default function CustomTestWorld({ test, onComplete, isQuickRecall, alway
 
   const progress = ((currentQuestionIndex + 1) / shuffledQuestions.length) * 100;
 
-  const customGradient = test.themeColors?.primary && test.themeColors?.secondary
-    ? `from-[${test.themeColors.primary}] to-[${test.themeColors.secondary}]`
-    : undefined;
-
   return (
-    <GradientCard className="p-6 max-w-2xl mx-auto" gradient={customGradient || "from-blue-500 to-indigo-600"}>
+    <GradientCard className="p-6 max-w-2xl mx-auto" gradient="from-blue-500 to-indigo-600">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold text-white">{test.name}</h2>
         <span className="text-white/70">Question {currentQuestionIndex + 1} of {shuffledQuestions.length}</span>
