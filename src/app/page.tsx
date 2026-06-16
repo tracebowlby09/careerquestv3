@@ -686,6 +686,13 @@ export default function Home() {
   }, [handleKeyDown]);
 
   const handleStart = (mode: GameMode) => {
+    // Auth check - redirect to auth screen if needed
+    if (!currentUser && !hasDismissedGuestWarning()) {
+      setPendingStartMode(mode);
+      setGameState("auth");
+      return;
+    }
+    
     audioSystem.playClickSound();
     audioSystem.playTitleMusic();
     setGameMode(mode);
@@ -893,19 +900,8 @@ export default function Home() {
       setGameMode(pendingStartMode);
       setGameState("career-select");
       setPendingStartMode(null);
-    } else {
-      setGameState("title");
     }
-  };
-
-  const handleStart = (mode: GameMode) => {
-    if (!currentUser && !hasDismissedGuestWarning()) {
-      setPendingStartMode(mode);
-      setGameState("auth");
-      return;
-    }
-    setGameMode(mode);
-    setGameState("career-select");
+    // If no pending mode, user was dismissed in profile, stay on title
   };
 
   const handleChallengeComplete = (success: boolean, finalScore: number, total: number, incorrect?: IncorrectAnswer[]) => {
