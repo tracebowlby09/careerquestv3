@@ -55,6 +55,7 @@ import CareerInfoPage from "@/components/CareerInfoPage";
 import AuthScreen from "@/components/AuthScreen";
 import ModeratorDashboard from "@/components/ModeratorDashboard";
 import CustomTestCreate from "@/components/CustomTestCreate";
+import CustomTestOutcome from "@/components/CustomTestOutcome";
 import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer, UserAccount, CustomTest, CustomQuestion } from "@/types/game";
 import { careerInfoByCareer } from "@/lib/careerInfo";
 import { getTodayDate, calculateLevel, calculateXPForNextLevel, getStreakXPBonus, getDailyChallenge } from "@/types/game";
@@ -62,7 +63,7 @@ import { GameSession, PlayerProgress } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import ScreenWrapper from "@/components/ScreenWrapper";
 
-type GameState = "title" | "tutorial" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "trophy" | "stats" | "career-info" | "profile" | "auth" | "custom-create" | "custom-play" | "moderator";
+type GameState = "title" | "tutorial" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "custom-outcome" | "trophy" | "stats" | "career-info" | "profile" | "auth" | "custom-create" | "custom-play" | "moderator";
 
 const careerNames: Record<Career, string> = {
   programmer: "Software Programmer",
@@ -529,18 +530,36 @@ export default function Home() {
   // Custom test state
   const [customTestCode, setCustomTestCode] = useState<string | null>(null);
   const [activeCustomTest, setActiveCustomTest] = useState<CustomTest | null>(null);
+  const [customTestPreview, setCustomTestPreview] = useState<CustomTest | null>(null);
+  const [customTestResult, setCustomTestResult] = useState<{ success: boolean; score: number; total: number } | null>(null);
 
   // Custom test handlers
   const handleCustomTestCreate = (test: CustomTest, code: string) => {
     setCustomTestCode(code);
     setActiveCustomTest(test);
+    setCustomTestResult(null);
     setGameState("custom-play");
   };
 
+  const handlePreviewCustomTest = (code: string) => {
+    setCustomTestPreview(loadCustomTestByCode(code.trim().toUpperCase()));
+  };
+
+  const handleCustomTestComplete = (success: boolean, finalScore: number, total: number) => {
+    setCustomTestResult({ success, score: finalScore, total });
+    setGameState("custom-outcome");
+  };
+
+  const handleCustomTestPlayAgain = () => {
+    setCustomTestResult(null);
+    setGameState("playing");
+  };
+
   const loadCustomTestByCode = (code: string): CustomTest | null => {
+    const normalizedCode = code.trim().toUpperCase();
     if (typeof window === "undefined") return null;
-    const pendingKey = `customTestPending_${code}`;
-    const approvedKey = `customTest_${code}`;
+    const pendingKey = `customTestPending_${normalizedCode}`;
+    const approvedKey = `customTest_${normalizedCode}`;
     const raw = localStorage.getItem(pendingKey) || localStorage.getItem(approvedKey);
     if (raw) {
       try {
@@ -557,6 +576,8 @@ export default function Home() {
     if (test) {
       setActiveCustomTest(test);
       setCustomTestCode(code);
+      setCustomTestPreview(test);
+      setCustomTestResult(null);
       setGameMode(test.mode);
       setSelectedCareer("programmer");
       setSelectedDifficulty(test.mode === "challenge" ? test.difficulty || "medium" : null);
@@ -1194,7 +1215,18 @@ export default function Home() {
     audioSystem.stopBackgroundMusic();
     audioSystem.playTitleMusic();
     setSelectedCertification(null);
+    setActiveCustomTest(null);
+    setCustomTestCode(null);
+    setCustomTestResult(null);
+    setCustomTestPreview(null);
     setGameState("title");
+  };
+
+  const handleCustomTestBackToTitle = () => {
+    setActiveCustomTest(null);
+    setCustomTestCode(null);
+    setCustomTestResult(null);
+    handleExitToTitle();
   };
 
   const handleExitToDifficultySelect = () => {
@@ -1373,6 +1405,8 @@ export default function Home() {
           onOpenProfile={() => setGameState("profile")}
           onOpenCustomCreate={() => setGameState("custom-create")}
           onEnterCode={handlePlayCustomTest}
+          onPreviewCode={handlePreviewCustomTest}
+          previewTest={customTestPreview}
           currentUser={currentUser}
         />
         {settingsModal}
@@ -1708,7 +1742,7 @@ if (gameState === "difficulty-select") {
             alwaysCorrect={alwaysCorrect}
             onExit={handleExitToTitle}
             onAnswerResult={handleAnswerResult}
-            onComplete={handleChallengeComplete}
+            onComplete={handleCustomTestComplete}
           />
         </div>
       );
@@ -2077,6 +2111,22 @@ if (gameState === "difficulty-select") {
             </div>
           </GradientCard>
         </div>
+        {settingsModal}
+      </>
+    );
+  }
+
+  if (gameState === "custom-outcome" && activeCustomTest && customTestResult) {
+    return (
+      <>
+        <CustomTestOutcome
+          test={activeCustomTest}
+          success={customTestResult.success}
+          score={customTestResult.score}
+          total={customTestResult.total}
+          onPlayAgain={handleCustomTestPlayAgain}
+          onBackToTitle={handleCustomTestBackToTitle}
+        />
         {settingsModal}
       </>
     );

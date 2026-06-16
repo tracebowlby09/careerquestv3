@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { CSSProperties, useState, useEffect, useMemo, useRef } from "react";
 import { CustomTest } from "@/types/game";
 import { GradientCard, GameButton } from "../ui/UIComponents";
 
@@ -20,6 +20,19 @@ function shuffleArray<T>(array: T[]): T[] {
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
   return shuffled;
+}
+
+function getCustomBackgroundStyle(test: CustomTest): CSSProperties | undefined {
+  if (!test.backgroundImage) return undefined;
+
+  const primary = test.themeColors?.primary ?? "#3b82f6";
+  const secondary = test.themeColors?.secondary ?? "#8b5cf6";
+  return {
+    backgroundImage: `linear-gradient(135deg, rgba(15, 23, 42, 0.88), rgba(30, 41, 59, 0.78)), url("${test.backgroundImage}")`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  };
 }
 
 export default function CustomTestWorld({ test, onComplete, isQuickRecall, alwaysCorrect, onExit, onAnswerResult }: CustomTestWorldProps) {
@@ -97,10 +110,18 @@ export default function CustomTestWorld({ test, onComplete, isQuickRecall, alway
   const progress = ((currentQuestionIndex + 1) / shuffledQuestions.length) * 100;
 
   return (
-    <GradientCard className="p-6 max-w-2xl mx-auto" gradient="from-blue-500 to-indigo-600">
+    <GradientCard className="relative overflow-hidden p-6 max-w-2xl mx-auto" gradient="from-blue-500 to-indigo-600" style={getCustomBackgroundStyle(test)}>
+      {test.backgroundImage && <div className="absolute inset-0 bg-black/30" />}
+      <div className="relative z-10">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-white">{test.name}</h2>
-        <span className="text-white/70">Question {currentQuestionIndex + 1} of {shuffledQuestions.length}</span>
+        <div className="flex items-center gap-3">
+          <span className="text-4xl" role="img" aria-label="Custom test icon">{test.icon || "🎓"}</span>
+          <div>
+            <h2 className="text-2xl font-bold text-white drop-shadow">{test.name}</h2>
+            {test.description && <p className="text-white/75 text-sm mt-1 drop-shadow">{test.description}</p>}
+          </div>
+        </div>
+        <span className="text-white/80 text-right">Question {currentQuestionIndex + 1} of {shuffledQuestions.length}</span>
       </div>
 
       <div className="w-full bg-white/20 rounded-full h-2 mb-4">
@@ -108,11 +129,11 @@ export default function CustomTestWorld({ test, onComplete, isQuickRecall, alway
       </div>
 
       <div className="mb-6">
-        <p className="text-white text-lg mb-4">{currentQuestion.question}</p>
+        <p className="text-white text-lg mb-4 drop-shadow">{currentQuestion.question}</p>
         
         <div className="grid grid-cols-1 gap-2">
           {shuffledOptions.map((option, idx) => {
-            let buttonClass = "w-full py-3 px-4 rounded-lg text-left transition-all";
+            let buttonClass = "w-full py-3 px-4 rounded-lg text-left transition-all text-white";
             
             if (selectedAnswer !== null) {
               const originalCorrectIndex = currentQuestion.options.indexOf(option);
@@ -176,6 +197,7 @@ export default function CustomTestWorld({ test, onComplete, isQuickRecall, alway
             </GameButton>
           )}
         </div>
+      </div>
       </div>
     </GradientCard>
   );

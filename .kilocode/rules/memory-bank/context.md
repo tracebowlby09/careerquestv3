@@ -28,6 +28,7 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 - ✅ **Wired auth handlers**: handleLogin, handleSignup, handleLogout connected in page.tsx with user-aware save/load functions
 - ✅ **Added guest warning dismiss**: Users can dismiss the guest warning in ProfileScreen to continue playing
 - ✅ **Preserved game mode flow**: Pending game mode is saved when redirecting to auth, restored after successful login/signup/guest play
+- ✅ **Enhanced custom tests**: Added descriptions, emoji icons, three required learned skills, visible custom backgrounds, code preview with test name/questions, and custom test end screens
 
 ## Current Structure
 
@@ -42,6 +43,9 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 | `src/components/ProfileScreen.tsx` | Profile popup with top trophies and level info | ✅ Ready |
 | `src/lib/careerInfo.ts` | Shared career content, salary, skills, and day-in-life data | ✅ Ready |
 | `src/components/careers/*.tsx` | Career world components | ✅ Enhanced |
+| `src/components/CustomTestCreate.tsx` | Custom quiz/test builder | ✅ Enhanced |
+| `src/components/CustomTestOutcome.tsx` | Custom test completion screen | ✅ Added |
+| `src/components/careers/CustomTestWorld.tsx` | Custom quiz/test player | ✅ Enhanced |
 | `src/components/difficulty/*.tsx` | Difficulty selection | ✅ Ready |
 
 ## Total Question Bank
@@ -76,6 +80,7 @@ Note: Challenge questions per career = 3-5 (varies by career). Certification use
 | 2026-06-16 | Fixed null handling in handleLogin and useEffect for user data loading |
 | 2026-06-16 | Added explicit Trophy type annotations for strict TypeScript mode |
 | 2026-06-16 | Added custom test creation feature - quiz builder, code-based sharing, localStorage storage |
+| 2026-06-16 | Enhanced custom tests - descriptions, emoji icons, three learned skills, background display, code preview, and custom end screen |
 
 ## New Certification Types Added
 - firefighter-cert (Firefighter I & II Certification)

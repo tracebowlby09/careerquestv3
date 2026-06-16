@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { audioSystem } from "@/lib/audio";
-import { GameMode } from "@/types/game";
+import { GameMode, CustomTest } from "@/types/game";
 import { GameButton, GradientCard, AnimatedIcon } from "./ui/UIComponents";
 
 interface TitleScreenProps {
@@ -13,16 +13,30 @@ interface TitleScreenProps {
   onOpenProfile: () => void;
   onOpenCustomCreate?: () => void;
   onEnterCode?: (code: string) => void;
+  onPreviewCode?: (code: string) => void;
+  previewTest?: CustomTest | null;
   currentUser?: string | null;
 }
 
-export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, onViewStats, onOpenProfile, onOpenCustomCreate, onEnterCode, currentUser }: TitleScreenProps) {
+export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, onViewStats, onOpenProfile, onOpenCustomCreate, onEnterCode, onPreviewCode, previewTest, currentUser }: TitleScreenProps) {
   const [showCodeInput, setShowCodeInput] = useState(false);
   const [inputCode, setInputCode] = useState("");
 
   const handleStart = (mode: GameMode) => {
     audioSystem.playClickSound();
     onStart(mode);
+  };
+
+  const handleCodeChange = (value: string) => {
+    const code = value.toUpperCase();
+    setInputCode(code);
+    onPreviewCode?.(code);
+  };
+
+  const handleCodeSubmit = () => {
+    const code = inputCode.trim().toUpperCase();
+    if (!code) return;
+    onPreviewCode?.(code);
   };
 
   return (
@@ -103,30 +117,83 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, o
           </div>
 
           {showCodeInput && (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-              <div className="bg-slate-900 p-6 rounded-xl max-w-sm w-full">
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+              <div className="bg-slate-900 p-6 rounded-xl max-w-2xl w-full max-h-[85vh] overflow-y-auto">
                 <h3 className="text-white font-bold mb-3">Enter Quiz Code</h3>
                 <input
                   type="text"
                   value={inputCode.toUpperCase()}
-                  onChange={(e) => setInputCode(e.target.value.toUpperCase())}
+                  onChange={(e) => handleCodeChange(e.target.value)}
                   placeholder="ABCD12"
                   className="w-full px-4 py-2 rounded bg-white/10 border border-white/20 text-white mb-4"
                   maxLength={8}
                 />
+
+                {previewTest && (
+                  <div className="mb-4 rounded-lg border border-white/20 bg-white/10 p-4 text-left">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="text-4xl">{previewTest.icon || "🎓"}</span>
+                      <div>
+                        <h4 className="text-white font-bold text-lg">{previewTest.name}</h4>
+                        {previewTest.description && (
+                          <p className="text-white/70 text-sm">{previewTest.description}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="mb-3">
+                      <p className="text-white/70 text-sm mb-2 font-bold">Skills Learned</p>
+                      <div className="flex flex-wrap gap-2">
+                        {(previewTest.skillsLearned || []).map((skill, idx) => (
+                          <span key={idx} className="px-3 py-1 rounded-full bg-white/15 text-white text-sm">
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <p className="text-white/70 text-sm mb-2 font-bold">Questions</p>
+                      <div className="space-y-2 max-h-48 overflow-y-auto pr-2">
+                        {previewTest.questions.map((question, idx) => (
+                          <div key={question.id} className="rounded bg-black/20 p-3">
+                            <p className="text-white text-sm font-semibold mb-1">
+                              {idx + 1}. {question.question}
+                            </p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-white/70 text-xs">
+                              {question.options.map((option, optIdx) => (
+                                <span key={optIdx}>
+                                  {String.fromCharCode(65 + optIdx)}. {option}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex gap-2">
-                  <GameButton 
-                    onClick={() => {
-                      if (inputCode && onEnterCode) {
-                        onEnterCode(inputCode);
-                      }
-                      setShowCodeInput(false);
-                    }}
+                  <GameButton
+                    onClick={handleCodeSubmit}
                     className="flex-1"
                     disabled={!inputCode}
                   >
-                    Play
+                    {previewTest ? "Update Preview" : "Preview Test"}
                   </GameButton>
+                  {previewTest && onEnterCode && (
+                    <GameButton
+                      onClick={() => {
+                        if (inputCode) {
+                          onEnterCode(inputCode);
+                        }
+                      }}
+                      className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600"
+                    >
+                      Play Test
+                    </GameButton>
+                  )}
                   <button
                     onClick={() => setShowCodeInput(false)}
                     className="px-4 py-2 rounded bg-gray-700 text-white"

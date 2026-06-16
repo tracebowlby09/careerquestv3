@@ -16,6 +16,9 @@ const generateCode = () => {
 
 export default function CustomTestCreate({ onBack, onTestCreated, currentUser }: CustomTestCreateProps) {
   const [testName, setTestName] = useState("");
+  const [description, setDescription] = useState("");
+  const [icon, setIcon] = useState("🎓");
+  const [skillsLearned, setSkillsLearned] = useState(["", "", ""]);
   const [mode, setMode] = useState<"challenge" | "quick-recall">("challenge");
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("medium");
   const [questions, setQuestions] = useState<CustomQuestion[]>([
@@ -55,8 +58,14 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser }:
     ));
   };
 
+  const updateSkill = (idx: number, value: string) => {
+    setSkillsLearned(skillsLearned.map((skill, skillIdx) => skillIdx === idx ? value : skill));
+  };
+
   const handleCreate = () => {
     if (!testName.trim()) return;
+    if (!icon.trim()) return;
+    if (skillsLearned.some(skill => !skill.trim())) return;
     if (questions.some(q => !q.question.trim() || q.options.some(o => !o.trim()))) return;
 
     const code = generateCode();
@@ -64,6 +73,9 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser }:
        id: Date.now().toString(),
        code,
        name: testName.trim(),
+       description: description.trim() || undefined,
+       icon: icon.trim(),
+       skillsLearned: skillsLearned.map(skill => skill.trim()),
        creatorUsername: currentUser || "Guest",
        mode,
       ...(mode === "challenge" && { difficulty }),
@@ -130,6 +142,44 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser }:
                 </select>
               </div>
             )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label className="block text-white font-bold text-sm mb-1">Test Icon Emoji</label>
+              <input
+                type="text"
+                value={icon}
+                onChange={(e) => setIcon(e.target.value)}
+                className="w-full px-4 py-2 rounded-lg bg-white/10 border-2 border-white/20 text-white text-center text-2xl"
+                placeholder="🎓"
+                maxLength={6}
+              />
+            </div>
+
+            {skillsLearned.map((skill, idx) => (
+              <div key={idx}>
+                <label className="block text-white font-bold text-sm mb-1">Skill {idx + 1}</label>
+                <input
+                  type="text"
+                  value={skill}
+                  onChange={(e) => updateSkill(idx, e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg bg-white/10 border-2 border-white/20 text-white"
+                  placeholder={`Skill learned ${idx + 1}`}
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-white font-bold text-sm mb-1">Test Description</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg bg-white/10 border-2 border-white/20 text-white"
+              placeholder="Describe what players will learn in this custom test..."
+              rows={3}
+            />
           </div>
 
           <div className="mb-4">

@@ -69,6 +69,9 @@ export interface CustomTest {
   id: string;
   code: string; // Unique short code for sharing/playing
   name: string;
+  description?: string;
+  icon?: string;
+  skillsLearned?: string[];
   creatorUsername: string;
   mode: "challenge" | "quick-recall";
   difficulty?: Difficulty;

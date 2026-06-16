@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 
 const cardStyles = {
   base: "rounded-2xl shadow-xl transition-all duration-300",
@@ -47,11 +47,13 @@ export function GradientCard({
   className = "",
   gradient = "from-blue-500 to-indigo-600",
   interactive = false,
+  style,
 }: {
   children: ReactNode;
   className?: string;
   gradient?: string;
   interactive?: boolean;
+  style?: CSSProperties;
 }) {
   return (
     <div className={`
@@ -59,7 +61,9 @@ export function GradientCard({
       bg-gradient-to-br ${gradient}
       ${interactive ? "hover:shadow-2xl hover:scale-105 hover:-translate-y-1 cursor-pointer transition-all duration-300" : ""}
       ${className}
-    `}>
+    `}
+    style={style}
+    >
       {children}
     </div>
   );
