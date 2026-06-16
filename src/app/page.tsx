@@ -359,7 +359,6 @@ export default function Home() {
   const [xpGainedLastChallenge, setXpGainedLastChallenge] = useState(0);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [showSecretTrophyPopup, setShowSecretTrophyPopup] = useState(false);
-  const [showSecretTrophyPopup, setShowSecretTrophyPopup] = useState(false);
   const [currentAchievementType, setCurrentAchievementType] = useState<string | null>(null);
 
   // Admin code detection (5839201746)
@@ -1446,9 +1445,8 @@ if (gameState === "difficulty-select") {
              difficulty={selectedDifficulty ?? "easy"}
              onComplete={handleChallengeComplete}
              isQuickRecall={isQuickRecall}
-             isCertification={gameMode === "certification"}
-             isSimulation={gameMode === "simulation"}
-             alwaysCorrect={alwaysCorrect}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
              onExit={handleExitToTitle}
              onTutorialBack={tutorialBackHandler}
              onAnswerResult={handleAnswerResult}
@@ -1459,9 +1457,8 @@ if (gameState === "difficulty-select") {
              difficulty={selectedDifficulty ?? "easy"}
              onComplete={handleChallengeComplete}
              isQuickRecall={isQuickRecall}
-             isCertification={gameMode === "certification"}
-             isSimulation={gameMode === "simulation"}
-             alwaysCorrect={alwaysCorrect}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
              onExit={handleExitToTitle}
              onTutorialBack={tutorialBackHandler}
              onAnswerResult={handleAnswerResult}
@@ -1472,9 +1469,8 @@ if (gameState === "difficulty-select") {
              difficulty={selectedDifficulty ?? "easy"}
              onComplete={handleChallengeComplete}
              isQuickRecall={isQuickRecall}
-             isCertification={gameMode === "certification"}
-             isSimulation={gameMode === "simulation"}
-             alwaysCorrect={alwaysCorrect}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
              onExit={handleExitToTitle}
              onTutorialBack={tutorialBackHandler}
              onAnswerResult={handleAnswerResult}
@@ -1485,9 +1481,8 @@ if (gameState === "difficulty-select") {
              difficulty={selectedDifficulty ?? "easy"}
              onComplete={handleChallengeComplete}
              isQuickRecall={isQuickRecall}
-             isCertification={gameMode === "certification"}
-             isSimulation={gameMode === "simulation"}
-             alwaysCorrect={alwaysCorrect}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
              onExit={handleExitToTitle}
              onTutorialBack={tutorialBackHandler}
              onAnswerResult={handleAnswerResult}
@@ -1498,9 +1493,8 @@ if (gameState === "difficulty-select") {
              difficulty={selectedDifficulty ?? "easy"}
              onComplete={handleChallengeComplete}
              isQuickRecall={isQuickRecall}
-             isCertification={gameMode === "certification"}
-             isSimulation={gameMode === "simulation"}
-             alwaysCorrect={alwaysCorrect}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
              onExit={handleExitToTitle}
              onTutorialBack={tutorialBackHandler}
              onAnswerResult={handleAnswerResult}
@@ -1511,9 +1505,8 @@ if (gameState === "difficulty-select") {
              difficulty={selectedDifficulty ?? "easy"}
              onComplete={handleChallengeComplete}
              isQuickRecall={isQuickRecall}
-             isCertification={gameMode === "certification"}
-             isSimulation={gameMode === "simulation"}
-             alwaysCorrect={alwaysCorrect}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
              onExit={handleExitToTitle}
              onTutorialBack={tutorialBackHandler}
              onAnswerResult={handleAnswerResult}
@@ -1524,9 +1517,8 @@ if (gameState === "difficulty-select") {
              difficulty={selectedDifficulty ?? "easy"}
              onComplete={handleChallengeComplete}
              isQuickRecall={isQuickRecall}
-             isCertification={gameMode === "certification"}
-             isSimulation={gameMode === "simulation"}
-             alwaysCorrect={alwaysCorrect}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
              onExit={handleExitToTitle}
              onTutorialBack={tutorialBackHandler}
              onAnswerResult={handleAnswerResult}
@@ -1537,9 +1529,8 @@ if (gameState === "difficulty-select") {
              difficulty={selectedDifficulty ?? "easy"}
              onComplete={handleChallengeComplete}
              isQuickRecall={isQuickRecall}
-             isCertification={gameMode === "certification"}
-             isSimulation={gameMode === "simulation"}
-             alwaysCorrect={alwaysCorrect}
+              isCertification={gameMode === "certification"}
+              alwaysCorrect={alwaysCorrect}
              onExit={handleExitToTitle}
              onTutorialBack={tutorialBackHandler}
              onAnswerResult={handleAnswerResult}

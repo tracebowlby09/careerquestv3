@@ -8,6 +8,12 @@ interface TrophyScreenProps {
   onBack: () => void;
 }
 
+const difficultyLabels: Record<Difficulty, string> = {
+  easy: "Bronze",
+  medium: "Silver",
+  hard: "Gold",
+};
+
 const careerNames: Record<Career, string> = {
   programmer: "Programmer",
   nurse: "Nurse",
@@ -70,6 +76,7 @@ const careerIcons: Record<Career, string> = {
   dentist: "🦷",
   construction: "🏗️",
 };
+
 
 const SECRET_TROPHY_ID = "konami-master";
 
@@ -479,9 +486,3 @@ export default function TrophyScreen({ trophies, onBack }: TrophyScreenProps) {
     </div>
   );
 }
-
-const difficultyLabels: Record<Difficulty, string> = {
-  easy: "Bronze",
-  medium: "Silver",
-  hard: "Gold",
-};
