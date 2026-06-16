@@ -49,6 +49,7 @@ import LevelUpPopup from "@/components/LevelUpPopup";
 import ProfileScreen from "@/components/ProfileScreen";
 import HomeTutorial from "@/components/HomeTutorial";
 import SecretTrophyPopup from "@/components/SecretTrophyPopup";
+import CareerInfoPage from "@/components/CareerInfoPage";
 import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer } from "@/types/game";
 import { careerInfoByCareer } from "@/lib/careerInfo";
 import { getTodayDate, calculateLevel, calculateXPForNextLevel, getStreakXPBonus, getDailyChallenge } from "@/types/game";
@@ -1720,6 +1721,31 @@ if (gameState === "difficulty-select") {
             setGameState("difficulty-select");
           }}
           completedToday={completedToday}
+        />
+        {settingsModal}
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
+          achievementType={currentAchievementType}
+          onClose={() => {
+            setShowSecretTrophyPopup(false);
+            setCurrentAchievementType(null);
+          }} 
+        />
+      </>
+    );
+  }
+
+  if (gameState === "career-info" && selectedCareer) {
+    return (
+      <>
+        <CareerInfoPage 
+          career={selectedCareer}
+          onBack={() => setGameState("career-select")}
+          onStartCareer={(career) => {
+            setSelectedCareer(career);
+            setGameState("difficulty-select");
+          }}
+          onExit={handleExitToTitle}
         />
         {settingsModal}
         <SecretTrophyPopup 
