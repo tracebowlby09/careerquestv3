@@ -64,6 +64,7 @@ import { audioSystem } from "@/lib/audio";
 import ScreenWrapper from "@/components/ScreenWrapper";
 
 type GameState = "title" | "tutorial" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "custom-outcome" | "trophy" | "stats" | "career-info" | "profile" | "auth" | "custom-create" | "custom-play" | "moderator";
+type ResizeAnchor = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 
 const careerNames: Record<Career, string> = {
   programmer: "Software Programmer",
@@ -592,8 +593,14 @@ export default function Home() {
   const [alwaysCorrect, setAlwaysCorrect] = useState(false);
   const [adminMinimized, setAdminMinimized] = useState(false);
   const [adminPosition, setAdminPosition] = useState({ x: 20, y: 20 });
+  const [adminSize, setAdminSize] = useState({ width: 420, height: 680 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [isResizing, setIsResizing] = useState(false);
+  const [resizeAnchor, setResizeAnchor] = useState<ResizeAnchor | null>(null);
+  const [resizeStart, setResizeStart] = useState({ x: 0, y: 0 });
+  const [resizeStartPosition, setResizeStartPosition] = useState({ x: 0, y: 0 });
+  const [resizeStartSize, setResizeStartSize] = useState({ width: 420, height: 680 });
   const [adminCustomCode, setAdminCustomCode] = useState("");
   const [adminTrophyAchievement, setAdminTrophyAchievement] = useState<AchievementType | "">("");
   const [adminTrophyCareer, setAdminTrophyCareer] = useState<Career>("programmer");
@@ -1438,6 +1445,34 @@ export default function Home() {
   };
 
   const handleAdminMouseMove = (e: React.MouseEvent) => {
+    if (isResizing) {
+      const deltaX = e.clientX - resizeStart.x;
+      const deltaY = e.clientY - resizeStart.y;
+      let nextWidth = resizeStartSize.width;
+      let nextHeight = resizeStartSize.height;
+      let nextX = resizeStartPosition.x;
+      let nextY = resizeStartPosition.y;
+
+      if (resizeAnchor === "bottom-right" || resizeAnchor === "top-right") {
+        nextWidth = Math.max(340, resizeStartSize.width + deltaX);
+      }
+      if (resizeAnchor === "bottom-left" || resizeAnchor === "top-left") {
+        nextWidth = Math.max(340, resizeStartSize.width - deltaX);
+        nextX = resizeStartPosition.x + (resizeStartSize.width - nextWidth);
+      }
+      if (resizeAnchor === "bottom-right" || resizeAnchor === "bottom-left") {
+        nextHeight = Math.max(420, resizeStartSize.height + deltaY);
+      }
+      if (resizeAnchor === "top-right" || resizeAnchor === "top-left") {
+        nextHeight = Math.max(420, resizeStartSize.height - deltaY);
+        nextY = resizeStartPosition.y + (resizeStartSize.height - nextHeight);
+      }
+
+      setAdminSize({ width: nextWidth, height: nextHeight });
+      setAdminPosition({ x: nextX, y: nextY });
+      return;
+    }
+
     if (!isDragging) return;
     setAdminPosition({
       x: e.clientX - dragOffset.x,
@@ -1447,6 +1482,17 @@ export default function Home() {
 
   const handleAdminMouseUp = () => {
     setIsDragging(false);
+    setIsResizing(false);
+    setResizeAnchor(null);
+  };
+
+  const handleResizeMouseDown = (e: React.MouseEvent, anchor: ResizeAnchor) => {
+    e.stopPropagation();
+    setIsResizing(true);
+    setResizeAnchor(anchor);
+    setResizeStart({ x: e.clientX, y: e.clientY });
+    setResizeStartPosition(adminPosition);
+    setResizeStartSize(adminSize);
   };
 
   // Admin panel JSX
@@ -1459,6 +1505,8 @@ export default function Home() {
         style={{ 
           left: adminPosition.x, 
           top: adminPosition.y,
+          width: adminSize.width,
+          height: adminSize.height,
           transform: isDragging ? 'none' : 'none'
         }}
         onMouseMove={handleAdminMouseMove}
@@ -1481,7 +1529,7 @@ export default function Home() {
           </div>
         ) : (
           // Full version
-          <div className="bg-gradient-to-br from-purple-900 to-indigo-900 rounded-2xl p-6 max-w-md w-full shadow-2xl border-2 border-purple-500">
+          <div className="relative bg-gradient-to-br from-purple-900 to-indigo-900 rounded-2xl p-6 w-full h-full shadow-2xl border-2 border-purple-500 flex flex-col overflow-hidden">
             <div 
               className="flex justify-between items-center mb-6 cursor-move -mx-2 -mt-2 p-2 rounded-t-xl hover:bg-purple-800/30"
               onMouseDown={handleAdminMouseDown}
@@ -1504,7 +1552,7 @@ export default function Home() {
               </div>
             </div>
             
-            <div className="space-y-4">
+            <div className="flex-1 overflow-y-auto pr-2 space-y-4">
               <div className="grid grid-cols-2 gap-2 text-white/80 text-sm">
                 <div className="rounded-xl bg-white/10 p-3">
                   <p className="text-white/50 text-xs">User</p>
@@ -1705,6 +1753,31 @@ export default function Home() {
                   Code: 5839201746
                 </p>
               </div>
+            </div>
+
+            <div
+              className="absolute top-0 left-0 w-6 h-6 cursor-nwse-resize flex items-start justify-start text-white/50 hover:text-white"
+              onMouseDown={(e) => handleResizeMouseDown(e, "top-left")}
+            >
+              <span className="text-xs leading-none">↖</span>
+            </div>
+            <div
+              className="absolute top-0 right-0 w-6 h-6 cursor-nesw-resize flex items-start justify-end text-white/50 hover:text-white"
+              onMouseDown={(e) => handleResizeMouseDown(e, "top-right")}
+            >
+              <span className="text-xs leading-none">↗</span>
+            </div>
+            <div
+              className="absolute bottom-0 left-0 w-6 h-6 cursor-nesw-resize flex items-end justify-start text-white/50 hover:text-white"
+              onMouseDown={(e) => handleResizeMouseDown(e, "bottom-left")}
+            >
+              <span className="text-xs leading-none">↙</span>
+            </div>
+            <div
+              className="absolute bottom-0 right-0 w-6 h-6 cursor-nwse-resize flex items-end justify-end text-white/50 hover:text-white"
+              onMouseDown={(e) => handleResizeMouseDown(e, "bottom-right")}
+            >
+              <span className="text-xs leading-none">↘</span>
             </div>
           </div>
         )}
