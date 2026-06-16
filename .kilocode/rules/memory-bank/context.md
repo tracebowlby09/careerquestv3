@@ -75,6 +75,7 @@ Note: Challenge questions per career = 3-5 (varies by career). Certification use
 | 2026-06-16 | Added UserAccount import, restored missing user management functions |
 | 2026-06-16 | Fixed null handling in handleLogin and useEffect for user data loading |
 | 2026-06-16 | Added explicit Trophy type annotations for strict TypeScript mode |
+| 2026-06-16 | Added custom test creation feature - quiz builder, code-based sharing, localStorage storage |
 
 ## New Certification Types Added
 - firefighter-cert (Firefighter I & II Certification)
