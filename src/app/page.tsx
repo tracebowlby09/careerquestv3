@@ -213,7 +213,7 @@ const checkAchievements = (
     const careerTrophies = allTrophies.filter(
       (t) => t.career === career && !t.achievementType
     );
-    const earnedDifficulties = new Set(careerTrophies.map((t) => t.difficulty));
+    const earnedDifficulties = new Set(careerTrophies.map((t: Trophy) => t.difficulty));
     const hasAllDifficulties = allDifficulties.every((d) => earnedDifficulties.has(d));
     
     if (hasAllDifficulties) {
@@ -263,7 +263,7 @@ const checkAchievements = (
     const careerTrophies = allTrophies.filter(
       (t) => t.career === career && !t.achievementType
     );
-    const earnedDifficulties = new Set(careerTrophies.map((t) => t.difficulty));
+    const earnedDifficulties = new Set(careerTrophies.map((t: Trophy) => t.difficulty));
     if (!allDifficulties.every((d) => earnedDifficulties.has(d))) {
       hasAllCareersMaster = false;
       break;
@@ -282,7 +282,7 @@ const checkAchievements = (
   const quickRecallTrophies = allTrophies.filter(
     (t) => t.achievementType === "quick-recall-champion"
   );
-  const quickRecallCareers = new Set(quickRecallTrophies.map((t) => t.career));
+  const quickRecallCareers = new Set(quickRecallTrophies.map((t: Trophy) => t.career));
   if (quickRecallCareers.size === allCareers.length) {
     const alreadyHasAllQuickRecallsMaster = allTrophies.some(
       (t) => t.achievementType === "all-quick-recalls-master"
@@ -296,7 +296,7 @@ const checkAchievements = (
   const certTrophies = allTrophies.filter(
     (t) => t.achievementType === "certification-master"
   );
-  const certCareers = new Set(certTrophies.map((t) => t.career));
+  const certCareers = new Set(certTrophies.map((t: Trophy) => t.career));
   if (certCareers.size === allCareers.length) {
     const alreadyHasAllCertsMaster = allTrophies.some(
       (t) => t.achievementType === "all-certifications-master"
@@ -328,7 +328,7 @@ const checkEasterEggAchievements = (
 
   // Lightning Reflex - 5 correct answers in a row
   if (currentConsecutiveCorrect >= 5) {
-    const alreadyHas = allTrophies.some((t) => t.achievementType === "lightning-reflex");
+    const alreadyHas = allTrophies.some((t: Trophy) => t.achievementType === "lightning-reflex");
     if (!alreadyHas) {
       achievements.push("lightning-reflex");
     }
@@ -336,7 +336,7 @@ const checkEasterEggAchievements = (
 
   // Marathon Runner - Complete challenge mode with no wrong answers
   if (!isQuickRecallMode && !hadWrongAnswer && score === total && total > 0) {
-    const alreadyHas = allTrophies.some((t) => t.achievementType === "marathon-runner");
+    const alreadyHas = allTrophies.some((t: Trophy) => t.achievementType === "marathon-runner");
     if (!alreadyHas) {
       achievements.push("marathon-runner");
     }
@@ -344,7 +344,7 @@ const checkEasterEggAchievements = (
 
   // Speed Demon - Quick Recall perfect score under 30 seconds (30000ms)
   if (isQuickRecallMode && score === total && total > 0 && quickRecallTimeMs !== null && quickRecallTimeMs < 30000) {
-    const alreadyHas = allTrophies.some((t) => t.achievementType === "speed-demon");
+    const alreadyHas = allTrophies.some((t: Trophy) => t.achievementType === "speed-demon");
     if (!alreadyHas) {
       achievements.push("speed-demon");
     }
@@ -352,7 +352,7 @@ const checkEasterEggAchievements = (
 
   // Jack of All Trades - Play at least one question from each career
   if (careersPlayedSet.size === allCareers.length) {
-    const alreadyHas = allTrophies.some((t) => t.achievementType === "jack-of-all-trades");
+    const alreadyHas = allTrophies.some((t: Trophy) => t.achievementType === "jack-of-all-trades");
     if (!alreadyHas) {
       achievements.push("jack-of-all-trades");
     }
@@ -360,7 +360,7 @@ const checkEasterEggAchievements = (
 
   // Lucky Star - Got a question wrong but still passed on Hard mode
   if (passedWithWrong && difficulty === "hard") {
-    const alreadyHas = allTrophies.some((t) => t.achievementType === "lucky-star");
+    const alreadyHas = allTrophies.some((t: Trophy) => t.achievementType === "lucky-star");
     if (!alreadyHas) {
       achievements.push("lucky-star");
     }
@@ -368,7 +368,7 @@ const checkEasterEggAchievements = (
 
   // Night Owl - Play after 10 PM (hour >= 22)
   if (gameStartHourValue !== null && gameStartHourValue >= 22) {
-    const alreadyHas = allTrophies.some((t) => t.achievementType === "night-owl");
+    const alreadyHas = allTrophies.some((t: Trophy) => t.achievementType === "night-owl");
     if (!alreadyHas) {
       achievements.push("night-owl");
     }
@@ -376,7 +376,7 @@ const checkEasterEggAchievements = (
 
   // Early Bird - Play before 6 AM (hour < 6)
   if (gameStartHourValue !== null && gameStartHourValue < 6) {
-    const alreadyHas = allTrophies.some((t) => t.achievementType === "early-bird");
+    const alreadyHas = allTrophies.some((t: Trophy) => t.achievementType === "early-bird");
     if (!alreadyHas) {
       achievements.push("early-bird");
     }
@@ -603,7 +603,7 @@ export default function Home() {
         };
         
         // Check if already unlocked
-        const alreadyUnlocked = trophies.some((t) => t.isSecret);
+        const alreadyUnlocked = trophies.some((t: Trophy) => t.isSecret);
         if (!alreadyUnlocked) {
           setTrophies([...trophies, secretTrophy]);
           saveTrophies([...trophies, secretTrophy]);
@@ -634,7 +634,7 @@ export default function Home() {
           achievementType: "pi-legend",
         };
         
-        const alreadyHasLegend = trophies.some((t) => t.achievementType === "pi-legend");
+        const alreadyHasLegend = trophies.some((t: Trophy) => t.achievementType === "pi-legend");
         if (!alreadyHasLegend) {
           setTrophies([...trophies, piTrophy]);
           saveTrophies([...trophies, piTrophy]);
@@ -649,7 +649,7 @@ export default function Home() {
         let newAchievement: AchievementType | null = null;
         
         // Check current progress
-        const alreadyHas = (type: string) => trophies.some((t) => t.achievementType === type);
+        const alreadyHas = (type: string) => trophies.some((t: Trophy) => t.achievementType === type);
         
         // Pi code has 9 characters: 3.1415926
         // Check thresholds for each Pi trophy
@@ -770,14 +770,14 @@ export default function Home() {
     const dateAchievements: AchievementType[] = [];
     
     if (isStateWeek) {
-      const alreadyHasStateWeek = existingTrophies.some((t) => t.achievementType === "state-week");
+      const alreadyHasStateWeek = existingTrophies.some((t: Trophy) => t.achievementType === "state-week");
       if (!alreadyHasStateWeek) {
         dateAchievements.push("state-week");
       }
     }
     
     if (hasTodayCheckin) {
-      const alreadyHasTodayCheckin = existingTrophies.some((t) => t.achievementType === "today-checkin");
+      const alreadyHasTodayCheckin = existingTrophies.some((t: Trophy) => t.achievementType === "today-checkin");
       if (!alreadyHasTodayCheckin) {
         dateAchievements.push("today-checkin");
       }
@@ -1170,7 +1170,7 @@ export default function Home() {
   // Render Settings modal (always available)
   const handleSettingsChange = useCallback(() => {
     const existingTrophies = loadTrophies();
-    const alreadyHasTechSavvy = existingTrophies.some((t) => t.achievementType === "tech-savvy");
+    const alreadyHasTechSavvy = existingTrophies.some((t: Trophy) => t.achievementType === "tech-savvy");
     if (!alreadyHasTechSavvy) {
       const techSavvyTrophy: Trophy = {
         career: "programmer",
