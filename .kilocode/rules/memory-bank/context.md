@@ -26,7 +26,8 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 - ✅ **Added auth system**: Created AuthScreen component, user account types, localStorage-based authentication with per-user progress storage
 - ✅ **Added guest mode warning**: ProfileScreen shows warning banner when no user is logged in
 - ✅ **Wired auth handlers**: handleLogin, handleSignup, handleLogout connected in page.tsx with user-aware save/load functions
-- ✅ **Added guest warning dismiss**: Users can dismiss the guest warning in ProfileScreen
+- ✅ **Added guest warning dismiss**: Users can dismiss the guest warning in ProfileScreen to continue playing
+- ✅ **Preserved game mode flow**: Pending game mode is saved when redirecting to auth, restored after successful login/signup/guest play
 
 ## Current Structure
 

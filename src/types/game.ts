@@ -45,6 +45,7 @@ export interface PlayerProgress {
 export interface UserAccount {
   id: string;
   username: string;
+  password: string;
   createdAt: string;
 }
 

@@ -156,13 +156,13 @@ const saveGameSessions = (sessions: GameSession[]) => {
 // Simple user management (local-only, no server)
 const USERS_KEY = "careerQuestUsers";
 
-const getAllUsers = (): { username: string; password: string; createdAt: string }[] => {
+const getAllUsers = (): UserAccount[] => {
   if (typeof window === "undefined") return [];
   const raw = localStorage.getItem(USERS_KEY);
   return raw ? JSON.parse(raw) : [];
 };
 
-const saveAllUsers = (users: { username: string; password: string; createdAt: string }[]) => {
+const saveAllUsers = (users: UserAccount[]) => {
   if (typeof window === "undefined") return;
   localStorage.setItem(USERS_KEY, JSON.stringify(users));
 };
@@ -178,7 +178,7 @@ const createUser = (username: string, password: string) => {
   if (!password || password.length < 4) return { success: false, reason: "Password must be at least 4 characters" as const };
   const users = getAllUsers();
   if (users.some((u) => u.username.toLowerCase() === normalized)) return { success: false, reason: "Username already taken" as const };
-  const newUser = { username: normalized, password, createdAt: new Date().toISOString() };
+  const newUser: UserAccount = { id: Date.now().toString(), username: normalized, password, createdAt: new Date().toISOString() };
   saveAllUsers([...users, newUser]);
   return { success: true, user: newUser };
 };
