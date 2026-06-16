@@ -59,7 +59,7 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, o
             </h1>
             
             <p className="text-xl md:text-2xl text-white/90 mb-6 max-w-2xl mx-auto">
-              Explore careers through interactive challenges. Master real-world skills across 9 exciting career paths.
+              Explore careers through interactive challenges. Master real-world skills across 18 exciting career paths.
             </p>
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-6 py-2 rounded-full">
               <span className="text-amber-400">✨</span>

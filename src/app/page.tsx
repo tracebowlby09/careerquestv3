@@ -1806,6 +1806,14 @@ export default function Home() {
     return (
       <HomeTutorial 
         onSkip={() => setShowTutorial(false)}
+        onLogin={() => {
+          setShowTutorial(false);
+          setGameState("auth");
+        }}
+        onSignup={() => {
+          setShowTutorial(false);
+          setGameState("auth");
+        }}
       />
     );
   }
