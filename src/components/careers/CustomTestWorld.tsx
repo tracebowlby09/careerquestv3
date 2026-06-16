@@ -28,6 +28,7 @@ export default function CustomTestWorld({ test, onComplete, isQuickRecall, alway
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [isCorrect, setIsCorrect] = useState(false);
   const scoreRef = useRef(0);
+  const correctForCurrentRef = useRef(false);
 
   const shuffledQuestions = useMemo(() => shuffleArray(test.questions), [test.questions]);
   const currentQuestion = shuffledQuestions[currentQuestionIndex];
@@ -38,16 +39,14 @@ export default function CustomTestWorld({ test, onComplete, isQuickRecall, alway
 
   useEffect(() => {
     scoreRef.current = 0;
+    correctForCurrentRef.current = false;
   }, []);
 
   const handleAnswer = (index: number) => {
     const correct = index === currentQuestion.correctIndex || !!alwaysCorrect;
     setSelectedAnswer(index);
     setIsCorrect(correct);
-
-    if (correct) {
-      scoreRef.current += 1;
-    }
+    correctForCurrentRef.current = correct;
 
     const timeMs = startTime ? Date.now() - startTime : 0;
     onAnswerResult?.(correct, timeMs);
@@ -55,20 +54,19 @@ export default function CustomTestWorld({ test, onComplete, isQuickRecall, alway
     // For quick recall, auto-advance after 1 second
     if (isQuickRecall) {
       setTimeout(() => {
-        handleNext(correct);
+        handleNext();
       }, 1000);
     }
   };
 
-  const handleNext = (wasCorrectForQuickRecall?: boolean) => {
+  const handleNext = () => {
+    if (correctForCurrentRef.current) {
+      scoreRef.current += 1;
+    }
+    
     setSelectedAnswer(null);
     setStartTime(Date.now());
-
-    if (wasCorrectForQuickRecall !== undefined) {
-      if (wasCorrectForQuickRecall) {
-        scoreRef.current += 1;
-      }
-    }
+    correctForCurrentRef.current = false;
 
     if (currentQuestionIndex < shuffledQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -173,7 +171,7 @@ export default function CustomTestWorld({ test, onComplete, isQuickRecall, alway
             </GameButton>
           )}
           {selectedAnswer !== null && !isQuickRecall && (
-            <GameButton onClick={() => handleNext()} className="text-sm">
+            <GameButton onClick={handleNext} className="text-sm">
               {currentQuestionIndex < shuffledQuestions.length - 1 ? 'Next →': 'Finish'}
             </GameButton>
           )}
