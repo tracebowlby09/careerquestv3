@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { CustomTest, CustomQuestion } from "@/types/game";
 import { GradientCard, GameButton } from "./ui/UIComponents";
 
@@ -28,6 +28,7 @@ export default function CustomTestWorld({ test, onComplete, isQuickRecall, alway
   const [startTime, setStartTime] = useState<number | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [isCorrect, setIsCorrect] = useState(false);
+  const scoreRef = useRef(0);
 
   const shuffledQuestions = useMemo(() => shuffleArray(test.questions), [test.questions]);
   const currentQuestion = shuffledQuestions[currentQuestionIndex];
@@ -35,6 +36,10 @@ export default function CustomTestWorld({ test, onComplete, isQuickRecall, alway
   useEffect(() => {
     setStartTime(Date.now());
   }, [currentQuestionIndex]);
+
+  useEffect(() => {
+    scoreRef.current = score;
+  }, [score]);
 
   const handleAnswer = (index: number) => {
     const correct = index === currentQuestion.correctIndex || !!alwaysCorrect;
@@ -60,12 +65,13 @@ export default function CustomTestWorld({ test, onComplete, isQuickRecall, alway
     setSelectedAnswer(null);
     setStartTime(Date.now());
 
+    const currentScore = wasCorrectForQuickRecall !== undefined ? (wasCorrectForQuickRecall ? scoreRef.current + 1 : scoreRef.current) : score;
+
     if (currentQuestionIndex < shuffledQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       // Quiz complete
-      const finalScore = wasCorrectForQuickRecall !== undefined ? (wasCorrectForQuickRecall ? score + 1 : score) : score;
-      onComplete(finalScore === shuffledQuestions.length, finalScore, shuffledQuestions.length);
+      onComplete(currentScore === shuffledQuestions.length, currentScore, shuffledQuestions.length);
     }
   };
 
@@ -168,7 +174,7 @@ export default function CustomTestWorld({ test, onComplete, isQuickRecall, alway
           )}
           {selectedAnswer !== null && !isQuickRecall && (
             <GameButton onClick={() => handleNext()} className="text-sm">
-              {currentQuestionIndex < shuffledQuestions.length - 1 ? 'Next →' : 'Finish'}
+              {currentQuestionIndex < shuffledQuestions.length - 1 ? 'Next →': 'Finish'}
             </GameButton>
           )}
         </div>
