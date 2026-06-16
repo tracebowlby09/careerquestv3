@@ -51,7 +51,7 @@ import HomeTutorial from "@/components/HomeTutorial";
 import SecretTrophyPopup from "@/components/SecretTrophyPopup";
 import CareerInfoPage from "@/components/CareerInfoPage";
 import AuthScreen from "@/components/AuthScreen";
-import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer } from "@/types/game";
+import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer, UserAccount } from "@/types/game";
 import { careerInfoByCareer } from "@/lib/careerInfo";
 import { getTodayDate, calculateLevel, calculateXPForNextLevel, getStreakXPBonus, getDailyChallenge } from "@/types/game";
 import { GameSession, PlayerProgress } from "@/types/game";
