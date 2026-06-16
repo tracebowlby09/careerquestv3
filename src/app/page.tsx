@@ -594,6 +594,7 @@ export default function Home() {
   const [adminPosition, setAdminPosition] = useState({ x: 20, y: 20 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [adminCustomCode, setAdminCustomCode] = useState("");
 
   // Konami code detection
   const konamiCode = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
@@ -1263,15 +1264,53 @@ export default function Home() {
   const settingsModal = <Settings isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} onSettingsChange={handleSettingsChange} />;
 
   // Admin panel functions
-  const handleClearTrophies = () => {
-    setTrophies([]);
-    saveTrophies([]);
-    audioSystem.playSuccessSound();
-  };
-
   const handleToggleAlwaysCorrect = () => {
     setAlwaysCorrect(!alwaysCorrect);
     audioSystem.playClickSound();
+  };
+
+  const getActiveProgressKey = () => currentUser ? `careerQuestProgress_${currentUser}` : "careerQuestProgress";
+  const getActiveTrophiesKey = () => currentUser ? `careerQuestTrophies_${currentUser}` : "careerQuestTrophies";
+  const getActiveSessionsKey = () => currentUser ? `careerQuestSessions_${currentUser}` : "careerQuestSessions";
+
+  const handleResetCurrentProgress = () => {
+    const emptyProgress: PlayerProgress = { xp: 0, level: 1, streak: 0 };
+    setPlayerProgress(emptyProgress);
+    setTrophies([]);
+    setSessions([]);
+    localStorage.removeItem(getActiveProgressKey());
+    localStorage.removeItem(getActiveTrophiesKey());
+    localStorage.removeItem(getActiveSessionsKey());
+    audioSystem.playSuccessSound();
+  };
+
+  const handleResetLevel = () => {
+    const progress: PlayerProgress = { ...playerProgress, xp: 0, level: 1 };
+    setPlayerProgress(progress);
+    savePlayerProgress(progress);
+    audioSystem.playSuccessSound();
+  };
+
+  const handleClearSessions = () => {
+    setSessions([]);
+    saveGameSessions([]);
+    audioSystem.playSuccessSound();
+  };
+
+  const handleToggleGuestWarning = () => {
+    if (hasDismissedGuestWarning()) {
+      localStorage.removeItem(GUEST_WARNING_KEY);
+    } else {
+      localStorage.setItem(GUEST_WARNING_KEY, "true");
+    }
+    audioSystem.playClickSound();
+  };
+
+  const handlePlayAdminCustomTest = () => {
+    if (adminCustomCode.trim()) {
+      handlePlayCustomTest(adminCustomCode.trim());
+      setAdminCustomCode("");
+    }
   };
 
   const handleCloseAdmin = () => {
@@ -1355,6 +1394,33 @@ export default function Home() {
             </div>
             
             <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-2 text-white/80 text-sm">
+                <div className="rounded-xl bg-white/10 p-3">
+                  <p className="text-white/50 text-xs">User</p>
+                  <p className="font-bold truncate">{currentUser || "Guest"}</p>
+                </div>
+                <div className="rounded-xl bg-white/10 p-3">
+                  <p className="text-white/50 text-xs">Level</p>
+                  <p className="font-bold">{playerProgress.level}</p>
+                </div>
+                <div className="rounded-xl bg-white/10 p-3">
+                  <p className="text-white/50 text-xs">XP</p>
+                  <p className="font-bold">{playerProgress.xp}</p>
+                </div>
+                <div className="rounded-xl bg-white/10 p-3">
+                  <p className="text-white/50 text-xs">Trophies</p>
+                  <p className="font-bold">{trophies.length}</p>
+                </div>
+                <div className="rounded-xl bg-white/10 p-3">
+                  <p className="text-white/50 text-xs">Sessions</p>
+                  <p className="font-bold">{sessions.length}</p>
+                </div>
+                <div className="rounded-xl bg-white/10 p-3">
+                  <p className="text-white/50 text-xs">Mode</p>
+                  <p className="font-bold capitalize">{gameMode}</p>
+                </div>
+              </div>
+
               <button
                 onClick={handleToggleAlwaysCorrect}
                 className={`w-full py-3 px-4 rounded-xl font-bold transition-all transform hover:scale-105 ${
@@ -1365,12 +1431,58 @@ export default function Home() {
               >
                 {alwaysCorrect ? "✅ Always Correct: ON" : "⬜ Always Correct: OFF"}
               </button>
+
+              <div className="space-y-2">
+                <input
+                  type="text"
+                  value={adminCustomCode}
+                  onChange={(e) => setAdminCustomCode(e.target.value.toUpperCase())}
+                  placeholder="Custom test code"
+                  className="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40"
+                  maxLength={8}
+                />
+                <button
+                  onClick={handlePlayAdminCustomTest}
+                  disabled={!adminCustomCode.trim()}
+                  className="w-full py-3 px-4 rounded-xl font-bold bg-gradient-to-r from-cyan-500 to-blue-600 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Play Custom Test
+                </button>
+              </div>
               
               <button
-                onClick={handleClearTrophies}
+                onClick={handleClearSessions}
+                className="w-full py-3 px-4 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl transition-all transform hover:scale-105"
+              >
+                📊 Clear Sessions
+              </button>
+
+              <button
+                onClick={handleResetLevel}
+                className="w-full py-3 px-4 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl transition-all transform hover:scale-105"
+              >
+                ⬇️ Reset Level/XP
+              </button>
+
+              <button
+                onClick={handleResetCurrentProgress}
                 className="w-full py-3 px-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all transform hover:scale-105"
               >
-                🗑️ Clear All Trophies
+                🗑️ Reset Current Progress
+              </button>
+
+              <button
+                onClick={handleToggleGuestWarning}
+                className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl transition-all transform hover:scale-105"
+              >
+                {hasDismissedGuestWarning() ? "Show Guest Warning" : "Hide Guest Warning"}
+              </button>
+
+              <button
+                onClick={() => setGameState("moderator")}
+                className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold rounded-xl transition-all transform hover:scale-105"
+              >
+                🔐 Moderator Dashboard
               </button>
               
               <div className="pt-4 border-t border-purple-700">
