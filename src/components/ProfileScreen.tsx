@@ -15,7 +15,7 @@ interface ProfileScreenProps {
   onLogin?: () => void;
   onSignup?: () => void;
   onLogout?: () => void;
-  currentUsername?: string;
+  currentUsername?: string | null;
   onDismissGuestWarning?: () => void;
 }
 
