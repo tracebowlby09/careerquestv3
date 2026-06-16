@@ -56,6 +56,35 @@ export interface DailyChallenge {
   date: string; // YYYY-MM-DD format
 }
 
+// Custom test types
+export interface CustomQuestion {
+  id: string;
+  question: string;
+  options: string[];
+  correctIndex: number;
+  explanation?: string;
+}
+
+export interface CustomTest {
+  id: string;
+  code: string; // Unique short code for sharing/playing
+  name: string;
+  creatorUsername: string;
+  mode: "challenge" | "quick-recall";
+  difficulty?: Difficulty;
+  questions: CustomQuestion[];
+  themeColors?: {
+    primary?: string;
+    secondary?: string;
+    accent?: string;
+  };
+  backgroundImage?: string;
+  createdAt: string;
+  approved: boolean;
+  approvedAt?: string;
+  approvedBy?: string; // Moderator username
+}
+
 // XP required for each level (exponential growth)
 export const XP_PER_LEVEL = [0, 100, 250, 450, 700, 1000, 1400, 1900, 2500, 3200, 4000];
 export const MAX_LEVEL = XP_PER_LEVEL.length - 1;

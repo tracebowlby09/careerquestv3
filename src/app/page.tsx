@@ -51,14 +51,15 @@ import HomeTutorial from "@/components/HomeTutorial";
 import SecretTrophyPopup from "@/components/SecretTrophyPopup";
 import CareerInfoPage from "@/components/CareerInfoPage";
 import AuthScreen from "@/components/AuthScreen";
-import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer, UserAccount } from "@/types/game";
+import CustomTestCreate from "@/components/CustomTestCreate";
+import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer, UserAccount, CustomTest, CustomQuestion } from "@/types/game";
 import { careerInfoByCareer } from "@/lib/careerInfo";
 import { getTodayDate, calculateLevel, calculateXPForNextLevel, getStreakXPBonus, getDailyChallenge } from "@/types/game";
 import { GameSession, PlayerProgress } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import ScreenWrapper from "@/components/ScreenWrapper";
 
-type GameState = "title" | "tutorial" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "trophy" | "stats" | "career-info" | "profile" | "auth";
+type GameState = "title" | "tutorial" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "trophy" | "stats" | "career-info" | "profile" | "auth" | "custom-create" | "custom-play";
 
 const careerNames: Record<Career, string> = {
   programmer: "Software Programmer",
@@ -521,6 +522,41 @@ export default function Home() {
   const saveTrophies = saveTrophiesForUser;
   const saveGameSessions = saveGameSessionsForUser;
   const savePlayerProgress = savePlayerProgressForUserState;
+
+  // Custom test state
+  const [customTestCode, setCustomTestCode] = useState<string | null>(null);
+  const [activeCustomTest, setActiveCustomTest] = useState<CustomTest | null>(null);
+
+  // Custom test handlers
+  const handleCustomTestCreate = (test: CustomTest, code: string) => {
+    setCustomTestCode(code);
+    setGameState("custom-play");
+  };
+
+  const loadCustomTestByCode = (code: string): CustomTest | null => {
+    if (typeof window === "undefined") return null;
+    const pendingKey = `customTestPending_${code}`;
+    const approvedKey = `customTest_${code}`;
+    const raw = localStorage.getItem(pendingKey) || localStorage.getItem(approvedKey);
+    if (raw) {
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  };
+
+  const handlePlayCustomTest = (code: string) => {
+    const test = loadCustomTestByCode(code);
+    if (test) {
+      setActiveCustomTest(test);
+      setCustomTestCode(code);
+      setGameMode(test.mode);
+      setGameState("playing");
+    }
+  };
 
   // Admin code detection (5839201746)
   const adminCode = ["5", "8", "3", "9", "2", "0", "1", "7", "4", "6"];
@@ -1980,6 +2016,41 @@ if (gameState === "difficulty-select") {
           onPlayAsGuest={continueAsGuest}
           onBack={() => setGameState("title")}
         />
+        {settingsModal}
+      </>
+    );
+  }
+
+  if (gameState === "custom-create") {
+    return (
+      <CustomTestCreate
+        onBack={() => setGameState("title")}
+        onTestCreated={handleCustomTestCreate}
+        currentUser={currentUser}
+      />
+    );
+  }
+
+  if (gameState === "custom-play" && customTestCode && activeCustomTest) {
+    return (
+      <>
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-purple-900 p-4 md:p-8 flex items-center justify-center">
+          <GradientCard className="p-8 max-w-md w-full" gradient="from-purple-600 via-blue-600 to-indigo-600">
+            <h2 className="text-2xl font-bold text-white mb-4">Custom Test Created!</h2>
+            <p className="text-white/70 mb-6">Share this code with friends or use it anytime:</p>
+            <div className="bg-white/20 rounded-lg p-4 mb-4">
+              <p className="text-4xl font-bold text-center text-yellow-400">{customTestCode}</p>
+            </div>
+            <div className="space-y-3">
+              <GameButton onClick={() => handlePlayCustomTest(customTestCode)} className="w-full">
+                Play Now
+              </GameButton>
+              <GameButton onClick={() => setGameState("title")} className="w-full bg-gradient-to-r from-gray-700 to-gray-800">
+                Back to Title
+              </GameButton>
+            </div>
+          </GradientCard>
+        </div>
         {settingsModal}
       </>
     );
