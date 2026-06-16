@@ -466,6 +466,7 @@ export default function Home() {
     return false;
   });
   const [gameMode, setGameMode] = useState<GameMode>("challenge");
+  const [pendingStartMode, setPendingStartMode] = useState<GameMode | null>(null);
   const [selectedCareer, setSelectedCareer] = useState<Career | null>(null);
   const [selectedCertification, setSelectedCertification] = useState<CertificationType | null>(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | null>(null);
@@ -488,14 +489,15 @@ export default function Home() {
   const [showGuestWarning, setShowGuestWarning] = useState(false);
 
   // Load user data on mount or when currentUser changes
+  const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
+    setIsMounted(true);
     const storedUser = typeof window !== "undefined" ? localStorage.getItem("careerQuestCurrentUser") : null;
-    if (storedUser !== currentUser) {
-      setCurrentUser(storedUser);
-    }
+    setCurrentUser(storedUser);
   }, []);
 
   useEffect(() => {
+    if (!isMounted) return;
     if (currentUser) {
       const userProgress = loadProgressForUser(currentUser);
       setPlayerProgress({ xp: userProgress.xp, level: userProgress.level, streak: userProgress.streak });
@@ -507,7 +509,7 @@ export default function Home() {
       setTrophies(loadTrophies());
       setSessions(loadGameSessions());
     }
-  }, [currentUser]);
+  }, [currentUser, isMounted]);
 
   // Admin code detection (5839201746)
   const adminCode = ["5", "8", "3", "9", "2", "0", "1", "7", "4", "6"];
@@ -845,6 +847,14 @@ export default function Home() {
       setPlayerProgress({ xp: userProgress.xp, level: userProgress.level, streak: userProgress.streak });
       setTrophies(userProgress.trophies);
       setSessions(userProgress.sessions);
+      // Continue with pending mode if any
+      if (pendingStartMode) {
+        setGameMode(pendingStartMode);
+        setGameState("career-select");
+        setPendingStartMode(null);
+      } else {
+        setGameState("title");
+      }
     }
     return result;
   };
@@ -856,6 +866,14 @@ export default function Home() {
       localStorage.setItem("careerQuestCurrentUser", result.user.username);
       // Initialize empty progress for new user
       saveProgressForUser(result.user.username, { xp: 0, level: 1, streak: 0, trophies: [], sessions: [] });
+      // Continue with pending mode if any
+      if (pendingStartMode) {
+        setGameMode(pendingStartMode);
+        setGameState("career-select");
+        setPendingStartMode(null);
+      } else {
+        setGameState("title");
+      }
     }
     return result;
   };
@@ -870,13 +888,19 @@ export default function Home() {
   };
 
   const continueAsGuest = () => {
-    setCurrentUser(null);
     dismissGuestWarning();
-    setGameState("title");
+    if (pendingStartMode) {
+      setGameMode(pendingStartMode);
+      setGameState("career-select");
+      setPendingStartMode(null);
+    } else {
+      setGameState("title");
+    }
   };
 
   const handleStart = (mode: GameMode) => {
     if (!currentUser && !hasDismissedGuestWarning()) {
+      setPendingStartMode(mode);
       setGameState("auth");
       return;
     }
