@@ -50,11 +50,6 @@ export default function HomeTutorial({ onSkip, onLogin, onSignup }: HomeTutorial
       icon: "👤",
       title: "Accounts & Guest Play",
       description: "Log in or sign up to save progress by username. Guest mode is available with a dismissible warning."
-    },
-    {
-      icon: "🛠️",
-      title: "Admin & Moderator Tools",
-      description: "Use admin controls for progress stats, resets, guest warning settings, trophy commands, custom test launching, and moderator review."
     }
   ];
 
