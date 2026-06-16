@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import { CustomTest } from "@/types/game";
-import { GradientCard, GameButton } from "./ui/UIComponents";
+import { GradientCard, GameButton } from "../ui/UIComponents";
 
 interface CustomTestWorldProps {
   test: CustomTest;
