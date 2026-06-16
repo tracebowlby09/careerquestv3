@@ -81,6 +81,36 @@ dentist: "Dentist",
   construction: "Construction Manager",
 };
 
+// Simple user management (local-only, no server)
+const USERS_KEY = "careerQuestUsers";
+
+const getAllUsers = (): UserAccount[] => {
+  if (typeof window === "undefined") return [];
+  const raw = localStorage.getItem(USERS_KEY);
+  return raw ? JSON.parse(raw) : [];
+};
+
+const saveAllUsers = (users: UserAccount[]) => {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+};
+
+const findUser = (username: string) => {
+  const normalized = username.toLowerCase().trim();
+  return getAllUsers().find((u) => u.username.toLowerCase() === normalized) || null;
+};
+
+const createUser = (username: string, password: string) => {
+  const normalized = username.toLowerCase().trim();
+  if (!normalized || normalized.length < 3) return { success: false, reason: "Username must be at least 3 characters" as const };
+  if (!password || password.length < 4) return { success: false, reason: "Password must be at least 4 characters" as const };
+  const users = getAllUsers();
+  if (users.some((u) => u.username.toLowerCase() === normalized)) return { success: false, reason: "Username already taken" as const };
+  const newUser: UserAccount = { id: Date.now().toString(), username: normalized, password, createdAt: new Date().toISOString() };
+  saveAllUsers([...users, newUser]);
+  return { success: true, user: newUser };
+};
+
 const authenticateUser = (username: string, password: string) => {
   const user = findUser(username);
   if (!user) return { success: false, reason: "Account not found" as const };

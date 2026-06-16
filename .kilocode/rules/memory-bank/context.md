@@ -71,7 +71,7 @@ Note: Challenge questions per career = 3-5 (varies by career). Certification use
 | Date | Changes |
 |------|---------|
 | 2026-06-15 | Initial auth system implementation - AuthScreen, ProfileScreen guest warning, user-aware save/load |
-| 2026-06-16 | Preserved game mode across auth flow, fixed UserAccount password type, improved data loading on mount |
+| 2026-06-16 | Fixed duplicate handleStart, added pending mode flow, fixed useCallback for load/save functions |
 
 ## New Certification Types Added
 - firefighter-cert (Firefighter I & II Certification)
