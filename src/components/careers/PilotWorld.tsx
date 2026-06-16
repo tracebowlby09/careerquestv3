@@ -196,7 +196,7 @@ const quickRecallQuestions: Question[] = [
     issues: [
       { id: "p1", issue: "Descend to lower altitude for medical", priority: 1 },
       { id: "p2", issue: "Divert to nearest suitable airport", priority: 2 },
-      { id: "p3", issue:: "Contact medical personnel on ground", priority: 3 },
+      { id: "p3", issue: "Contact medical personnel on ground", priority: 3 },
     ],
     correctOrder: ["p1", "p2", "p3"],
   },
@@ -226,7 +226,7 @@ const quickRecallQuestions: Question[] = [
     issues: [
       { id: "p1", issue: "Squawk 7600 and exit controlled airspace", priority: 1 },
       { id: "p2", issue: "Continue flight under VFR rules", priority: 2 },
-      { id: "p3", issue:: "Monitor emergency frequency for calls", priority: 3 },
+      { id: "p3", issue: "Monitor emergency frequency for calls", priority: 3 },
     ],
     correctOrder: ["p1", "p2", "p3"],
   },
@@ -256,7 +256,7 @@ const quickRecallQuestions: Question[] = [
     issues: [
       { id: "p1", issue: "Transition to instrument references", priority: 1 },
       { id: "p2", issue: "Verify runway lighting activation", priority: 2 },
-      { id: "p3", issue:: "Increase approach speed for night landing", priority: 3 },
+      { id: "p3", issue: "Increase approach speed for night landing", priority: 3 },
     ],
     correctOrder: ["p1", "p2", "p3"],
   },
