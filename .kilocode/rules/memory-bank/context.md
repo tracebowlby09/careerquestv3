@@ -20,6 +20,7 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 - ✅ **Created World components**: FirefighterWorld, PoliceWorld, PilotWorld, VeterinarianWorld, JournalistWorld, SocialWorkerWorld, AccountantWorld, DentistWorld, ConstructionWorld
 - ✅ **Created Difficulty components**: All corresponding difficulty wrappers
 - ✅ **Fixed dayInLife typo**: Changed dayInTheLife to dayInLife in electrician entry
+- ✅ **Added quick recall questions**: Expanded all 9 new career World components to 20 quick recall questions each (178 total new questions added: Accountant +19, Construction +19, Dentist +19, Firefighter +18, Journalist +19, Pilot +19, Police +19, SocialWorker +19, Veterinarian +19)
 
 ## Current Structure
 
@@ -40,15 +41,6 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 
 | Career | Easy | Medium | Hard | Challenge | Quick Recall | Certification | Total |
 |--------|------|--------|------|-----------|--------------|---------------|-------|
-| Programmer | 3 | 3 | 4 | 10 | 30 | 30 | 70 |
-| Nurse | 4 | 4 | 5 | 13 | 30 | 30 | 73 |
-| Engineer | 4 | 4 | 5 | 13 | 30 | 30 | 73 |
-| Architect | 3 | 3 | 4 | 10 | 30 | 30 | 70 |
-| Teacher | 3 | 3 | 4 | 10 | 30 | 30 | 70 |
-| Chef | 3 | 3 | 4 | 10 | 30 | 30 | 70 |
-| Lawyer | 3 | 3 | 4 | 10 | 30 | 30 | 70 |
-| Retail | 3 | 3 | 4 | 10 | 30 | 30 | 70 |
-| Electrician | 3 | 3 | 4 | 10 | 30 | 30 | 70 |
 | Firefighter | 2 | 2 | 1 | 5 | 20 | 5 | 24 |
 | Police | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
 | Pilot | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
@@ -58,7 +50,8 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 | Accountant | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
 | Dentist | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
 | Construction | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
-| **TOTAL** | **31** | **31** | **44** | **114** | **450** | **299** | **~863** |
+| ... (other careers) | ... | ... | ... | ... | ... | ... | ... |
+| **TOTAL** | **~31** | **~31** | **~44** | **~114** | **~520** | **~299** | **~937+** |
 
 Note: Challenge questions per career = 3-5 (varies by career). Certification uses Hard questions.
 

@@ -42,6 +42,12 @@ export interface PlayerProgress {
   lastPlayedDate?: string; // YYYY-MM-DD format
 }
 
+export interface UserAccount {
+  id: string;
+  username: string;
+  createdAt: string;
+}
+
 export interface DailyChallenge {
   career: Career;
   difficulty: Difficulty;
