@@ -48,6 +48,7 @@ import StatsScreen from "@/components/StatsScreen";
 import LevelUpPopup from "@/components/LevelUpPopup";
 import ProfileScreen from "@/components/ProfileScreen";
 import HomeTutorial from "@/components/HomeTutorial";
+import SecretTrophyPopup from "@/components/SecretTrophyPopup";
 import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer } from "@/types/game";
 import { careerInfoByCareer } from "@/lib/careerInfo";
 import { getTodayDate, calculateLevel, calculateXPForNextLevel, getStreakXPBonus, getDailyChallenge } from "@/types/game";
