@@ -572,6 +572,22 @@ export default function Home() {
     return null;
   };
 
+  const getApprovedCustomTests = (): CustomTest[] => {
+    if (typeof window === "undefined") return [];
+    const tests: CustomTest[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith("customTest_")) continue;
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+        const test: CustomTest = JSON.parse(raw);
+        if (test.approved) tests.push(test);
+      } catch {}
+    }
+    return tests.sort((a, b) => (b.approvedAt || "").localeCompare(a.approvedAt || ""));
+  };
+
   const handlePlayCustomTest = (code: string) => {
     const test = loadCustomTestByCode(code);
     if (test) {
@@ -1807,6 +1823,7 @@ export default function Home() {
           onEnterCode={handlePlayCustomTest}
           onPreviewCode={handlePreviewCustomTest}
           previewTest={customTestPreview}
+          approvedTests={getApprovedCustomTests()}
           currentUser={currentUser}
         />
         {settingsModal}

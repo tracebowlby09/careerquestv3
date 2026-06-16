@@ -15,10 +15,11 @@ interface TitleScreenProps {
   onEnterCode?: (code: string) => void;
   onPreviewCode?: (code: string) => void;
   previewTest?: CustomTest | null;
+  approvedTests?: CustomTest[];
   currentUser?: string | null;
 }
 
-export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, onViewStats, onOpenProfile, onOpenCustomCreate, onEnterCode, onPreviewCode, previewTest, currentUser }: TitleScreenProps) {
+export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, onViewStats, onOpenProfile, onOpenCustomCreate, onEnterCode, onPreviewCode, previewTest, approvedTests = [], currentUser }: TitleScreenProps) {
   const [showCodeInput, setShowCodeInput] = useState(false);
   const [inputCode, setInputCode] = useState("");
 
@@ -116,6 +117,52 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, o
             </button>
           </div>
 
+          {approvedTests.length > 0 && (
+            <div className="mt-8 text-left">
+              <div className="flex items-center justify-between gap-3 mb-3">
+                <div>
+                  <h3 className="text-white font-bold text-lg">Approved Custom Tests</h3>
+                  <p className="text-white/60 text-sm">Play moderator-approved quizzes without entering a code.</p>
+                </div>
+                <button
+                  onClick={() => setShowCodeInput(true)}
+                  className="text-cyan-300 hover:text-cyan-200 text-sm font-bold"
+                >
+                  Use Code
+                </button>
+              </div>
+              <div className="grid gap-3 max-h-72 overflow-y-auto pr-2">
+                {approvedTests.map((test) => (
+                  <button
+                    key={test.code}
+                    onClick={() => {
+                      setInputCode(test.code);
+                      onPreviewCode?.(test.code);
+                      setShowCodeInput(true);
+                    }}
+                    className="rounded-xl border border-white/20 bg-white/10 p-4 text-left hover:bg-white/15 hover:scale-[1.01] transition"
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className="text-3xl">{test.icon || "🎓"}</span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                          <h4 className="text-white font-bold break-words">{test.name}</h4>
+                          <span className="text-amber-300 text-xs font-bold">{test.code}</span>
+                        </div>
+                        {test.description && (
+                          <p className="text-white/70 text-sm mt-1 max-h-10 overflow-hidden">{test.description}</p>
+                        )}
+                        <p className="text-white/50 text-xs mt-2">
+                          by @{test.creatorUsername} • {test.questions.length} questions • {test.mode}
+                        </p>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {showCodeInput && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
               <div className="bg-slate-900 p-6 rounded-xl max-w-2xl w-full max-h-[85vh] overflow-y-auto">
@@ -170,6 +217,32 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, o
                           </div>
                         ))}
                       </div>
+                    </div>
+                  </div>
+                )}
+
+                {approvedTests.length > 0 && (
+                  <div className="mb-4">
+                    <p className="text-white/70 text-sm mb-2 font-bold">Approved Tests</p>
+                    <div className="grid gap-2 max-h-48 overflow-y-auto pr-2">
+                      {approvedTests.map((test) => (
+                        <button
+                          key={test.code}
+                          onClick={() => {
+                            setInputCode(test.code);
+                            onPreviewCode?.(test.code);
+                          }}
+                          className="rounded-lg bg-white/10 p-3 text-left hover:bg-white/15"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="text-2xl">{test.icon || "🎓"}</span>
+                            <div className="min-w-0">
+                              <p className="text-white font-bold text-sm truncate">{test.name}</p>
+                              <p className="text-white/50 text-xs">{test.code} • {test.questions.length} questions</p>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
                     </div>
                   </div>
                 )}
