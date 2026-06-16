@@ -1673,6 +1673,63 @@ if (gameState === "difficulty-select") {
      );
   }
 
+  if (gameState === "stats") {
+    return (
+      <>
+        <StatsScreen 
+          trophies={trophies}
+          sessions={sessions}
+          level={playerProgress.level}
+          xp={playerProgress.xp}
+          streak={playerProgress.streak}
+          onBack={() => setGameState("title")}
+        />
+        {settingsModal}
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
+          achievementType={currentAchievementType}
+          onClose={() => {
+            setShowSecretTrophyPopup(false);
+            setCurrentAchievementType(null);
+          }} 
+        />
+      </>
+    );
+  }
+
+  if (gameState === "profile") {
+    const level = calculateLevel(playerProgress.xp);
+    const today = getTodayDate();
+    const completedToday = playerProgress.lastPlayedDate === today;
+    return (
+      <>
+        <ProfileScreen 
+          trophies={trophies}
+          xp={playerProgress.xp}
+          level={level}
+          streak={playerProgress.streak}
+          onBack={() => setGameState("title")}
+          onAcceptDailyChallenge={(career, difficulty) => {
+            setSelectedCareer(career);
+            setSelectedDifficulty(difficulty);
+            setGameMode("challenge");
+            setGameState("difficulty-select");
+          }}
+          completedToday={completedToday}
+        />
+        {settingsModal}
+        <SecretTrophyPopup 
+          show={showSecretTrophyPopup} 
+          achievementType={currentAchievementType}
+          onClose={() => {
+            setShowSecretTrophyPopup(false);
+            setCurrentAchievementType(null);
+          }} 
+        />
+      </>
+    );
+  }
+
   if (gameState === "trophy") {
     return (
       <>
