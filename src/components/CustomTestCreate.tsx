@@ -60,7 +60,7 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser }:
     if (questions.some(q => !q.question.trim() || q.options.some(o => !o.trim()))) return;
 
     const code = generateCode();
-const test: CustomTest = {
+    const test: CustomTest = {
        id: Date.now().toString(),
        code,
        name: testName.trim(),
