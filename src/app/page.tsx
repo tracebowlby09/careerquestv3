@@ -1365,6 +1365,9 @@ export default function Home() {
           onViewTrophies={() => setGameState("trophy")}
           onViewStats={() => setGameState("stats")}
           onOpenProfile={() => setGameState("profile")}
+          onOpenCustomCreate={() => setGameState("custom-create")}
+          onEnterCode={handlePlayCustomTest}
+          currentUser={currentUser}
         />
         {settingsModal}
         <SecretTrophyPopup 
