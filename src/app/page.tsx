@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import TitleScreen from "@/components/TitleScreen";
+import CustomTestWorld from "@/components/careers/CustomTestWorld";
 import { GradientCard, GameButton } from "@/components/ui/UIComponents";
 import CareerSelection from "@/components/CareerSelection";
 import CertificationSelection from "@/components/CertificationSelection";
@@ -557,6 +558,8 @@ export default function Home() {
       setActiveCustomTest(test);
       setCustomTestCode(code);
       setGameMode(test.mode);
+      setSelectedCareer("programmer");
+      setSelectedDifficulty(test.mode === "challenge" ? test.difficulty || "medium" : null);
       setGameState("playing");
     }
   };
@@ -1692,8 +1695,24 @@ if (gameState === "difficulty-select") {
     );
   }
 
-  if (gameState === "playing" && selectedCareer) {
+  if (gameState === "playing" && (selectedCareer || activeCustomTest)) {
     const isQuickRecall = gameMode === "quick-recall";
+    
+    // Custom test mode
+    if (activeCustomTest) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-purple-900 p-4 md:p-8 flex items-center justify-center">
+          <CustomTestWorld
+            test={activeCustomTest}
+            isQuickRecall={isQuickRecall}
+            alwaysCorrect={alwaysCorrect}
+            onExit={handleExitToTitle}
+            onAnswerResult={handleAnswerResult}
+            onComplete={handleChallengeComplete}
+          />
+        </div>
+      );
+    }
     
     // Determine which handler to use for tutorial back button based on game mode
     const tutorialBackHandler = isQuickRecall ? handleExitToCareerSelect : handleExitToDifficultySelect;
