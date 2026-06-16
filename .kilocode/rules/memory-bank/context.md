@@ -49,16 +49,16 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 | Lawyer | 3 | 3 | 4 | 10 | 30 | 30 | 70 |
 | Retail | 3 | 3 | 4 | 10 | 30 | 30 | 70 |
 | Electrician | 3 | 3 | 4 | 10 | 30 | 30 | 70 |
-| Firefighter | 2 | 2 | 1 | 5 | 1 | 5 | 14 |
-| Police | 1 | 1 | 1 | 3 | 1 | 5 | 11 |
-| Pilot | 1 | 1 | 1 | 3 | 1 | 5 | 11 |
-| Veterinarian | 2 | 2 | 1 | 5 | 1 | 5 | 14 |
-| Journalist | 1 | 1 | 1 | 3 | 1 | 5 | 11 |
-| Social Worker | 1 | 1 | 1 | 3 | 1 | 5 | 11 |
-| Accountant | 1 | 1 | 1 | 3 | 1 | 5 | 11 |
-| Dentist | 1 | 1 | 1 | 3 | 1 | 5 | 11 |
-| Construction | 1 | 1 | 1 | 3 | 1 | 5 | 11 |
-| **TOTAL** | **31** | **31** | **44** | **114** | **278** | **299** | **668+** |
+| Firefighter | 2 | 2 | 1 | 5 | 20 | 5 | 24 |
+| Police | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
+| Pilot | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
+| Veterinarian | 2 | 2 | 1 | 5 | 20 | 5 | 24 |
+| Journalist | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
+| Social Worker | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
+| Accountant | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
+| Dentist | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
+| Construction | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
+| **TOTAL** | **31** | **31** | **44** | **114** | **450** | **299** | **~863** |
 
 Note: Challenge questions per career = 3-5 (varies by career). Certification uses Hard questions.
 
