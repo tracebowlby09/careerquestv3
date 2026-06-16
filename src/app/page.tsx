@@ -1095,6 +1095,8 @@ export default function Home() {
           onStart={handleStart} 
           onOpenSettings={() => setSettingsOpen(true)} 
           onViewTrophies={() => setGameState("trophy")}
+          onViewStats={() => setGameState("stats")}
+          onOpenProfile={() => setGameState("profile")}
         />
         {settingsModal}
         <SecretTrophyPopup 
