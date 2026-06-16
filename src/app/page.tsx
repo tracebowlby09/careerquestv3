@@ -428,9 +428,15 @@ export default function Home() {
     if (!isMounted) return;
     if (currentUser) {
       const userProgress = loadProgressForUser(currentUser);
-      setPlayerProgress({ xp: userProgress.xp, level: userProgress.level, streak: userProgress.streak });
-      setTrophies(userProgress.trophies);
-      setSessions(userProgress.sessions);
+      if (userProgress) {
+        setPlayerProgress({ xp: userProgress.xp, level: userProgress.level, streak: userProgress.streak });
+        setTrophies(userProgress.trophies);
+        setSessions(userProgress.sessions);
+      } else {
+        setPlayerProgress({ xp: 0, level: 1, streak: 0 });
+        setTrophies([]);
+        setSessions([]);
+      }
     } else {
       // Guest mode - load from default localStorage keys (existing non-user progress)
       setPlayerProgress(loadPlayerProgress());
@@ -854,11 +860,15 @@ export default function Home() {
     if (result.success && result.user) {
       setCurrentUser(result.user.username);
       localStorage.setItem("careerQuestCurrentUser", result.user.username);
-      // Load this user's progress
+      // Load this user's progress (or defaults if none)
       const userProgress = loadProgressForUser(result.user.username);
-      setPlayerProgress({ xp: userProgress.xp, level: userProgress.level, streak: userProgress.streak });
-      setTrophies(userProgress.trophies);
-      setSessions(userProgress.sessions);
+      setPlayerProgress({ 
+        xp: userProgress?.xp ?? 0, 
+        level: userProgress?.level ?? 1, 
+        streak: userProgress?.streak ?? 0 
+      });
+      setTrophies(userProgress?.trophies ?? []);
+      setSessions(userProgress?.sessions ?? []);
       // Continue with pending mode if any
       if (pendingStartMode) {
         setGameMode(pendingStartMode);
