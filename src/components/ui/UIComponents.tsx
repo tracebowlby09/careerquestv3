@@ -71,16 +71,19 @@ export function GameButton({
   variant = "primary",
   disabled = false,
   className = "",
+  type,
 }: {
   children: ReactNode;
   onClick?: () => void;
   variant?: "primary" | "secondary" | "success" | "danger" | "ghost";
   disabled?: boolean;
   className?: string;
+  type?: "button" | "submit" | "reset";
 }) {
   const baseClass = buttonStyles[variant];
   return (
     <button
+      type={type}
       onClick={onClick}
       disabled={disabled}
       className={`

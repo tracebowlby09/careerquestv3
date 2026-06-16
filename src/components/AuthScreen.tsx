@@ -103,12 +103,12 @@ export default function AuthScreen({ onLogin, onSignup, onPlayAsGuest, onBack }:
             </div>
           )}
 
-          <GameButton
-            onClick={handleSubmit}
-            className="w-full py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold text-lg"
-          >
-            {isLogin ? "Log In" : "Sign Up"}
-          </GameButton>
+<GameButton
+             type="submit"
+             className="w-full py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold text-lg"
+           >
+             {isLogin ? "Log In" : "Sign Up"}
+           </GameButton>
         </form>
 
         <div className="mt-4 space-y-3">
