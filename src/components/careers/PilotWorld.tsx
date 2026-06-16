@@ -146,7 +146,7 @@ const quickRecallQuestions: Question[] = [
     issues: [
       { id: "p1", issue: "Don oxygen masks and descend", priority: 1 },
       { id: "p2", issue: "Check passenger oxygen deployment", priority: 2 },
-      { id: "p3", issue:: "Log altitude and time of depressurization", priority: 3 },
+      { id: "p3", issue: "Log altitude and time of depressurization", priority: 3 },
     ],
     correctOrder: ["p1", "p2", "p3"],
   },

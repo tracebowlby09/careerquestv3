@@ -205,7 +205,7 @@ const quickRecallQuestions: Question[] = [
       { id: "p1", type: "Mass Casualty", severity: "Multiple children injured, triage needed", priority: 1 },
       { id: "p2", type: "MVA Response", severity: "Bus stabilization and extrication", priority: 2 },
       { id: "p3", type: "HazMat", severity: "Fuel leak from bus tank", priority: 3 },
-      { id: "p4", type:: "Parent Notification", severity: "Contact and reunite families", priority: 4 },
+      { id: "p4", type: "Parent Notification", severity: "Contact and reunite families", priority: 4 },
     ],
     correctOrder: ["p1", "p2", "p3", "p4"],
   },
