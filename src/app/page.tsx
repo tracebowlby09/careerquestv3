@@ -473,9 +473,9 @@ export default function Home() {
   const [totalQuestions, setTotalQuestions] = useState(0);
   const [challengeSuccess, setChallengeSuccess] = useState(false);
   const [incorrectAnswers, setIncorrectAnswers] = useState<IncorrectAnswer[]>([]);
-  const [trophies, setTrophies] = useState<Trophy[]>(() => loadTrophies());
-  const [sessions, setSessions] = useState<GameSession[]>(() => loadGameSessions());
-  const [playerProgress, setPlayerProgress] = useState<PlayerProgress>(() => loadPlayerProgress());
+  const [trophies, setTrophies] = useState<Trophy[]>([]);
+  const [sessions, setSessions] = useState<GameSession[]>([]);
+  const [playerProgress, setPlayerProgress] = useState<PlayerProgress>({ xp: 0, level: 1, streak: 0 });
   const [showLevelUp, setShowLevelUp] = useState(false);
   const [oldLevel, setOldLevel] = useState(1);
   const [xpGainedLastChallenge, setXpGainedLastChallenge] = useState(0);
@@ -484,13 +484,30 @@ export default function Home() {
   const [currentAchievementType, setCurrentAchievementType] = useState<string | null>(null);
 
   // Auth state
-  const [currentUser, setCurrentUser] = useState<string | null>(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("careerQuestCurrentUser");
-    }
-    return null;
-  });
+  const [currentUser, setCurrentUser] = useState<string | null>(null);
   const [showGuestWarning, setShowGuestWarning] = useState(false);
+
+  // Load user data on mount or when currentUser changes
+  useEffect(() => {
+    const storedUser = typeof window !== "undefined" ? localStorage.getItem("careerQuestCurrentUser") : null;
+    if (storedUser !== currentUser) {
+      setCurrentUser(storedUser);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (currentUser) {
+      const userProgress = loadProgressForUser(currentUser);
+      setPlayerProgress({ xp: userProgress.xp, level: userProgress.level, streak: userProgress.streak });
+      setTrophies(userProgress.trophies);
+      setSessions(userProgress.sessions);
+    } else {
+      // Guest mode - load from default localStorage keys (existing non-user progress)
+      setPlayerProgress(loadPlayerProgress());
+      setTrophies(loadTrophies());
+      setSessions(loadGameSessions());
+    }
+  }, [currentUser]);
 
   // Admin code detection (5839201746)
   const adminCode = ["5", "8", "3", "9", "2", "0", "1", "7", "4", "6"];
