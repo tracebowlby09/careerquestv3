@@ -77,110 +77,8 @@ const careerNames: Record<Career, string> = {
   journalist: "Journalist",
   "social-worker": "Social Worker",
   accountant: "Accountant",
-  dentist: "Dentist",
+dentist: "Dentist",
   construction: "Construction Manager",
-};
-
-// Load trophies from localStorage (or per-user if logged in)
-const loadTrophies = (): Trophy[] => {
-  if (typeof window === "undefined") return [];
-  const key = currentUser ? `careerQuestTrophies_${currentUser}` : "careerQuestTrophies";
-  const saved = localStorage.getItem(key);
-  if (saved) {
-    try {
-      const trophies = JSON.parse(saved);
-      return trophies.map((t: any) => ({
-        ...t,
-        earnedAt: new Date(t.earnedAt),
-      }));
-    } catch {
-      return [];
-    }
-  }
-  return [];
-};
-
-// Load game sessions from localStorage (or per-user if logged in)
-const loadGameSessions = (): GameSession[] => {
-  if (typeof window === "undefined") return [];
-  const key = currentUser ? `careerQuestSessions_${currentUser}` : "careerQuestSessions";
-  const saved = localStorage.getItem(key);
-  if (saved) {
-    try {
-      const sessions = JSON.parse(saved);
-      return sessions.map((s: any) => ({
-        ...s,
-        timestamp: new Date(s.timestamp),
-      }));
-    } catch {
-      return [];
-    }
-  }
-  return [];
-};
-
-// Load player progress from localStorage (or per-user if logged in)
-const loadPlayerProgress = (): PlayerProgress => {
-  if (typeof window === "undefined") return { xp: 0, level: 1, streak: 0 };
-  const key = currentUser ? `careerQuestProgress_${currentUser}` : "careerQuestProgress";
-  const saved = localStorage.getItem(key);
-  if (saved) {
-    try {
-      return JSON.parse(saved);
-    } catch {
-      return { xp: 0, level: 1, streak: 0 };
-    }
-  }
-  return { xp: 0, level: 1, streak: 0 };
-};
-
-// Save player progress to localStorage (or per-user if logged in)
-const savePlayerProgress = (progress: PlayerProgress) => {
-  if (typeof window === "undefined") return;
-  const key = currentUser ? `careerQuestProgress_${currentUser}` : "careerQuestProgress";
-  localStorage.setItem(key, JSON.stringify(progress));
-};
-
-const saveTrophies = (trophies: Trophy[]) => {
-  if (typeof window === "undefined") return;
-  const key = currentUser ? `careerQuestTrophies_${currentUser}` : "careerQuestTrophies";
-  localStorage.setItem(key, JSON.stringify(trophies));
-};
-
-const saveGameSessions = (sessions: GameSession[]) => {
-  if (typeof window === "undefined") return;
-  const key = currentUser ? `careerQuestSessions_${currentUser}` : "careerQuestSessions";
-  localStorage.setItem(key, JSON.stringify(sessions));
-};
-
-// Simple user management (local-only, no server)
-const USERS_KEY = "careerQuestUsers";
-
-const getAllUsers = (): UserAccount[] => {
-  if (typeof window === "undefined") return [];
-  const raw = localStorage.getItem(USERS_KEY);
-  return raw ? JSON.parse(raw) : [];
-};
-
-const saveAllUsers = (users: UserAccount[]) => {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-};
-
-const findUser = (username: string) => {
-  const normalized = username.toLowerCase().trim();
-  return getAllUsers().find((u) => u.username.toLowerCase() === normalized) || null;
-};
-
-const createUser = (username: string, password: string) => {
-  const normalized = username.toLowerCase().trim();
-  if (!normalized || normalized.length < 3) return { success: false, reason: "Username must be at least 3 characters" as const };
-  if (!password || password.length < 4) return { success: false, reason: "Password must be at least 4 characters" as const };
-  const users = getAllUsers();
-  if (users.some((u) => u.username.toLowerCase() === normalized)) return { success: false, reason: "Username already taken" as const };
-  const newUser: UserAccount = { id: Date.now().toString(), username: normalized, password, createdAt: new Date().toISOString() };
-  saveAllUsers([...users, newUser]);
-  return { success: true, user: newUser };
 };
 
 const authenticateUser = (username: string, password: string) => {
@@ -510,6 +408,83 @@ export default function Home() {
       setSessions(loadGameSessions());
     }
   }, [currentUser, isMounted]);
+
+  // Load/save functions that use currentUser state
+  const loadTrophiesForUser = useCallback(() => {
+    if (typeof window === "undefined") return [];
+    const key = currentUser ? `careerQuestTrophies_${currentUser}` : "careerQuestTrophies";
+    const saved = localStorage.getItem(key);
+    if (saved) {
+      try {
+        const trophies = JSON.parse(saved);
+        return trophies.map((t: any) => ({
+          ...t,
+          earnedAt: new Date(t.earnedAt),
+        }));
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  }, [currentUser]);
+
+  const loadGameSessionsForUser = useCallback(() => {
+    if (typeof window === "undefined") return [];
+    const key = currentUser ? `careerQuestSessions_${currentUser}` : "careerQuestSessions";
+    const saved = localStorage.getItem(key);
+    if (saved) {
+      try {
+        const sessions = JSON.parse(saved);
+        return sessions.map((s: any) => ({
+          ...s,
+          timestamp: new Date(s.timestamp),
+        }));
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  }, [currentUser]);
+
+  const loadPlayerProgressForUserState = useCallback(() => {
+    if (typeof window === "undefined") return { xp: 0, level: 1, streak: 0 };
+    const key = currentUser ? `careerQuestProgress_${currentUser}` : "careerQuestProgress";
+    const saved = localStorage.getItem(key);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return { xp: 0, level: 1, streak: 0 };
+      }
+    }
+    return { xp: 0, level: 1, streak: 0 };
+  }, [currentUser]);
+
+  const saveTrophiesForUser = useCallback((trophies: Trophy[]) => {
+    if (typeof window === "undefined") return;
+    const key = currentUser ? `careerQuestTrophies_${currentUser}` : "careerQuestTrophies";
+    localStorage.setItem(key, JSON.stringify(trophies));
+  }, [currentUser]);
+
+  const saveGameSessionsForUser = useCallback((sessions: GameSession[]) => {
+    if (typeof window === "undefined") return;
+    const key = currentUser ? `careerQuestSessions_${currentUser}` : "careerQuestSessions";
+    localStorage.setItem(key, JSON.stringify(sessions));
+  }, [currentUser]);
+
+  const savePlayerProgressForUserState = useCallback((progress: PlayerProgress) => {
+    if (typeof window === "undefined") return;
+    const key = currentUser ? `careerQuestProgress_${currentUser}` : "careerQuestProgress";
+    localStorage.setItem(key, JSON.stringify(progress));
+  }, [currentUser]);
+
+  // Helper functions that use currentUser state (for backward compatibility in existing code)
+  const loadTrophies = loadTrophiesForUser;
+  const loadGameSessions = loadGameSessionsForUser;
+  const loadPlayerProgress = loadPlayerProgressForUserState;
+  const saveTrophies = saveTrophiesForUser;
+  const saveGameSessions = saveGameSessionsForUser;
+  const savePlayerProgress = savePlayerProgressForUserState;
 
   // Admin code detection (5839201746)
   const adminCode = ["5", "8", "3", "9", "2", "0", "1", "7", "4", "6"];
