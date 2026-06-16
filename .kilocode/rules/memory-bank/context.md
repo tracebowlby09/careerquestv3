@@ -29,7 +29,7 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 - ✅ **Added guest warning dismiss**: Users can dismiss the guest warning in ProfileScreen to continue playing
 - ✅ **Preserved game mode flow**: Pending game mode is saved when redirecting to auth, restored after successful login/signup/guest play
 - ✅ **Enhanced custom tests**: Added descriptions, emoji icons, three required learned skills, visible custom backgrounds, code preview with test name/questions, and custom test end screens
-- ✅ **Expanded admin tools**: Added admin panel progress stats, custom test launcher, session reset, level reset, full progress reset, guest warning toggle, and moderator dashboard access
+- ✅ **Expanded admin tools**: Added admin panel progress stats, custom test launcher, session reset, level reset, full progress reset, guest warning toggle, trophy commands, and developer dashboard access
 
 ## Current Structure
 
@@ -84,6 +84,7 @@ Note: Challenge questions per career = 3-5 (varies by career). Certification use
 | 2026-06-16 | Added custom test creation feature - quiz builder, code-based sharing, localStorage storage |
 | 2026-06-16 | Enhanced custom tests - descriptions, emoji icons, three learned skills, background display, code preview, and custom end screen |
 | 2026-06-16 | Expanded admin tools - progress stats, custom test launcher, reset controls, guest warning toggle, and moderator dashboard enhancements |
+| 2026-06-16 | Added trophy admin commands and opened developer dashboard access to admin panel users |
 
 ## New Certification Types Added
 - firefighter-cert (Firefighter I & II Certification)

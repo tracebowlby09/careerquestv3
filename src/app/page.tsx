@@ -595,6 +595,9 @@ export default function Home() {
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [adminCustomCode, setAdminCustomCode] = useState("");
+  const [adminTrophyAchievement, setAdminTrophyAchievement] = useState<AchievementType | "">("");
+  const [adminTrophyCareer, setAdminTrophyCareer] = useState<Career>("programmer");
+  const [adminTrophyDifficulty, setAdminTrophyDifficulty] = useState<Difficulty>("hard");
 
   // Konami code detection
   const konamiCode = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
@@ -1297,6 +1300,114 @@ export default function Home() {
     audioSystem.playSuccessSound();
   };
 
+  const handleClearTrophies = () => {
+    setTrophies([]);
+    saveTrophies([]);
+    audioSystem.playSuccessSound();
+  };
+
+  const handleAwardCareerTrophy = () => {
+    const alreadyHasTrophy = trophies.some(
+      (trophy) => !trophy.achievementType && trophy.career === adminTrophyCareer && trophy.difficulty === adminTrophyDifficulty
+    );
+    if (alreadyHasTrophy) return;
+
+    const nextTrophies: Trophy[] = [
+      ...trophies,
+      {
+        career: adminTrophyCareer,
+        difficulty: adminTrophyDifficulty,
+        earnedAt: new Date(),
+      },
+    ];
+    setTrophies(nextTrophies);
+    saveTrophies(nextTrophies);
+    audioSystem.playSuccessSound();
+  };
+
+  const handleAwardSecretTrophy = () => {
+    if (!adminTrophyAchievement) return;
+
+    const alreadyHasTrophy = trophies.some(
+      (trophy) => trophy.achievementType === adminTrophyAchievement
+    );
+    if (alreadyHasTrophy) return;
+
+    const nextTrophies: Trophy[] = [
+      ...trophies,
+      {
+        career: adminTrophyCareer,
+        difficulty: adminTrophyDifficulty,
+        earnedAt: new Date(),
+        isSecret: true,
+        achievementType: adminTrophyAchievement,
+      },
+    ];
+    setTrophies(nextTrophies);
+    saveTrophies(nextTrophies);
+    setCurrentAchievementType(adminTrophyAchievement);
+    setShowSecretTrophyPopup(true);
+    audioSystem.playSuccessSound();
+  };
+
+  const handleAwardAllSecretTrophies = () => {
+    const adminAchievementOptions: AchievementType[] = [
+      "career-master",
+      "quick-recall-champion",
+      "perfect-recall",
+      "konami-master",
+      "all-careers-master",
+      "all-quick-recalls-master",
+      "lightning-reflex",
+      "marathon-runner",
+      "speed-demon",
+      "jack-of-all-trades",
+      "lucky-star",
+      "night-owl",
+      "early-bird",
+      "pi-pioneer",
+      "pi-explorer",
+      "pi-master",
+      "pi-genius",
+      "pi-legend",
+      "state-week",
+      "today-checkin",
+      "phoenix",
+      "keyboard-warrior",
+      "explorer",
+      "patience",
+      "streak-master",
+      "return-customer",
+      "committed",
+      "tech-savvy",
+      "variety-pack",
+      "second-chance",
+      "certification-master",
+      "all-certifications-master",
+      "nationals",
+    ];
+    const newAchievements = adminAchievementOptions.filter(
+      (achievement) => !trophies.some((trophy) => trophy.achievementType === achievement)
+    );
+    if (newAchievements.length === 0) return;
+
+    const nextTrophies: Trophy[] = [
+      ...trophies,
+      ...newAchievements.map((achievement) => ({
+        career: adminTrophyCareer,
+        difficulty: adminTrophyDifficulty,
+        earnedAt: new Date(),
+        isSecret: true,
+        achievementType: achievement,
+      })),
+    ];
+    setTrophies(nextTrophies);
+    saveTrophies(nextTrophies);
+    setCurrentAchievementType(newAchievements[0]);
+    setShowSecretTrophyPopup(true);
+    audioSystem.playSuccessSound();
+  };
+
   const handleToggleGuestWarning = () => {
     if (hasDismissedGuestWarning()) {
       localStorage.removeItem(GUEST_WARNING_KEY);
@@ -1370,7 +1481,7 @@ export default function Home() {
           </div>
         ) : (
           // Full version
-          <div className="bg-gradient-to-br from-purple-900 to-indigo-900 rounded-2xl p-6 max-w-sm w-full shadow-2xl border-2 border-purple-500">
+          <div className="bg-gradient-to-br from-purple-900 to-indigo-900 rounded-2xl p-6 max-w-md w-full shadow-2xl border-2 border-purple-500">
             <div 
               className="flex justify-between items-center mb-6 cursor-move -mx-2 -mt-2 p-2 rounded-t-xl hover:bg-purple-800/30"
               onMouseDown={handleAdminMouseDown}
@@ -1432,6 +1543,110 @@ export default function Home() {
                 {alwaysCorrect ? "✅ Always Correct: ON" : "⬜ Always Correct: OFF"}
               </button>
 
+              <div className="rounded-xl bg-white/10 p-3 space-y-3">
+                <p className="text-white font-bold">Trophy Commands</p>
+                <select
+                  value={adminTrophyCareer}
+                  onChange={(e) => setAdminTrophyCareer(e.target.value as Career)}
+                  className="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white"
+                >
+                  <option value="programmer">Programmer</option>
+                  <option value="nurse">Nurse</option>
+                  <option value="engineer">Engineer</option>
+                  <option value="teacher">Teacher</option>
+                  <option value="chef">Chef</option>
+                  <option value="architect">Architect</option>
+                  <option value="lawyer">Lawyer</option>
+                  <option value="retail">Retail</option>
+                  <option value="electrician">Electrician</option>
+                  <option value="firefighter">Firefighter</option>
+                  <option value="police">Police</option>
+                  <option value="pilot">Pilot</option>
+                  <option value="veterinarian">Veterinarian</option>
+                  <option value="journalist">Journalist</option>
+                  <option value="social-worker">Social Worker</option>
+                  <option value="accountant">Accountant</option>
+                  <option value="dentist">Dentist</option>
+                  <option value="construction">Construction</option>
+                </select>
+                <select
+                  value={adminTrophyDifficulty}
+                  onChange={(e) => setAdminTrophyDifficulty(e.target.value as Difficulty)}
+                  className="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white"
+                >
+                  <option value="easy">Easy</option>
+                  <option value="medium">Medium</option>
+                  <option value="hard">Hard</option>
+                </select>
+                <select
+                  value={adminTrophyAchievement}
+                  onChange={(e) => setAdminTrophyAchievement(e.target.value as AchievementType | "")}
+                  className="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white"
+                >
+                  <option value="">Select secret trophy</option>
+                  <option value="career-master">Career Master</option>
+                  <option value="quick-recall-champion">Quick Recall Champion</option>
+                  <option value="perfect-recall">Perfect Recall</option>
+                  <option value="konami-master">Konami Master</option>
+                  <option value="all-careers-master">All Careers Master</option>
+                  <option value="all-quick-recalls-master">All Quick Recalls Master</option>
+                  <option value="lightning-reflex">Lightning Reflex</option>
+                  <option value="marathon-runner">Marathon Runner</option>
+                  <option value="speed-demon">Speed Demon</option>
+                  <option value="jack-of-all-trades">Jack of All Trades</option>
+                  <option value="lucky-star">Lucky Star</option>
+                  <option value="night-owl">Night Owl</option>
+                  <option value="early-bird">Early Bird</option>
+                  <option value="pi-pioneer">Pi Pioneer</option>
+                  <option value="pi-explorer">Pi Explorer</option>
+                  <option value="pi-master">Pi Master</option>
+                  <option value="pi-genius">Pi Genius</option>
+                  <option value="pi-legend">Pi Legend</option>
+                  <option value="state-week">State Week</option>
+                  <option value="today-checkin">Today Check-in</option>
+                  <option value="phoenix">Phoenix</option>
+                  <option value="keyboard-warrior">Keyboard Warrior</option>
+                  <option value="explorer">Explorer</option>
+                  <option value="patience">Patience</option>
+                  <option value="streak-master">Streak Master</option>
+                  <option value="return-customer">Return Customer</option>
+                  <option value="committed">Committed</option>
+                  <option value="tech-savvy">Tech Savvy</option>
+                  <option value="variety-pack">Variety Pack</option>
+                  <option value="second-chance">Second Chance</option>
+                  <option value="certification-master">Certification Master</option>
+                  <option value="all-certifications-master">All Certifications Master</option>
+                  <option value="nationals">Nationals</option>
+                </select>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={handleAwardSecretTrophy}
+                    disabled={!adminTrophyAchievement}
+                    className="py-2 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Award Secret
+                  </button>
+                  <button
+                    onClick={handleAwardCareerTrophy}
+                    className="py-2 px-3 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold"
+                  >
+                    Award Career
+                  </button>
+                </div>
+                <button
+                  onClick={handleAwardAllSecretTrophies}
+                  className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold"
+                >
+                  Award All Secret Trophies
+                </button>
+                <button
+                  onClick={handleClearTrophies}
+                  className="w-full py-2 px-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold"
+                >
+                  Clear Trophies
+                </button>
+              </div>
+
               <div className="space-y-2">
                 <input
                   type="text"
@@ -1482,7 +1697,7 @@ export default function Home() {
                 onClick={() => setGameState("moderator")}
                 className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold rounded-xl transition-all transform hover:scale-105"
               >
-                🔐 Moderator Dashboard
+                🔐 Developer Dashboard
               </button>
               
               <div className="pt-4 border-t border-purple-700">

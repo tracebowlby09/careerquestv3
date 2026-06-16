@@ -37,7 +37,6 @@ function formatDate(value?: string) {
 
 export default function ModeratorDashboard({ currentUser, onBack }: ModeratorDashboardProps) {
   const [search, setSearch] = useState("");
-  const isModerator = currentUser === MODERATOR_USERNAME;
   const pendingTests = getStorageTests("customTestPending_");
   const approvedTests = getStorageTests("customTest_");
   const filteredPending = pendingTests.filter((test) => {
@@ -48,18 +47,6 @@ export default function ModeratorDashboard({ currentUser, onBack }: ModeratorDas
     const haystack = `${test.name} ${test.creatorUsername} ${test.code} ${test.description ?? ""}`.toLowerCase();
     return haystack.includes(search.toLowerCase());
   });
-
-  if (!isModerator) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-purple-900 p-4 md:p-8 flex items-center justify-center">
-        <GradientCard className="p-8 max-w-md" gradient="from-red-600 to-red-800">
-          <h2 className="text-2xl font-bold text-white mb-4">Access Denied</h2>
-          <p className="text-white/70 mb-4">Only the moderator account ({MODERATOR_USERNAME}) can access this page.</p>
-          <GameButton onClick={onBack}>Back to Title</GameButton>
-        </GradientCard>
-      </div>
-    );
-  }
 
   const approveTest = (code: string) => {
     const pendingKey = `customTestPending_${code}`;
@@ -227,8 +214,10 @@ export default function ModeratorDashboard({ currentUser, onBack }: ModeratorDas
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-white">Moderator Dashboard</h1>
-            <p className="text-white/60 mt-1">Review, approve, search, and clean up custom tests.</p>
+            <h1 className="text-3xl font-bold text-white">Developer Dashboard</h1>
+            <p className="text-white/60 mt-1">
+              Custom test management for admin panel users{currentUser ? ` • Signed in as @${currentUser}` : ""}.
+            </p>
           </div>
           <GameButton onClick={onBack} className="bg-gradient-to-r from-gray-700 to-gray-800">Back to Title</GameButton>
         </div>
