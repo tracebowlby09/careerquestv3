@@ -91,6 +91,196 @@ const quickRecallQuestions: Question[] = [
     ],
     correctOrder: ["p1", "p2", "p3"],
   },
+  {
+    id: "qr2",
+    scenario: "Emergency intake: critical animal cases",
+    animals: [
+      { id: "p1", name: "Dog - Choking", symptoms: "Object lodged in throat, gagging", priority: 1 },
+      { id: "p2", name: "Cat - Seizure", symptoms: "Ongoing seizure activity", priority: 2 },
+      { id: "p3", name: "Rabbit - Nail trim", symptoms: "Overgrown nails, needs grooming", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr3",
+    scenario: "Multiple species emergency room arrivals",
+    animals: [
+      { id: "p1", name: "Cat - Hit by Car", symptoms: "Open wound, shock signs", priority: 1 },
+      { id: "p2", name: "Bird - Broken Wing", symptoms: "Wing drooping, cannot fly", priority: 2 },
+      { id: "p3", name: "Hamster - Dew claw overgrown", symptoms: "Needs nail trim, otherwise healthy", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr4",
+    scenario: "Surgical case prioritization",
+    animals: [
+      { id: "p1", name: "Dog - GDV Bloat", symptoms: "Distended abdomen, retching, life-threatening", priority: 1 },
+      { id: "p2", name: "Cat - Urethral Blockage", symptoms: "Straining to urinate, bladder full", priority: 2 },
+      { id: "p3", name: "Dog - Dental Cleaning", symptoms: "Severe tartar buildup, bad breath", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr5",
+    scenario: "Poisoning exposure cases",
+    animals: [
+      { id: "p1", name: "Cat - Antifreeze Ingestion", symptoms: "Kidney failure signs, vomiting", priority: 1 },
+      { id: "p2", name: "Dog - Chocolate Ingestion", symptoms: "Panting, restlessness, mild tremors", priority: 2 },
+      { id: "p3", name: "Rabbit - Houseplant Ingestion", symptoms: "Chewed on mild toxic plant, monitoring needed", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr6",
+    scenario: "Puppy and kitten wellness exams",
+    animals: [
+      { id: "p1", name: "Puppy - Parvovirus Suspected", symptoms: "Vomiting, bloody diarrhea, lethargy", priority: 1 },
+      { id: "p2", name: "Kitten - Upper Respiratory", symptoms: "Sneezing, eye discharge, eating normally", priority: 2 },
+      { id: "p3", name: "Puppy - First Vaccines", symptoms: "Healthy, needs DHPP and deworming", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr7",
+    scenario: "Orthopedic emergency prioritization",
+    animals: [
+      { id: "p1", name: "Dog - Open Fracture", symptoms: "Bone protruding through skin, severe bleeding", priority: 1 },
+      { id: "p2", name: "Cat - Luxated Patella", symptoms: "Knee cap out of place, limping", priority: 2 },
+      { id: "p3", name: "Dog - Hip Dysplasia Follow-up", symptoms: "Chronic mobility issues, no acute pain", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr8",
+    scenario: "Dermatology cases and allergies",
+    animals: [
+      { id: "p1", name: "Dog - Anaphylaxis", symptoms: "Facial swelling, difficulty breathing after vaccine", priority: 1 },
+      { id: "p2", name: "Cat - Flea Allergy Dermatitis", symptoms: "Hair loss, scabs, severe itching", priority: 2 },
+      { id: "p3", name: "Dog - Hot Spot", symptoms: "Localized skin infection, needs treatment", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr9",
+    scenario: "Cardiac emergency cases",
+    animals: [
+      { id: "p1", name: "Cat - CHF Congestive Heart Failure", symptoms: "Difficulty breathing, fluid in lungs", priority: 1 },
+      { id: "p2", name: "Dog - Heart Murmur Follow-up", symptoms: "Stable, needs annual heart check", priority: 2 },
+      { id: "p3", name: "Dog - Arrhythmia Monitoring", symptoms: "Irregular heartbeat detected, needs ECG", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr10",
+    scenario: "Neurological emergency prioritization",
+    animals: [
+      { id: "p1", name: "Dog - IVDD Paralyzed", symptoms: "Cannot walk, deep pain response lost", priority: 1 },
+      { id: "p2", name: "Cat - Vestibular Disease", symptoms: "Head tilt, circling, nystagmus", priority: 2 },
+      { id: "p3", name: "Dog - Seizure Follow-up", symptoms: "Well controlled on meds, needs refill and check", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr11",
+    scenario: "Exotic animal emergency prioritization",
+    animals: [
+      { id: "p1", name: "Snake - Respiratory Infection", symptoms: "Open-mouth breathing, mucus discharge", priority: 1 },
+      { id: "p2", name: "Ferret - Insulinoma", symptoms: "Collapse episodes, needs treatment plan", priority: 2 },
+      { id: "p3", name: "Turtle - Shell Rot", symptoms: "Soft spots on shell, needs antibiotic treatment", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr12",
+    scenario: "Senior wellness and palliative care",
+    animals: [
+      { id: "p1", name: "Cat - Kidney Failure Crisis", symptoms: "Not eating, severely dehydrated, elevated kidney values", priority: 1 },
+      { id: "p2", name: "Dog - Arthritis Management", symptoms: "Difficulty standing, needs pain management plan", priority: 2 },
+      { id: "p3", name: "Cat - Senior Bloodwork Review", symptoms: "Stable chronic kidney disease, routine recheck", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr13",
+    scenario: "Mass casualty incident at dog fighting scene",
+    animals: [
+      { id: "p1", name: "Dog - Severe Wounds", symptoms: "Puncture wounds, hemorrhage, shock", priority: 1 },
+      { id: "p2", name: "Dog - Malnourished", symptoms: "Severely underweight, dehydration, needs fluids", priority: 2 },
+      { id: "p3", name: "Cat - Terrified Cagemate", symptoms: "Stress-related, needs quiet handling and exam", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr14",
+    scenario: "Puppy mill rescue intake",
+    animals: [
+      { id: "p1", name: "Puppy - Parvo Positive", symptoms: "Vomiting, bloody diarrhea, dehydrated", priority: 1 },
+      { id: "p2", name: "Adult Dog - Severe Demodex", symptoms: "Hair loss, skin infection, needs treatment", priority: 2 },
+      { id: "p3", name: "Puppy - Mild Upper Respiratory", symptoms: "Sneezing, mild nasal discharge, stable", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr15",
+    scenario: "Hoarding case rescue prioritization",
+    animals: [
+      { id: "p1", name: "Cat - Not Breathing", symptoms: "Respiratory arrest, CPR needed immediately", priority: 1 },
+      { id: "p2", name: "Dog - Emaciated", symptoms: "Body score 1/9, needs immediate fluid therapy", priority: 2 },
+      { id: "p3", name: "Cat - Mild Upper Respiratory", symptoms: "Sneezing, nasal discharge, needs antibiotics", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr16",
+    scenario: "Disaster relief triage after hurricane flooding",
+    animals: [
+      { id: "p1", name: "Dog - Drowning Victim", symptoms: "Unresponsive, pulmonary edema, CPR in progress", priority: 1 },
+      { id: "p2", name: "Cat - Open Wound Infection", symptoms: "Lacerated paw pad, necrotic tissue, needs debridement", priority: 2 },
+      { id: "p3", name: "Rabbit - Stress-Induced GI Stasis", symptoms: "Not eating, needs fluids and motility drugs", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr17",
+    scenario: "Mass casualty from livestock transport accident",
+    animals: [
+      { id: "p1", name: "Horse - Compound Fracture", symptoms: "Front leg bone protruding, shock, needs euthanasia or amputation", priority: 1 },
+      { id: "p2", name: "Cow - Lacerated Jugular", symptoms: "Severe bleeding from neck wound", priority: 2 },
+      { id: "p3", name: "Goat - Minor Abrasions", symptoms: "Scrapes and bruises, otherwise alert and standing", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr18",
+    scenario: "Wildlife rescue intake after wildfire",
+    animals: [
+      { id: "p1", name: "Bear Cub - Burned Paws", symptoms: "Severe pad burns, needs immediate pain management", priority: 1 },
+      { id: "p2", name: "Deer Fawn - Smoked Inhalation", symptoms: "Respiratory distress from smoke exposure", priority: 2 },
+      { id: "p3", name: "Owl - Feather Damage", symptoms: "Burned wing feathers, needs re-feathering support", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr19",
+    scenario: "Oil spill wildlife response",
+    animals: [
+      { id: "p1", name: "Sea Lion - Hypothermia", symptoms: "Oil-coated, body temperature critically low", priority: 1 },
+      { id: "p2", name: "Pelican - Oiled Feathers", symptoms: "Unable to preen, waterproofing compromised", priority: 2 },
+      { id: "p3", name: "Duck - Minor Oiling", symptoms: "Small amount on back, needs wash monitoring", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr20",
+    scenario: "Zoo emergency: ambiguous toxic exposure",
+    animals: [
+      { id: "p1", name: "Tiger - Seizure Activity", symptoms: "Collapsed, paddling, possibly ingested toxin", priority: 1 },
+      { id: "p2", name: "Giraffe - Laminitis Signs", symptoms: "Shifting weight, reluctance to move, needs immediate care", priority: 2 },
+      { id: "p3", name: "Python - Shedding Difficulties", symptoms: "Retained eye caps, dysecdysis, needs assistance", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
 ];
 
 export default function VeterinarianWorld({ difficulty, onComplete, isQuickRecall, isCertification, alwaysCorrect, onExit, onTutorialBack, onAnswerResult }: VeterinarianWorldProps) {

@@ -90,6 +90,196 @@ const quickRecallQuestions: Question[] = [
     ],
     correctOrder: ["p1", "p2", "p3"],
   },
+  {
+    id: "qr2",
+    scenario: "Prioritize: pre-flight checklist items urgently",
+    issues: [
+      { id: "p1", issue: "Verify flight control functionality", priority: 1 },
+      { id: "p2", issue: "Complete weather briefing review", priority: 2 },
+      { id: "p3", issue: "Load catering supplies on aircraft", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr3",
+    scenario: "Prioritize: navigation problems during flight",
+    issues: [
+      { id: "p1", issue: "Recover from GPS signal failure", priority: 1 },
+      { id: "p2", issue: "Cross-check with paper charts", priority: 2 },
+      { id: "p3", issue: "Inform passengers of minor delay", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr4",
+    scenario: "Prioritize: air traffic control instructions urgency",
+    issues: [
+      { id: "p1", issue: "Immediate altitude change requested", priority: 1 },
+      { id: "p2", issue: "Vector for traffic avoidance", priority: 2 },
+      { id: "p3", issue: "Frequency change to approach", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr5",
+    scenario: "Prioritize: weather phenomenon response actions",
+    issues: [
+      { id: "p1", issue: "Divert around severe thunderstorm", priority: 1 },
+      { id: "p2", issue: "Adjust altitude for smooth air", priority: 2 },
+      { id: "p3", issue: "Update weather log in flight bag", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr6",
+    scenario: "Prioritize: instrument failure in clouds",
+    issues: [
+      { id: "p1", issue: "Declare emergency for priority handling", priority: 1 },
+      { id: "p2", issue: "Switch to backup instruments", priority: 2 },
+      { id: "p3", issue: "Notify passengers of instrument issue", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr7",
+    scenario: "Prioritize: cabin pressure concerns",
+    issues: [
+      { id: "p1", issue: "Don oxygen masks and descend", priority: 1 },
+      { id: "p2", issue: "Check passenger oxygen deployment", priority: 2 },
+      { id: "p3", issue:: "Log altitude and time of depressurization", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr8",
+    scenario: "Prioritize: fuel management decisions",
+    issues: [
+      { id: "p1", issue: "Declare fuel emergency to ATC", priority: 1 },
+      { id: "p2", issue: "Calculate remaining fuel endurance", priority: 2 },
+      { id: "p3", issue: "Brief passengers on fuel situation", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr9",
+    scenario: "Prioritize: electrical system failures",
+    issues: [
+      { id: "p1", issue: "Reset tripped circuit breakers", priority: 1 },
+      { id: "p2", issue: "Verify essential avionics powered", priority: 2 },
+      { id: "p3", issue: "Switch to backup electrical bus", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr10",
+    scenario: "Prioritize: hydraulic system malfunction",
+    issues: [
+      { id: "p1", issue: "Confirm landing gear down and locked", priority: 1 },
+      { id: "p2", issue: "Review emergency landing procedures", priority: 2 },
+      { id: "p3", issue: "Prepare cabin for emergency landing", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr11",
+    scenario: "Prioritize: ice accumulation on approach",
+    issues: [
+      { id: "p1", issue: "Activate wing anti-ice systems", priority: 1 },
+      { id: "p2", issue: "Request deicing at airport", priority: 2 },
+      { id: "p3", issue: "Calculate landing distance adjustments", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr12",
+    scenario: "Prioritize: passenger medical emergency",
+    issues: [
+      { id: "p1", issue: "Descend to lower altitude for medical", priority: 1 },
+      { id: "p2", issue: "Divert to nearest suitable airport", priority: 2 },
+      { id: "p3", issue:: "Contact medical personnel on ground", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr13",
+    scenario: "Prioritize: crosswind landing challenges",
+    issues: [
+      { id: "p1", issue: "Calculate maximum crosswind component", priority: 1 },
+      { id: "p2", issue: "Brief crew on landing technique", priority: 2 },
+      { id: "p3", issue: "Monitor runway surface conditions", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr14",
+    scenario: "Prioritize: turbulence penetration procedures",
+    issues: [
+      { id: "p1", issue: "Reduce to turbulence penetration speed", priority: 1 },
+      { id: "p2", issue: "Secure cabin and galley items", priority: 2 },
+      { id: "p3", issue: "Advise passengers to fasten seatbelts", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr15",
+    scenario: "Prioritize: ATC communication failure",
+    issues: [
+      { id: "p1", issue: "Squawk 7600 and exit controlled airspace", priority: 1 },
+      { id: "p2", issue: "Continue flight under VFR rules", priority: 2 },
+      { id: "p3", issue:: "Monitor emergency frequency for calls", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr16",
+    scenario: "Prioritize: windshear on approach",
+    issues: [
+      { id: "p1", issue: "Execute windshear escape maneuver", priority: 1 },
+      { id: "p2", issue: "Call for go-around clearance", priority: 2 },
+      { id: "p3", issue: "Brief passengers on missed approach", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr17",
+    scenario: "Prioritize: engine flameout recovery",
+    issues: [
+      { id: "p1", issue: "Restart engine using emergency procedure", priority: 1 },
+      { id: "p2", issue: "Declare emergency to ATC", priority: 2 },
+      { id: "p3", issue: "Configure for single-engine flight", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr18",
+    scenario: "Prioritize: night flight visual references",
+    issues: [
+      { id: "p1", issue: "Transition to instrument references", priority: 1 },
+      { id: "p2", issue: "Verify runway lighting activation", priority: 2 },
+      { id: "p3", issue:: "Increase approach speed for night landing", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr19",
+    scenario: "Prioritize: FAA regulation compliance items",
+    issues: [
+      { id: "p1", issue: "Verify currency for instrument rating", priority: 1 },
+      { id: "p2", issue: "Complete required proficiency check", priority: 2 },
+      { id: "p3", issue: "Update logbook with recent flights", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr20",
+    scenario: "Prioritize: pre-landing checklist completion",
+    issues: [
+      { id: "p1", issue: "Complete before landing checklist", priority: 1 },
+      { id: "p2", issue: "Brief passengers on arrival", priority: 2 },
+      { id: "p3", issue: "Secure flight deck items", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
 ];
 
 export default function PilotWorld({ difficulty, onComplete, isQuickRecall, isCertification, alwaysCorrect, onExit, onTutorialBack, onAnswerResult }: PilotWorldProps) {

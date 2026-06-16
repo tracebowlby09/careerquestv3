@@ -90,6 +90,196 @@ const quickRecallQuestions: Question[] = [
     ],
     correctOrder: ["p1", "p2", "p3"],
   },
+  {
+    id: "qr2",
+    scenario: "Prioritize: month-end closing tasks",
+    tasks: [
+      { id: "p1", task: "Prepare balance sheet", priority: 1 },
+      { id: "p2", task: "Reconcile bank statements", priority: 2 },
+      { id: "p3", task: "Send invoices to clients", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr3",
+    scenario: "Prioritize: quarterly tasks for audit prep",
+    tasks: [
+      { id: "p1", task: "Review accounts receivable aging", priority: 1 },
+      { id: "p2", task: "Calculate depreciation expenses", priority: 2 },
+      { id: "p3", task: "Organize general ledger", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr4",
+    scenario: "Prioritize: budgeting season tasks",
+    tasks: [
+      { id: "p1", task: "Complete annual budget forecast", priority: 1 },
+      { id: "p2", task: "Analyze variance report", priority: 2 },
+      { id: "p3", task: "Update client contact list", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr5",
+    scenario: "Prioritize: tax bracket analysis tasks",
+    tasks: [
+      { id: "p1", task: "Calculate client tax liability", priority: 1 },
+      { id: "p2", task: "Apply standard deductions", priority: 2 },
+      { id: "p3", task: "Research tax law changes", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr6",
+    scenario: "Prioritize: GAAP compliance checklist",
+    tasks: [
+      { id: "p1", task: "Verify revenue recognition timing", priority: 1 },
+      { id: "p2", task: "Review expense matching rules", priority: 2 },
+      { id: "p3", task: "Update chart of accounts", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr7",
+    scenario: "Prioritize: cash flow management tasks",
+    tasks: [
+      { id: "p1", task: "Prepare weekly cash flow forecast", priority: 1 },
+      { id: "p2", task: "Follow up on overdue payments", priority: 2 },
+      { id: "p3", task: "Schedule vendor payments", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr8",
+    scenario: "Prioritize: payroll processing day",
+    tasks: [
+      { id: "p1", task: "Process salary payments", priority: 1 },
+      { id: "p2", task: "File payroll tax reports", priority: 2 },
+      { id: "p3", task: "Update employee benefits", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr9",
+    scenario: "Prioritize: audit preparation items",
+    tasks: [
+      { id: "p1", task: "Gather supporting documentation", priority: 1 },
+      { id: "p2", task: "Review internal controls", priority: 2 },
+      { id: "p3", task: "Schedule auditor meetings", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr10",
+    scenario: "Prioritize: financial statement review",
+    tasks: [
+      { id: "p1", task: "Consolidate subsidiary ledgers", priority: 1 },
+      { id: "p2", task: "Verify account balances", priority: 2 },
+      { id: "p3", task: "Format presentation slides", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr11",
+    scenario: "Prioritize: client tax consultation tasks",
+    tasks: [
+      { id: "p1", task: "Analyze prior year returns", priority: 1 },
+      { id: "p2", task: "Estimate current year tax", priority: 2 },
+      { id: "p3", task: "Recommend deductions strategy", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr12",
+    scenario: "Prioritize: accounts payable workflow",
+    tasks: [
+      { id: "p1", task: "Match invoices to purchase orders", priority: 1 },
+      { id: "p2", task: "Process payment approvals", priority: 2 },
+      { id: "p3", task: "File paper invoices", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr13",
+    scenario: "Prioritize: month-end close procedures",
+    tasks: [
+      { id: "p1", task: "Post adjusting journal entries", priority: 1 },
+      { id: "p2", task: "Run financial statements", priority: 2 },
+      { id: "p3", task: "Send statements to management", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr14",
+    scenario: "Prioritize: bookkeeping cleanup tasks",
+    tasks: [
+      { id: "p1", task: "Reclassify misposted entries", priority: 1 },
+      { id: "p2", task: "Balance checkbook register", priority: 2 },
+      { id: "p3", task: "Archive old receipts", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr15",
+    scenario: "Prioritize: tax season rush items",
+    tasks: [
+      { id: "p1", task: "Complete extension filings", priority: 1 },
+      { id: "p2", task: "Client signature collection", priority: 2 },
+      { id: "p3", task: "Update tax software", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr16",
+    scenario: "Prioritize: quarterly reporting deadline",
+    tasks: [
+      { id: "p1", task: "Prepare 10-Q filing", priority: 1 },
+      { id: "p2", task: "Review auditor comments", priority: 2 },
+      { id: "p3", task: "Clean email inbox", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr17",
+    scenario: "Prioritize: client financial review",
+    tasks: [
+      { id: "p1", task: "Analyze profit and loss statement", priority: 1 },
+      { id: "p2", task: "Calculate key ratios", priority: 2 },
+      { id: "p3", task: "Draft cover memo", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr18",
+    scenario: "Prioritize: regulatory compliance check",
+    tasks: [
+      { id: "p1", task: "Update compliance documentation", priority: 1 },
+      { id: "p2", task: "Conduct internal review", priority: 2 },
+      { id: "p3", task: "Order office supplies", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr19",
+    scenario: "Prioritize: year-end closing items",
+    tasks: [
+      { id: "p1", task: "Accrue year-end expenses", priority: 1 },
+      { id: "p2", task: "Physical inventory count", priority: 2 },
+      { id: "p3", task: "Holiday party planning", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr20",
+    scenario: "Prioritize: client inquiry response",
+    tasks: [
+      { id: "p1", task: "Address urgent billing question", priority: 1 },
+      { id: "p2", task: "Provide financial summary", priority: 2 },
+      { id: "p3", task: "Schedule follow-up call", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
 ];
 
 export default function AccountantWorld({ difficulty, onComplete, isQuickRecall, isCertification, alwaysCorrect, onExit, onTutorialBack, onAnswerResult }: AccountantWorldProps) {

@@ -91,6 +91,196 @@ const quickRecallQuestions: Question[] = [
     ],
     correctOrder: ["p1", "p2", "p3"],
   },
+  {
+    id: "qr2",
+    scenario: "Prioritize: emergency dental patients",
+    patients: [
+      { id: "p1", name: "Patient A - Trauma", condition: "Teeth knocked out in sports injury", priority: 1 },
+      { id: "p2", name: "Patient B - Pain", condition: "Severe toothache, swelling present", priority: 2 },
+      { id: "p3", name: "Patient C - Cleaning", condition: "Routine prophylaxis cleaning", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr3",
+    scenario: "Prioritize: radiograph scheduling and procedures",
+    patients: [
+      { id: "p1", name: "Patient A - Emergency", condition: "Severe pain, possible root fracture", priority: 1 },
+      { id: "p2", name: "Patient B - Crown", condition: "Crown prep and temporary placement", priority: 2 },
+      { id: "p3", name: "Patient C - Exam", condition: "Bite wing x-rays for checkup", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr4",
+    scenario: "Prioritize: oral surgery triage",
+    patients: [
+      { id: "p1", name: "Patient A - Surgery", condition: "Impacted wisdom tooth extraction", priority: 1 },
+      { id: "p2", name: "Patient B - Filling", condition: "Cavity preparation and restoration", priority: 2 },
+      { id: "p3", name: "Patient C - Consult", condition: "Dental implant consultation", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr5",
+    scenario: "Prioritize: periodontal care scheduling",
+    patients: [
+      { id: "p1", name: "Patient A - Deep Cleaning", condition: "Advanced periodontal disease, bleeding", priority: 1 },
+      { id: "p2", name: "Patient B - Scaling", condition: "Moderate tartar buildup", priority: 2 },
+      { id: "p3", name: "Patient C - Checkup", condition: "Healthy gums, routine exam", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr6",
+    scenario: "Prioritize: pediatric dentistry cases",
+    patients: [
+      { id: "p1", name: "Patient A - Emergency", condition: "Child with dental trauma, tooth fractured", priority: 1 },
+      { id: "p2", name: "Patient B - Behavior", condition: "Anxious child, first filling", priority: 2 },
+      { id: "p3", name: "Patient C - Cleaning", condition: "Routine cleaning, cooperative teenager", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr7",
+    scenario: "Prioritize: endodontic procedures",
+    patients: [
+      { id: "p1", name: "Patient A - Root Canal", condition: "Acute pulpitis, severe pain", priority: 1 },
+      { id: "p2", name: "Patient B - Consult", condition: "Root canal evaluation and discussion", priority: 2 },
+      { id: "p3", name: "Patient C - Crown", condition: "Post-root canal crown placement", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr8",
+    scenario: "Prioritize: cosmetic dentistry queue",
+    patients: [
+      { id: "p1", name: "Patient A - Emergency", condition: "Tooth chipped, patient in pain", priority: 1 },
+      { id: "p2", name: "Patient B - Whitening", condition: "Professional bleaching treatment", priority: 2 },
+      { id: "p3", name: "Patient C - Bonding", condition: "Composite veneer consultation", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr9",
+    scenario: "Prioritize: prosthodontic emergencies",
+    patients: [
+      { id: "p1", name: "Patient A - Denture", condition: "Broken denture, unable to eat", priority: 1 },
+      { id: "p2", name: "Patient B - Bridge", condition: "Bridge adjustment for fit", priority: 2 },
+      { id: "p3", name: "Patient C - Implant", condition: "Implant maintenance visit", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr10",
+    scenario: "Prioritize: preventive care urgency",
+    patients: [
+      { id: "p1", name: "Patient A - Recall", condition: "Overdue cleaning, early decay signs", priority: 1 },
+      { id: "p2", name: "Patient B - Exam", condition: "Routine six-month maintenance", priority: 2 },
+      { id: "p3", name: "Patient C - Sealants", condition: "Child sealant application", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr11",
+    scenario: "Prioritize: elderly patient care needs",
+    patients: [
+      { id: "p1", name: "Patient A - Dry Mouth", condition: "Severe xerostomia, rampant decay risk", priority: 1 },
+      { id: "p2", name: "Patient B - Denture", condition: "Denture sore spots, check fit", priority: 2 },
+      { id: "p3", name: "Patient C - Cleaning", condition: "Routine cleaning, good oral health", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr12",
+    scenario: "Prioritize: dental abscess cases",
+    patients: [
+      { id: "p1", name: "Patient A - Abscess", condition: "Swollen face, fever, dental abscess", priority: 1 },
+      { id: "p2", name: "Patient B - Antibiotics", condition: "Prescription for infection control", priority: 2 },
+      { id: "p3", name: "Patient C - Follow-up", condition: "Post-extraction healing check", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr13",
+    scenario: "Prioritize: orthodontic emergencies",
+    patients: [
+      { id: "p1", name: "Patient A - Wire", condition: "Broken wire, soft tissue trauma", priority: 1 },
+      { id: "p2", name: "Patient B - Adjustment", condition: "Routine brace adjustment", priority: 2 },
+      { id: "p3", name: "Patient C - Retention", condition: "Retainer check and cleaning", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr14",
+    scenario: "Prioritize: oral pathology concerns",
+    patients: [
+      { id: "p1", name: "Patient A - Lesion", condition: "Suspicious oral lesion, biopsy needed", priority: 1 },
+      { id: "p2", name: "Patient B - Canker", condition: "Recurrent aphthous ulcer evaluation", priority: 2 },
+      { id: "p3", name: "Patient C - Exam", condition: "Routine oral cancer screening", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr15",
+    scenario: "Prioritize: sedation dentistry cases",
+    patients: [
+      { id: "p1", name: "Patient A - Special Needs", condition: "Special needs patient, extensive work", priority: 1 },
+      { id: "p2", name: "Patient B - Anxiety", condition: "Severe dental phobia, sedation consult", priority: 2 },
+      { id: "p3", name: "Patient C - Routine", condition: "Routine cleaning with local anesthetic", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr16",
+    scenario: "Prioritize: emergency room referrals",
+    patients: [
+      { id: "p1", name: "Patient A - ER", condition: "Dental trauma from accident, ER referral", priority: 1 },
+      { id: "p2", name: "Patient B - Urgent", condition: "Severe pain after hours callback", priority: 2 },
+      { id: "p3", name: "Patient C - Routine", condition: "Scheduled filling appointment", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr17",
+    scenario: "Prioritize: weekend emergency calls",
+    patients: [
+      { id: "p1", name: "Patient A - Pain", condition: "Uncontrolled dental pain, weekend call", priority: 1 },
+      { id: "p2", name: "Patient B - Broken", condition: "Crown fell off, temporary needed", priority: 2 },
+      { id: "p3", name: "Patient C - Question", condition: "Insurance coverage inquiry", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr18",
+    scenario: "Prioritize: new patient screening",
+    patients: [
+      { id: "p1", name: "Patient A - New Emergency", condition: "New patient with severe dental emergency", priority: 1 },
+      { id: "p2", name: "Patient B - New Routine", condition: "New patient comprehensive exam", priority: 2 },
+      { id: "p3", name: "Patient C - Records", condition: "Transfer patient records review", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr19",
+    scenario: "Prioritize: follow-up and recall patients",
+    patients: [
+      { id: "p1", name: "Patient A - Post Op", condition: "Post-surgery complication check", priority: 1 },
+      { id: "p2", name: "Patient B - Recall", condition: "Overdue recall patient contact", priority: 2 },
+      { id: "p3", name: "Patient C - Results", condition: "Lab results follow-up call", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr20",
+    scenario: "Prioritize: end of day patient needs",
+    patients: [
+      { id: "p1", name: "Patient A - Emergency", condition: "Last minute severe pain emergency", priority: 1 },
+      { id: "p2", name: "Patient B - Reschedule", condition: "No-show patient rescheduling", priority: 2 },
+      { id: "p3", name: "Patient C - Supplies", condition: "Inventory and order dental supplies", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
 ];
 
 export default function DentistWorld({ difficulty, onComplete, isQuickRecall, isCertification, alwaysCorrect, onExit, onTutorialBack, onAnswerResult }: DentistWorldProps) {

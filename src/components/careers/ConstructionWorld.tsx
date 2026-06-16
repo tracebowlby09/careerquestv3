@@ -90,6 +90,196 @@ const quickRecallQuestions: Question[] = [
     ],
     correctOrder: ["p1", "p2", "p3"],
   },
+  {
+    id: "qr2",
+    scenario: "Prioritize: permit inspection, material delivery, crew scheduling",
+    tasks: [
+      { id: "p1", name: "Building permit inspection", priority: 1 },
+      { id: "p2", name: "Concrete delivery coordination", priority: 2 },
+      { id: "p3", name: "Electrical crew scheduling", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr3",
+    scenario: "Prioritize: weather delays, safety check, deadline pressure",
+    tasks: [
+      { id: "p1", name: "Secure loose materials for wind", priority: 1 },
+      { id: "p2", name: "Morning safety briefing", priority: 2 },
+      { id: "p3", name: "Update project timeline", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr4",
+    scenario: "Prioritize: OSHA compliance, daily tasks, paperwork",
+    tasks: [
+      { id: "p1", name: "Conduct OSHA required safety training", priority: 1 },
+      { id: "p2", name: "Inspect scaffolding setup", priority: 2 },
+      { id: "p3", name: "File daily progress report", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr5",
+    scenario: "Prioritize: blueprint corrections, material shortage, inspection",
+    tasks: [
+      { id: "p1", name: "Review revised blueprints for errors", priority: 1 },
+      { id: "p2", name: "Order additional lumber", priority: 2 },
+      { id: "p3", name: "Document change order request", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr6",
+    scenario: "Prioritize: concrete pour, weather window, crew coordination",
+    tasks: [
+      { id: "p1", name: "Prepare for concrete pour", priority: 1 },
+      { id: "p2", name: "Confirm concrete truck arrival", priority: 2 },
+      { id: "p3", name: "Set up vibration equipment", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr7",
+    scenario: "Prioritize: structural inspection, scheduling, ordering",
+    tasks: [
+      { id: "p1", name: "Inspect foundation footings", priority: 1 },
+      { id: "p2", name: "Reschedule plumbing rough-in", priority: 2 },
+      { id: "p3", name: "Order insulation materials", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr8",
+    scenario: "Prioritize: hazard control, daily prep, documentation",
+    tasks: [
+      { id: "p1", name: "Address trench safety violation", priority: 1 },
+      { id: "p2", name: "Post today's work assignments", priority: 2 },
+      { id: "p3", name: "Upload safety photos to portal", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr9",
+    scenario: "Prioritize: quality check, deadline, resource allocation",
+    tasks: [
+      { id: "p1", name: "Verify beam measurements", priority: 1 },
+      { id: "p2", name: "Coordinate crane availability", priority: 2 },
+      { id: "p3", name: "Email client project update", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr10",
+    scenario: "Prioritize: environmental compliance, work progress, meetings",
+    tasks: [
+      { id: "p1", name: "Submit stormwater runoff report", priority: 1 },
+      { id: "p2", name: "Complete backfill inspection", priority: 2 },
+      { id: "p3", name: "Prep for weekly progress meeting", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr11",
+    scenario: "Prioritize: electrical work, inspection, scheduling",
+    tasks: [
+      { id: "p1", name: "Test electrical connections", priority: 1 },
+      { id: "p2", name: "Schedule electrical inspection", priority: 2 },
+      { id: "p3", name: "Update project estimate", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr12",
+    scenario: "Prioritize: plumbing inspection, material delay, timeline",
+    tasks: [
+      { id: "p1", name: "Inspect plumbing rough-in work", priority: 1 },
+      { id: "p2", name: "Follow up on pipe delivery delay", priority: 2 },
+      { id: "p3", name: "Notify subcontractors of changes", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr13",
+    scenario: "Prioritize: HVAC installation, quality, coordination",
+    tasks: [
+      { id: "p1", name: "Verify HVAC load calculations", priority: 1 },
+      { id: "p2", name: "Inspect ductwork installation", priority: 2 },
+      { id: "p3", name: "Coordinate with electrical team", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr14",
+    scenario: "Prioritize: roofing, weather, safety",
+    tasks: [
+      { id: "p1", name: "Secure roofing materials for overnight", priority: 1 },
+      { id: "p2", name: "Check wind forecast for scaffolding", priority: 2 },
+      { id: "p3", name: "Verify harness inspections current", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr15",
+    scenario: "Prioritize: drywall, scheduling, cleanup",
+    tasks: [
+      { id: "p1", name: "Inspect drywall finish quality", priority: 1 },
+      { id: "p2", name: "Schedule drywall taping crew", priority: 2 },
+      { id: "p3", name: "Coordinate site cleanup today", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr16",
+    scenario: "Prioritize: painting, weather prep, inspection",
+    tasks: [
+      { id: "p1", name: "Verify paint adhesion test results", priority: 1 },
+      { id: "p2", name: "Protect finished flooring from paint", priority: 2 },
+      { id: "p3", name: "Schedule final walkthrough prep", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr17",
+    scenario: "Prioritize: flooring, moisture, scheduling",
+    tasks: [
+      { id: "p1", name: "Test concrete moisture levels", priority: 1 },
+      { id: "p2", name: "Coordinate tile delivery timing", priority: 2 },
+      { id: "p3", name: "Update flooring warranty documents", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr18",
+    scenario: "Prioritize: safety violation, work stoppage, reporting",
+    tasks: [
+      { id: "p1", name: "Stop work for unsafe scaffold", priority: 1 },
+      { id: "p2", name: "Correct scaffold issues immediately", priority: 2 },
+      { id: "p3", name: "Document OSHA report", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr19",
+    scenario: "Prioritize: final inspection, punch list, handover",
+    tasks: [
+      { id: "p1", name: "Complete final building inspection", priority: 1 },
+      { id: "p2", name: "Resolve all punch list items", priority: 2 },
+      { id: "p3", name: "Prepare owner handover package", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr20",
+    scenario: "Prioritize: warranty work, new project, documentation",
+    tasks: [
+      { id: "p1", name: "Address warranty callback issues", priority: 1 },
+      { id: "p2", name: "Start new project mobilization", priority: 2 },
+      { id: "p3", name: "Close out old project files", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
 ];
 
 export default function ConstructionWorld({ difficulty, onComplete, isQuickRecall, isCertification, alwaysCorrect, onExit, onTutorialBack, onAnswerResult }: ConstructionWorldProps) {

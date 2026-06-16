@@ -91,6 +91,196 @@ const quickRecallQuestions: Question[] = [
     ],
     correctOrder: ["p1", "p3", "p2"],
   },
+  {
+    id: "qr2",
+    scenario: "Prioritize: life-threatening versus property crimes",
+    situations: [
+      { id: "p1", type: "Shots Fired", description: "Active shooter reported downtown", priority: 1 },
+      { id: "p2", type: "Burglary", description: "Residential break-in in progress", priority: 2 },
+      { id: "p3", type: "Vandalism", description: "Graffiti reported at park", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr3",
+    scenario: "Prioritize: traffic stop escalation risk",
+    situations: [
+      { id: "p1", type: "Traffic Stop", description: "Suspect reaching under seat, possible weapon", priority: 1 },
+      { id: "p2", type: "Backup Request", description: "Officer needs assistance with suspect", priority: 2 },
+      { id: "p3", type: "Accident", description: "Minor fender-bender, no injuries", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr4",
+    scenario: "Prioritize: Miranda rights timing with questioning",
+    situations: [
+      { id: "p1", type: "Custodial Interrogation", description: "Ready to question arrestee about crimes", priority: 1 },
+      { id: "p2", type: "Evidence Collection", description: "Photograph crime scene for evidence", priority: 2 },
+      { id: "p3", type: "Report Writing", description: "Document arrest in incident report", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr5",
+    scenario: "Prioritize: use of force continuum application",
+    situations: [
+      { id: "p1", type: "Threatening Suspect", description: "Armed individual refusing commands", priority: 1 },
+      { id: "p2", type: "Verbal Escalation", description: "Deescalate angry but unarmed person", priority: 2 },
+      { id: "p3", type: "Passive Resistance", description: "Subject refusing to comply peacefully", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr6",
+    scenario: "Prioritize: evidence preservation at scene",
+    situations: [
+      { id: "p1", type: "Crime Scene", description: "Secure evidence before it's contaminated", priority: 1 },
+      { id: "p2", type: "Witness Interview", description: "Get initial statements from witnesses", priority: 2 },
+      { id: "p3", type: "Media Inquiry", description: "Handle press questions about incident", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr7",
+    scenario: "Prioritize: arrest procedure steps",
+    situations: [
+      { id: "p1", type: "Handcuffing", description: "Secure suspect for transport safely", priority: 1 },
+      { id: "p2", type: "Search Incident", description: "Search for weapons and evidence", priority: 2 },
+      { id: "p3", type: "Transport", description: "Move suspect to patrol car", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr8",
+    scenario: "Prioritize: search and seizure law compliance",
+    situations: [
+      { id: "p1", type: "Consent Search", description: "Obtain valid consent for vehicle search", priority: 1 },
+      { id: "p2", type: "Plain View", description: "Document contraband in plain sight", priority: 2 },
+      { id: "p3", type: "Inventory Search", description: "Complete inventory of impounded vehicle", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr9",
+    scenario: "Prioritize: patrol beat coverage strategy",
+    situations: [
+      { id: "p1", type: "Hot Call", description: "Priority response to ongoing incident", priority: 1 },
+      { id: "p2", type: "Reckless Driving", description: "Aggressive driver endangering traffic", priority: 2 },
+      { id: "p3", type: "Business Check", description: "Routine security check at business", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr10",
+    scenario: "Prioritize: community policing event planning",
+    situations: [
+      { id: "p1", type: "Neighborhood Meeting", description: "Address crime concerns with residents", priority: 1 },
+      { id: "p2", type: "Traffic Enforcement", description: "School zone speeding complaint", priority: 2 },
+      { id: "p3", type: "Report Follow-up", description: "Update pending case reports", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr11",
+    scenario: "Prioritize: report writing with time constraints",
+    situations: [
+      { id: "p1", type: "Arrest Report", description: "Complete mandatory arrest documentation", priority: 1 },
+      { id: "p2", type: "Use of Force Report", description: "Document force used in suspect arrest", priority: 2 },
+      { id: "p3", type: "Incident Summary", description: "Brief summary of routine call", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr12",
+    scenario: "Prioritize: field interview card completion",
+    situations: [
+      { id: "p1", type: "Suspect Interview", description: "Document interview with person of interest", priority: 1 },
+      { id: "p2", type: "Witness Statement", description: "Record account from bystander", priority: 2 },
+      { id: "p3", type: "Victim Contact", description: "Follow up with crime victim", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr13",
+    scenario: "Prioritize: radio call handling efficiency",
+    situations: [
+      { id: "p1", type: "Emergency Call", description: "Officer needs immediate backup", priority: 1 },
+      { id: "p2", type: "Information Request", description: "Dispatch asks for unit status", priority: 2 },
+      { id: "p3", type: "Administrative Message", description: "Call about meeting schedule changes", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr14",
+    scenario: "Prioritize: warrant verification procedures",
+    situations: [
+      { id: "p1", type: "Warrant Check", description: "Verify arrest warrant before entry", priority: 1 },
+      { id: "p2", type: "Probable Cause", description: "Establish grounds for search", priority: 2 },
+      { id: "p3", type: "Supervisory Approval", description: "Get sergeant approval for action", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr15",
+    scenario: "Prioritize: DUI investigation steps",
+    situations: [
+      { id: "p1", type: "Field Sobriety Tests", description: "Conduct standardized sobriety tests", priority: 1 },
+      { id: "p2", type: "Breathalyzer Admin", description: "Administer chemical test for BAC", priority: 2 },
+      { id: "p3", type: "Transport Booking", description: "Book suspect at jail facility", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr16",
+    scenario: "Prioritize: juvenile custody procedures",
+    situations: [
+      { id: "p1", type: "Parent Notification", description: "Contact parents of minor detainee", priority: 1 },
+      { id: "p2", type: "Juvenile Processing", description: "Follow special procedures for minor arrest", priority: 2 },
+      { id: "p3", type: "Report Documentation", description: "Document juvenile case details", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr17",
+    scenario: "Prioritize: domestic violence response",
+    situations: [
+      { id: "p1", type: "Safety Assessment", description: "Ensure victim and scene are secure", priority: 1 },
+      { id: "p2", type: "Medical Attention", description: "Arrange medical care for injuries", priority: 2 },
+      { id: "p3", type: "Report Filing", description: "Complete domestic incident report", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr18",
+    scenario: "Prioritize: traffic collision investigation",
+    situations: [
+      { id: "p1", type: "Injury Assessment", description: "Check for injuries, call EMS if needed", priority: 1 },
+      { id: "p2", type: "Evidence Photos", description: "Photograph vehicle positions and damage", priority: 2 },
+      { id: "p3", type: "Traffic Control", description: "Direct traffic around accident scene", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr19",
+    scenario: "Prioritize: narcotics enforcement priorities",
+    situations: [
+      { id: "p1", type: "Drug Arrest", description: "Suspect with visible narcotics in car", priority: 1 },
+      { id: "p2", type: "Search Warrant", description: "Execute warrant at suspected dealer location", priority: 2 },
+      { id: "p3", type: "Asset Forfeiture", description: "Document seized property for evidence", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr20",
+    scenario: "Prioritize: cold case follow-up actions",
+    situations: [
+      { id: "p1", type: "DNA Results", description: "New lab results identify suspect", priority: 1 },
+      { id: "p2", type: "Witness Contact", description: "Locate witness for re-interview", priority: 2 },
+      { id: "p3", type: "File Organization", description: "Organize case files for review", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
 ];
 
 export default function PoliceWorld({ difficulty, onComplete, isQuickRecall, isCertification, alwaysCorrect, onExit, onTutorialBack, onAnswerResult }: PoliceWorldProps) {

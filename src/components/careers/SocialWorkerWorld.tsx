@@ -91,6 +91,196 @@ const quickRecallQuestions: Question[] = [
     ],
     correctOrder: ["p1", "p3", "p2"],
   },
+  {
+    id: "qr2",
+    scenario: "Child welfare hotline call - assess urgency",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Child reported home alone with visible injuries", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Parent concerned about neighbors child", priority: 2 },
+      { id: "p3", name: "Client C", situation: "General inquiry about foster care process", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr3",
+    scenario: "Multiple clients need same day attention",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Suicidal ideation, actively planning", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Homeless veteran needs shelter placement tonight", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Parent needs help with school enrollment forms", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr4",
+    scenario: "Substance abuse crisis and family conflict",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Overdose victim, unresponsive, EMS called", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Parent requesting rehab placement for teen", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Couple wanting marriage counseling referral", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr5",
+    scenario: "Elder abuse report and resource allocation",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Elderly patient with unexplained bruises, possible caregiver abuse", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Senior needs meal delivery service connection", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Family seeking guardianship paperwork help", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr6",
+    scenario: "Domestic violence shelter and safety planning",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Victim fleeing abuser, needs emergency shelter tonight", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Victim requesting safety plan and legal resources", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Former client needs follow-up support group referral", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr7",
+    scenario: "School social worker caseload priorities",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Student threatening self-harm on social media", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Student being bullied, needs immediate safety plan", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Parent requesting 504 plan evaluation scheduling", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr8",
+    scenario: "Housing instability and eviction crisis",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Family evicted today, children sleeping in car", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Tenant facing eviction in 30 days, needs legal aid", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Individual seeking Section 8 application assistance", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr9",
+    scenario: "Mental health crisis in hospital discharge",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Patient refusing discharge, expressing suicidal thoughts", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Patient needs community mental health referral before leaving", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Family requesting information about support services", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr10",
+    scenario: "Immigration and refugee resettlement services",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Asylum seeker with credible fear, deportation risk imminent", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Refugee family needs housing and school enrollment help", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Individual seeking citizenship class information", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr11",
+    scenario: "Substance exposed newborn and family services",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Newborn testing positive for substances, CPS involvement required", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Mother needs drug treatment referral and parenting support", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Sibling needs temporary foster placement while case assessed", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr12",
+    scenario: "Grief and bereavement support prioritization",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Teen who lost parent, expressing suicidal ideation", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Widower needs grief counseling referral and support group", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Family seeking resources for memorial service assistance", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr13",
+    scenario: "Disaster response and community trauma",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Family missing member after tornado, need immediate location help", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Family lost home, needs temporary shelter and supplies", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Community member wanting to volunteer for relief efforts", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr14",
+    scenario: "Veteran services and PTSD crisis intervention",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Veteran with PTSD, threatening self-harm, crisis team needed", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Veteran needs VA benefits application assistance", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Veteran seeking peer support group connection", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr15",
+    scenario: "Teen pregnancy and family dynamics",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Pregnant teen reporting abuse at home, needs emergency placement", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Pregnant teen needs prenatal care referral and parenting classes", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Parents seeking family mediation services", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr16",
+    scenario: "School refusal and truancy intervention",
+    clients: [
+      { id: "p1", name: "Client A", situation: "12-year-old refusing to leave home, parent fears violence", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Teen truant for 3 weeks, family needs attendance support plan", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Parent wants information about alternative schooling options", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr17",
+    scenario: "ADHD diagnosis follow-up and family support",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Child with new ADHD diagnosis, parent needs immediate behavior strategies", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Teen with ADHD needs academic advocacy and IEP support", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Parent seeking parent training group for ADHD management", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr18",
+    scenario: "Autism diagnosis follow-up and family support",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Toddler with new autism diagnosis, parent needs immediate intervention services", priority: 1 },
+      { id: "p2", name: "Client B", situation: "School-age child needs ABA therapy coordination", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Parent seeking respite care resources and support group", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr19",
+    scenario: "Behavioral issues and classroom management referral",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Student threatening violence, immediate safety assessment needed", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Student suspended multiple times, needs behavior intervention plan", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Teacher requesting classroom management strategy consultation", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
+  {
+    id: "qr20",
+    scenario: "Transition planning for high school student",
+    clients: [
+      { id: "p1", name: "Client A", situation: "Senior with IEP, graduation at risk without transition services", priority: 1 },
+      { id: "p2", name: "Client B", situation: "Student needs vocational assessment and job training placement", priority: 2 },
+      { id: "p3", name: "Client C", situation: "Parent seeking information about post-secondary support services", priority: 3 },
+    ],
+    correctOrder: ["p1", "p2", "p3"],
+  },
 ];
 
 export default function SocialWorkerWorld({ difficulty, onComplete, isQuickRecall, isCertification, alwaysCorrect, onExit, onTutorialBack, onAnswerResult }: SocialWorkerWorldProps) {
