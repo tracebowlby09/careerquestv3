@@ -3,6 +3,8 @@
 import { Trophy, Career, Difficulty, XP_PER_LEVEL, calculateXPForNextLevel, getDailyChallenge } from "@/types/game";
 import { GradientCard, AnimatedIcon } from "./ui/UIComponents";
 
+const MODERATOR_USERNAME = "Developer849";
+
 interface ProfileScreenProps {
   trophies: Trophy[];
   xp: number;
@@ -17,6 +19,7 @@ interface ProfileScreenProps {
   onLogout?: () => void;
   currentUsername?: string | null;
   onDismissGuestWarning?: () => void;
+  onOpenModerator?: () => void;
 }
 
 const careerIcons: Record<Career, string> = {
@@ -103,7 +106,7 @@ const achievementNames: Record<string, string> = {
   "nationals": "Nationals Champion",
 };
 
-export default function ProfileScreen({ trophies, xp, level, streak, onBack, onAcceptDailyChallenge, completedToday, isGuest, onLogin, onSignup, onLogout, currentUsername, onDismissGuestWarning }: ProfileScreenProps) {
+export default function ProfileScreen({ trophies, xp, level, streak, onBack, onAcceptDailyChallenge, completedToday, isGuest, onLogin, onSignup, onLogout, currentUsername, onDismissGuestWarning, onOpenModerator }: ProfileScreenProps) {
   const sortedTrophies = [...trophies].sort((a, b) => {
     const isAchA = a.isSecret && a.achievementType;
     const isAchB = b.isSecret && b.achievementType;
@@ -259,6 +262,15 @@ export default function ProfileScreen({ trophies, xp, level, streak, onBack, onA
                 className="w-full py-3 rounded-full bg-red-500/20 border border-red-400/50 text-red-300 font-bold hover:bg-red-500/30 transition-transform mb-2"
               >
                 🚪 Log Out
+              </button>
+            )}
+
+            {currentUsername === MODERATOR_USERNAME && onOpenModerator && (
+              <button
+                onClick={onOpenModerator}
+                className="w-full py-3 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold hover:scale-105 transition-transform mb-2"
+              >
+                🛡️ Moderator Dashboard
               </button>
             )}
           </>

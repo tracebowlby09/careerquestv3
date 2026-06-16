@@ -1998,6 +1998,7 @@ if (gameState === "difficulty-select") {
           onLogout={handleLogout}
           currentUsername={currentUser}
           onDismissGuestWarning={dismissGuestWarning}
+          onOpenModerator={() => setGameState("moderator")}
         />
         {settingsModal}
         <SecretTrophyPopup
