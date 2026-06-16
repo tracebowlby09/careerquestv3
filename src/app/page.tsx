@@ -1143,6 +1143,10 @@ export default function Home() {
       <>
         <CareerSelection 
           onSelectCareer={handleCareerSelect} 
+          onLearnMore={(career) => {
+            setSelectedCareer(career);
+            setGameState("career-info");
+          }}
           onOpenSettings={() => setSettingsOpen(true)} 
           onExit={handleExitToTitle}
           gameMode={gameMode}
