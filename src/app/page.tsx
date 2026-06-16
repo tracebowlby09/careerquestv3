@@ -532,6 +532,7 @@ export default function Home() {
   // Custom test handlers
   const handleCustomTestCreate = (test: CustomTest, code: string) => {
     setCustomTestCode(code);
+    setActiveCustomTest(test);
     setGameState("custom-play");
   };
 

@@ -56,17 +56,16 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser }:
   };
 
   const handleCreate = () => {
-    if (!currentUser) return;
     if (!testName.trim()) return;
     if (questions.some(q => !q.question.trim() || q.options.some(o => !o.trim()))) return;
 
     const code = generateCode();
-    const test: CustomTest = {
-      id: Date.now().toString(),
-      code,
-      name: testName.trim(),
-      creatorUsername: currentUser,
-      mode,
+const test: CustomTest = {
+       id: Date.now().toString(),
+       code,
+       name: testName.trim(),
+       creatorUsername: currentUser || "Guest",
+       mode,
       ...(mode === "challenge" && { difficulty }),
       questions,
       themeColors: {
@@ -222,7 +221,7 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser }:
         </div>
 
         <div className="flex gap-3">
-          <GameButton onClick={handleCreate} className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600">
+          <GameButton type="button" onClick={handleCreate} className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600">
             Create Quiz & Generate Code
           </GameButton>
           <GameButton onClick={onBack} className="bg-gradient-to-r from-gray-700 to-gray-800">
