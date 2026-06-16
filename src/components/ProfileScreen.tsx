@@ -16,6 +16,7 @@ interface ProfileScreenProps {
   onSignup?: () => void;
   onLogout?: () => void;
   currentUsername?: string;
+  onDismissGuestWarning?: () => void;
 }
 
 const careerIcons: Record<Career, string> = {
@@ -102,7 +103,7 @@ const achievementNames: Record<string, string> = {
   "nationals": "Nationals Champion",
 };
 
-export default function ProfileScreen({ trophies, xp, level, streak, onBack, onAcceptDailyChallenge, completedToday, isGuest, onLogin, onSignup, onLogout, currentUsername }: ProfileScreenProps) {
+export default function ProfileScreen({ trophies, xp, level, streak, onBack, onAcceptDailyChallenge, completedToday, isGuest, onLogin, onSignup, onLogout, currentUsername, onDismissGuestWarning }: ProfileScreenProps) {
   const sortedTrophies = [...trophies].sort((a, b) => {
     const isAchA = a.isSecret && a.achievementType;
     const isAchB = b.isSecret && b.achievementType;
@@ -127,8 +128,21 @@ export default function ProfileScreen({ trophies, xp, level, streak, onBack, onA
           <h2 className="text-3xl font-extrabold text-white mb-2">Your Profile</h2>
           {isGuest ? (
             <div className="mt-3 p-3 rounded-lg bg-amber-500/20 border border-amber-400/50">
-              <p className="text-amber-200 text-sm font-semibold">⚠️ Guest Mode</p>
-              <p className="text-amber-100/80 text-xs mt-1">Progress is only saved in this browser and won&apos;t sync across devices. Create an account to save permanently.</p>
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-amber-200 text-sm font-semibold">⚠️ Guest Mode</p>
+                  <p className="text-amber-100/80 text-xs mt-1">Progress is only saved in this browser and won&apos;t sync across devices. Create an account to save permanently.</p>
+                </div>
+                {onDismissGuestWarning && (
+                  <button
+                    onClick={onDismissGuestWarning}
+                    className="text-amber-300 hover:text-amber-200 text-xs ml-2"
+                    title="Dismiss warning"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
             </div>
           ) : currentUsername ? (
             <p className="text-white/70 text-sm">Playing as <span className="text-yellow-300 font-bold">@{currentUsername}</span></p>

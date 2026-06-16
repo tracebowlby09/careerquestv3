@@ -854,7 +854,7 @@ export default function Home() {
 
   const continueAsGuest = () => {
     setCurrentUser(null);
-    setShowGuestWarning(true);
+    dismissGuestWarning();
     setGameState("title");
   };
 
@@ -1904,6 +1904,7 @@ if (gameState === "difficulty-select") {
           onSignup={() => setGameState("auth")}
           onLogout={handleLogout}
           currentUsername={currentUser}
+          onDismissGuestWarning={dismissGuestWarning}
         />
         {settingsModal}
         <SecretTrophyPopup
