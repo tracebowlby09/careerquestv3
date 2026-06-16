@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import TitleScreen from "@/components/TitleScreen";
+import { GradientCard, GameButton } from "@/components/ui/UIComponents";
 import CareerSelection from "@/components/CareerSelection";
 import CertificationSelection from "@/components/CertificationSelection";
 import CertificationWorld from "@/components/CertificationWorld";
