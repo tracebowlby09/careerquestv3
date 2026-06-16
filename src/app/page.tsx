@@ -52,6 +52,7 @@ import HomeTutorial from "@/components/HomeTutorial";
 import SecretTrophyPopup from "@/components/SecretTrophyPopup";
 import CareerInfoPage from "@/components/CareerInfoPage";
 import AuthScreen from "@/components/AuthScreen";
+import ModeratorDashboard from "@/components/ModeratorDashboard";
 import CustomTestCreate from "@/components/CustomTestCreate";
 import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer, UserAccount, CustomTest, CustomQuestion } from "@/types/game";
 import { careerInfoByCareer } from "@/lib/careerInfo";
@@ -60,7 +61,7 @@ import { GameSession, PlayerProgress } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import ScreenWrapper from "@/components/ScreenWrapper";
 
-type GameState = "title" | "tutorial" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "trophy" | "stats" | "career-info" | "profile" | "auth" | "custom-create" | "custom-play";
+type GameState = "title" | "tutorial" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "trophy" | "stats" | "career-info" | "profile" | "auth" | "custom-create" | "custom-play" | "moderator";
 
 const careerNames: Record<Career, string> = {
   programmer: "Software Programmer",
@@ -2059,6 +2060,16 @@ if (gameState === "difficulty-select") {
       </>
     );
   }
+
+  if (gameState === "moderator") {
+    return (
+      <ModeratorDashboard
+        currentUser={currentUser}
+        onBack={() => setGameState("title")}
+      />
+    );
+  }
+
 
   if (gameState === "career-info" && selectedCareer) {
     return (
