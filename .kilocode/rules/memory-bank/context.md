@@ -66,6 +66,13 @@ Note: Challenge questions per career = 3-5 (varies by career). Certification use
 - Regular Challenge Mode: **60%**
 - Certification Mode: **80%**
 
+## Session History
+
+| Date | Changes |
+|------|---------|
+| 2026-06-15 | Initial auth system implementation - AuthScreen, ProfileScreen guest warning, user-aware save/load |
+| 2026-06-16 | Preserved game mode across auth flow, fixed UserAccount password type, improved data loading on mount |
+
 ## New Certification Types Added
 - firefighter-cert (Firefighter I & II Certification)
 - police-academy (Police Academy Certification)
