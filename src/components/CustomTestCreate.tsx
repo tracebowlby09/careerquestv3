@@ -44,6 +44,11 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser, i
   const [accentColor, setAccentColor] = useState(initialTest?.themeColors?.accent ?? "#fbbf24");
   const [backgroundImage, setBackgroundImage] = useState(initialTest?.backgroundImage ?? "");
   const [imageError, setImageError] = useState<string | null>(null);
+  const [localEditingTest, setLocalEditingTest] = useState<CustomTest | null>(null);
+  const [showApprovedTestSelector, setShowApprovedTestSelector] = useState(false);
+  const [approvedTests, setApprovedTests] = useState<CustomTest[]>([]);
+
+  const editingTest = localEditingTest ?? initialTest;
 
   const addQuestion = () => {
     setQuestions([...questions, createDefaultQuestion()]);
@@ -93,15 +98,58 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser, i
     setSkillsLearned(skillsLearned.map((skill, skillIdx) => skillIdx === idx ? value : skill));
   };
 
+  const loadApprovedTests = () => {
+    if (!currentUser || typeof window === "undefined") return [];
+
+    const tests: CustomTest[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith("customTest_")) continue;
+
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+        const test: CustomTest = JSON.parse(raw);
+        if (test.approved && test.creatorUsername === currentUser) {
+          tests.push(test);
+        }
+      } catch {}
+    }
+
+    return tests.sort((a, b) => (b.approvedAt || "").localeCompare(a.approvedAt || ""));
+  };
+
+  const openApprovedTestSelector = () => {
+    setApprovedTests(loadApprovedTests());
+    setShowApprovedTestSelector(true);
+  };
+
+  const selectApprovedTestToEdit = (test: CustomTest) => {
+    setTestName(test.name);
+    setDescription(test.description ?? "");
+    setIcon(test.icon ?? "🎓");
+    setSkillsLearned([...(test.skillsLearned ?? []), "", "", ""].slice(0, 3));
+    setMode(test.mode);
+    setDifficulty(test.difficulty ?? "medium");
+    setQuestions(test.questions.map(q => ({ ...q, options: [...q.options], explanation: q.explanation ?? "" })));
+    setPrimaryColor(test.themeColors?.primary ?? "#3b82f6");
+    setSecondaryColor(test.themeColors?.secondary ?? "#8b5cf6");
+    setAccentColor(test.themeColors?.accent ?? "#fbbf24");
+    setBackgroundImage(test.backgroundImage ?? "");
+    setImageError(null);
+    setLocalEditingTest(test);
+    setShowApprovedTestSelector(false);
+  };
+
   const handleCreate = () => {
     if (!testName.trim()) return;
     if (!icon.trim()) return;
     if (skillsLearned.some(skill => !skill.trim())) return;
     if (questions.some(q => !q.question.trim() || q.options.some(o => !o.trim()))) return;
 
-    const code = initialTest?.code || generateCode();
+    const code = editingTest?.code || generateCode();
     const test: CustomTest = {
-       id: initialTest?.id || Date.now().toString(),
+       id: editingTest?.id || Date.now().toString(),
        code,
        name: testName.trim(),
        description: description.trim() || undefined,
@@ -123,14 +171,14 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser, i
         accent: accentColor !== "#fbbf24" ? accentColor : undefined,
       },
       backgroundImage: backgroundImage || undefined,
-      createdAt: initialTest?.createdAt || new Date().toISOString(),
+      createdAt: editingTest?.createdAt || new Date().toISOString(),
       approved: false
     };
 
     const pendingKey = `customTestPending_${code}`;
     localStorage.setItem(pendingKey, JSON.stringify(test));
     
-    if (initialTest) {
+    if (editingTest) {
       localStorage.removeItem(`customTest_${code}`);
     }
 
@@ -141,11 +189,17 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser, i
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-purple-900 p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
         <GradientCard className="p-6 mb-6" gradient="from-purple-600 via-blue-600 to-indigo-600">
-          <h2 className="text-2xl font-bold text-white mb-4">{initialTest ? "Edit Custom Quiz" : "Create Custom Quiz"}</h2>
-          {initialTest?.approved && (
+          <h2 className="text-2xl font-bold text-white mb-4">{editingTest ? "Edit Custom Quiz" : "Create Custom Quiz"}</h2>
+          {editingTest?.approved && (
             <p className="text-white/70 mb-4 text-sm">
               This approved quiz has been moved back to pending review. The code will stay the same until it is approved again.
             </p>
+          )}
+
+          {currentUser && (
+            <GameButton onClick={openApprovedTestSelector} className="w-full bg-gradient-to-r from-cyan-500 to-blue-600">
+              Edit Approved Test
+            </GameButton>
           )}
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -340,12 +394,56 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser, i
 
         <div className="flex gap-3">
           <GameButton type="button" onClick={handleCreate} className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600">
-            {initialTest ? "Save Quiz for Reapproval" : "Create Quiz & Generate Code"}
+            {editingTest ? "Save Quiz for Reapproval" : "Create Quiz & Generate Code"}
           </GameButton>
-          <GameButton onClick={onBack} className="bg-gradient-to-r from-gray-700 to-gray-800">
+          <GameButton onClick={() => {
+            setLocalEditingTest(null);
+            setShowApprovedTestSelector(false);
+            onBack();
+          }} className="bg-gradient-to-r from-gray-700 to-gray-800">
             Cancel
           </GameButton>
         </div>
+
+        {showApprovedTestSelector && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <GradientCard className="max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6" gradient="from-slate-900 via-indigo-900 to-purple-900">
+              <div className="flex justify-between items-start gap-4 mb-4">
+                <div>
+                  <h3 className="text-2xl font-bold text-white">Edit Approved Test</h3>
+                  <p className="text-white/70 text-sm mt-1">
+                    Choose one of your approved quizzes. The code will stay the same and the quiz will return to pending review after saving.
+                  </p>
+                </div>
+                <button onClick={() => setShowApprovedTestSelector(false)} className="text-white/60 hover:text-white text-xl">
+                  ✕
+                </button>
+              </div>
+
+              {approvedTests.length === 0 ? (
+                <div className="rounded-lg bg-white/10 p-4 text-center text-white/70">
+                  No approved tests found for your account.
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {approvedTests.map((test) => (
+                    <GradientCard key={test.code} className="p-4" gradient="from-white/10 to-white/5">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div className="min-w-0">
+                          <h4 className="text-white font-bold break-words">{test.name}</h4>
+                          <p className="text-white/60 text-sm">Code: {test.code} • {test.questions.length} questions</p>
+                        </div>
+                        <GameButton onClick={() => selectApprovedTestToEdit(test)} className="bg-gradient-to-r from-cyan-500 to-blue-600 text-sm">
+                          Edit Test
+                        </GameButton>
+                      </div>
+                    </GradientCard>
+                  ))}
+                </div>
+              )}
+            </GradientCard>
+          </div>
+        )}
       </div>
     </div>
   );
