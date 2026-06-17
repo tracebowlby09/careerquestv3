@@ -533,9 +533,14 @@ export default function Home() {
   const [activeCustomTest, setActiveCustomTest] = useState<CustomTest | null>(null);
   const [customTestPreview, setCustomTestPreview] = useState<CustomTest | null>(null);
   const [customTestResult, setCustomTestResult] = useState<{ success: boolean; score: number; total: number } | null>(null);
+  const [editingCustomTest, setEditingCustomTest] = useState<CustomTest | null>(null);
+  const [customTestWasEdited, setCustomTestWasEdited] = useState(false);
 
   // Custom test handlers
   const handleCustomTestCreate = (test: CustomTest, code: string) => {
+    const wasEdited = Boolean(editingCustomTest?.approved);
+    setEditingCustomTest(null);
+    setCustomTestWasEdited(wasEdited);
     setCustomTestCode(code);
     setActiveCustomTest(test);
     setCustomTestResult(null);
@@ -600,6 +605,13 @@ export default function Home() {
       setSelectedDifficulty(test.mode === "challenge" ? test.difficulty || "medium" : null);
       setGameState("playing");
     }
+  };
+
+  const handleEditApprovedCustomTest = (test: CustomTest) => {
+    setEditingCustomTest(test);
+    setCustomTestPreview(null);
+    setCustomTestWasEdited(false);
+    setGameState("custom-create");
   };
 
   // Admin code detection (5839201746)
@@ -1246,6 +1258,8 @@ export default function Home() {
     setCustomTestCode(null);
     setCustomTestResult(null);
     setCustomTestPreview(null);
+    setEditingCustomTest(null);
+    setCustomTestWasEdited(false);
     setGameState("title");
   };
 
@@ -1253,6 +1267,8 @@ export default function Home() {
     setActiveCustomTest(null);
     setCustomTestCode(null);
     setCustomTestResult(null);
+    setEditingCustomTest(null);
+    setCustomTestWasEdited(false);
     handleExitToTitle();
   };
 
@@ -1833,6 +1849,7 @@ export default function Home() {
           previewTest={customTestPreview}
           approvedTests={getApprovedCustomTests()}
           currentUser={currentUser}
+          onEditApprovedTest={handleEditApprovedCustomTest}
         />
         {settingsModal}
         <SecretTrophyPopup 
@@ -2509,9 +2526,13 @@ if (gameState === "difficulty-select") {
   if (gameState === "custom-create") {
     return (
       <CustomTestCreate
-        onBack={() => setGameState("title")}
+        onBack={() => {
+          setEditingCustomTest(null);
+          setGameState("title");
+        }}
         onTestCreated={handleCustomTestCreate}
         currentUser={currentUser}
+        initialTest={editingCustomTest}
       />
     );
   }
@@ -2521,8 +2542,14 @@ if (gameState === "difficulty-select") {
       <>
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-purple-900 p-4 md:p-8 flex items-center justify-center">
           <GradientCard className="p-8 max-w-md w-full" gradient="from-purple-600 via-blue-600 to-indigo-600">
-            <h2 className="text-2xl font-bold text-white mb-4">Custom Test Created!</h2>
-            <p className="text-white/70 mb-6">Share this code with friends or use it anytime:</p>
+            <h2 className="text-2xl font-bold text-white mb-4">
+              {customTestWasEdited ? "Custom Test Updated & Sent for Reapproval!" : "Custom Test Created!"}
+            </h2>
+            <p className="text-white/70 mb-6">
+              {customTestWasEdited
+                ? "Your approved quiz is back in pending review. The code stayed the same and will return to the front page after approval."
+                : "Share this code with friends or use it anytime:"}
+            </p>
             <div className="bg-white/20 rounded-lg p-4 mb-4">
               <p className="text-4xl font-bold text-center text-yellow-400">{customTestCode}</p>
             </div>
@@ -2530,7 +2557,11 @@ if (gameState === "difficulty-select") {
               <GameButton onClick={() => handlePlayCustomTest(customTestCode)} className="w-full">
                 Play Now
               </GameButton>
-              <GameButton onClick={() => setGameState("title")} className="w-full bg-gradient-to-r from-gray-700 to-gray-800">
+              <GameButton onClick={() => {
+                setEditingCustomTest(null);
+                setCustomTestWasEdited(false);
+                setGameState("title");
+              }} className="w-full bg-gradient-to-r from-gray-700 to-gray-800">
                 Back to Title
               </GameButton>
             </div>

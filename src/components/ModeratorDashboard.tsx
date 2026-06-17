@@ -139,6 +139,13 @@ export default function ModeratorDashboard({ currentUser, onBack }: ModeratorDas
               <p className="text-white font-semibold mb-1">
                 {index + 1}. {question.question}
               </p>
+              {question.image && (
+                <img
+                  src={question.image}
+                  alt={`Question ${index + 1} image`}
+                  className="mb-2 max-h-56 w-full rounded-lg object-contain bg-white/10"
+                />
+              )}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-1 text-white/70 text-sm">
                 {question.options.map((option, optionIndex) => (
                   <span key={optionIndex}>

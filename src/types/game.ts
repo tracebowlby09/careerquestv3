@@ -63,6 +63,7 @@ export interface CustomQuestion {
   options: string[];
   correctIndex: number;
   explanation?: string;
+  image?: string;
 }
 
 export interface CustomTest {

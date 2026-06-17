@@ -17,9 +17,10 @@ interface TitleScreenProps {
   previewTest?: CustomTest | null;
   approvedTests?: CustomTest[];
   currentUser?: string | null;
+  onEditApprovedTest?: (test: CustomTest) => void;
 }
 
-export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, onViewStats, onOpenProfile, onOpenCustomCreate, onEnterCode, onPreviewCode, previewTest, approvedTests = [], currentUser }: TitleScreenProps) {
+export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, onViewStats, onOpenProfile, onOpenCustomCreate, onEnterCode, onPreviewCode, previewTest, approvedTests = [], currentUser, onEditApprovedTest }: TitleScreenProps) {
   const [showCodeInput, setShowCodeInput] = useState(false);
   const [inputCode, setInputCode] = useState("");
 
@@ -155,6 +156,18 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, o
                         <p className="text-white/50 text-xs mt-2">
                           by @{test.creatorUsername} • {test.questions.length} questions • {test.mode}
                         </p>
+                        {currentUser === test.creatorUsername && onEditApprovedTest && (
+                          <button
+                            type="button"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              onEditApprovedTest(test);
+                            }}
+                            className="mt-2 text-cyan-300 hover:text-cyan-200 text-sm font-bold"
+                          >
+                            Edit Test
+                          </button>
+                        )}
                       </div>
                     </div>
                   </button>
@@ -207,6 +220,13 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, o
                             <p className="text-white text-sm font-semibold mb-1">
                               {idx + 1}. {question.question}
                             </p>
+                            {question.image && (
+                              <img
+                                src={question.image}
+                                alt={`Question ${idx + 1} image`}
+                                className="mb-2 max-h-40 w-full rounded-lg object-contain bg-white/10"
+                              />
+                            )}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-white/70 text-xs">
                               {question.options.map((option, optIdx) => (
                                 <span key={optIdx}>

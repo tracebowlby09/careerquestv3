@@ -129,6 +129,13 @@ export default function CustomTestWorld({ test, onComplete, isQuickRecall, alway
       </div>
 
       <div className="mb-6">
+        {currentQuestion.image && (
+          <img
+            src={currentQuestion.image}
+            alt={`Question ${currentQuestionIndex + 1} image`}
+            className="mb-4 max-h-72 w-full rounded-xl border border-white/20 object-contain bg-black/20"
+          />
+        )}
         <p className="text-white text-lg mb-4 drop-shadow">{currentQuestion.question}</p>
         
         <div className="grid grid-cols-1 gap-2">

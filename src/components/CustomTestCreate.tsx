@@ -8,36 +8,45 @@ interface CustomTestCreateProps {
   onBack: () => void;
   onTestCreated: (test: CustomTest, code: string) => void;
   currentUser: string | null;
+  initialTest?: CustomTest | null;
 }
+
+const MAX_IMAGE_SIZE = 2 * 1024 * 1024;
 
 const generateCode = () => {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
 };
 
-export default function CustomTestCreate({ onBack, onTestCreated, currentUser }: CustomTestCreateProps) {
-  const [testName, setTestName] = useState("");
-  const [description, setDescription] = useState("");
-  const [icon, setIcon] = useState("🎓");
-  const [skillsLearned, setSkillsLearned] = useState(["", "", ""]);
-  const [mode, setMode] = useState<"challenge" | "quick-recall">("challenge");
-  const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("medium");
-  const [questions, setQuestions] = useState<CustomQuestion[]>([
-    { id: "1", question: "", options: ["", "", "", ""], correctIndex: 0, explanation: "" }
-  ]);
+const createDefaultQuestion = (): CustomQuestion => ({
+  id: Date.now().toString(),
+  question: "",
+  options: ["", "", "", ""],
+  correctIndex: 0,
+  explanation: ""
+});
 
-  const [primaryColor, setPrimaryColor] = useState("#3b82f6");
-  const [secondaryColor, setSecondaryColor] = useState("#8b5cf6");
-  const [accentColor, setAccentColor] = useState("#fbbf24");
-  const [backgroundImage, setBackgroundImage] = useState("");
+export default function CustomTestCreate({ onBack, onTestCreated, currentUser, initialTest }: CustomTestCreateProps) {
+  const [testName, setTestName] = useState(initialTest?.name ?? "");
+  const [description, setDescription] = useState(initialTest?.description ?? "");
+  const [icon, setIcon] = useState(initialTest?.icon ?? "🎓");
+  const [skillsLearned, setSkillsLearned] = useState<string[]>(() => {
+    const defaults = ["", "", ""];
+    return initialTest?.skillsLearned?.length ? [...initialTest.skillsLearned, ...defaults].slice(0, 3) : defaults;
+  });
+  const [mode, setMode] = useState<"challenge" | "quick-recall">(initialTest?.mode ?? "challenge");
+  const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">(initialTest?.difficulty ?? "medium");
+  const [questions, setQuestions] = useState<CustomQuestion[]>(() => {
+    return initialTest?.questions?.length ? initialTest.questions.map(q => ({ ...q, options: [...q.options], explanation: q.explanation ?? "" })) : [createDefaultQuestion()];
+  });
+
+  const [primaryColor, setPrimaryColor] = useState(initialTest?.themeColors?.primary ?? "#3b82f6");
+  const [secondaryColor, setSecondaryColor] = useState(initialTest?.themeColors?.secondary ?? "#8b5cf6");
+  const [accentColor, setAccentColor] = useState(initialTest?.themeColors?.accent ?? "#fbbf24");
+  const [backgroundImage, setBackgroundImage] = useState(initialTest?.backgroundImage ?? "");
+  const [imageError, setImageError] = useState<string | null>(null);
 
   const addQuestion = () => {
-    setQuestions([...questions, {
-      id: Date.now().toString(),
-      question: "",
-      options: ["", "", "", ""],
-      correctIndex: 0,
-      explanation: ""
-    }]);
+    setQuestions([...questions, createDefaultQuestion()]);
   };
 
   const removeQuestion = (id: string) => {
@@ -50,6 +59,28 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser }:
     setQuestions(questions.map(q => 
       q.id === id ? { ...q, [field]: value } : q
     ));
+  };
+
+  const updateQuestionImage = (id: string, file: File | null) => {
+    if (!file) return;
+    setImageError(null);
+
+    if (file.type && !file.type.startsWith("image/")) {
+      setImageError("Please upload an image file.");
+      return;
+    }
+
+    if (file.size > MAX_IMAGE_SIZE) {
+      setImageError("Question photos must be smaller than 2MB.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      updateQuestion(id, "image", String(reader.result));
+    };
+    reader.onerror = () => setImageError("Could not read that image.");
+    reader.readAsDataURL(file);
   };
 
   const updateOption = (qId: string, optIdx: number, value: string) => {
@@ -68,9 +99,9 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser }:
     if (skillsLearned.some(skill => !skill.trim())) return;
     if (questions.some(q => !q.question.trim() || q.options.some(o => !o.trim()))) return;
 
-    const code = generateCode();
+    const code = initialTest?.code || generateCode();
     const test: CustomTest = {
-       id: Date.now().toString(),
+       id: initialTest?.id || Date.now().toString(),
        code,
        name: testName.trim(),
        description: description.trim() || undefined,
@@ -79,22 +110,30 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser }:
        creatorUsername: currentUser || "Guest",
        mode,
       ...(mode === "challenge" && { difficulty }),
-      questions,
+      questions: questions.map(q => ({
+        ...q,
+        question: q.question.trim(),
+        options: q.options.map(option => option.trim()),
+        explanation: q.explanation?.trim() || undefined,
+        image: q.image || undefined,
+      })),
       themeColors: {
         primary: primaryColor !== "#3b82f6" ? primaryColor : undefined,
         secondary: secondaryColor !== "#8b5cf6" ? secondaryColor : undefined,
         accent: accentColor !== "#fbbf24" ? accentColor : undefined,
       },
       backgroundImage: backgroundImage || undefined,
-      createdAt: new Date().toISOString(),
+      createdAt: initialTest?.createdAt || new Date().toISOString(),
       approved: false
     };
 
-    // Save to localStorage with "pending" prefix
     const pendingKey = `customTestPending_${code}`;
     localStorage.setItem(pendingKey, JSON.stringify(test));
     
-    // Notify parent
+    if (initialTest) {
+      localStorage.removeItem(`customTest_${code}`);
+    }
+
     onTestCreated(test, code);
   };
 
@@ -102,7 +141,12 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser }:
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-purple-900 p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
         <GradientCard className="p-6 mb-6" gradient="from-purple-600 via-blue-600 to-indigo-600">
-          <h2 className="text-2xl font-bold text-white mb-4">Create Custom Quiz</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">{initialTest ? "Edit Custom Quiz" : "Create Custom Quiz"}</h2>
+          {initialTest?.approved && (
+            <p className="text-white/70 mb-4 text-sm">
+              This approved quiz has been moved back to pending review. The code will stay the same until it is approved again.
+            </p>
+          )}
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
@@ -234,6 +278,24 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser }:
                 placeholder="Enter your question here..."
                 rows={2}
               />
+
+              <div className="mb-3">
+                <label className="block text-white font-bold text-sm mb-1">Question Photo (optional)</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => updateQuestionImage(q.id, e.target.files?.[0] ?? null)}
+                  className="w-full px-3 py-2 rounded bg-white/10 border border-white/20 text-white text-sm file:mr-3 file:rounded file:border-0 file:bg-white/20 file:px-3 file:py-2 file:text-white"
+                />
+                {q.image && (
+                  <div className="mt-3">
+                    <img src={q.image} alt={`Question ${idx + 1} preview`} className="max-h-64 w-full object-contain rounded-lg border border-white/20 bg-black/20" />
+                    <button onClick={() => updateQuestion(q.id, "image", "")} className="mt-2 text-sm text-red-300 hover:text-red-200">
+                      Remove Photo
+                    </button>
+                  </div>
+                )}
+              </div>
               
               <div className="grid grid-cols-2 gap-2 mb-2">
                 {q.options.map((opt, optIdx) => (
@@ -270,9 +332,15 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser }:
           ))}
         </div>
 
+        {imageError && (
+          <div className="mb-4 rounded-lg bg-red-500/20 border border-red-400/50 p-3 text-center text-red-200 text-sm">
+            {imageError}
+          </div>
+        )}
+
         <div className="flex gap-3">
           <GameButton type="button" onClick={handleCreate} className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600">
-            Create Quiz & Generate Code
+            {initialTest ? "Save Quiz for Reapproval" : "Create Quiz & Generate Code"}
           </GameButton>
           <GameButton onClick={onBack} className="bg-gradient-to-r from-gray-700 to-gray-800">
             Cancel
