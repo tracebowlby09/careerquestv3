@@ -63,7 +63,7 @@ export default function CareerAptitudeDashboard({
     let strength = 0;
     const synonyms = skillSynonyms[skill] || [skill];
 
-    const careerSessions = sessions.filter(s => s.career === career && !s.achievementType);
+    const careerSessions = sessions.filter(s => s.career === career);
     const careerTrophies = trophies.filter(s => s.career === career && !s.achievementType);
 
     careerSessions.forEach(session => {
