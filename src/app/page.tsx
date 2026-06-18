@@ -2647,7 +2647,6 @@ if (gameState === "difficulty-select") {
     return (
       <>
         <StoryOutcomeScreen
-          career={selectedCareer}
           careerTitle={journey.title}
           careerIcon={journey.icon}
           milestone={milestone}
@@ -2813,7 +2812,7 @@ if (gameState === "difficulty-select") {
                 setEditingCustomTest(null);
                 setCustomTestWasEdited(false);
                 setGameState("title");
-              }}className="w-full bg-gradient-to-r from-gray-700 to-gray-800">
+              }} className="w-full bg-gradient-to-r from-gray-700 to-gray-800">
                 Back to Title
               </GameButton>
             </div>

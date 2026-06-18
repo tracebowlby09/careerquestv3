@@ -1,5 +1,5 @@
 import type { Career, Difficulty, StoryProgress } from "@/types/game";
-import { careerInfoByCareer, careerInfoList } from "@/lib/careerInfo";
+import { careerInfoByCareer } from "@/lib/careerInfo";
 
 export interface StoryCharacter {
   name: string;

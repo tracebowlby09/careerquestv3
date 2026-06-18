@@ -1,11 +1,10 @@
 "use client";
 
-import type { Career, Difficulty } from "@/types/game";
+import type { Difficulty } from "@/types/game";
 import type { StoryMilestone } from "@/lib/storyMode";
 import { GameButton, GradientCard } from "./ui/UIComponents";
 
 interface StoryOutcomeScreenProps {
-  career: Career;
   careerTitle: string;
   careerIcon: string;
   milestone: StoryMilestone;
@@ -28,7 +27,6 @@ const difficultyLabels: Record<Difficulty, string> = {
 };
 
 export default function StoryOutcomeScreen({
-  career,
   careerTitle,
   careerIcon,
   milestone,
