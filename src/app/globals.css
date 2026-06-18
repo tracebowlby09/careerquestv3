@@ -55,7 +55,38 @@
   }
 
   body.cq-large-text {
-    font-size: 18px;
+    font-size: 20px !important;
+  }
+
+  body.cq-large-text .text-xs,
+  body.cq-large-text .text-\[11px\],
+  body.cq-large-text .text-sm,
+  body.cq-large-text .text-base,
+  body.cq-large-text .text-lg,
+  body.cq-large-text .text-xl,
+  body.cq-large-text .text-2xl,
+  body.cq-large-text .text-3xl,
+  body.cq-large-text .text-4xl,
+  body.cq-large-text .text-5xl,
+  body.cq-large-text .text-6xl,
+  body.cq-large-text .text-7xl,
+  body.cq-large-text .text-8xl {
+    font-size: clamp(1rem, 1.5vw, 1.35rem) !important;
+  }
+
+  body.cq-large-text h1,
+  body.cq-large-text h2,
+  body.cq-large-text h3,
+  body.cq-large-text h4,
+  body.cq-large-text h5,
+  body.cq-large-text p,
+  body.cq-large-text span,
+  body.cq-large-text label,
+  body.cq-large-text button,
+  body.cq-large-text input,
+  body.cq-large-text select,
+  body.cq-large-text textarea {
+    font-size: inherit;
   }
 
   body.cq-readable-layout {
