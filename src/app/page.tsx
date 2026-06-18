@@ -56,14 +56,17 @@ import AuthScreen from "@/components/AuthScreen";
 import ModeratorDashboard from "@/components/ModeratorDashboard";
 import CustomTestCreate from "@/components/CustomTestCreate";
 import CustomTestOutcome from "@/components/CustomTestOutcome";
-import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer, UserAccount, CustomTest, CustomQuestion } from "@/types/game";
+import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer, UserAccount, CustomTest, CustomQuestion, StoryProgress } from "@/types/game";
 import { careerInfoByCareer } from "@/lib/careerInfo";
 import { getTodayDate, calculateLevel, calculateXPForNextLevel, getStreakXPBonus, getDailyChallenge } from "@/types/game";
-import { GameSession, PlayerProgress } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
 import ScreenWrapper from "@/components/ScreenWrapper";
+import StoryModeSelection from "@/components/StoryModeSelection";
+import StoryOutcomeScreen from "@/components/StoryOutcomeScreen";
+import StoryCompleteScreen from "@/components/StoryCompleteScreen";
+import { storyJourneyByCareer, storyJourneyOrder, getStoryMilestone, updateStoryProgress } from "@/lib/storyMode";
 
-type GameState = "title" | "tutorial" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "custom-outcome" | "trophy" | "stats" | "career-info" | "profile" | "auth" | "custom-create" | "custom-play" | "moderator";
+type GameState = "title" | "tutorial" | "story-select" | "story-outcome" | "story-complete" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "custom-outcome" | "trophy" | "stats" | "career-info" | "profile" | "auth" | "custom-create" | "custom-play" | "moderator";
 type ResizeAnchor = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 
 const careerNames: Record<Career, string> = {
@@ -404,6 +407,11 @@ export default function Home() {
   const [selectedCareer, setSelectedCareer] = useState<Career | null>(null);
   const [selectedCertification, setSelectedCertification] = useState<CertificationType | null>(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | null>(null);
+  const [storyModeActive, setStoryModeActive] = useState(false);
+  const [pendingStoryMode, setPendingStoryMode] = useState(false);
+  const [storyStep, setStoryStep] = useState(0);
+  const [storyProgress, setStoryProgress] = useState<StoryProgress>({ completedMilestones: [], completedJourneys: [] });
+  const [storyLastResult, setStoryLastResult] = useState<{ success: boolean; score: number; total: number } | null>(null);
   const [score, setScore] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
   const [challengeSuccess, setChallengeSuccess] = useState(false);
@@ -422,6 +430,28 @@ export default function Home() {
   const [currentUser, setCurrentUser] = useState<string | null>(null);
   const [showGuestWarning, setShowGuestWarning] = useState(false);
 
+  const loadStoryProgressForUser = useCallback((username: string | null) => {
+    if (typeof window === "undefined") return { completedMilestones: [] as string[], completedJourneys: [] as Career[] };
+    const key = username ? `careerQuestStoryProgress_${username}` : "careerQuestStoryProgress";
+    const saved = localStorage.getItem(key);
+    if (!saved) return { completedMilestones: [] as string[], completedJourneys: [] as Career[] };
+    try {
+      const parsed = JSON.parse(saved);
+      return {
+        completedMilestones: Array.isArray(parsed.completedMilestones) ? parsed.completedMilestones : [],
+        completedJourneys: Array.isArray(parsed.completedJourneys) ? parsed.completedJourneys.filter((career: Career) => storyJourneyOrder.includes(career)) : [],
+      };
+    } catch {
+      return { completedMilestones: [] as string[], completedJourneys: [] as Career[] };
+    }
+  }, []);
+
+  const saveStoryProgressForUser = useCallback((username: string | null, progress: StoryProgress) => {
+    if (typeof window === "undefined") return;
+    const key = username ? `careerQuestStoryProgress_${username}` : "careerQuestStoryProgress";
+    localStorage.setItem(key, JSON.stringify(progress));
+  }, []);
+
   // Load user data on mount or when currentUser changes
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
@@ -438,18 +468,21 @@ export default function Home() {
         setPlayerProgress({ xp: userProgress.xp, level: userProgress.level, streak: userProgress.streak });
         setTrophies(userProgress.trophies);
         setSessions(userProgress.sessions);
+        setStoryProgress(loadStoryProgressForUser(currentUser));
       } else {
         setPlayerProgress({ xp: 0, level: 1, streak: 0 });
         setTrophies([]);
         setSessions([]);
+        setStoryProgress(loadStoryProgressForUser(currentUser));
       }
     } else {
       // Guest mode - load from default localStorage keys (existing non-user progress)
       setPlayerProgress(loadPlayerProgress());
       setTrophies(loadTrophies());
       setSessions(loadGameSessions());
+      setStoryProgress(loadStoryProgressForUser(null));
     }
-  }, [currentUser, isMounted]);
+  }, [currentUser, isMounted, loadStoryProgressForUser]);
 
   // Load/save functions that use currentUser state
   const loadTrophiesForUser = useCallback(() => {
@@ -902,7 +935,101 @@ export default function Home() {
     }
   };
 
+  const handleOpenStoryMode = () => {
+    if (!currentUser && !hasDismissedGuestWarning()) {
+      setPendingStoryMode(true);
+      setGameState("auth");
+      return;
+    }
+
+    audioSystem.playClickSound();
+    audioSystem.playTitleMusic();
+    setSelectedCertification(null);
+    setStoryModeActive(true);
+    setStoryStep(0);
+    setStoryLastResult(null);
+    setGameState("story-select");
+  };
+
+  const handleStartStoryJourney = (career: Career) => {
+    const journey = storyJourneyByCareer[career];
+    const firstMilestone = journey.milestones[0];
+    if (!firstMilestone) return;
+
+    audioSystem.playClickSound();
+    audioSystem.playTitleMusic();
+    setSelectedCareer(career);
+    setSelectedDifficulty(firstMilestone.difficulty);
+    setSelectedCertification(null);
+    setGameMode("challenge");
+    setStoryModeActive(true);
+    setStoryStep(0);
+    setStoryLastResult(null);
+    setGameState("playing");
+
+    const currentHour = new Date().getHours();
+    setGameStartHour(currentHour);
+    setConsecutiveCorrect(0);
+    setCareersPlayed(new Set([career]));
+    setHasWrongAnswer(false);
+    setQuickRecallStartTime(null);
+  };
+
+  const handleStoryNext = () => {
+    if (!selectedCareer) return;
+
+    if (!storyLastResult?.success) {
+      setStoryLastResult(null);
+      setGameState("playing");
+      return;
+    }
+
+    const journey = storyJourneyByCareer[selectedCareer];
+    const nextStep = storyStep + 1;
+
+    if (nextStep >= journey.milestones.length) {
+      setGameState("story-complete");
+      return;
+    }
+
+    const nextMilestone = getStoryMilestone(selectedCareer, nextStep);
+    if (!nextMilestone) return;
+
+    setStoryStep(nextStep);
+    setSelectedDifficulty(nextMilestone.difficulty);
+    setStoryLastResult(null);
+    setGameState("playing");
+  };
+
+  const handleStoryBackToSelection = () => {
+    setStoryLastResult(null);
+    setGameState("story-select");
+  };
+
+  const handleStoryReplayMilestone = () => {
+    setStoryLastResult(null);
+    setGameState("playing");
+  };
+
+  const handleStoryReplayJourney = () => {
+    setStoryStep(0);
+    setStoryLastResult(null);
+    if (selectedCareer) {
+      const journey = storyJourneyByCareer[selectedCareer];
+      const firstMilestone = journey.milestones[0];
+      if (firstMilestone) {
+        setSelectedDifficulty(firstMilestone.difficulty);
+      }
+    }
+    setGameState("playing");
+  };
+
   const handleCareerSelect = (career: Career) => {
+    if (storyModeActive) {
+      handleStartStoryJourney(career);
+      return;
+    }
+
     setSelectedCareer(career);
     
     // Track careers played for Jack of All Trades trophy
@@ -971,8 +1098,13 @@ export default function Home() {
       });
       setTrophies(userProgress?.trophies ?? []);
       setSessions(userProgress?.sessions ?? []);
+      setStoryProgress(loadStoryProgressForUser(result.user.username));
       // Continue with pending mode if any
-      if (pendingStartMode) {
+      if (pendingStoryMode) {
+        setPendingStoryMode(false);
+        setStoryModeActive(true);
+        setGameState("story-select");
+      } else if (pendingStartMode) {
         setGameMode(pendingStartMode);
         setGameState("career-select");
         setPendingStartMode(null);
@@ -990,8 +1122,14 @@ export default function Home() {
       localStorage.setItem("careerQuestCurrentUser", result.user.username);
       // Initialize empty progress for new user
       saveProgressForUser(result.user.username, { xp: 0, level: 1, streak: 0, trophies: [], sessions: [] });
+      saveStoryProgressForUser(result.user.username, { completedMilestones: [], completedJourneys: [] });
+      setStoryProgress({ completedMilestones: [], completedJourneys: [] });
       // Continue with pending mode if any
-      if (pendingStartMode) {
+      if (pendingStoryMode) {
+        setPendingStoryMode(false);
+        setStoryModeActive(true);
+        setGameState("story-select");
+      } else if (pendingStartMode) {
         setGameMode(pendingStartMode);
         setGameState("career-select");
         setPendingStartMode(null);
@@ -1009,11 +1147,18 @@ export default function Home() {
     setPlayerProgress({ xp: 0, level: 1, streak: 0 });
     setTrophies([]);
     setSessions([]);
+    setStoryProgress({ completedMilestones: [], completedJourneys: [] });
+    setStoryModeActive(false);
+    setPendingStoryMode(false);
   };
 
   const continueAsGuest = () => {
     dismissGuestWarning();
-    if (pendingStartMode) {
+    if (pendingStoryMode) {
+      setPendingStoryMode(false);
+      setStoryModeActive(true);
+      setGameState("story-select");
+    } else if (pendingStartMode) {
       setGameMode(pendingStartMode);
       setGameState("career-select");
       setPendingStartMode(null);
@@ -1023,6 +1168,7 @@ export default function Home() {
 
   const handleChallengeComplete = (success: boolean, finalScore: number, total: number, incorrect?: IncorrectAnswer[]) => {
     // Determine game modes first
+    const isStoryMode = storyModeActive;
     const isQuickRecallMode = gameMode === "quick-recall";
     const isCertificationMode = gameMode === "certification";
 
@@ -1215,28 +1361,42 @@ export default function Home() {
       setCurrentAchievementType(easterEggAchievements[0]);
     }
 
+    if (isStoryMode && selectedCareer) {
+      const nextStoryProgress = updateStoryProgress(storyProgress, selectedCareer, storyStep, success);
+      setStoryProgress(nextStoryProgress);
+      saveStoryProgressForUser(currentUser, nextStoryProgress);
+      setStoryLastResult({ success, score: finalScore, total });
+      setGameState("story-outcome");
+      return;
+    }
+
     setGameState("outcome");
   };
 
   const handlePlayAgain = () => {
+    setStoryLastResult(null);
     setGameState("playing");
   };
 
   const handleChangeDifficulty = () => {
     setSelectedDifficulty(null);
-    setGameState("difficulty-select");
+    setGameState(storyModeActive ? "story-select" : "difficulty-select");
   };
 
   const handleNewCareer = () => {
     setSelectedCareer(null);
     setSelectedDifficulty(null);
     setSelectedCertification(null);
-    setGameState("career-select");
+    setGameState(storyModeActive ? "story-select" : "career-select");
   };
 
   const handleBackToSelection = () => {
     setSelectedCareer(null);
     setSelectedDifficulty(null);
+    if (storyModeActive) {
+      setGameState("story-select");
+      return;
+    }
     if (gameMode === "certification") {
       setSelectedCertification(null);
       setGameState("certification-select");
@@ -1247,7 +1407,7 @@ export default function Home() {
 
   const handleBackToCareerSelect = () => {
     setSelectedCareer(null);
-    setGameState("career-select");
+    setGameState(storyModeActive ? "story-select" : "career-select");
   };
 
   const handleExitToTitle = () => {
@@ -1260,6 +1420,10 @@ export default function Home() {
     setCustomTestPreview(null);
     setEditingCustomTest(null);
     setCustomTestWasEdited(false);
+    setStoryModeActive(false);
+    setPendingStoryMode(false);
+    setStoryStep(0);
+    setStoryLastResult(null);
     setGameState("title");
   };
 
@@ -1275,13 +1439,13 @@ export default function Home() {
   const handleExitToDifficultySelect = () => {
     // Go back to difficulty selection screen
     setSelectedDifficulty(null);
-    setGameState("difficulty-select");
+    setGameState(storyModeActive ? "story-select" : "difficulty-select");
   };
 
   const handleExitToCareerSelect = () => {
     // Go back to career selection screen
     setSelectedCareer(null);
-    setGameState("career-select");
+    setGameState(storyModeActive ? "story-select" : "career-select");
   };
 
   // Render Settings modal (always available)
@@ -1839,6 +2003,7 @@ export default function Home() {
       <>
         <TitleScreen 
           onStart={handleStart} 
+          onStartStory={handleOpenStoryMode}
           onOpenSettings={() => setSettingsOpen(true)} 
           onViewTrophies={() => setGameState("trophy")}
           onViewStats={() => setGameState("stats")}
@@ -1858,7 +2023,7 @@ export default function Home() {
           onClose={() => {
             setShowSecretTrophyPopup(false);
             setCurrentAchievementType(null);
-          }} 
+          }}
         />
         {renderAdminPanel()}
       </>
@@ -1873,6 +2038,31 @@ export default function Home() {
           onOpenSettings={() => setSettingsOpen(true)}
           onExit={() => {
             setGameMode("challenge");
+            setGameState("title");
+          }}
+        />
+        {settingsModal}
+        <SecretTrophyPopup
+          show={showSecretTrophyPopup}
+          achievementType={currentAchievementType}
+          onClose={() => {
+            setShowSecretTrophyPopup(false);
+            setCurrentAchievementType(null);
+          }}
+        />
+        {adminMode && renderAdminPanel()}
+      </>
+    );
+  }
+
+  if (gameState === "story-select") {
+    return (
+      <>
+        <StoryModeSelection
+          progress={storyProgress}
+          onStartJourney={handleStartStoryJourney}
+          onBack={() => {
+            setStoryModeActive(false);
             setGameState("title");
           }}
         />
@@ -1910,7 +2100,7 @@ export default function Home() {
           onClose={() => {
             setShowSecretTrophyPopup(false);
             setCurrentAchievementType(null);
-          }} 
+          }}
         />
         {adminMode && renderAdminPanel()}
       </>
@@ -2142,7 +2332,7 @@ if (gameState === "difficulty-select") {
           onClose={() => {
             setShowSecretTrophyPopup(false);
             setCurrentAchievementType(null);
-          }} 
+          }}
         />
       </>
     );
@@ -2445,6 +2635,68 @@ if (gameState === "difficulty-select") {
      );
   }
 
+  if (gameState === "story-outcome" && selectedCareer && storyLastResult) {
+    const journey = storyJourneyByCareer[selectedCareer];
+    const milestone = getStoryMilestone(selectedCareer, storyStep);
+
+    if (!milestone) {
+      setGameState("story-select");
+      return null;
+    }
+
+    return (
+      <>
+        <StoryOutcomeScreen
+          career={selectedCareer}
+          careerTitle={journey.title}
+          careerIcon={journey.icon}
+          milestone={milestone}
+          milestoneIndex={storyStep}
+          totalMilestones={journey.milestones.length}
+          success={storyLastResult.success}
+          score={storyLastResult.score}
+          total={storyLastResult.total}
+          completedMilestones={storyProgress.completedMilestones.filter((id) => id.startsWith(`${selectedCareer}-`)).length}
+          onNext={handleStoryNext}
+          onReplay={handleStoryReplayMilestone}
+          onBackToJourney={handleStoryBackToSelection}
+          onExit={handleExitToTitle}
+        />
+        {settingsModal}
+        <SecretTrophyPopup
+          show={showSecretTrophyPopup}
+          achievementType={currentAchievementType}
+          onClose={() => {
+            setShowSecretTrophyPopup(false);
+            setCurrentAchievementType(null);
+          }}
+        />
+      </>
+    );
+  }
+
+  if (gameState === "story-complete" && selectedCareer) {
+    return (
+      <>
+        <StoryCompleteScreen
+          career={selectedCareer}
+          onPlayAgain={handleStoryReplayJourney}
+          onChooseJourney={handleStoryBackToSelection}
+          onExit={handleExitToTitle}
+        />
+        {settingsModal}
+        <SecretTrophyPopup
+          show={showSecretTrophyPopup}
+          achievementType={currentAchievementType}
+          onClose={() => {
+            setShowSecretTrophyPopup(false);
+            setCurrentAchievementType(null);
+          }}
+        />
+      </>
+    );
+  }
+
   if (gameState === "stats") {
     return (
       <>
@@ -2463,7 +2715,7 @@ if (gameState === "difficulty-select") {
           onClose={() => {
             setShowSecretTrophyPopup(false);
             setCurrentAchievementType(null);
-          }} 
+          }}
         />
       </>
     );
@@ -2561,7 +2813,7 @@ if (gameState === "difficulty-select") {
                 setEditingCustomTest(null);
                 setCustomTestWasEdited(false);
                 setGameState("title");
-              }} className="w-full bg-gradient-to-r from-gray-700 to-gray-800">
+              }}className="w-full bg-gradient-to-r from-gray-700 to-gray-800">
                 Back to Title
               </GameButton>
             </div>
@@ -2617,7 +2869,7 @@ if (gameState === "difficulty-select") {
           onClose={() => {
             setShowSecretTrophyPopup(false);
             setCurrentAchievementType(null);
-          }} 
+          }}
         />
       </>
     );
@@ -2636,7 +2888,7 @@ if (gameState === "difficulty-select") {
           onClose={() => {
             setShowSecretTrophyPopup(false);
             setCurrentAchievementType(null);
-          }} 
+          }}
         />
       </>
     );
@@ -2668,7 +2920,7 @@ if (gameState === "difficulty-select") {
           onClose={() => {
             setShowSecretTrophyPopup(false);
             setCurrentAchievementType(null);
-          }} 
+          }}
         />
       </>
     );

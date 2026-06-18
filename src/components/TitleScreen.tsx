@@ -7,6 +7,7 @@ import { GameButton, GradientCard, AnimatedIcon } from "./ui/UIComponents";
 
 interface TitleScreenProps {
   onStart: (mode: GameMode) => void;
+  onStartStory?: () => void;
   onOpenSettings: () => void;
   onViewTrophies: () => void;
   onViewStats: () => void;
@@ -20,7 +21,7 @@ interface TitleScreenProps {
   onEditApprovedTest?: (test: CustomTest) => void;
 }
 
-export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, onViewStats, onOpenProfile, onOpenCustomCreate, onEnterCode, onPreviewCode, previewTest, approvedTests = [], currentUser, onEditApprovedTest }: TitleScreenProps) {
+export default function TitleScreen({ onStart, onStartStory, onOpenSettings, onViewTrophies, onViewStats, onOpenProfile, onOpenCustomCreate, onEnterCode, onPreviewCode, previewTest, approvedTests = [], currentUser, onEditApprovedTest }: TitleScreenProps) {
   const [showCodeInput, setShowCodeInput] = useState(false);
   const [inputCode, setInputCode] = useState("");
 
@@ -94,6 +95,19 @@ export default function TitleScreen({ onStart, onOpenSettings, onViewTrophies, o
                 📜 Certification Mode
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </GameButton>
+
+            <GameButton
+              onClick={() => {
+                audioSystem.playClickSound();
+                onStartStory?.();
+              }}
+              className="text-xl bg-gradient-to-r from-violet-500 to-fuchsia-600 relative overflow-hidden group"
+            >
+              <span className="relative z-10 flex items-center justify-center gap-3">
+                📖 Story Mode
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-violet-400 to-fuchsia-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </GameButton>
 
             {currentUser && (

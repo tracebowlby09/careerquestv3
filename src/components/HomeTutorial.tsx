@@ -32,6 +32,11 @@ export default function HomeTutorial({ onSkip, onLogin, onSignup }: HomeTutorial
       description: "Take career-specific certification exams for licenses like AWS, RN, PE, CPA, CPL, OSHA-30, and more."
     },
     {
+      icon: "📖",
+      title: "Story Mode",
+      description: "Follow a career journey with mentors, workplace milestones, and progressive challenges from first day to career mastery."
+    },
+    {
       icon: "🧑‍💻",
       title: "Custom Quizzes",
       description: "Create, preview, share, and play custom quiz codes. Moderator-approved tests appear directly on the title screen."
@@ -79,7 +84,7 @@ export default function HomeTutorial({ onSkip, onLogin, onSignup }: HomeTutorial
               Welcome to Career Quest V3!
             </h1>
             <p className="text-xl text-white/80">
-              Learn real career skills through challenges, quick recall, certifications, custom quizzes, trophies, and saved progress.
+              Learn real career skills through challenges, quick recall, story journeys, certifications, custom quizzes, trophies, and saved progress.
             </p>
           </div>
 

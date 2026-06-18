@@ -34,6 +34,7 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 - ✅ **Updated title copy**: Changed career path count from 9 to 18 to match the expanded career roster.
 - ✅ **Enhanced custom tests**: Added creator editing for approved front-page quizzes and pending quizzes with same-code reapproval flow, plus per-question photo uploads shown in creator, moderator, preview, and play screens.
 - ✅ **Added custom quiz edit entry point**: Added an “Edit My Test” button inside the custom quiz creation screen so creators can choose pending or approved quizzes to edit from the same tab.
+- ✅ **Added Story Mode**: Added a title-screen Story Mode entry point with career journey selection, mentor characters, five milestone challenges per career, retry/next milestone flow, journey completion screen, and per-user or guest localStorage progress.
 
 ## Current Structure
 
@@ -53,6 +54,10 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 | `src/components/ModeratorDashboard.tsx` | Custom test moderation dashboard | ✅ Enhanced |
 | `src/components/careers/CustomTestWorld.tsx` | Custom quiz/test player | ✅ Enhanced |
 | `src/components/difficulty/*.tsx` | Difficulty selection | ✅ Ready |
+| `src/components/StoryModeSelection.tsx` | Story Mode career journey selector | ✅ Added |
+| `src/components/StoryOutcomeScreen.tsx` | Story Mode milestone result screen | ✅ Added |
+| `src/components/StoryCompleteScreen.tsx` | Story Mode journey completion screen | ✅ Added |
+| `src/lib/storyMode.ts` | Story Mode journey data and progress helpers | ✅ Added |
 
 ## Total Question Bank
 
@@ -94,6 +99,7 @@ Note: Challenge questions per career = 3-5 (varies by career). Certification use
 | 2026-06-16 | Removed admin/moderator tools from the tutorial screen |
 | 2026-06-17 | Enhanced custom tests with same-code reapproval editing for creator-owned approved and pending quizzes and per-question photo uploads |
 | 2026-06-17 | Added an “Edit My Test” entry point inside the custom quiz creation screen |
+| 2026-06-18 | Added Story Mode with career journeys, milestone progress, and story result screens |
 
 ## New Certification Types Added
 - firefighter-cert (Firefighter I & II Certification)

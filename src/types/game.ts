@@ -12,6 +12,11 @@ export interface Trophy {
   achievementType?: AchievementType;
 }
 
+export interface StoryProgress {
+  completedMilestones: string[];
+  completedJourneys: Career[];
+}
+
 export interface GameProgress {
   trophies: Trophy[];
   currentScore: number;
