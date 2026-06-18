@@ -2720,8 +2720,8 @@ if (gameState === "difficulty-select") {
           score={storyLastResult.score}
           total={storyLastResult.total}
           completedMilestones={storyProgress.completedMilestones.filter((id) => id.startsWith(`${selectedCareer}-`)).length}
-           incorrectAnswers={incorrectAnswers}
-           onSelectPivotCareer={handlePivotCareerSelect}
+          incorrectAnswers={incorrectAnswers}
+          onSelectPivotCareer={handlePivotCareerSelect}
           onNext={handleStoryNext}
           onReplay={handleStoryReplayMilestone}
           onBackToJourney={handleStoryBackToSelection}
@@ -2962,7 +2962,7 @@ if (gameState === "difficulty-select") {
   if (gameState === "outcome" && selectedCareer) {
     return (
       <>
-<OutcomeScreen
+        <OutcomeScreen
             career={selectedCareer}
             difficulty={selectedDifficulty ?? "easy"}
             success={challengeSuccess}
@@ -2977,7 +2977,7 @@ if (gameState === "difficulty-select") {
             isCertification={gameMode === "certification"}
             onBackToSelection={handleBackToSelection}
             incorrectAnswers={incorrectAnswers}
-           onViewAptitudeDashboard={handleViewAptitudeDashboard}
+            onViewAptitudeDashboard={handleViewAptitudeDashboard}
           />
         {settingsModal}
         <SecretTrophyPopup 
@@ -3007,4 +3007,5 @@ if (gameState === "difficulty-select") {
         {settingsModal}
       </>
     );
+}
 }
