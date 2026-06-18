@@ -56,7 +56,7 @@ import AuthScreen from "@/components/AuthScreen";
 import ModeratorDashboard from "@/components/ModeratorDashboard";
 import CustomTestCreate from "@/components/CustomTestCreate";
 import CustomTestOutcome from "@/components/CustomTestOutcome";
-import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer, UserAccount, CustomTest, CustomQuestion, StoryProgress } from "@/types/game";
+import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer, UserAccount, CustomTest, CustomQuestion, StoryProgress, PlayerProgress } from "@/types/game";
 import { careerInfoByCareer } from "@/lib/careerInfo";
 import { getTodayDate, calculateLevel, calculateXPForNextLevel, getStreakXPBonus, getDailyChallenge } from "@/types/game";
 import { audioSystem } from "@/lib/audio";
