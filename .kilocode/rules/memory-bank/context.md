@@ -32,8 +32,8 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 - ✅ **Expanded admin tools**: Added admin panel progress stats, custom test launcher, session reset, level reset, full progress reset, guest warning toggle, trophy commands, developer dashboard access, scrollable layout, and corner resizing
 - ✅ **Updated tutorial screen**: Added Career Quest V3 feature overview covering 18 career paths, challenge mode, quick recall, certification exams, custom quizzes, trophies, stats/profile/leveling, and accounts/guest play, plus login and sign up entry buttons.
 - ✅ **Updated title copy**: Changed career path count from 9 to 18 to match the expanded career roster.
-- ✅ **Enhanced custom tests**: Added creator editing for approved front-page quizzes with same-code reapproval flow, plus per-question photo uploads shown in creator, moderator, preview, and play screens.
-- ✅ **Added custom quiz edit entry point**: Added an “Edit Approved Test” button inside the custom quiz creation screen so creators can choose an approved quiz to edit from the same tab.
+- ✅ **Enhanced custom tests**: Added creator editing for approved front-page quizzes and pending quizzes with same-code reapproval flow, plus per-question photo uploads shown in creator, moderator, preview, and play screens.
+- ✅ **Added custom quiz edit entry point**: Added an “Edit My Test” button inside the custom quiz creation screen so creators can choose pending or approved quizzes to edit from the same tab.
 
 ## Current Structure
 
@@ -92,8 +92,8 @@ Note: Challenge questions per career = 3-5 (varies by career). Certification use
 | 2026-06-16 | Made the admin panel scrollable and resizable from all four corners |
 | 2026-06-16 | Updated tutorial screen with full V3 feature overview and login/sign up entry buttons; updated title copy to 18 career paths |
 | 2026-06-16 | Removed admin/moderator tools from the tutorial screen |
-| 2026-06-17 | Enhanced custom tests with same-code reapproval editing for creator-owned approved quizzes and per-question photo uploads |
-| 2026-06-17 | Added an “Edit Approved Test” entry point inside the custom quiz creation screen |
+| 2026-06-17 | Enhanced custom tests with same-code reapproval editing for creator-owned approved and pending quizzes and per-question photo uploads |
+| 2026-06-17 | Added an “Edit My Test” entry point inside the custom quiz creation screen |
 
 ## New Certification Types Added
 - firefighter-cert (Firefighter I & II Certification)

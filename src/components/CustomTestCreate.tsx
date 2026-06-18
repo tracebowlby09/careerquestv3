@@ -45,8 +45,8 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser, i
   const [backgroundImage, setBackgroundImage] = useState(initialTest?.backgroundImage ?? "");
   const [imageError, setImageError] = useState<string | null>(null);
   const [localEditingTest, setLocalEditingTest] = useState<CustomTest | null>(null);
-  const [showApprovedTestSelector, setShowApprovedTestSelector] = useState(false);
-  const [approvedTests, setApprovedTests] = useState<CustomTest[]>([]);
+  const [showEditableTestSelector, setShowEditableTestSelector] = useState(false);
+  const [editableTests, setEditableTests] = useState<CustomTest[]>([]);
 
   const editingTest = localEditingTest ?? initialTest;
 
@@ -98,33 +98,41 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser, i
     setSkillsLearned(skillsLearned.map((skill, skillIdx) => skillIdx === idx ? value : skill));
   };
 
-  const loadApprovedTests = () => {
+  const loadEditableTests = () => {
     if (!currentUser || typeof window === "undefined") return [];
 
     const tests: CustomTest[] = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (!key || !key.startsWith("customTest_")) continue;
+    const prefixes = ["customTestPending_", "customTest_"];
 
-      try {
-        const raw = localStorage.getItem(key);
-        if (!raw) continue;
-        const test: CustomTest = JSON.parse(raw);
-        if (test.approved && test.creatorUsername === currentUser) {
-          tests.push(test);
-        }
-      } catch {}
-    }
+    prefixes.forEach((prefix) => {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (!key || !key.startsWith(prefix)) continue;
 
-    return tests.sort((a, b) => (b.approvedAt || "").localeCompare(a.approvedAt || ""));
+        try {
+          const raw = localStorage.getItem(key);
+          if (!raw) continue;
+          const test: CustomTest = JSON.parse(raw);
+          if (test.creatorUsername === currentUser) {
+            tests.push(test);
+          }
+        } catch {}
+      }
+    });
+
+    return tests.sort((a, b) => {
+      const aDate = a.approvedAt || a.createdAt || "";
+      const bDate = b.approvedAt || b.createdAt || "";
+      return bDate.localeCompare(aDate);
+    });
   };
 
-  const openApprovedTestSelector = () => {
-    setApprovedTests(loadApprovedTests());
-    setShowApprovedTestSelector(true);
+  const openEditableTestSelector = () => {
+    setEditableTests(loadEditableTests());
+    setShowEditableTestSelector(true);
   };
 
-  const selectApprovedTestToEdit = (test: CustomTest) => {
+  const selectEditableTestToEdit = (test: CustomTest) => {
     setTestName(test.name);
     setDescription(test.description ?? "");
     setIcon(test.icon ?? "🎓");
@@ -138,7 +146,7 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser, i
     setBackgroundImage(test.backgroundImage ?? "");
     setImageError(null);
     setLocalEditingTest(test);
-    setShowApprovedTestSelector(false);
+    setShowEditableTestSelector(false);
   };
 
   const handleCreate = () => {
@@ -197,8 +205,8 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser, i
           )}
 
           {currentUser && (
-            <GameButton onClick={openApprovedTestSelector} className="w-full bg-gradient-to-r from-cyan-500 to-blue-600">
-              Edit Approved Test
+            <GameButton onClick={openEditableTestSelector} className="w-full bg-gradient-to-r from-cyan-500 to-blue-600">
+              Edit My Test
             </GameButton>
           )}
           
@@ -398,42 +406,47 @@ export default function CustomTestCreate({ onBack, onTestCreated, currentUser, i
           </GameButton>
           <GameButton onClick={() => {
             setLocalEditingTest(null);
-            setShowApprovedTestSelector(false);
+            setShowEditableTestSelector(false);
             onBack();
           }} className="bg-gradient-to-r from-gray-700 to-gray-800">
             Cancel
           </GameButton>
         </div>
 
-        {showApprovedTestSelector && (
+        {showEditableTestSelector && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <GradientCard className="max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6" gradient="from-slate-900 via-indigo-900 to-purple-900">
               <div className="flex justify-between items-start gap-4 mb-4">
                 <div>
-                  <h3 className="text-2xl font-bold text-white">Edit Approved Test</h3>
+                  <h3 className="text-2xl font-bold text-white">Edit My Test</h3>
                   <p className="text-white/70 text-sm mt-1">
-                    Choose one of your approved quizzes. The code will stay the same and the quiz will return to pending review after saving.
+                    Choose one of your pending or approved quizzes. The code will stay the same; approved quizzes return to pending review after saving.
                   </p>
                 </div>
-                <button onClick={() => setShowApprovedTestSelector(false)} className="text-white/60 hover:text-white text-xl">
+                <button onClick={() => setShowEditableTestSelector(false)} className="text-white/60 hover:text-white text-xl">
                   ✕
                 </button>
               </div>
 
-              {approvedTests.length === 0 ? (
+              {editableTests.length === 0 ? (
                 <div className="rounded-lg bg-white/10 p-4 text-center text-white/70">
-                  No approved tests found for your account.
+                  No pending or approved tests found for your account.
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {approvedTests.map((test) => (
+                  {editableTests.map((test) => (
                     <GradientCard key={test.code} className="p-4" gradient="from-white/10 to-white/5">
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div className="min-w-0">
                           <h4 className="text-white font-bold break-words">{test.name}</h4>
-                          <p className="text-white/60 text-sm">Code: {test.code} • {test.questions.length} questions</p>
+                          <div className="flex flex-wrap items-center gap-2 text-white/60 text-sm">
+                            <span>Code: {test.code} • {test.questions.length} questions</span>
+                            <span className={`px-2 py-0.5 rounded text-xs font-bold ${test.approved ? "bg-green-500/20 text-green-300" : "bg-amber-500/20 text-amber-300"}`}>
+                              {test.approved ? "Approved" : "Pending"}
+                            </span>
+                          </div>
                         </div>
-                        <GameButton onClick={() => selectApprovedTestToEdit(test)} className="bg-gradient-to-r from-cyan-500 to-blue-600 text-sm">
+                        <GameButton onClick={() => selectEditableTestToEdit(test)} className="bg-gradient-to-r from-cyan-500 to-blue-600 text-sm">
                           Edit Test
                         </GameButton>
                       </div>
