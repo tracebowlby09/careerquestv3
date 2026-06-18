@@ -100,6 +100,7 @@ Note: Challenge questions per career = 3-5 (varies by career). Certification use
 | 2026-06-17 | Enhanced custom tests with same-code reapproval editing for creator-owned approved and pending quizzes and per-question photo uploads |
 | 2026-06-17 | Added an “Edit My Test” entry point inside the custom quiz creation screen |
 | 2026-06-18 | Added Story Mode with career journeys, milestone progress, and story result screens |
+| 2026-06-18 | Reviewed committed Story Mode changes and fixed unused props, unused imports, and JSX spacing issues |
 
 ## New Certification Types Added
 - firefighter-cert (Firefighter I & II Certification)
