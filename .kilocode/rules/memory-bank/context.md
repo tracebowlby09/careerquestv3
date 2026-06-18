@@ -35,6 +35,7 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 - ✅ **Enhanced custom tests**: Added creator editing for approved front-page quizzes and pending quizzes with same-code reapproval flow, plus per-question photo uploads shown in creator, moderator, preview, and play screens.
 - ✅ **Added custom quiz edit entry point**: Added an “Edit My Test” button inside the custom quiz creation screen so creators can choose pending or approved quizzes to edit from the same tab.
 - ✅ **Added Story Mode**: Added a title-screen Story Mode entry point with career journey selection, mentor characters, five milestone challenges per career, retry/next milestone flow, journey completion screen, and per-user or guest localStorage progress.
+- ✅ **Added accessibility settings and How to Play walkthrough**: Added persistent accessibility preferences for high contrast, larger text, readable layout, and reduced motion, plus an interactive title-screen How to Play walkthrough.
 
 ## Current Structure
 
@@ -101,6 +102,7 @@ Note: Challenge questions per career = 3-5 (varies by career). Certification use
 | 2026-06-17 | Added an “Edit My Test” entry point inside the custom quiz creation screen |
 | 2026-06-18 | Added Story Mode with career journeys, milestone progress, and story result screens |
 | 2026-06-18 | Reviewed committed Story Mode changes and fixed unused props, unused imports, and JSX spacing issues |
+| 2026-06-18 | Added accessibility preferences and an interactive title-screen How to Play walkthrough |
 
 ## New Certification Types Added
 - firefighter-cert (Firefighter I & II Certification)
