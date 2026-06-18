@@ -24,6 +24,31 @@ interface TitleScreenProps {
 export default function TitleScreen({ onStart, onStartStory, onOpenSettings, onViewTrophies, onViewStats, onOpenProfile, onOpenCustomCreate, onEnterCode, onPreviewCode, previewTest, approvedTests = [], currentUser, onEditApprovedTest }: TitleScreenProps) {
   const [showCodeInput, setShowCodeInput] = useState(false);
   const [inputCode, setInputCode] = useState("");
+  const [showHowToPlay, setShowHowToPlay] = useState(false);
+  const [howToPlayStep, setHowToPlayStep] = useState(0);
+
+  const howToPlaySteps = [
+    {
+      title: "Pick a Mode",
+      description: "Choose Challenge, Quick Recall, Certification, or Story Mode from the title screen.",
+      icon: "🎮",
+    },
+    {
+      title: "Choose a Career",
+      description: "Select a career path to practice real workplace decisions for that job.",
+      icon: "🧭",
+    },
+    {
+      title: "Answer Scenarios",
+      description: "Read each situation, choose the best action, and review the explanation after each answer.",
+      icon: "💡",
+    },
+    {
+      title: "Earn Progress",
+      description: "Pass challenges to earn trophies, XP, stats, and story milestone progress.",
+      icon: "🏆",
+    },
+  ];
 
   const handleStart = (mode: GameMode) => {
     audioSystem.playClickSound();
@@ -123,10 +148,20 @@ export default function TitleScreen({ onStart, onStartStory, onOpenSettings, onV
             )}
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <button
+              onClick={() => {
+                audioSystem.playClickSound();
+                setShowHowToPlay(true);
+                setHowToPlayStep(0);
+              }}
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-full border-2 border-cyan-300/60 bg-cyan-400/10 text-cyan-100 text-sm font-bold hover:bg-cyan-400/20 transition"
+            >
+              ❔ How to Play
+            </button>
             <button
               onClick={() => setShowCodeInput(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-white/30 bg-white/10 text-white text-sm hover:bg-white/20 transition"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-full border-2 border-white/30 bg-white/10 text-white text-sm font-bold hover:bg-white/20 transition"
             >
               🎯 Enter Quiz Code
             </button>
@@ -186,6 +221,74 @@ export default function TitleScreen({ onStart, onStartStory, onOpenSettings, onV
                     </div>
                   </button>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {showHowToPlay && (
+            <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-label="How to Play">
+              <div className="bg-slate-900 p-6 md:p-8 rounded-2xl max-w-2xl w-full border border-white/20">
+                <div className="flex items-start justify-between gap-4 mb-6">
+                  <div>
+                    <div className="text-5xl mb-3">{howToPlaySteps[howToPlayStep].icon}</div>
+                    <h3 className="text-3xl font-extrabold text-white">How to Play</h3>
+                    <p className="text-white/70 mt-2">
+                      Step {howToPlayStep + 1} of {howToPlaySteps.length}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setShowHowToPlay(false)}
+                    className="text-white/70 hover:text-white text-3xl"
+                    aria-label="Close how to play"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                <div className="rounded-xl bg-white/10 p-6 border border-white/15 mb-6">
+                  <h4 className="text-2xl font-extrabold text-white mb-3">
+                    {howToPlaySteps[howToPlayStep].title}
+                  </h4>
+                  <p className="text-white/80 text-lg leading-relaxed">
+                    {howToPlaySteps[howToPlayStep].description}
+                  </p>
+                </div>
+
+                <div className="flex gap-2 mb-5 overflow-x-auto pb-2">
+                  {howToPlaySteps.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setHowToPlayStep(index)}
+                      aria-label={`Go to step ${index + 1}`}
+                      className={`h-3 flex-1 rounded-full min-w-12 ${
+                        index === howToPlayStep ? "bg-cyan-300" : "bg-white/20"
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <GameButton
+                    onClick={() => setHowToPlayStep((step) => Math.max(0, step - 1))}
+                    disabled={howToPlayStep === 0}
+                    variant="secondary"
+                    className="flex-1"
+                  >
+                    ← Previous
+                  </GameButton>
+                  <GameButton
+                    onClick={() => {
+                      if (howToPlayStep < howToPlaySteps.length - 1) {
+                        setHowToPlayStep((step) => step + 1);
+                      } else {
+                        setShowHowToPlay(false);
+                      }
+                    }}
+                    className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600"
+                  >
+                    {howToPlayStep === howToPlaySteps.length - 1 ? "Got It" : "Next →"}
+                  </GameButton>
+                </div>
               </div>
             </div>
           )}

@@ -29,4 +29,58 @@
   .shadow-3xl {
     box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.3);
   }
+
+  body.cq-high-contrast,
+  body.cq-high-contrast * {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-color: #fff !important;
+    box-shadow: none !important;
+  }
+
+  body.cq-high-contrast input,
+  body.cq-high-contrast select,
+  body.cq-high-contrast textarea {
+    background-color: #111 !important;
+    color: #fff !important;
+  }
+
+  body.cq-high-contrast button:not(:disabled),
+  body.cq-high-contrast a,
+  body.cq-high-contrast input,
+  body.cq-high-contrast select,
+  body.cq-high-contrast textarea {
+    outline-color: #ffeb3b !important;
+    outline-offset: 2px !important;
+  }
+
+  body.cq-large-text {
+    font-size: 18px;
+  }
+
+  body.cq-readable-layout {
+    line-height: 1.8;
+    letter-spacing: 0.01em;
+  }
+
+  body.cq-readable-layout button,
+  body.cq-readable-layout input,
+  body.cq-readable-layout select,
+  body.cq-readable-layout textarea {
+    border-radius: 0.75rem !important;
+  }
+
+  body.cq-reduce-motion *,
+  body.cq-reduce-motion *::before,
+  body.cq-reduce-motion *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  :focus-visible {
+    outline: 3px solid #facc15;
+    outline-offset: 3px;
+  }
 }
