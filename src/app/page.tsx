@@ -56,6 +56,7 @@ import AuthScreen from "@/components/AuthScreen";
 import ModeratorDashboard from "@/components/ModeratorDashboard";
 import CustomTestCreate from "@/components/CustomTestCreate";
 import CustomTestOutcome from "@/components/CustomTestOutcome";
+import StoryWorld from "@/components/careers/StoryWorld";
 import { Career, Difficulty, GameMode, CertificationType, Trophy, AchievementType, IncorrectAnswer, UserAccount, CustomTest, CustomQuestion, StoryProgress, PlayerProgress, GameSession } from "@/types/game";
 import { careerInfoByCareer } from "@/lib/careerInfo";
 import { getTodayDate, calculateLevel, calculateXPForNextLevel, getStreakXPBonus, getDailyChallenge } from "@/types/game";
@@ -2364,6 +2365,51 @@ if (gameState === "difficulty-select") {
   if (gameState === "playing" && (selectedCareer || activeCustomTest)) {
     const isQuickRecall = gameMode === "quick-recall";
     
+    if (storyModeActive && selectedCareer) {
+      const journey = storyJourneyByCareer[selectedCareer];
+      const milestone = getStoryMilestone(selectedCareer, storyStep);
+      if (!milestone) {
+        setGameState("story-select");
+        return null;
+      }
+
+      const careerBackgrounds: Record<string, string> = {
+        programmer: "/images/programmer-bg.jpg",
+        nurse: "/images/nurse-bg.jpg",
+        engineer: "/images/engineer-bg.jpg",
+        teacher: "/images/teacher-bg.jpg",
+        chef: "/images/chef-bg.jpg",
+        architect: "/images/architect-bg.jpg",
+        lawyer: "/images/lawyer-bg.jpg",
+        retail: "/images/retail-bg.jpg",
+        electrician: "/images/electrician-bg.jpg",
+      };
+      const backgroundImage = careerBackgrounds[selectedCareer];
+
+      return (
+        <ScreenWrapper
+          onOpenSettings={() => setSettingsOpen(true)}
+          onExit={handleExitToTitle}
+          showExitWarning={true}
+          dark={true}
+          fullScreen={true}
+          backgroundImage={backgroundImage}
+        >
+          <StoryWorld
+            career={selectedCareer}
+            milestone={milestone}
+            milestoneIndex={storyStep}
+            totalMilestones={journey.milestones.length}
+            onComplete={handleChallengeComplete}
+            alwaysCorrect={alwaysCorrect}
+            onExit={handleExitToTitle}
+            onTutorialBack={handleExitToDifficultySelect}
+            onAnswerResult={handleAnswerResult}
+          />
+        </ScreenWrapper>
+      );
+    }
+
     // Custom test mode
     if (activeCustomTest) {
       return (
