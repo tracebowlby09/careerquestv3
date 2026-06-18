@@ -36,6 +36,8 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 - ✅ **Added custom quiz edit entry point**: Added an “Edit My Test” button inside the custom quiz creation screen so creators can choose pending or approved quizzes to edit from the same tab.
 - ✅ **Added Story Mode**: Added a title-screen Story Mode entry point with career journey selection, mentor characters, five milestone challenges per career, retry/next milestone flow, journey completion screen, and per-user or guest localStorage progress.
 - ✅ **Added accessibility settings and How to Play walkthrough**: Added persistent accessibility preferences for high contrast, larger text, readable layout, and reduced motion, plus an interactive title-screen How to Play walkthrough.
+- ✅ **Added Career Aptitude Dashboard**: Created CareerAptitudeDashboard component showing skill strength analysis across all careers, top matches highlighting, and career exploration entry points.
+- ✅ **Added Career Pivot Suggestions**: StoryOutcomeScreen now shows 3 alternative career suggestions for failed milestones with "Try This" buttons to immediately start a new journey.
 
 ## Current Structure
 
@@ -113,4 +115,4 @@ Note: Challenge questions per career = 3-5 (varies by career). Certification use
 - lcsw (Licensed Clinical Social Worker)
 - cpa (Certified Public Accountant)
 - dental-board (Dental Board Certification)
-- osha-30 (OSHA 30-Hour Construction)
+- osha-30 (OSHA 30-Hour Construction)| 2026-06-18 | Added Career Aptitude Dashboard and Career Pivot Suggestions for deeper game design |

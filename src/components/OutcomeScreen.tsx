@@ -23,6 +23,7 @@ interface OutcomeScreenProps {
   incorrectAnswers?: IncorrectAnswer[];
   oldLevel?: number;
   newLevel?: number;
+  onViewAptitudeDashboard?: () => void;
 }
 
 const careerData = {
@@ -311,6 +312,7 @@ export default function OutcomeScreen({
   incorrectAnswers = [],
   oldLevel,
   newLevel,
+  onViewAptitudeDashboard,
 }: OutcomeScreenProps) {
   const data = careerData[career];
   const percentage = Math.round((score / total) * 100);
@@ -511,6 +513,15 @@ export default function OutcomeScreen({
             >
               {isCertification ? "Try Another Certification" : "Explore Another Career"}
             </GameButton>
+
+            {!isQuickRecall && !isCertification && onViewAptitudeDashboard && (
+              <GameButton 
+                onClick={onViewAptitudeDashboard}
+                className="w-full text-lg bg-gradient-to-r from-amber-600 to-yellow-600"
+              >
+                📊 Analyze Career Aptitude
+              </GameButton>
+            )}
           </div>
 
           <div className={`mt-6 text-center text-sm ${isQuickRecall ? "text-purple-300" : "text-white/60"}`}>

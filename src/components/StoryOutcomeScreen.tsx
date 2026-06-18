@@ -1,8 +1,10 @@
 "use client";
 
-import type { Difficulty } from "@/types/game";
+import type { Difficulty, IncorrectAnswer } from "@/types/game";
 import type { StoryMilestone } from "@/lib/storyMode";
-import { GameButton, GradientCard } from "./ui/UIComponents";
+import { GameButton, GradientCard, AnimatedIcon, AnimatedContainer } from "./ui/UIComponents";
+import { careerInfoByCareer, CareerInfo } from "@/lib/careerInfo";
+import type { Career } from "@/types/game";
 
 interface StoryOutcomeScreenProps {
   careerTitle: string;
@@ -14,11 +16,20 @@ interface StoryOutcomeScreenProps {
   score: number;
   total: number;
   completedMilestones: number;
+  incorrectAnswers?: IncorrectAnswer[];
   onNext: () => void;
   onReplay: () => void;
   onBackToJourney: () => void;
   onExit: () => void;
+  onSelectPivotCareer?: (career: Career) => void;
 }
+
+const allCareers: Career[] = ["programmer", "nurse", "engineer", "teacher", "chef", "architect", "lawyer", "retail", "electrician", "firefighter", "police", "pilot", "veterinarian", "journalist", "social-worker", "accountant", "dentist", "construction"];
+
+const getPivotCareers = (): CareerInfo[] => {
+  const shuffled = [...allCareers].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 3).map(career => careerInfoByCareer[career]);
+};
 
 const difficultyLabels: Record<Difficulty, string> = {
   easy: "Bronze",
@@ -36,12 +47,15 @@ export default function StoryOutcomeScreen({
   score,
   total,
   completedMilestones,
+  incorrectAnswers = [],
   onNext,
   onReplay,
   onBackToJourney,
   onExit,
+  onSelectPivotCareer,
 }: StoryOutcomeScreenProps) {
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+  const isFinalMilestone = milestoneIndex + 1 === totalMilestones;
   const isFinalComplete = success && completedMilestones === totalMilestones;
 
   return (
@@ -92,6 +106,35 @@ export default function StoryOutcomeScreen({
             </div>
           </div>
         </div>
+
+        {!success && onSelectPivotCareer && (
+          <div className="rounded-2xl bg-gradient-to-r from-purple-900/30 to-indigo-900/30 p-6 border border-purple-500/30 mb-8 text-left">
+            <h3 className="text-lg font-bold text-purple-300 mb-3 flex items-center gap-2">
+              <span>🧭</span> Career Pivot Suggestions
+            </h3>
+            <p className="text-white/70 text-sm mb-4">
+              Not the right fit? Here are other careers you might excel in:
+            </p>
+            <div className="space-y-3">
+              {getPivotCareers().map((careerInfo, idx) => (
+                <AnimatedContainer key={careerInfo.id} delay={idx * 50}>
+                  <div className="flex items-center justify-between p-3 bg-white/10 rounded-lg border border-white/15">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">{careerInfo.icon}</span>
+                      <span className="text-white font-medium">{careerInfo.title}</span>
+                    </div>
+                    <GameButton 
+                      onClick={() => onSelectPivotCareer(careerInfo.id)}
+                      className="text-xs py-1 px-3 bg-gradient-to-r from-purple-500 to-indigo-600"
+                    >
+                      Try This
+                    </GameButton>
+                  </div>
+                </AnimatedContainer>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="grid gap-3 md:grid-cols-2">
           {isFinalComplete ? (

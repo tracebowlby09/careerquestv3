@@ -66,8 +66,9 @@ import StoryModeSelection from "@/components/StoryModeSelection";
 import StoryOutcomeScreen from "@/components/StoryOutcomeScreen";
 import StoryCompleteScreen from "@/components/StoryCompleteScreen";
 import { storyJourneyByCareer, storyJourneyOrder, getStoryMilestone, updateStoryProgress } from "@/lib/storyMode";
+import CareerAptitudeDashboard from "@/components/CareerAptitudeDashboard";
 
-type GameState = "title" | "tutorial" | "story-select" | "story-outcome" | "story-complete" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "custom-outcome" | "trophy" | "stats" | "career-info" | "profile" | "auth" | "custom-create" | "custom-play" | "moderator";
+type GameState = "title" | "tutorial" | "story-select" | "story-outcome" | "story-complete" | "career-select" | "certification-select" | "difficulty-select" | "playing" | "outcome" | "custom-outcome" | "trophy" | "stats" | "career-info" | "profile" | "auth" | "custom-create" | "custom-play" | "moderator" | "aptitude-dashboard";
 type ResizeAnchor = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 
 const careerNames: Record<Career, string> = {
@@ -1011,6 +1012,23 @@ export default function Home() {
     setStoryLastResult(null);
     setGameState("playing");
   };
+
+  const handlePivotCareerSelect = (career: Career) => {
+    setSelectedCareer(career);
+    const journey = storyJourneyByCareer[career];
+    const firstMilestone = journey.milestones[0];
+    if (firstMilestone) {
+      setSelectedDifficulty(firstMilestone.difficulty);
+    }
+    setStoryStep(0);
+    setStoryLastResult(null);
+    setGameState("playing");
+  };
+
+  const handleViewAptitudeDashboard = () => {
+    setGameState("aptitude-dashboard");
+  };
+
 
   const handleStoryReplayJourney = () => {
     setStoryStep(0);
@@ -2702,6 +2720,8 @@ if (gameState === "difficulty-select") {
           score={storyLastResult.score}
           total={storyLastResult.total}
           completedMilestones={storyProgress.completedMilestones.filter((id) => id.startsWith(`${selectedCareer}-`)).length}
+           incorrectAnswers={incorrectAnswers}
+           onSelectPivotCareer={handlePivotCareerSelect}
           onNext={handleStoryNext}
           onReplay={handleStoryReplayMilestone}
           onBackToJourney={handleStoryBackToSelection}
@@ -2957,6 +2977,7 @@ if (gameState === "difficulty-select") {
             isCertification={gameMode === "certification"}
             onBackToSelection={handleBackToSelection}
             incorrectAnswers={incorrectAnswers}
+           onViewAptitudeDashboard={handleViewAptitudeDashboard}
           />
         {settingsModal}
         <SecretTrophyPopup 
@@ -2970,4 +2991,20 @@ if (gameState === "difficulty-select") {
       </>
     );
   }
+
+  if (gameState === "aptitude-dashboard") {
+    return (
+      <>
+        <CareerAptitudeDashboard
+          sessions={sessions}
+          trophies={trophies}
+          onExploreCareer={(career) => {
+            setSelectedCareer(career);
+            setGameState("career-info");
+          }}
+          onExit={() => setGameState("title")}
+        />
+        {settingsModal}
+      </>
+    );
 }
