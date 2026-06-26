@@ -43,31 +43,35 @@ export default function CertificationSelection({ onSelectCertification, onOpenSe
         </p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-3 gap-8">
         {certificationOrder.map((certType, idx) => {
           const meta = certificationMetadata[certType];
           return (
             <AnimatedContainer key={certType} delay={idx * 50}>
               <button 
                 onClick={() => handleSelect(certType)}
-                className="relative group overflow-hidden rounded-2xl p-7 shadow-xl hover:shadow-2xl hover:scale-105 hover:-translate-y-1 transition-all duration-300 text-left bg-gradient-to-br from-white/10 to-white/5 border-2 border-white/20 hover:border-purple-400"
+                className="relative group overflow-hidden rounded-2xl p-8 shadow-xl hover:shadow-2xl hover:scale-105 hover:-translate-y-2 transition-all duration-300 text-left h-full flex flex-col bg-gradient-to-br from-white/10 to-white/5 border-2 border-white/20 hover:border-purple-400"
               >
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300">
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300">
                   <div className="absolute -top-4 -right-4 w-24 h-24 bg-purple-400/30 rounded-full blur-xl"></div>
+                  <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-purple-400/20 rounded-full blur-xl"></div>
                 </div>
-                
-                <div className="relative z-10">
-                  <div className="text-6xl mb-4 transform group-hover:scale-110 transition-transform duration-300 text-center">
+
+                <div className="relative z-10 flex h-full flex-col">
+                  <div className="text-7xl mb-5 text-center transform group-hover:scale-110 transition-transform duration-300">
                     <AnimatedIcon animate="none">{meta.icon}</AnimatedIcon>
                   </div>
-                  <h3 className="text-2xl font-bold mb-2 text-white text-center drop-shadow-md">
+
+                  <h3 className="text-2xl font-extrabold text-white mb-3 text-center drop-shadow-md">
                     {meta.title}
                   </h3>
-                  <p className="text-white/80 text-sm mb-5 text-center">
+
+                  <p className="text-white/90 mb-5 text-center text-sm font-medium flex-1">
                     {meta.description}
                   </p>
-                  <div className="flex justify-center">
-                    <span className="text-sm font-bold text-white bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2">
+
+                  <div className="mt-auto flex justify-center">
+                    <span className="inline-flex items-center gap-2 rounded-full bg-white/20 backdrop-blur-sm px-5 py-3 text-sm font-extrabold text-white transition-all hover:scale-105">
                       Start Exam →
                     </span>
                   </div>
