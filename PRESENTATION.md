@@ -180,7 +180,7 @@ const [trophies, setTrophies] = useState<Trophy[]>(() => loadTrophies());
 ```typescript
 export type Difficulty = "easy" | "medium" | "hard";
 export type Career = "programmer" | "nurse" | "engineer" | "teacher" | "chef" | "architect" | "firefighter" | "police" | "pilot" | "veterinarian" | "journalist" | "social-worker" | "accountant" | "dentist" | "construction";
-export type GameMode = "challenge" | "quick-recall" | "certification" | "story";
+export type GameMode = "challenge" | "quick-recall" | "certification";
 
 export interface Trophy {
   career: Career;
