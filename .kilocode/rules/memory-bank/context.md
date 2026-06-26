@@ -121,5 +121,5 @@ Note: Challenge questions per career = 3-5 (varies by career). Certification use
 ### 2026-06-18
 - Added Career Aptitude Dashboard and Career Pivot Suggestions for deeper game design
 
-### 2026-06-25
-- Updated How to Play walkthrough and PRESENTATION.md to include Story Mode, Certification Mode, XP/achievements, and Career Aptitude Dashboard
+### 2026-06-26
+- Equalized certification tile sizes in CertificationSelection to match CareerSelection styling
