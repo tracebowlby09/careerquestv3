@@ -16,7 +16,7 @@
 
 **Career Quest** is an interactive educational game where players:
 
-- 🎮 **Explore 6 different careers** through realistic challenges - Each career represents a real-world profession with job-specific scenarios
+- 🎮 **Explore 18 different careers** through realistic challenges - Each career represents a real-world profession with job-specific scenarios
 - 📚 **Answer career-specific questions** across 3 difficulty levels - Questions are designed by considering actual job tasks and skills needed
 - 🏆 **Earn trophies and achievements** for completed challenges - Rewards provide sense of accomplishment and motivation to continue
 - ⚡ **Compete in Quick Recall** for fast-paced trivia action - Timed mode tests knowledge retention and quick thinking
@@ -37,6 +37,16 @@
 - Immediate gameplay - No navigation needed, starts right away
 - Perfect for testing your knowledge - Good for quick practice sessions
 
+### Certification Mode
+- Professional certification exams for each career - 5 questions per certification
+- 80% passing threshold - Must get 4 of 5 correct
+- Earn certification trophies - Demonstrates expertise
+
+### Story Mode
+- Career journey with mentor guidance - Choose a mentor character
+- 5 milestone challenges per career - Sequential progression
+- Unlock career pivot suggestions - Try alternative paths based on performance
+
 ---
 
 ## Slide 4: Available Careers
@@ -49,6 +59,18 @@
 | **Teacher** | 👩‍🏫 | Communication, Patience, Leadership | Classroom scenarios, teaching methods, student engagement |
 | **Head Chef** | 👨‍🍳 | Creativity, Time Management, Quality Control | Kitchen challenges, recipe creation, timing dishes |
 | **Architect** | 🏛️ | Spatial Thinking, Problem Solving, Sustainability | Design projects, spatial planning, sustainable solutions |
+| **Lawyer** | ⚖️ | Legal Reasoning, Argumentation, Ethics | Case analysis, legal procedures, ethical dilemmas |
+| **Retail Worker** | 🛍️ | Customer Service, Sales, Problem Resolution | Customer scenarios, sales techniques, conflict resolution |
+| **Electrician** | ⚡ | Technical Skills, Safety, Troubleshooting | Electrical systems, safety protocols, problem diagnosis |
+| **Firefighter** | 🚒 | Emergency Response, Physical Fitness, Teamwork | Rescue scenarios, fire safety, emergency decision-making |
+| **Police Officer** | 👮 | Law Enforcement, Observation, Communication | Patrol scenarios, investigation, community relations |
+| **Commercial Pilot** | ✈️ | Navigation, Safety, Communication | Flight procedures, weather decisions, emergency protocols |
+| **Veterinarian** | 🐕 | Animal Care, Diagnosis, Compassion | Animal treatment, diagnosis, client communication |
+| **Journalist** | 📰 | Research, Writing, Investigation | Interview scenarios, article writing, fact-checking |
+| **Social Worker** | 🤝 | Advocacy, Empathy, Resource Navigation | Client cases, resource allocation, crisis intervention |
+| **Accountant** | 📊 | Financial Analysis, Accuracy, Regulation | Tax preparation, auditing, financial reporting |
+| **Dentist** | 🦷 | Precision, Patient Care, Diagnosis | Treatment planning, patient comfort, oral health |
+| **Construction Manager** | 🏗️ | Planning, Safety, Coordination | Project management, safety oversight, resource allocation |
 
 ---
 
@@ -87,8 +109,8 @@
 ## Slide 7: Trophy System
 
 ### Regular Trophies
-- Earn a trophy for each career/difficulty combination - 6 careers × 3 difficulties = 18 trophies
-- Collect all 18 regular trophies to complete the game - Full completion requires mastery
+- Earn a trophy for each career/difficulty combination - 18 careers × 3 difficulties = 54 trophies
+- Collect all trophies to complete the game - Full completion requires mastery
 
 ### Achievement Trophies
 - **Career Master** - Complete all 3 difficulties for one career - Earned automatically when done
@@ -128,8 +150,8 @@ src/
 │   ├── TutorialScreen.tsx # Tutorial - First-time instructions
 │   ├── OutcomeScreen.tsx # Results - Post-question display
 │   ├── TrophyScreen.tsx  # Trophy case - Collection display
-│   ├── difficulty/       # 6 difficulty screens - Career-specific questions
-│   └── careers/          # 6 career worlds - Question content
+│   ├── difficulty/       # Difficulty screens - Career-specific questions
+│   └── careers/          # 18 career worlds - Question content
 └── lib/
     └── audio.ts          # Web Audio API system - Sound management
 ```
@@ -233,10 +255,11 @@ interface Question {
 ## Slide 14: Features & Screens
 
 ### Title Screen
-- Animated background particles - Visual engagement
-- Two game mode buttons (Challenge Mode, Quick Recall) - Primary navigation
-- Settings gear button - Audio configuration
+- Four game mode buttons (Challenge, Quick Recall, Certification, Story Mode) - Multiple ways to play
+- Settings gear button - Audio and accessibility configuration
 - Trophy case access - View collected trophies
+- Stats & Analytics button - Track progress and XP
+- Profile access - Account management
 
 ### Career Selection Screen
 - Grid of career cards with icons - Visual career overview
@@ -294,14 +317,14 @@ From FEATURE_IDEAS.md:
 
 ## Slide 18: How to Play
 
-1. **Start** → Choose Challenge Mode or Quick Recall
-2. **Select Career** → Pick from 6 careers
-3. **Choose Difficulty** → Easy/Medium/Hard
-4. **Answer Questions** → Complete the challenge
-5. **Earn Trophies** → Collect achievements
-6. **View Progress** → Check Trophy Case
+1. **Pick a Mode** → Challenge / Quick Recall / Certification / Story Mode
+2. **Select Career** → Choose from 18 career paths
+3. **Set Difficulty** → Easy (3 questions), Medium (5), Hard (7) - Story Mode has milestones
+4. **Answer Questions** → Complete challenges, review explanations
+5. **Earn Rewards** → Trophies, XP, achievements, unlock Career Aptitude Dashboard
+6. **Track Progress** → View Stats & Analytics, check Trophy Case, customize in Settings
 
-**Game loop:** Players repeat steps 2-5 to collect all trophies and achievements
+**Game loop:** Players explore careers, complete challenges, earn trophies, and unlock new career matches in the Aptitude Dashboard.
 
 ---
 
@@ -318,13 +341,15 @@ Secret admin panel accessible by typing `5839201746`:
 
 ## Slide 20: Summary
 
-✅ **6 Careers** with unique challenges  
-✅ **3 Difficulty levels** per career  
-✅ **2 Game modes** (Challenge + Quick Recall)  
-✅ **18+ Trophies** including secret easter eggs  
-✅ **Full audio system** with background music  
+✅ **18 Careers** with unique challenges  
+✅ **3 Difficulty levels** per career plus Certification exams  
+✅ **4 Game modes** (Challenge + Quick Recall + Certification + Story Mode)  
+✅ **25+ Trophies** including secret easter eggs and achievement badges  
+✅ **Full audio system** with background music and sound effects  
 ✅ **Responsive design** with career backgrounds  
-✅ **localStorage** persistence  
+✅ **localStorage** persistence for user progress and settings  
+✅ **Stats & Analytics** dashboard with XP and leveling  
+✅ **Career Aptitude Dashboard** for skill analysis and career matching  
 
 ---
 

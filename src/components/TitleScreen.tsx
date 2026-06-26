@@ -30,23 +30,33 @@ export default function TitleScreen({ onStart, onStartStory, onOpenSettings, onV
   const howToPlaySteps = [
     {
       title: "Pick a Mode",
-      description: "Choose Challenge, Quick Recall, Certification, or Story Mode from the title screen.",
+      description: "Choose Challenge, Quick Recall, Certification, or Story Mode from the title screen. Each offers a different way to explore careers.",
       icon: "🎮",
     },
     {
       title: "Choose a Career",
-      description: "Select a career path to practice real workplace decisions for that job.",
+      description: "Select from 18 career paths including Programmer, Nurse, Chef, Firefighter, Teacher, and more. Each has unique challenges.",
       icon: "🧭",
     },
     {
-      title: "Answer Scenarios",
-      description: "Read each situation, choose the best action, and review the explanation after each answer.",
+      title: "Set Difficulty or Journey",
+      description: "Challenge Mode: Pick Easy/Medium/Hard for 3-7 questions. Story Mode: Complete 5 milestone challenges with a mentor.",
+      icon: "⚡",
+    },
+    {
+      title: "Answer & Learn",
+      description: "Read each scenario, choose the best action, and review explanations to learn real workplace skills.",
       icon: "💡",
     },
     {
-      title: "Earn Progress",
-      description: "Pass challenges to earn trophies, XP, stats, and story milestone progress.",
+      title: "Earn Rewards",
+      description: "Earn trophies, XP, achievement badges, and unlock new career matches in the Aptitude Dashboard.",
       icon: "🏆",
+    },
+    {
+      title: "Track Progress",
+      description: "View stats, level up, and check your Trophy Case. Customize accessibility in Settings.",
+      icon: "📊",
     },
   ];
 
