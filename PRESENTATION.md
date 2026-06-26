@@ -179,8 +179,8 @@ const [trophies, setTrophies] = useState<Trophy[]>(() => loadTrophies());
 
 ```typescript
 export type Difficulty = "easy" | "medium" | "hard";
-export type Career = "programmer" | "nurse" | "engineer" | "teacher" | "chef" | "architect";
-export type GameMode = "challenge" | "quick-recall";
+export type Career = "programmer" | "nurse" | "engineer" | "teacher" | "chef" | "architect" | "firefighter" | "police" | "pilot" | "veterinarian" | "journalist" | "social-worker" | "accountant" | "dentist" | "construction";
+export type GameMode = "challenge" | "quick-recall" | "certification" | "story";
 
 export interface Trophy {
   career: Career;
@@ -280,6 +280,12 @@ interface Question {
 - SFX volume slider - Control sound effects
 - Persistent via localStorage - Settings saved between sessions
 
+### Accessibility Settings
+- High Contrast mode - Black and white theme for readability
+- Larger Text - Increases base text size across the game
+- Readable Layout - Larger spacing and softer card shapes
+- Reduce Motion - Disables animations and bouncing icons
+
 ### Exit Warning System
 - ScreenWrapper component shows warning when leaving mid-game - Prevents accidental progress loss
 - Triggers on browser back button or page leave - Navigation safety
@@ -299,19 +305,17 @@ interface Question {
 | **TypeScript** | Type safety (strict mode) | Catches errors at compile time |
 | **Tailwind CSS 4** | Styling | Utility-first, maintainable styles |
 | **Web Audio API** | Audio playback | Low-latency, game-ready audio |
-| **localStorage** | Trophy persistence | Client-side data storage without backend |
+| **localStorage** | User progress, trophies, and settings persistence | Client-side data storage without backend |
 
 ---
 
-## Slide 17: Future Enhancements
+## Slide 17: Implemented Features
 
-From FEATURE_IDEAS.md:
-- 📊 Statistics & Analytics Dashboard - Track player performance over time
-- ⭐ XP & Leveling System - Progression beyond trophies
-- 📅 Daily Challenges & Streaks - Daily engagement
-- 🏅 Expanded Achievement System - More goals to achieve
-- 📚 Career Information Pages - Educational content about each career
-- 📝 Question Review & Learning Mode - Review wrong answers
+✅ **Statistics & Analytics Dashboard** - Track player performance over time with XP and leveling
+✅ **XP & Leveling System** - Progression beyond trophies with level-up celebrations
+✅ **Expanded Achievement System** - Secret easter egg trophies and milestone achievements
+✅ **Career Information Pages** - Educational content about each career
+✅ **Career Aptitude Dashboard** - Skill analysis and career matching
 
 ---
 
