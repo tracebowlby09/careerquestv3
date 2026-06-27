@@ -459,7 +459,7 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
   
   // Quick Recall hearts system
   const [hearts, setHearts] = useState(3);
-  const [timeLeft, setTimeLeft] = useState(20);
+  const [timeLeft, setTimeLeft] = useState(15);
   const [showHeartLost, setShowHeartLost] = useState(false);
 
   const handleLoseHeart = () => {
@@ -472,7 +472,7 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
   useEffect(() => {
     if (!isQuickRecall || stage !== "challenge" || hearts <= 0) return;
 
-    setTimeLeft(20);
+    setTimeLeft(15);
 
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
@@ -480,7 +480,7 @@ export default function ArchitectWorld({ difficulty, onComplete, isQuickRecall, 
           setHearts((h) => h - 1);
           setShowHeartLost(true);
           setTimeout(() => setShowHeartLost(false), 1000);
-          return 20;
+          return 15;
         }
         return prev - 1;
       });

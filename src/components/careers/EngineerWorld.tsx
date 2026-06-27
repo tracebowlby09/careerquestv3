@@ -547,7 +547,7 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, i
   
   // Quick Recall hearts system
   const [hearts, setHearts] = useState(3);
-  const [timeLeft, setTimeLeft] = useState(20);
+  const [timeLeft, setTimeLeft] = useState(15);
   const [showHeartLost, setShowHeartLost] = useState(false);
 
   // Quick Recall timer countdown
@@ -560,7 +560,7 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, i
           setHearts((h) => h - 1);
           setShowHeartLost(true);
           setTimeout(() => setShowHeartLost(false), 1000);
-          return 20;
+          return 15;
         }
         return prev - 1;
       });
@@ -572,7 +572,7 @@ export default function EngineerWorld({ difficulty, onComplete, isQuickRecall, i
   // Reset timer on new question
   useEffect(() => {
     if (isQuickRecall && stage === "challenge") {
-      setTimeLeft(20);
+      setTimeLeft(15);
     }
   }, [currentQuestionIndex, isQuickRecall, stage]);
 

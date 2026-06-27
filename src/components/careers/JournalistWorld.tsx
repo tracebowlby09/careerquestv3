@@ -311,7 +311,7 @@ export default function JournalistWorld({ difficulty, onComplete, isQuickRecall,
   const [bestStreak, setBestStreak] = useState(0);
   const [incorrectAnswers, setIncorrectAnswers] = useState<IncorrectAnswer[]>([]);
   const [hearts, setHearts] = useState(3);
-  const [timeLeft, setTimeLeft] = useState(20);
+  const [timeLeft, setTimeLeft] = useState(15);
   const [showHeartLost, setShowHeartLost] = useState(false);
 
   useEffect(() => {
@@ -323,7 +323,7 @@ export default function JournalistWorld({ difficulty, onComplete, isQuickRecall,
           setHearts((h) => h - 1);
           setShowHeartLost(true);
           setTimeout(() => setShowHeartLost(false), 1000);
-          return 20;
+          return 15;
         }
         return prev - 1;
       });
@@ -334,7 +334,7 @@ export default function JournalistWorld({ difficulty, onComplete, isQuickRecall,
 
   useEffect(() => {
     if (isQuickRecall && stage === "challenge") {
-      setTimeLeft(20);
+      setTimeLeft(15);
     }
   }, [currentQuestionIndex, isQuickRecall, stage]);
 

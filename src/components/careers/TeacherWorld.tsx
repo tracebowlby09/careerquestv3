@@ -458,7 +458,7 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall, is
   
   // Quick Recall hearts system
   const [hearts, setHearts] = useState(3);
-  const [timeLeft, setTimeLeft] = useState(20);
+  const [timeLeft, setTimeLeft] = useState(15);
   const [showHeartLost, setShowHeartLost] = useState(false);
   const [heartLostMessage, setHeartLostMessage] = useState("");
 
@@ -471,7 +471,7 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall, is
         if (prev <= 1) {
           // Time's up - lose a heart
           handleLoseHeart("Time's up!");
-          return 20;
+          return 15;
         }
         return prev - 1;
       });
@@ -509,7 +509,7 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall, is
          // Move to next question
          setCurrentQuestionIndex(currentQuestionIndex + 1);
          setSelectedAnswer(null);
-         setTimeLeft(20);
+         setTimeLeft(15);
        } else {
          // Last question done
          onComplete(true, score + 1, totalQuestions, updatedIncorrect);
@@ -560,7 +560,7 @@ export default function TeacherWorld({ difficulty, onComplete, isQuickRecall, is
         if (currentQuestionIndex < totalQuestions - 1) {
           setCurrentQuestionIndex(currentQuestionIndex + 1);
           setSelectedAnswer(null);
-          setTimeLeft(20);
+          setTimeLeft(15);
         } else {
           // All questions done - WIN!
           onComplete(true, newScore, totalQuestions);

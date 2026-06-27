@@ -454,7 +454,7 @@ export default function ElectricianWorld({ difficulty, onComplete, isQuickRecall
   const [bestStreak, setBestStreak] = useState(0);
   const [incorrectAnswers, setIncorrectAnswers] = useState<IncorrectAnswer[]>([]);
   const [hearts, setHearts] = useState(3);
-  const [timeLeft, setTimeLeft] = useState(20);
+  const [timeLeft, setTimeLeft] = useState(15);
   const [showHeartLost, setShowHeartLost] = useState(false);
   const [heartLostMessage, setHeartLostMessage] = useState("");
   const [questionStartTime, setQuestionStartTime] = useState<number>(Date.now());
@@ -466,7 +466,7 @@ export default function ElectricianWorld({ difficulty, onComplete, isQuickRecall
       setTimeLeft((prev) => {
         if (prev <= 1) {
           handleLoseHeart("Time's up!");
-          return 20;
+          return 15;
         }
         return prev - 1;
       });
@@ -502,7 +502,7 @@ export default function ElectricianWorld({ difficulty, onComplete, isQuickRecall
        } else if (currentQuestionIndex < totalQuestions - 1) {
          setCurrentQuestionIndex(currentQuestionIndex + 1);
          setSelectedAnswer(null);
-         setTimeLeft(20);
+         setTimeLeft(15);
          setQuestionStartTime(Date.now());
        } else {
          onComplete(true, score + 1, totalQuestions, updatedIncorrect);
@@ -550,7 +550,7 @@ export default function ElectricianWorld({ difficulty, onComplete, isQuickRecall
         if (currentQuestionIndex < totalQuestions - 1) {
           setCurrentQuestionIndex(currentQuestionIndex + 1);
           setSelectedAnswer(null);
-          setTimeLeft(20);
+          setTimeLeft(15);
           setQuestionStartTime(Date.now());
         } else {
           onComplete(true, newScore, totalQuestions);

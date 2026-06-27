@@ -464,7 +464,7 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall, isCe
   const [bestStreak, setBestStreak] = useState(0);
   const [incorrectAnswers, setIncorrectAnswers] = useState<IncorrectAnswer[]>([]);
   const [hearts, setHearts] = useState(3);
-  const [timeLeft, setTimeLeft] = useState(20);
+  const [timeLeft, setTimeLeft] = useState(15);
   const [showHeartLost, setShowHeartLost] = useState(false);
 
   // Quick Recall timer countdown
@@ -478,7 +478,7 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall, isCe
           setHearts((h) => h - 1);
           setShowHeartLost(true);
           setTimeout(() => setShowHeartLost(false), 1000);
-          return 20;
+          return 15;
         }
         return prev - 1;
       });
@@ -490,7 +490,7 @@ export default function NurseWorld({ difficulty, onComplete, isQuickRecall, isCe
   // Reset timer on new question
   useEffect(() => {
     if (isQuickRecall && stage === "challenge") {
-      setTimeLeft(20);
+      setTimeLeft(15);
     }
   }, [currentQuestionIndex, isQuickRecall, stage]);
 

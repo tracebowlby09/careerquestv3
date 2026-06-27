@@ -33,12 +33,14 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 - ✅ **Updated tutorial screen**: Added Career Quest V3 feature overview covering 18 career paths, challenge mode, quick recall, certification exams, custom quizzes, trophies, stats/profile/leveling, and accounts/guest play, plus login and sign up entry buttons.
 - ✅ **Updated title copy**: Changed career path count from 9 to 18 to match the expanded career roster.
 - ✅ **Enhanced custom tests**: Added creator editing for approved front-page quizzes and pending quizzes with same-code reapproval flow, plus per-question photo uploads shown in creator, moderator, preview, and play screens.
-- ✅ **Added custom quiz edit entry point**: Added an “Edit My Test” button inside the custom quiz creation screen so creators can choose pending or approved quizzes to edit from the same tab.
+- ✅ **Added custom quiz edit entry point**: Added an "Edit My Test" button inside the custom quiz creation screen so creators can choose pending or approved quizzes to edit from the same tab.
 - ✅ **Added Story Mode**: Added a title-screen Story Mode entry point with career journey selection, mentor characters, five milestone challenges per career, retry/next milestone flow, journey completion screen, and per-user or guest localStorage progress.
 - ✅ **Added accessibility settings and How to Play walkthrough**: Added persistent accessibility preferences for high contrast, larger text, readable layout, and reduced motion, plus an interactive title-screen How to Play walkthrough.
 - ✅ **Updated How to Play content**: Expanded walkthrough steps to include Story Mode, Certification Mode, XP/achievements, and the Career Aptitude Dashboard.
 - ✅ **Added Career Aptitude Dashboard**: Created CareerAptitudeDashboard component showing skill strength analysis across all careers, top matches highlighting, and career exploration entry points.
 - ✅ **Added Career Pivot Suggestions**: StoryOutcomeScreen now shows 3 alternative career suggestions for failed milestones with "Try This" buttons to immediately start a new journey.
+- ✅ **Changed Quick Recall timer**: Reduced from 20 to 15 seconds in all 18 World components (Accountant, Architect, Chef, Construction, Dentist, Electrician, Engineer, Firefighter, Journalist, Lawyer, Nurse, Pilot, Police, Programmer, Retail, Social Worker, Teacher, Veterinarian)
+- ✅ **Expanded certification tests**: Added 20 questions to each of 18 certification question banks (PE, Teaching, ServSafe, ARE, Bar, Customer Service, Journeyman, Firefighter, Police, CPL, Vet Tech, Journalism, LCSW, CPA, Dental Board, OSHA, RN, AWS) - all now have 25 questions each
 
 ## Current Structure
 
@@ -67,17 +69,17 @@ Career Quest V3 is a career exploration game with multiple career paths featurin
 
 | Career | Easy | Medium | Hard | Challenge | Quick Recall | Certification | Total |
 |--------|------|--------|------|-----------|--------------|---------------|-------|
-| Firefighter | 2 | 2 | 1 | 5 | 20 | 5 | 24 |
-| Police | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
-| Pilot | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
-| Veterinarian | 2 | 2 | 1 | 5 | 20 | 5 | 24 |
-| Journalist | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
-| Social Worker | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
-| Accountant | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
-| Dentist | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
-| Construction | 1 | 1 | 1 | 3 | 20 | 5 | 21 |
+| Firefighter | 2 | 2 | 1 | 5 | 20 | 25 | 55 |
+| Police | 1 | 1 | 1 | 3 | 20 | 25 | 50 |
+| Pilot | 1 | 1 | 1 | 3 | 20 | 25 | 50 |
+| Veterinarian | 2 | 2 | 1 | 5 | 20 | 25 | 55 |
+| Journalist | 1 | 1 | 1 | 3 | 20 | 25 | 50 |
+| Social Worker | 1 | 1 | 1 | 3 | 20 | 25 | 50 |
+| Accountant | 1 | 1 | 1 | 3 | 20 | 25 | 50 |
+| Dentist | 1 | 1 | 1 | 3 | 20 | 25 | 50 |
+| Construction | 1 | 1 | 1 | 3 | 20 | 25 | 50 |
 | ... (other careers) | ... | ... | ... | ... | ... | ... | ... |
-| **TOTAL** | **~31** | **~31** | **~44** | **~114** | **~520** | **~299** | **~937+** |
+| **TOTAL** | **~31** | **~31** | **~44** | **~114** | **~520** | **~450** | **~1197+** |
 
 Note: Challenge questions per career = 3-5 (varies by career). Certification uses Hard questions.
 
@@ -123,3 +125,7 @@ Note: Challenge questions per career = 3-5 (varies by career). Certification use
 
 ### 2026-06-26
 - Equalized certification tile sizes in CertificationSelection to match CareerSelection styling
+
+### 2026-06-27
+- Changed Quick Recall timer from 20 to 15 seconds across all 18 career World components
+- Expanded all 18 certification question banks from 5 to 25 questions each (RN, PE, Teaching, ServSafe, ARE, Bar, Customer Service, Journeyman, Firefighter, Police, CPL, Vet Tech, Journalism, LCSW, CPA, Dental Board, OSHA, AWS)
